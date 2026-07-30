@@ -1,22 +1,24 @@
-function makeCard(id, key, name, strength, rows, abilities = []) {
+function makeCard(id, key, name, strength, rows, abilities = [], image = null) {
   return {
     id,
     key,
     name,
     strength,
     rows: [...rows],
-    abilities: [...abilities]
+    abilities: [...abilities],
+    image
   };
 }
 
-function makeCopies(prefix, key, name, strength, rows, count, abilities = []) {
+function makeCopies(prefix, key, name, strength, rows, count, abilities = [], image = null) {
   return Array.from({ length: count }, (_, index) => makeCard(
     `${prefix}-${index + 1}`,
     key,
     name,
     strength,
     rows,
-    abilities
+    abilities,
+    image
   ));
 }
 
@@ -113,7 +115,13 @@ export function listDecks() {
     id: deck.id,
     name: deck.name,
     description: deck.description,
-    cardCount: deck.cards.length
+    cardCount: deck.cards.length,
+    symbol: {
+      "six-crowns": "♛",
+      aldori: "⚔",
+      "iron-khans": "♞",
+      arcana: "✦"
+    }[deck.id] ?? "◆"
   }));
 }
 
@@ -122,6 +130,8 @@ export function cloneDeck(deckId) {
   if (!deck) throw new Error(`Deck inconnu : ${deckId}`);
   return deck.cards.map((card) => ({
     ...card,
+    factionId: deckId,
+    image: card.image ?? null,
     rows: [...card.rows],
     abilities: [...card.abilities]
   }));

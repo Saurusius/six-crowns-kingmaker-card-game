@@ -26,6 +26,30 @@ const ROLE_LABELS = Object.freeze({
   resilient: "Bastion"
 });
 
+
+const ROW_ICONS = Object.freeze({
+  "avant-garde": "fa-solid fa-shield-halved",
+  "escarmouche": "fa-solid fa-crosshairs",
+  "domaine": "fa-solid fa-chess-rook"
+});
+
+const ROLE_ICONS = Object.freeze({
+  hero: "fa-solid fa-crown",
+  support: "fa-solid fa-handshake-angle",
+  bond: "fa-solid fa-link",
+  rally: "fa-solid fa-people-group",
+  resilient: "fa-solid fa-shield",
+  mobile: "fa-solid fa-arrows-left-right",
+  troop: "fa-solid fa-helmet-safety"
+});
+
+const FACTION_VISUALS = Object.freeze({
+  "six-crowns": { symbol: "♛", label: "Six Couronnes" },
+  aldori: { symbol: "⚔", label: "Maison Aldori" },
+  "iron-khans": { symbol: "♞", label: "Khans de Fer" },
+  arcana: { symbol: "✦", label: "Arcanes" }
+});
+
 const ROLE_DESCRIPTIONS = Object.freeze({
   hero: "Carte prestigieuse à forte valeur.",
   support: "Donne +1 à toutes les autres cartes de sa ligne.",
@@ -511,9 +535,24 @@ export function startNextRound(state) {
 function roleBadges(card) {
   const badges = card.abilities
     .filter((ability) => ROLE_LABELS[ability])
-    .map((ability) => ({ id: ability, label: ROLE_LABELS[ability], description: ROLE_DESCRIPTIONS[ability] }));
-  if (card.rows.length > 1) badges.push({ id: "mobile", label: "Mobile", description: "Peut être jouée sur plusieurs lignes." });
-  if (badges.length === 0) badges.push({ id: "troop", label: "Troupe", description: "Force directe, sans capacité spéciale." });
+    .map((ability) => ({
+      id: ability,
+      label: ROLE_LABELS[ability],
+      description: ROLE_DESCRIPTIONS[ability],
+      icon: ROLE_ICONS[ability]
+    }));
+  if (card.rows.length > 1) badges.push({
+    id: "mobile",
+    label: "Mobile",
+    description: "Peut être jouée sur plusieurs lignes.",
+    icon: ROLE_ICONS.mobile
+  });
+  if (badges.length === 0) badges.push({
+    id: "troop",
+    label: "Troupe",
+    description: "Force directe, sans capacité spéciale.",
+    icon: ROLE_ICONS.troop
+  });
   return badges;
 }
 
@@ -522,12 +561,22 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
     ? calculateSideScores({ "avant-garde": rowCards, "escarmouche": [], "domaine": [] })
       .rowDetails["avant-garde"].cards.find((candidate) => candidate.id === card.id)?.effectiveStrength ?? card.strength
     : card.strength;
+  const badges = roleBadges(card);
+  const faction = FACTION_VISUALS[card.factionId] ?? { symbol: "◆", label: "Neutre" };
+  const rowChoices = card.rows.map((row) => ({ id: row, label: ROW_LABELS[row], icon: ROW_ICONS[row] }));
   return {
     ...card,
     effectiveStrength,
     isModified: effectiveStrength !== card.strength,
-    rowChoices: card.rows.map((row) => ({ id: row, label: ROW_LABELS[row] })),
-    roleBadges: roleBadges(card),
+    hasImage: Boolean(card.image),
+    factionSymbol: faction.symbol,
+    factionLabel: faction.label,
+    factionClass: `scg-faction-${card.factionId ?? "neutral"}`,
+    rowChoices,
+    rowSummary: rowChoices.map((row) => row.label).join(" · "),
+    primaryRowIcon: rowChoices[0]?.icon ?? ROW_ICONS["avant-garde"],
+    roleBadges: badges,
+    effectText: badges.map((badge) => `${badge.label} — ${badge.description}`).join(" "),
     mulliganSelected: mulliganSelection.includes(card.id)
   };
 }
@@ -564,6 +613,17 @@ export function createBoardViewModel(state) {
     && state.currentTurn === "player"
     && !state.player?.passed;
   const decks = listDecks();
+  const preparedPlayerRows = state.player ? prepareRows(state.player.rows) : null;
+  const preparedOpponentRows = state.opponent ? prepareRows(state.opponent.rows) : null;
+  const playerStatuses = Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("player", evaluation.rowControl[row])]));
+  const opponentStatuses = Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("opponent", evaluation.rowControl[row])]));
+  const makeRowList = (preparedRows, statuses, scores, order) => order.map((row) => ({
+    id: row,
+    label: ROW_LABELS[row],
+    score: scores.rows[row],
+    status: statuses[row],
+    cards: preparedRows[row]
+  }));
 
   return {
     ...state,
@@ -574,20 +634,23 @@ export function createBoardViewModel(state) {
     })),
     player: state.player ? {
       ...state.player,
-      rows: prepareRows(state.player.rows),
+      rows: preparedPlayerRows,
+      rowList: makeRowList(preparedPlayerRows, playerStatuses, evaluation.scores.player, ["avant-garde", "escarmouche", "domaine"]),
       hand: state.player.hand.map((card) => prepareCardView(card, null, state.mulliganSelection)),
       gems: gemMarkers(state.player.lives),
       controlledLines: evaluation.controlledLines.player,
-      rowStatuses: Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("player", evaluation.rowControl[row])]))
+      rowStatuses: playerStatuses
     } : null,
     opponent: state.opponent ? {
       ...state.opponent,
-      rows: prepareRows(state.opponent.rows),
+      rows: preparedOpponentRows,
+      rowList: makeRowList(preparedOpponentRows, opponentStatuses, evaluation.scores.opponent, ["domaine", "escarmouche", "avant-garde"]),
       handCount: state.opponent.hand.length,
       gems: gemMarkers(state.opponent.lives),
       controlledLines: evaluation.controlledLines.opponent,
-      rowStatuses: Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("opponent", evaluation.rowControl[row])]))
+      rowStatuses: opponentStatuses
     } : null,
+    rowLabels: ROW_LABELS,
     playerScore: evaluation.scores.player,
     opponentScore: evaluation.scores.opponent,
     canPlayerAct,

@@ -168,3 +168,15 @@ test("aucune carte n’est piochée automatiquement entre les manches", () => {
   assert.equal(state.opponent.hand.length, opponentHand);
   assert.equal(state.round, 2);
 });
+
+test("le modèle d’affichage prépare les cartes pour les futures illustrations", async () => {
+  const { createBoardViewModel } = await import("../scripts/rules/state.js");
+  const state = readyGame();
+  const view = createBoardViewModel(state);
+  const card = view.player.hand[0];
+  assert.equal(typeof card.factionClass, "string");
+  assert.equal(typeof card.factionSymbol, "string");
+  assert.equal(typeof card.effectText, "string");
+  assert.equal(Array.isArray(card.rowChoices), true);
+  assert.equal(typeof card.rowChoices[0].icon, "string");
+});

@@ -2,7 +2,7 @@
 
 Prototype Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.5.0
+## Règles du prototype 0.6.0
 
 Chaque joueur choisit un deck prédéfini de 20 cartes maximum. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -43,3 +43,8 @@ await game.modules
   .api
   .openBoard();
 ```
+
+
+## Illustrations de cartes
+
+La version 0.6.0 utilise un véritable cadre de carte vertical. Chaque carte peut recevoir un chemin `image` dans `scripts/rules/decks.js`. Sans image, un visuel temporaire propre à sa faction est affiché automatiquement. Consultez `assets/cards/README.md` pour le format et l’arborescence recommandés.

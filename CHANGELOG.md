@@ -1,5 +1,17 @@
 # Journal des versions
 
+## 0.6.0 — Les cartes deviennent des cartes
+
+- Nouveau cadre vertical pensé pour accueillir des illustrations 3:4.
+- Visuels temporaires distincts pour les quatre factions quand aucune illustration n’est renseignée.
+- Cartes plus grandes et détaillées dans la main et pendant le mulligan.
+- Cartes compactes sur le plateau afin de conserver les trois lignes lisibles.
+- La force devient un médaillon visuel et la ligne principale une icône.
+- Les capacités sont représentées par des pictogrammes plutôt que par des étiquettes textuelles.
+- Le texte complet de chaque effet reste visible dans la main et dans une fiche au survol des cartes du plateau.
+- Ajout d’une structure de dossiers et d’un guide pour intégrer progressivement les illustrations WebP.
+
+
 ## 0.5.0 — La pièce tranche, les lignes décident
 
 - Le joueur choisit désormais Pile ou Face avant le lancer animé.
