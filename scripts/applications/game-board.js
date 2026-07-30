@@ -13,7 +13,8 @@ import {
   startMatch,
   startNextRound,
   takeOpponentTurn,
-  toggleMulliganCard
+  toggleMulliganCard,
+  toggleRules
 } from "../rules/state.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -92,6 +93,14 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       } catch (error) {
         ui.notifications.warn(error.message);
       }
+    });
+
+
+    this.element.querySelectorAll("[data-action='toggle-rules']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        toggleRules(this.matchState);
+        await this.render({ force: true });
+      });
     });
 
     this.element.querySelectorAll("[data-action='flip-coin']").forEach((button) => {

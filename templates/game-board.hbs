@@ -1,4 +1,4 @@
-<section class="scg-shell">
+<section class="scg-shell {{#if rulesOpen}}is-rules-open{{/if}}">
   <header class="scg-toolbar">
     <div class="scg-round-heading">
       <strong>{{#if round}}Manche {{round}}{{else}}Nouvelle partie{{/if}}</strong>
@@ -6,6 +6,7 @@
       {{#if showBoard}}<span class="scg-turn">Tour : {{turnLabel}}</span>{{/if}}
     </div>
     <div class="scg-toolbar-actions">
+      <button type="button" data-action="toggle-rules"><i class="fa-solid fa-book-open"></i> Règlement</button>
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
       {{#if canStartNextRound}}
         <button type="button" data-action="next-round"><i class="fa-solid fa-forward"></i> Manche suivante</button>
@@ -18,6 +19,28 @@
   </header>
 
   <p class="scg-message">{{message}}</p>
+
+  {{#if rulesOpen}}
+    <section class="scg-rulebook-panel">
+      <div class="scg-rulebook-header">
+        <div>
+          <h2>Règlement du Jeu des Six Couronnes</h2>
+          <p>Rappel rapide des effets, du déroulement d’une manche et des conditions de victoire.</p>
+        </div>
+        <button type="button" class="scg-rulebook-close" data-action="toggle-rules"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="scg-rulebook-grid">
+        {{#each ruleSections}}
+          <article class="scg-rulebook-card">
+            <h3>{{title}}</h3>
+            <ul>
+              {{#each items}}<li>{{this}}</li>{{/each}}
+            </ul>
+          </article>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
 
   {{#if isDeckSelection}}
     <section class="scg-setup-panel">
@@ -75,28 +98,28 @@
 
       <div class="scg-coin-stage">
         <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
-          <div class="scg-coin-face scg-coin-front">6</div>
-          <div class="scg-coin-face scg-coin-back">♛</div>
+          <div class="scg-coin-face scg-coin-front"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="scg-coin-face scg-coin-back"><i class="fa-solid fa-sword"></i></div>
         </div>
-        {{#if coin.resolved}}<strong class="scg-coin-result">{{coinFaceLabel}}</strong>{{/if}}
+        {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
       </div>
 
       {{#if coin.resolved}}
         <div class="scg-coin-summary {{#if coinPlayerWon}}is-win{{else}}is-loss{{/if}}">
-          Votre choix : <strong>{{coinChoiceLabel}}</strong> · Résultat : <strong>{{coinFaceLabel}}</strong>
+          Votre choix : <strong><i class="{{coinChoiceIcon}}"></i> {{coinChoiceLabel}}</strong> · Résultat : <strong><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>
         </div>
         <button class="scg-primary-button" type="button" data-action="continue-after-coin">Voir les mains</button>
       {{else}}
         {{#if coin.flipping}}
-          <div class="scg-coin-summary">Votre choix : <strong>{{coinChoiceLabel}}</strong></div>
+          <div class="scg-coin-summary">Votre choix : <strong><i class="{{coinChoiceIcon}}"></i> {{coinChoiceLabel}}</strong></div>
           <button class="scg-primary-button" type="button" disabled><i class="fa-solid fa-coins"></i> La pièce tourne…</button>
         {{else}}
-          <div class="scg-coin-choice" role="group" aria-label="Choisissez pile ou face">
-            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="pile">
-              <span class="scg-choice-symbol">♛</span><strong>Pile</strong>
+          <div class="scg-coin-choice" role="group" aria-label="Choisissez Bouclier ou Épée">
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="shield">
+              <span class="scg-choice-symbol"><i class="fa-solid fa-shield-halved"></i></span><strong>Bouclier</strong>
             </button>
-            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="face">
-              <span class="scg-choice-symbol">6</span><strong>Face</strong>
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="sword">
+              <span class="scg-choice-symbol"><i class="fa-solid fa-sword"></i></span><strong>Épée</strong>
             </button>
           </div>
         {{/if}}
@@ -153,8 +176,8 @@
         </span>
       </div>
       <div class="scg-deck-status">
-        <span>Le contrôle des lignes remporte la manche.</span>
-        <span>Survolez une carte du plateau pour lire son effet.</span>
+        <span>La manche se gagne d’abord au contrôle des lignes, puis au total.</span>
+        <span>Le bouton <strong>Règlement</strong> reste disponible pendant toute la partie.</span>
       </div>
       <div class="scg-score-side scg-score-side-player">
         <span class="scg-gems" title="Points de manche restants">
@@ -170,126 +193,169 @@
       <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> {{opponent.name}} réfléchit…</div>
     {{/if}}
 
-    <div class="scg-battlefield">
-      <section class="scg-side scg-opponent {{#if opponent.passed}}is-passed{{/if}}">
-        <div class="scg-side-heading">
-          <strong>Camp adverse</strong>
-          <span>{{opponent.handCount}} cartes en main · Pioche {{opponent.deck.length}} · Défausse {{opponent.discard.length}}</span>
+    <section class="scg-board-layout">
+      <aside class="scg-hand-sidebar {{#unless canPlayerAct}}is-locked{{/unless}}">
+        <div class="scg-side-mini scg-side-mini-opponent">
+          <strong>{{opponent.name}}</strong>
+          <span>{{opponent.handCount}} cartes en main</span>
           {{#if opponent.passed}}<span class="scg-pass-badge">A passé</span>{{/if}}
         </div>
 
-        {{#each opponent.rowList}}
-          <div class="scg-row" data-row="{{id}}">
-            <div class="scg-row-label {{status.className}}">
-              <span>{{label}}</span>
-              <strong>{{score}}</strong>
-              <small class="scg-row-control">{{status.label}}</small>
-            </div>
-            <div class="scg-card-line">
-              {{#each cards}}
-                <article class="scg-card scg-board-card {{factionClass}}">
-                  <div class="scg-card-art">
-                    {{#if hasImage}}
-                      <img src="{{image}}" alt="Illustration de {{name}}">
-                    {{else}}
-                      <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
-                    {{/if}}
-                    <span class="scg-strength">{{effectiveStrength}}</span>
-                    {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
-                    <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
-                  </div>
-                  <div class="scg-card-caption">
-                    <strong>{{name}}</strong>
-                    <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
-                  </div>
-                  <div class="scg-card-popover">
-                    <strong>{{name}}</strong>
-                    <span>{{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
-                    <p>{{effectText}}</p>
-                  </div>
-                </article>
-              {{/each}}
-            </div>
+        <div class="scg-hand-panel">
+          <div class="scg-side-heading">
+            <strong>Votre main</strong>
+            <span>{{player.hand.length}} cartes à jouer</span>
           </div>
-        {{/each}}
-      </section>
-
-      <div class="scg-divider"></div>
-
-      <section class="scg-side scg-player {{#if player.passed}}is-passed{{/if}}">
-        <div class="scg-side-heading">
-          <strong>Votre camp</strong>
-          <span>{{player.hand.length}} cartes en main · Pioche {{player.deck.length}} · Défausse {{player.discard.length}}</span>
-          {{#if player.passed}}<span class="scg-pass-badge">Vous avez passé</span>{{/if}}
+          <div class="scg-hand-column">
+            {{#each player.hand}}
+              <article class="scg-card scg-detail-card scg-hand-card {{factionClass}}">
+                <div class="scg-card-art">
+                  {{#if hasImage}}
+                    <img src="{{image}}" alt="Illustration de {{name}}">
+                  {{else}}
+                    <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
+                  {{/if}}
+                  <span class="scg-strength">{{strength}}</span>
+                  <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                </div>
+                <div class="scg-card-body">
+                  <strong class="scg-card-name">{{name}}</strong>
+                  <div class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</div>
+                  <small class="scg-card-effect">{{effectText}}</small>
+                </div>
+                <div class="scg-play-actions">
+                  {{#each rowChoices}}
+                    <button type="button" data-action="play-card" data-card-id="{{../id}}" data-row="{{id}}" {{#unless @root.canPlayerAct}}disabled{{/unless}}><i class="{{icon}}"></i> {{label}}</button>
+                  {{/each}}
+                </div>
+              </article>
+            {{/each}}
+          </div>
         </div>
 
-        {{#each player.rowList}}
-          <div class="scg-row" data-row="{{id}}">
-            <div class="scg-row-label {{status.className}}">
-              <span>{{label}}</span>
-              <strong>{{score}}</strong>
-              <small class="scg-row-control">{{status.label}}</small>
-            </div>
-            <div class="scg-card-line">
-              {{#each cards}}
-                <article class="scg-card scg-board-card {{factionClass}}">
-                  <div class="scg-card-art">
-                    {{#if hasImage}}
-                      <img src="{{image}}" alt="Illustration de {{name}}">
-                    {{else}}
-                      <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
-                    {{/if}}
-                    <span class="scg-strength">{{effectiveStrength}}</span>
-                    {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
-                    <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
-                  </div>
-                  <div class="scg-card-caption">
-                    <strong>{{name}}</strong>
-                    <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
-                  </div>
-                  <div class="scg-card-popover">
-                    <strong>{{name}}</strong>
-                    <span>{{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
-                    <p>{{effectText}}</p>
-                  </div>
-                </article>
-              {{/each}}
-            </div>
-          </div>
-        {{/each}}
-      </section>
-    </div>
+        <div class="scg-side-mini scg-side-mini-player">
+          <strong>{{player.name}}</strong>
+          <span>Pioche {{player.deck.length}} · Défausse {{player.discard.length}}</span>
+          {{#if player.passed}}<span class="scg-pass-badge">Vous avez passé</span>{{/if}}
+        </div>
+      </aside>
 
-    <section class="scg-hand {{#unless canPlayerAct}}is-locked{{/unless}}">
-      <div class="scg-side-heading">
-        <strong>Votre main</strong>
-        <span>{{player.hand.length}} cartes · Illustration, force, ligne et effet restent visibles.</span>
+      <div class="scg-battlefield-panel">
+        <section class="scg-side scg-opponent {{#if opponent.passed}}is-passed{{/if}}">
+          {{#each opponent.rowList}}
+            <div class="scg-row" data-row="{{id}}">
+              <div class="scg-row-label {{status.className}}">
+                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span>{{label}}</span>
+                <strong>{{score}}</strong>
+                <small class="scg-row-control">{{status.label}}</small>
+              </div>
+              <div class="scg-card-line">
+                {{#each cards}}
+                  <article class="scg-card scg-board-card {{factionClass}}">
+                    <div class="scg-card-art">
+                      {{#if hasImage}}
+                        <img src="{{image}}" alt="Illustration de {{name}}">
+                      {{else}}
+                        <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
+                      {{/if}}
+                      <span class="scg-strength">{{effectiveStrength}}</span>
+                      {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                    </div>
+                    <div class="scg-card-caption">
+                      <strong>{{name}}</strong>
+                      <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
+                    </div>
+                    <div class="scg-card-popover">
+                      <strong>{{name}}</strong>
+                      <span>{{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
+                      <p>{{effectText}}</p>
+                    </div>
+                  </article>
+                {{/each}}
+              </div>
+            </div>
+          {{/each}}
+        </section>
+
+        <div class="scg-divider"></div>
+
+        <section class="scg-side scg-player {{#if player.passed}}is-passed{{/if}}">
+          {{#each player.rowList}}
+            <div class="scg-row" data-row="{{id}}">
+              <div class="scg-row-label {{status.className}}">
+                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span>{{label}}</span>
+                <strong>{{score}}</strong>
+                <small class="scg-row-control">{{status.label}}</small>
+              </div>
+              <div class="scg-card-line">
+                {{#each cards}}
+                  <article class="scg-card scg-board-card {{factionClass}}">
+                    <div class="scg-card-art">
+                      {{#if hasImage}}
+                        <img src="{{image}}" alt="Illustration de {{name}}">
+                      {{else}}
+                        <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
+                      {{/if}}
+                      <span class="scg-strength">{{effectiveStrength}}</span>
+                      {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                    </div>
+                    <div class="scg-card-caption">
+                      <strong>{{name}}</strong>
+                      <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
+                    </div>
+                    <div class="scg-card-popover">
+                      <strong>{{name}}</strong>
+                      <span>{{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
+                      <p>{{effectText}}</p>
+                    </div>
+                  </article>
+                {{/each}}
+              </div>
+            </div>
+          {{/each}}
+        </section>
       </div>
-      <div class="scg-hand-grid">
-        {{#each player.hand}}
-          <article class="scg-card scg-detail-card scg-hand-card {{factionClass}}">
-            <div class="scg-card-art">
-              {{#if hasImage}}
-                <img src="{{image}}" alt="Illustration de {{name}}">
-              {{else}}
-                <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
-              {{/if}}
-              <span class="scg-strength">{{strength}}</span>
-              <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
-            </div>
-            <div class="scg-card-body">
-              <strong class="scg-card-name">{{name}}</strong>
-              <div class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</div>
-              <small class="scg-card-effect">{{effectText}}</small>
-            </div>
-            <div class="scg-play-actions">
-              {{#each rowChoices}}
-                <button type="button" data-action="play-card" data-card-id="{{../id}}" data-row="{{id}}" {{#unless @root.canPlayerAct}}disabled{{/unless}}><i class="{{icon}}"></i> {{label}}</button>
-              {{/each}}
-            </div>
+
+      <aside class="scg-reserve-sidebar">
+        <div class="scg-zone-stack scg-zone-stack-opponent">
+          <article class="scg-zone-card">
+            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <strong>Deck adverse</strong>
+            <small>{{opponent.deck.length}} carte(s)</small>
           </article>
-        {{/each}}
-      </div>
+          <article class="scg-zone-card">
+            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-skull"></i></span></div>
+            <strong>Défausse adverse</strong>
+            <small>{{opponent.discard.length}} carte(s)</small>
+          </article>
+        </div>
+
+        <div class="scg-turn-card">
+          <strong>{{#if isOpponentTurn}}Tour adverse{{else}}État de la manche{{/if}}</strong>
+          <p>{{message}}</p>
+          <div class="scg-turn-meta">
+            <span><i class="fa-solid fa-shield-halved"></i> {{opponent.controlledLines}} ligne(s) adverses</span>
+            <span><i class="fa-solid fa-sword"></i> {{player.controlledLines}} ligne(s) alliées</span>
+          </div>
+        </div>
+
+        <div class="scg-zone-stack scg-zone-stack-player">
+          <article class="scg-zone-card">
+            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <strong>Votre deck</strong>
+            <small>{{player.deck.length}} carte(s)</small>
+          </article>
+          <article class="scg-zone-card">
+            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-fire"></i></span></div>
+            <strong>Votre défausse</strong>
+            <small>{{player.discard.length}} carte(s)</small>
+          </article>
+        </div>
+      </aside>
     </section>
   {{/if}}
 </section>

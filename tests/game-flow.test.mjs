@@ -21,7 +21,7 @@ const fixedRandom = () => 0.42;
 function readyGame() {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state, "face");
+  beginCoinToss(state, "shield");
   resolveCoinToss(state, () => 0.1);
   continueAfterCoinToss(state);
   confirmMulligan(state);
@@ -48,36 +48,36 @@ test("chaque camp reçoit dix cartes après la sélection des decks", () => {
   assert.equal(state.opponent.hand.length, 10);
 });
 
-test("le joueur choisit pile ou face avant le lancer", () => {
+test("le joueur choisit bouclier ou épée avant le lancer", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
   assert.throws(() => beginCoinToss(state));
-  beginCoinToss(state, "pile");
-  assert.equal(state.coin.choice, "pile");
+  beginCoinToss(state, "sword");
+  assert.equal(state.coin.choice, "sword");
 });
 
 test("un bon choix au lancer de pièce donne le premier tour", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state, "face");
+  beginCoinToss(state, "shield");
   resolveCoinToss(state, () => 0.1);
-  assert.equal(state.coin.face, "face");
+  assert.equal(state.coin.face, "shield");
   assert.equal(state.currentTurn, "player");
 });
 
 test("un mauvais choix au lancer de pièce donne le premier tour à l’adversaire", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state, "pile");
+  beginCoinToss(state, "sword");
   resolveCoinToss(state, () => 0.1);
-  assert.equal(state.coin.face, "face");
+  assert.equal(state.coin.face, "shield");
   assert.equal(state.currentTurn, "opponent");
 });
 
 test("le mulligan remplace au maximum deux cartes et ne peut être utilisé qu’une fois", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state, "face");
+  beginCoinToss(state, "shield");
   resolveCoinToss(state, () => 0.1);
   continueAfterCoinToss(state);
 

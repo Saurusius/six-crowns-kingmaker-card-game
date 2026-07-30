@@ -58,6 +58,48 @@ const ROLE_DESCRIPTIONS = Object.freeze({
   resilient: "Peut rester entre deux manches avec une force réduite de moitié."
 });
 
+
+const RULEBOOK = Object.freeze([
+  {
+    title: "Déroulement d’une partie",
+    items: [
+      "Chaque joueur choisit un deck prédéfini de 20 cartes maximum.",
+      "Un lancer de pièce oppose Bouclier et Épée pour déterminer qui commence.",
+      "Chaque joueur pioche 10 cartes, puis peut remplacer jusqu’à 2 cartes une seule fois.",
+      "À son tour, un joueur joue 1 carte sur une ligne autorisée ou passe pour la manche."
+    ]
+  },
+  {
+    title: "Lignes de bataille",
+    items: [
+      "Avant-garde : mêlée, unités de choc et défenseurs.",
+      "Escarmouche : tireurs, éclaireurs et manœuvres rapides.",
+      "Domaine : soutiens, mages, bâtiments et influence."
+    ]
+  },
+  {
+    title: "Effets des cartes",
+    items: [
+      "Héros : carte prestigieuse à forte valeur.",
+      "Soutien : donne +1 à toutes les autres cartes de sa ligne.",
+      "Formation : gagne +2 par autre copie identique sur la même ligne.",
+      "Renfort : déploie toutes les autres copies présentes dans la pioche.",
+      "Bastion : la meilleure carte Bastion peut rester pour la manche suivante avec une force réduite de moitié.",
+      "Mobile : peut être jouée sur plusieurs lignes."
+    ]
+  },
+  {
+    title: "Victoire",
+    items: [
+      "Quand les deux joueurs ont passé, on compare d’abord le contrôle des 3 lignes.",
+      "Le camp qui contrôle le plus de lignes gagne la manche.",
+      "En cas d’égalité sur les lignes contrôlées, la force totale départage les deux camps.",
+      "Chaque camp possède 2 gemmes rouges ; perdre une manche fait perdre 1 gemme.",
+      "Quand un camp perd ses 2 gemmes, la partie est terminée."
+    ]
+  }
+]);
+
 function emptyRows() {
   return Object.fromEntries(ROWS.map((row) => [row, []]));
 }
@@ -111,6 +153,7 @@ export function createPrototypeState() {
     roundResult: null,
     gameWinner: null,
     mulliganSelection: [],
+    rulesOpen: false,
     coin: {
       flipping: false,
       resolved: false,
@@ -190,6 +233,11 @@ export function evaluateBoard(state) {
   return evaluateScores(getScores(state));
 }
 
+export function toggleRules(state, forceValue = null) {
+  state.rulesOpen = typeof forceValue === "boolean" ? forceValue : !state.rulesOpen;
+  return state;
+}
+
 export function selectDeck(state, side, deckId) {
   if (state.phase !== PHASES.DECK_SELECTION) throw new Error("Le choix des decks est terminé.");
   if (!getDeckDefinition(deckId)) throw new Error("Ce deck n’existe pas.");
@@ -215,6 +263,7 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   state.roundResult = null;
   state.gameWinner = null;
   state.mulliganSelection = [];
+  state.rulesOpen = false;
   state.coin = { flipping: false, resolved: false, choice: null, face: null, winner: null };
   state.message = "Les decks sont prêts. Lancez la pièce pour désigner le premier joueur.";
   return state;
@@ -224,10 +273,10 @@ export function beginCoinToss(state, choice) {
   if (state.phase !== PHASES.COIN_TOSS) throw new Error("Le tirage au sort n’est pas disponible.");
   if (state.coin.flipping) throw new Error("La pièce est déjà en l’air.");
   if (state.coin.resolved) throw new Error("Le tirage au sort est déjà terminé.");
-  if (!["pile", "face"].includes(choice)) throw new Error("Choisissez Pile ou Face avant de lancer la pièce.");
+  if (!["shield", "sword"].includes(choice)) throw new Error("Choisissez Bouclier ou Épée avant de lancer la pièce.");
   state.coin.choice = choice;
   state.coin.flipping = true;
-  state.message = `Vous choisissez ${choice === "face" ? "Face" : "Pile"}. La pièce tourne dans les airs…`;
+  state.message = `Vous choisissez ${choice === "shield" ? "Bouclier" : "Épée"}. La pièce tourne dans les airs…`;
   return state;
 }
 
@@ -235,7 +284,7 @@ export function resolveCoinToss(state, random = Math.random) {
   if (state.phase !== PHASES.COIN_TOSS || !state.coin.flipping) {
     throw new Error("La pièce n’a pas été lancée.");
   }
-  const result = random() < 0.5 ? "face" : "pile";
+  const result = random() < 0.5 ? "shield" : "sword";
   const playerStarts = result === state.coin.choice;
   state.coin.flipping = false;
   state.coin.resolved = true;
@@ -244,8 +293,8 @@ export function resolveCoinToss(state, random = Math.random) {
   state.roundStarter = state.coin.winner;
   state.currentTurn = state.coin.winner;
   state.message = playerStarts
-    ? `${result === "face" ? "Face" : "Pile"} ! Bon choix : vous commencerez la première manche.`
-    : `${result === "face" ? "Face" : "Pile"} ! Mauvais choix : ${state.opponent.name} commencera la première manche.`;
+    ? `${result === "shield" ? "Bouclier" : "Épée"} ! Bon choix : vous commencerez la première manche.`
+    : `${result === "shield" ? "Bouclier" : "Épée"} ! Mauvais choix : ${state.opponent.name} commencera la première manche.`;
   return state;
 }
 
@@ -620,6 +669,7 @@ export function createBoardViewModel(state) {
   const makeRowList = (preparedRows, statuses, scores, order) => order.map((row) => ({
     id: row,
     label: ROW_LABELS[row],
+    icon: ROW_ICONS[row],
     score: scores.rows[row],
     status: statuses[row],
     cards: preparedRows[row]
@@ -671,9 +721,13 @@ export function createBoardViewModel(state) {
       : state.coin.resolved
         ? `is-resolved is-${state.coin.face}`
         : "",
-    coinFaceLabel: state.coin.face === "face" ? "Face" : state.coin.face === "pile" ? "Pile" : "?",
-    coinChoiceLabel: state.coin.choice === "face" ? "Face" : state.coin.choice === "pile" ? "Pile" : "—",
+    coinFaceLabel: state.coin.face === "shield" ? "Bouclier" : state.coin.face === "sword" ? "Épée" : "?",
+    coinChoiceLabel: state.coin.choice === "shield" ? "Bouclier" : state.coin.choice === "sword" ? "Épée" : "—",
+    coinFaceIcon: state.coin.face === "shield" ? "fa-solid fa-shield-halved" : state.coin.face === "sword" ? "fa-solid fa-sword" : "fa-solid fa-circle-question",
+    coinChoiceIcon: state.coin.choice === "shield" ? "fa-solid fa-shield-halved" : state.coin.choice === "sword" ? "fa-solid fa-sword" : "fa-solid fa-circle-question",
     coinPlayerWon: state.coin.resolved && state.coin.winner === "player",
+    rulesOpen: state.rulesOpen,
+    ruleSections: RULEBOOK,
     mulliganSelectedCount: state.mulliganSelection.length,
     mulliganButtonLabel: state.mulliganSelection.length > 0
       ? `Remplacer ${state.mulliganSelection.length} carte(s)`

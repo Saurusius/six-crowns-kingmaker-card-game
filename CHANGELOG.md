@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.7.0 — Plateau réorganisé et règlement intégré
+
+- refonte ergonomique du plateau : main verticale à gauche, champ de bataille au centre, deck et défausse à droite ;
+- ajout d’un bouton **Règlement** accessible au démarrage comme en cours de partie ;
+- panneau de règles intégré rappelant les effets de cartes et les conditions de victoire ;
+- remplacement du lancer **Pile / Face** par **Bouclier / Épée** avec iconographie adaptée ;
+- conservation du système de cartes illustrées de la v0.6.0 avec cartes compactes sur le plateau et détail complet dans la main.
+
 ## 0.6.0 — Les cartes deviennent des cartes
 
 - Nouveau cadre vertical pensé pour accueillir des illustrations 3:4.
