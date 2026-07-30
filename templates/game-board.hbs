@@ -46,7 +46,7 @@
     <section class="scg-setup-panel">
       <div class="scg-setup-heading">
         <h2>Choisissez les decks</h2>
-        <p>Chaque deck prédéfini contient exactement 20 cartes.</p>
+        <p>Les decks prédéfinis sont des decks de démonstration de 20 cartes, indépendants de votre collection personnelle.</p>
       </div>
 
       <div class="scg-deck-select-grid">
@@ -77,7 +77,7 @@
             <span class="scg-deck-symbol">{{symbol}}</span>
             <div>
               <strong>{{name}}</strong>
-              <small>{{cardCount}} cartes</small>
+              <small>{{cardCount}} cartes{{#if demo}} · Démonstration{{/if}}</small>
               <p>{{description}}</p>
             </div>
           </article>
@@ -85,8 +85,8 @@
       </div>
 
       <div class="scg-setup-actions">
-        <button class="scg-secondary-button" type="button" data-action="open-booster">
-          <i class="fa-solid fa-box-open"></i> Ouvrir un booster
+        <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}>
+          <i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}
         </button>
         <button class="scg-secondary-button" type="button" data-action="open-collection">
           <i class="fa-solid fa-table-cells-large"></i> Ma collection

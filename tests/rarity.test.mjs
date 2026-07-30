@@ -55,3 +55,14 @@ test("les quatre collections contiennent exactement quarante cartes", async () =
   assert.equal(total, 160);
 });
 
+
+
+test("les cartes des decks de démonstration sont absentes des collections personnelles", async () => {
+  const catalog = await loadCatalog();
+  const catalogIds = new Set(catalog.map((card) => card.id));
+  const { PREDEFINED_DECKS } = await import("../scripts/rules/decks.js");
+  const demoIds = Object.values(PREDEFINED_DECKS).flatMap((deck) => deck.cards.map((card) => card.id));
+  assert.equal(demoIds.length, 80);
+  assert.equal(new Set(demoIds).size, 80);
+  assert.deepEqual(demoIds.filter((id) => catalogIds.has(id)), []);
+});

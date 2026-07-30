@@ -1,5 +1,25 @@
 # Journal des versions
 
+## 0.7.9 — Decks de démonstration et boosters attribués
+
+- reconstruction des quatre decks prédéfinis comme decks de démonstration indépendants des collections personnelles ;
+- chaque deck de démonstration contient exactement **15 Communes, 4 Peu communes et 1 Rare** ;
+- les 80 cartes de démonstration utilisent des identifiants séparés et ne peuvent ni apparaître dans la collection, ni tomber dans un booster, ni être utilisées dans un deck personnalisé ;
+- ajout d’un compteur de boosters disponibles propre à chaque profil Foundry ;
+- les comptes non MJ ne peuvent ouvrir un booster que s’ils disposent d’au moins un booster offert par un MJ ;
+- chaque ouverture joueur consomme exactement un booster disponible ;
+- ajout d’un outil MJ permettant d’offrir de 1 à 100 boosters à un profil ciblé ;
+- affichage du nombre de boosters disponibles dans la collection et sur l’écran de sélection des decks ;
+- ajout de tests dédiés à la répartition des decks, à la séparation démonstration/collection et aux crédits de boosters.
+
+## 0.7.8 — Réinitialisation de collection réparée
+
+- remplacement de l’écriture d’un objet vide par la suppression explicite du flag de collection du profil Foundry ;
+- utilisation de la fenêtre de confirmation native `DialogV2` de Foundry VTT 14 ;
+- retour visuel pendant la suppression et bilan du nombre de cartes retirées ;
+- actualisation immédiate de la collection lorsque le MJ réinitialise son propre profil ;
+- ajout d’un test automatisé dédié à la suppression du flag utilisateur.
+
 ## 0.7.7 — Collection et decks sous contrôle
 
 - ajout de filtres de collection par faction, rareté, ligne et état de possession ;

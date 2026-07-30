@@ -2,9 +2,9 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.7
+## Règles du prototype 0.7.9
 
-Chaque joueur choisit un deck prédéfini d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
+Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
 1. Le joueur choisit **Bouclier** ou **Épée**.
 2. Une pièce animée désigne le camp qui commence.
@@ -46,9 +46,11 @@ Chaque booster contient :
 - 1 carte garantie : 99 % Rare, 1 % Unique.
 - Toute carte représentant un PNJ nommé est au minimum Rare.
 
-Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante.
+Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante. Les cartes des quatre decks de démonstration utilisent des identifiants séparés et ne figurent jamais dans cette collection.
 
-L’écran **Ma collection** affiche les 160 cartes du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués. La collection peut être filtrée par faction, rareté, ligne et état de possession, avec une recherche par nom et des compteurs par faction. Les MJ disposent aussi d’outils intégrés pour donner une carte, ouvrir un booster pour un joueur ou réinitialiser une collection.
+L’écran **Ma collection** affiche les 160 cartes collectionnables du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués. La collection peut être filtrée par faction, rareté, ligne et état de possession, avec une recherche par nom et des compteurs par faction.
+
+Chaque profil possède également un nombre de **boosters disponibles**. Un compte non MJ ne peut ouvrir un booster que si un MJ lui en a offert au moins un ; chaque ouverture consomme un booster. Le MJ peut créditer plusieurs boosters à un joueur depuis les outils de collection, par exemple lors d’une montée de niveau ou comme récompense ponctuelle.
 
 ## Constructeur de deck
 
@@ -103,8 +105,10 @@ const decks = await api.getCustomDecks();
 
 // Outils MJ
 await api.grantCardToUser({ userId, cardId, count: 1 });
-await api.openBooster({ userId });
+await api.grantBoostersToUser({ userId, count: 3 });
 await api.resetCollectionForUser({ userId });
+
+const boostersDisponibles = await api.getBoosterCredits();
 ```
 
 ## Illustrations de cartes

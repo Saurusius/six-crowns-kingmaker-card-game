@@ -1,6 +1,7 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 
 export const COLLECTION_FLAG = "cardCollection";
+export const BOOSTER_CREDITS_FLAG = "boosterCredits";
 const BOOSTER_MACRO_NAME = "Ouvrir un booster des Six Couronnes";
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
@@ -46,6 +47,17 @@ function resolveUser({ user = null, userId = null } = {}) {
   return targetUser;
 }
 
+function normalizeBoosterCredits(value) {
+  return Math.max(0, Number.parseInt(value ?? 0, 10) || 0);
+}
+
+async function setBoosterCredits(targetUser, value) {
+  const credits = normalizeBoosterCredits(value);
+  await targetUser.setFlag(MODULE_ID, BOOSTER_CREDITS_FLAG, credits);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id);
+  return credits;
+}
+
 export async function loadCardCatalog() {
   catalogPromise ??= Promise.all(CARD_FILES.map((file) => loadJson(
     `modules/${MODULE_ID}/data/cards/${file}`
@@ -78,6 +90,20 @@ function shuffle(items, random = Math.random) {
     [result[index], result[target]] = [result[target], result[index]];
   }
   return result;
+}
+
+export async function getBoosterCredits(options = {}) {
+  const targetUser = resolveUser(options);
+  return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, BOOSTER_CREDITS_FLAG));
+}
+
+export async function grantBoostersToUser({ userId, count = 1 } = {}) {
+  if (!game.user.isGM) throw new Error("Seul un MJ peut offrir des boosters.");
+  const targetUser = resolveUser({ userId });
+  const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
+  const previous = await getBoosterCredits({ user: targetUser });
+  const credits = await setBoosterCredits(targetUser, previous + quantity);
+  return { user: targetUser, granted: quantity, credits };
 }
 
 export async function getCollection(options = {}) {
@@ -132,12 +158,30 @@ export async function grantCardToUser({ userId, cardId, count = 1 } = {}) {
 export async function resetCollectionForUser({ userId } = {}) {
   if (!game.user.isGM) throw new Error("Seul un MJ peut réinitialiser une collection.");
   const targetUser = resolveUser({ userId });
-  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, {});
+  const previousCollection = foundry.utils.deepClone(
+    targetUser.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {}
+  );
+  const removedCards = Object.keys(previousCollection).length;
+  const removedCopies = Object.values(previousCollection).reduce(
+    (total, entry) => total + Math.max(0, Number.parseInt(entry?.count, 10) || 0),
+    0
+  );
+
+  await targetUser.unsetFlag(MODULE_ID, COLLECTION_FLAG);
+  const remaining = targetUser.getFlag(MODULE_ID, COLLECTION_FLAG);
+  if (remaining && Object.keys(remaining).length > 0) {
+    await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, null);
+  }
+
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, {}, targetUser.id);
-  return targetUser;
+  return {
+    user: targetUser,
+    removedCards,
+    removedCopies
+  };
 }
 
-function boosterChatContent(cards, targetUser) {
+function boosterChatContent(cards, targetUser, remainingCredits = null) {
   const rows = cards.map((card, index) => `
     <article class="scg-booster-card scg-booster-${escapeHtml(card.rarity)}">
       <span class="scg-booster-number">${index + 1}</span>
@@ -151,11 +195,15 @@ function boosterChatContent(cards, targetUser) {
   const introduction = openedForAnotherUser
     ? `Booster ouvert par <strong>${escapeHtml(game.user.name)}</strong> pour <strong>${escapeHtml(targetUser.name)}</strong>.`
     : `Ouvert par <strong>${escapeHtml(targetUser.name)}</strong>.`;
+  const creditLine = remainingCredits === null
+    ? ""
+    : `<p>Boosters restant à ouvrir : <strong>${remainingCredits}</strong>.</p>`;
 
   return `
     <section class="scg-booster-result">
       <h2><i class="fa-solid fa-box-open"></i> Booster des Six Couronnes</h2>
       <p>${introduction} Les cartes ont été ajoutées à sa collection.</p>
+      ${creditLine}
       <div class="scg-booster-list">${rows}</div>
     </section>
   `;
@@ -163,20 +211,47 @@ function boosterChatContent(cards, targetUser) {
 
 export async function openBooster({ random = Math.random, user = null, userId = null } = {}) {
   const targetUser = resolveUser({ user, userId });
+  const requiresCredit = !game.user.isGM;
+  let previousCredits = null;
+  let remainingCredits = null;
+
+  if (requiresCredit) {
+    if (targetUser.id !== game.user.id) {
+      throw new Error("Vous ne pouvez ouvrir que les boosters de votre propre profil.");
+    }
+    previousCredits = await getBoosterCredits({ user: targetUser });
+    if (previousCredits <= 0) {
+      throw new Error("Vous n’avez aucun booster à ouvrir. Un MJ doit vous en offrir un.");
+    }
+    remainingCredits = await setBoosterCredits(targetUser, previousCredits - 1);
+  }
+
   const catalog = await loadCardCatalog();
   const cards = [];
-
   for (let index = 0; index < 4; index += 1) {
     cards.push(pickCard(catalog, drawNormalRarity(random), random));
   }
   cards.push(pickCard(catalog, drawGuaranteedRarity(random), random));
-
   const booster = shuffle(cards, random);
-  await addCardsToCollection(booster, { user: targetUser });
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-    content: boosterChatContent(booster, targetUser)
-  });
+
+  try {
+    await addCardsToCollection(booster, { user: targetUser });
+  } catch (error) {
+    if (requiresCredit && previousCredits !== null) {
+      await setBoosterCredits(targetUser, previousCredits);
+    }
+    throw error;
+  }
+
+  try {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
+      content: boosterChatContent(booster, targetUser, remainingCredits)
+    });
+  } catch (error) {
+    console.error(`${MODULE_TITLE} | Publication du booster dans le chat impossible`, error);
+  }
+
   const suffix = targetUser.id === game.user.id ? "votre collection" : `la collection de ${targetUser.name}`;
   ui.notifications.info(`Booster ouvert : 5 cartes ajoutées à ${suffix}.`);
   return booster;

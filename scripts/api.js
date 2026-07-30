@@ -1,5 +1,7 @@
 import {
+  getBoosterCredits,
   getCollection,
+  grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
@@ -31,8 +33,10 @@ export async function openBoard() {
 
 export {
   duplicateCustomDeck,
+  getBoosterCredits,
   getCollection,
   getCustomDecks,
+  grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,

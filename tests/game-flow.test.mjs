@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { PREDEFINED_DECKS, listDecks } from "../scripts/rules/decks.js";
+import { PREDEFINED_DECKS, PREDEFINED_RARITY_COUNTS, listDecks } from "../scripts/rules/decks.js";
 import { drawGuaranteedRarity, drawNormalRarity } from "../scripts/boosters.js";
 import {
   PHASES,
@@ -51,12 +51,14 @@ test("l’option Deck aléatoire choisit un deck prédéfini valide", () => {
   assert.equal(state.opponent.hand.length, 10);
 });
 
-test("toutes les cartes de deck utilisent les quatre nouvelles raretés", () => {
-  const rarities = new Set(["commun", "peuCommune", "rare", "unique"]);
+test("chaque deck de démonstration respecte la répartition 75 / 20 / 5", () => {
   for (const deck of Object.values(PREDEFINED_DECKS)) {
-    for (const card of deck.cards) {
-      assert.equal(rarities.has(card.rarity), true, `${card.name} n’a pas de rareté valide`);
-    }
+    const counts = deck.cards.reduce((result, card) => {
+      result[card.rarity] = (result[card.rarity] ?? 0) + 1;
+      return result;
+    }, { commun: 0, peuCommune: 0, rare: 0, unique: 0 });
+    assert.deepEqual(counts, PREDEFINED_RARITY_COUNTS, deck.name);
+    assert.equal(deck.cards.every((card) => card.demoOnly), true, `${deck.name} contient une carte collectionnable.`);
   }
 });
 

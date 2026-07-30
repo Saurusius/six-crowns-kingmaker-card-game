@@ -1,6 +1,8 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import {
+  getBoosterCredits,
   getCollection,
+  grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
@@ -14,7 +16,7 @@ import {
 } from "../collection-rules.js";
 import { openDeckBuilder } from "../profile.js";
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 function selectOptions(entries, selectedValue) {
   return entries.map(([id, details]) => ({
@@ -57,16 +59,31 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     this._collectionHook = Hooks.on(`${MODULE_ID}.collectionUpdated`, (_collection, userId) => {
       if (this.rendered && (!userId || userId === game.user.id)) void this.render({ force: true });
     });
+    this._boosterHook = Hooks.on(`${MODULE_ID}.boosterCreditsUpdated`, (_credits, userId) => {
+      if (this.rendered && (!userId || userId === game.user.id || game.user.isGM)) {
+        void this.render({ force: true });
+      }
+    });
   }
 
   async _prepareContext() {
-    const [catalog, collection] = await Promise.all([loadCardCatalog(), getCollection()]);
+    const [catalog, collection, boosterCredits] = await Promise.all([
+      loadCardCatalog(),
+      getCollection(),
+      getBoosterCredits()
+    ]);
     const groups = buildCollectionGroups(catalog, collection);
     const total = groups.reduce((sum, group) => sum + group.total, 0);
     const discovered = groups.reduce((sum, group) => sum + group.discovered, 0);
     const copies = groups.reduce((sum, group) => sum + group.copies, 0);
     const users = Array.from(game.users?.contents ?? game.users ?? [])
       .sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    const usersWithCredits = game.user.isGM
+      ? await Promise.all(users.map(async (user) => ({
+        user,
+        boosterCredits: await getBoosterCredits({ user })
+      })))
+      : [];
     const gmCards = [...catalog]
       .sort((a, b) => {
         const factionOrder = (FACTION_DETAILS[a.faction]?.order ?? 99) - (FACTION_DETAILS[b.faction]?.order ?? 99);
@@ -100,6 +117,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       discovered,
       copies,
       completionPercent: total > 0 ? Math.round((discovered / total) * 100) : 0,
+      boosterCredits,
+      canOpenBooster: game.user.isGM || boosterCredits > 0,
+      boosterButtonLabel: game.user.isGM
+        ? "Ouvrir un booster (MJ)"
+        : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
       search: this.search,
       factionFilter: this.factionFilter,
       rarityFilter: this.rarityFilter,
@@ -114,10 +136,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       rarityOptions: selectOptions(Object.entries(RARITY_DETAILS), this.rarityFilter),
       rowOptions: selectOptions(Object.entries(ROW_DETAILS), this.rowFilter),
       isGM: game.user.isGM,
-      gmUsers: users.map((user) => ({
+      gmUsers: usersWithCredits.map(({ user, boosterCredits: credits }) => ({
         id: user.id,
         name: user.name,
         activeLabel: user.active ? "connecté" : "hors ligne",
+        boosterCredits: credits,
         selected: user.id === this.gmTargetUserId
       })),
       gmCards
@@ -215,28 +238,54 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       }
     });
 
-    this.element.querySelector("[data-action='gm-open-booster']")?.addEventListener("click", async () => {
+    this.element.querySelector("[data-action='gm-grant-boosters']")?.addEventListener("click", async () => {
       try {
         this._captureGmSelection();
-        await openBooster({ userId: this.gmTargetUserId });
+        const count = this.element.querySelector("[name='gm-booster-count']")?.value ?? 1;
+        const result = await grantBoostersToUser({ userId: this.gmTargetUserId, count });
+        ui.notifications.info(
+          `${result.granted} booster(s) offert(s) à ${result.user.name}. Total disponible : ${result.credits}.`
+        );
+        await this.render({ force: true });
       } catch (error) {
-        console.error(`${MODULE_TITLE} | Booster MJ impossible`, error);
+        console.error(`${MODULE_TITLE} | Don de boosters impossible`, error);
         ui.notifications.error(error.message);
       }
     });
 
-    this.element.querySelector("[data-action='gm-reset-collection']")?.addEventListener("click", async () => {
+    this.element.querySelector("[data-action='gm-reset-collection']")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
       try {
         this._captureGmSelection();
         const targetUser = game.users.get(this.gmTargetUserId);
         if (!targetUser) throw new Error("Joueur introuvable.");
-        const confirmed = globalThis.confirm(`Réinitialiser définitivement toute la collection de ${targetUser.name} ? Ses decks seront conservés, mais pourront devenir invalides.`);
+
+        const confirmed = await DialogV2.confirm({
+          window: { title: "Réinitialiser une collection" },
+          content: `<p>Réinitialiser définitivement toute la collection de <strong>${foundry.utils.escapeHTML(targetUser.name)}</strong> ?</p><p>Ses decks et ses boosters non ouverts seront conservés, mais ses decks pourront devenir invalides.</p>`,
+          rejectClose: false,
+          modal: true
+        });
         if (!confirmed) return;
-        await resetCollectionForUser({ userId: targetUser.id });
-        ui.notifications.warn(`Collection de ${targetUser.name} réinitialisée.`);
+
+        button.disabled = true;
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Réinitialisation…';
+        const result = await resetCollectionForUser({ userId: targetUser.id });
+
+        if (targetUser.id === game.user.id) {
+          await this.render({ force: true });
+        }
+        ui.notifications.warn(
+          `Collection de ${targetUser.name} réinitialisée : ${result.removedCards} carte(s) distincte(s), ${result.removedCopies} exemplaire(s) supprimé(s).`
+        );
       } catch (error) {
         console.error(`${MODULE_TITLE} | Réinitialisation impossible`, error);
         ui.notifications.error(error.message);
+      } finally {
+        if (button?.isConnected) {
+          button.disabled = false;
+          button.innerHTML = '<i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection';
+        }
       }
     });
 
@@ -245,6 +294,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
 
   async close(options = {}) {
     if (this._collectionHook !== null) Hooks.off(`${MODULE_ID}.collectionUpdated`, this._collectionHook);
+    if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
     return super.close(options);
   }
 }

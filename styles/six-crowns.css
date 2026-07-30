@@ -1664,3 +1664,39 @@
     grid-column: auto;
   }
 }
+
+/* v0.7.9 — boosters attribués par le MJ */
+.scg-secondary-button:disabled,
+.scg-profile-actions button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  filter: grayscale(.45);
+}
+
+.scg-booster-credit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #8d6d32;
+  border-radius: 4px;
+  background: rgba(82, 61, 24, .38);
+  color: #f0cf6a;
+  font-size: .76rem;
+  font-weight: 700;
+}
+
+.scg-gm-tools-grid {
+  grid-template-columns: minmax(180px, .9fr) minmax(280px, 1.5fr) 120px 120px minmax(250px, auto);
+}
+
+@media (max-width: 1150px) {
+  .scg-gm-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .scg-gm-card-select,
+  .scg-gm-actions {
+    grid-column: 1 / -1;
+  }
+}

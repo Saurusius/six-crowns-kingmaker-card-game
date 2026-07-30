@@ -1,5 +1,5 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
-import { openBooster } from "../boosters.js";
+import { getBoosterCredits, openBooster } from "../boosters.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import {
   PHASES,
@@ -51,11 +51,28 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         await this.render({ force: true });
       }
     });
+    this._boosterHook = Hooks.on(`${MODULE_ID}.boosterCreditsUpdated`, async (_credits, userId) => {
+      if (userId === game.user.id && this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
+        await this.render({ force: true });
+      }
+    });
   }
 
   async _prepareContext() {
     await syncCustomDeckRegistry();
-    return createBoardViewModel(this.matchState);
+    const [view, boosterCredits] = await Promise.all([
+      Promise.resolve(createBoardViewModel(this.matchState)),
+      getBoosterCredits()
+    ]);
+    return {
+      ...view,
+      isGM: game.user.isGM,
+      boosterCredits,
+      canOpenBooster: game.user.isGM || boosterCredits > 0,
+      boosterButtonLabel: game.user.isGM
+        ? "Ouvrir un booster (MJ)"
+        : `Ouvrir un booster (${boosterCredits})`
+    };
   }
 
   _clearTimers() {
@@ -114,6 +131,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
       try {
         await openBooster();
+        await this.render({ force: true });
       } catch (error) {
         console.error(`${MODULE_TITLE} | Ouverture du booster impossible`, error);
         ui.notifications.error(error.message);
@@ -224,6 +242,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   async close(options = {}) {
     this._clearTimers();
     if (this._decksHook !== null) Hooks.off(`${MODULE_ID}.decksUpdated`, this._decksHook);
+    if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
     return super.close(options);
   }
 }

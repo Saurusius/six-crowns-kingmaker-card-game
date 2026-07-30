@@ -5,7 +5,8 @@
       <p>Les cartes non obtenues restent masquées : leur nom, leur rareté, leur ligne et leurs effets ne sont pas révélés.</p>
     </div>
     <div class="scg-profile-actions">
-      <button type="button" data-action="open-booster"><i class="fa-solid fa-box-open"></i> Ouvrir un booster</button>
+      <span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Ouverture MJ illimitée{{else}}{{boosterCredits}} booster(s) à ouvrir{{/if}}</span>
+      <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
       <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
     </div>
   </header>
@@ -68,14 +69,14 @@
       <header>
         <div>
           <h2><i class="fa-solid fa-user-shield"></i> Outils MJ</h2>
-          <p>Ces actions modifient directement la collection liée au profil Foundry du joueur ciblé.</p>
+          <p>Ces actions modifient directement la collection et les boosters disponibles du profil Foundry ciblé.</p>
         </div>
       </header>
       <div class="scg-gm-tools-grid">
         <label>
           <span>Joueur ciblé</span>
           <select name="gm-target-user">
-            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}}</option>{{/each}}
+            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}} — {{boosterCredits}} booster(s)</option>{{/each}}
           </select>
         </label>
         <label class="scg-gm-card-select">
@@ -85,12 +86,16 @@
           </select>
         </label>
         <label>
-          <span>Quantité</span>
+          <span>Exemplaires de la carte</span>
           <input type="number" name="gm-card-count" value="1" min="1" max="100">
+        </label>
+        <label>
+          <span>Boosters à offrir</span>
+          <input type="number" name="gm-booster-count" value="1" min="1" max="100">
         </label>
         <div class="scg-gm-actions">
           <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner la carte</button>
-          <button type="button" data-action="gm-open-booster"><i class="fa-solid fa-box-open"></i> Ouvrir un booster</button>
+          <button type="button" data-action="gm-grant-boosters"><i class="fa-solid fa-ticket"></i> Offrir les boosters</button>
           <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
         </div>
       </div>

@@ -79,7 +79,7 @@ const RULEBOOK = Object.freeze([
   {
     title: "Déroulement d’une partie",
     items: [
-      "Chaque joueur choisit un deck prédéfini d’exactement 20 cartes.",
+      "Chaque joueur choisit un deck de démonstration ou un deck personnalisé d’exactement 20 cartes.",
       "Un lancer de pièce oppose Bouclier et Épée pour déterminer qui commence.",
       "Chaque joueur pioche 10 cartes, puis peut remplacer jusqu’à 2 cartes une seule fois.",
       "À son tour, un joueur joue 1 carte sur une ligne autorisée ou passe pour la manche."
@@ -122,7 +122,9 @@ const RULEBOOK = Object.freeze([
       "Tirage normal : 65 % Commun, 25 % Peu commune, 8 % Rare et 2 % Unique.",
       "Carte garantie : 99 % Rare et 1 % Unique.",
       "Les doublons sont autorisés et chaque carte ouverte est sauvegardée dans la collection de l’utilisateur.",
-      "La collection et les decks personnalisés sont propres au profil Foundry connecté."
+      "Les decks prédéfinis sont réservés aux tests : leurs cartes ne font pas partie des collections personnelles.",
+      "Un joueur non MJ doit disposer d’un booster offert par un MJ ; l’ouverture consomme 1 booster disponible.",
+      "La collection, les boosters disponibles et les decks personnalisés sont propres au profil Foundry connecté."
     ]
   }
 ]);

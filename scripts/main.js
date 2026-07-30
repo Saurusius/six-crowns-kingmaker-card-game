@@ -3,8 +3,10 @@ import { createBoosterMacro } from "./boosters.js";
 import { createProfileMacros } from "./profile.js";
 import {
   duplicateCustomDeck,
+  getBoosterCredits,
   getCollection,
   getCustomDecks,
+  grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBoard,
@@ -21,9 +23,11 @@ const api = Object.freeze({
   openBooster,
   openCollection,
   openDeckBuilder,
+  getBoosterCredits,
   getCollection,
   getCustomDecks,
   loadCardCatalog,
+  grantBoostersToUser,
   grantCardToUser,
   resetCollectionForUser,
   renameCustomDeck,
