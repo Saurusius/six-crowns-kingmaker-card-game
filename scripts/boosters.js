@@ -1,6 +1,6 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 
-const COLLECTION_FLAG = "cardCollection";
+export const COLLECTION_FLAG = "cardCollection";
 const BOOSTER_MACRO_NAME = "Ouvrir un booster des Six Couronnes";
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
@@ -104,6 +104,7 @@ async function addCardsToCollection(cards) {
     collection[card.id] = current;
   }
   await game.user.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection);
   return collection;
 }
 

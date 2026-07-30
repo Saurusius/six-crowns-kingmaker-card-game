@@ -73,7 +73,7 @@
 
       <div class="scg-deck-gallery">
         {{#each decks}}
-          <article class="scg-deck-summary scg-deck-{{id}}">
+          <article class="scg-deck-summary {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}}">
             <span class="scg-deck-symbol">{{symbol}}</span>
             <div>
               <strong>{{name}}</strong>
@@ -87,6 +87,12 @@
       <div class="scg-setup-actions">
         <button class="scg-secondary-button" type="button" data-action="open-booster">
           <i class="fa-solid fa-box-open"></i> Ouvrir un booster
+        </button>
+        <button class="scg-secondary-button" type="button" data-action="open-collection">
+          <i class="fa-solid fa-table-cells-large"></i> Ma collection
+        </button>
+        <button class="scg-secondary-button" type="button" data-action="open-deck-builder">
+          <i class="fa-solid fa-hammer"></i> Mes decks
         </button>
         <button class="scg-primary-button" type="button" data-action="start-game">
           <i class="fa-solid fa-play"></i> Préparer la partie

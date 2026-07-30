@@ -1,8 +1,27 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { createBoosterMacro } from "./boosters.js";
-import { getCollection, loadCardCatalog, openBoard, openBooster } from "./api.js";
+import { createProfileMacros } from "./profile.js";
+import {
+  getCollection,
+  getCustomDecks,
+  loadCardCatalog,
+  openBoard,
+  openBooster,
+  openCollection,
+  openDeckBuilder,
+  syncCustomDeckRegistry
+} from "./api.js";
 
-const api = Object.freeze({ openBoard, openBooster, getCollection, loadCardCatalog });
+const api = Object.freeze({
+  openBoard,
+  openBooster,
+  openCollection,
+  openDeckBuilder,
+  getCollection,
+  getCustomDecks,
+  loadCardCatalog,
+  syncCustomDeckRegistry
+});
 
 function exposeApi() {
   const moduleEntry = game.modules.get(MODULE_ID);
@@ -36,17 +55,28 @@ Hooks.once("init", () => {
 Hooks.once("ready", async () => {
   exposeApi();
   try {
+    await syncCustomDeckRegistry();
     await createBoosterMacro();
+    await createProfileMacros();
   } catch (error) {
-    console.error(`${MODULE_TITLE} | Création de la macro booster impossible`, error);
+    console.error(`${MODULE_TITLE} | Initialisation des collections impossible`, error);
   }
-  console.log(`${MODULE_TITLE} | Prêt. Commande : /sixcouronnes`);
+  console.log(`${MODULE_TITLE} | Prêt. Commandes : /sixcouronnes, /sixcollection, /sixdecks`);
 });
 
 Hooks.on("chatMessage", (_chatLog, message) => {
   const command = String(message ?? "").trim().toLowerCase();
-  if (!["/sixcouronnes", "/sixcrowns"].includes(command)) return true;
-
-  void safelyOpenBoard();
-  return false;
+  if (["/sixcouronnes", "/sixcrowns"].includes(command)) {
+    void safelyOpenBoard();
+    return false;
+  }
+  if (["/sixcollection", "/sixcards"].includes(command)) {
+    void openCollection();
+    return false;
+  }
+  if (["/sixdecks", "/sixdeck"].includes(command)) {
+    void openDeckBuilder();
+    return false;
+  }
+  return true;
 });

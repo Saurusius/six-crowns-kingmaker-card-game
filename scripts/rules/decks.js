@@ -1,3 +1,5 @@
+import { expandCustomDeckCards } from "../collection-rules.js";
+
 const UNIQUE_CARD_KEYS = new Set([
   "khanesse-reine-sans-couronne",
   "nyrissa-reine-epines"
@@ -153,27 +155,53 @@ for (const deck of Object.values(DECK_DEFINITIONS)) {
 
 export const PREDEFINED_DECKS = Object.freeze(DECK_DEFINITIONS);
 
+let customDeckDefinitions = {};
+
+export function registerCustomDecks(decks = [], catalog = []) {
+  const definitions = {};
+  for (const deck of decks) {
+    const cards = expandCustomDeckCards(deck, catalog);
+    if (cards.length !== 20) continue;
+    const id = `custom:${deck.id}`;
+    definitions[id] = {
+      id,
+      sourceId: deck.id,
+      name: deck.name,
+      description: "Deck personnalisé mélangeant les cartes de votre collection.",
+      cards,
+      custom: true
+    };
+  }
+  customDeckDefinitions = definitions;
+  return customDeckDefinitions;
+}
+
+function allDeckDefinitions() {
+  return { ...PREDEFINED_DECKS, ...customDeckDefinitions };
+}
+
 export function listDecks() {
-  return Object.values(PREDEFINED_DECKS).map((deck) => ({
+  return Object.values(allDeckDefinitions()).map((deck) => ({
     id: deck.id,
     name: deck.name,
     description: deck.description,
     cardCount: deck.cards.length,
-    symbol: {
+    custom: Boolean(deck.custom),
+    symbol: deck.custom ? "✧" : ({
       "six-crowns": "♛",
       aldori: "⚔",
       "iron-khans": "♞",
       arcana: "✦"
-    }[deck.id] ?? "◆"
+    }[deck.id] ?? "◆")
   }));
 }
 
 export function cloneDeck(deckId) {
-  const deck = PREDEFINED_DECKS[deckId];
+  const deck = allDeckDefinitions()[deckId];
   if (!deck) throw new Error(`Deck inconnu : ${deckId}`);
   return deck.cards.map((card) => ({
     ...card,
-    factionId: deckId,
+    factionId: card.factionId ?? deckId,
     image: card.image ?? null,
     rows: [...card.rows],
     abilities: [...card.abilities]
@@ -181,5 +209,5 @@ export function cloneDeck(deckId) {
 }
 
 export function getDeckDefinition(deckId) {
-  return PREDEFINED_DECKS[deckId] ?? null;
+  return allDeckDefinitions()[deckId] ?? null;
 }

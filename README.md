@@ -1,10 +1,10 @@
 # Le Jeu des Six Couronnes
 
-Prototype Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
+Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.3
+## Règles du prototype 0.7.4
 
-Chaque joueur choisit un deck prédéfini d’exactement 20 cartes, ou sélectionne **Deck aléatoire**. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
+Chaque joueur choisit un deck prédéfini d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
 1. Le joueur choisit **Bouclier** ou **Épée**.
 2. Une pièce animée désigne le camp qui commence.
@@ -29,63 +29,72 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 
 ### Raretés
 
-Le catalogue de 82 cartes suit désormais cette répartition :
+Le catalogue de 82 cartes utilise quatre raretés :
 
-- **Commun** — blanc : 53 cartes, soit 64,6 % ;
-- **Peu commune** — orange : 20 cartes, soit 24,4 % ;
-- **Rare** — bleu : 7 cartes, soit 8,5 % ;
-- **Unique** — violet : 2 cartes, soit 2,4 %.
+- **Commun** — blanc : 53 cartes ;
+- **Peu commune** — orange : 20 cartes ;
+- **Rare** — bleu : 7 cartes ;
+- **Unique** — violet : 2 cartes.
 
-Avec 82 cartes, la répartition entière la plus proche conserve 7 cartes Rares et 2 cartes Uniques. Les Héros et personnages majeurs sont prioritairement placés dans les raretés supérieures.
+## Boosters et collection personnelle
 
-## Boosters et collection
-
-Le module reprend le fonctionnement du prototype de booster fourni :
+Chaque booster contient :
 
 - 4 cartes avec les probabilités normales : 65 % Commun, 25 % Peu commune, 8 % Rare, 2 % Unique ;
-- 1 carte garantie : 90 % Rare, 10 % Unique ;
-- les doublons sont autorisés ;
-- les cartes ouvertes sont sauvegardées dans la collection personnelle de l’utilisateur.
+- 1 carte garantie : 90 % Rare, 10 % Unique.
 
-Le bouton **Ouvrir un booster** est disponible sur l’écran de sélection des decks. Une macro globale est également créée pour le MJ.
+Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante.
 
-Le constructeur de decks personnalisés n’est pas encore inclus, mais il pourra utiliser cette collection dans une prochaine version.
+L’écran **Ma collection** affiche toutes les cartes du module regroupées par collection. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués.
 
-## Ouvrir le plateau
+## Constructeur de deck
 
-Dans le chat Foundry :
+Le constructeur permet :
+
+- de mélanger librement des cartes de plusieurs factions ;
+- d’utiliser uniquement les cartes réellement possédées par le profil connecté ;
+- de respecter la limite d’exemplaires indiquée par chaque carte ;
+- de sauvegarder plusieurs decks personnels ;
+- de sélectionner ces decks directement au lancement d’une partie.
+
+Un deck personnalisé doit contenir exactement 20 cartes. Les cartes de type Chef ou Spéciale restent visibles dans la collection, mais ne sont pas encore utilisables tant que leurs règles propres ne sont pas implémentées.
+
+## Commandes Foundry
+
+Ouvrir le plateau :
 
 ```text
 /sixcouronnes
 ```
 
-Ou avec une macro de type Script :
+Ouvrir la collection personnelle :
 
-```js
-await game.modules
-  .get("six-crowns-kingmaker-card-game")
-  .api
-  .openBoard();
+```text
+/sixcollection
 ```
 
-## API des boosters
+Ouvrir le constructeur de deck :
 
-```js
-await game.modules
-  .get("six-crowns-kingmaker-card-game")
-  .api
-  .openBooster();
+```text
+/sixdecks
 ```
 
-Consulter la collection de l’utilisateur courant :
+Des macros globales équivalentes sont créées automatiquement par le MJ lors du premier chargement du module.
+
+## API
 
 ```js
-await game.modules
-  .get("six-crowns-kingmaker-card-game")
-  .api
-  .getCollection();
+const api = game.modules.get("six-crowns-kingmaker-card-game").api;
+
+await api.openBoard();
+await api.openBooster();
+await api.openCollection();
+await api.openDeckBuilder();
+
+const collection = await api.getCollection();
+const decks = await api.getCustomDecks();
 ```
 
 ## Illustrations de cartes
 
-Chaque carte peut recevoir un chemin `image` dans `scripts/rules/decks.js`. Sans image, un visuel temporaire propre à sa faction est affiché automatiquement. Consultez `assets/cards/README.md` pour le format et l’arborescence recommandés.
+Chaque carte peut recevoir un chemin `image`. Sans image, un visuel temporaire propre à sa faction est affiché automatiquement. Consultez `assets/cards/README.md` pour le format et l’arborescence recommandés.

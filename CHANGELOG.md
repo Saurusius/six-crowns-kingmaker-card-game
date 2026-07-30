@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 0.7.4 — Collection personnelle et constructeur de deck
+
+- ajout d’un écran **Ma collection** affichant les 82 cartes du module, regroupées par collection ;
+- les cartes non obtenues restent masquées afin d’éviter les spoilers, tout en conservant leur emplacement dans la collection ;
+- ajout d’un constructeur permettant de mélanger librement les cartes possédées de plusieurs factions ;
+- validation des decks personnalisés à exactement 20 cartes, selon les exemplaires possédés et la limite propre à chaque carte ;
+- sauvegarde de plusieurs decks personnalisés et ajout automatique de ceux-ci à l’écran de sélection des decks ;
+- stockage des cartes et decks sur le profil utilisateur Foundry connecté, séparément pour chaque joueur ;
+- ajout des commandes `/sixcollection` et `/sixdecks`, ainsi que de macros dédiées ;
+- ajout de 6 tests pour les collections, les spoilers et les decks personnalisés.
+
 ## 0.7.3 — Vingt cartes dans chaque deck
 
 - ajout du **Fauconnier des steppes** au deck des Khans de Fer ;

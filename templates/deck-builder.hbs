@@ -1,0 +1,95 @@
+<section class="scg-profile-shell scg-builder-shell">
+  <header class="scg-profile-toolbar">
+    <div>
+      <h1>Constructeur de deck</h1>
+      <p>Collection de {{userName}} · Mélange libre des factions · Exactement {{requiredTotal}} cartes.</p>
+    </div>
+    <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
+      <strong>{{total}} / {{requiredTotal}}</strong>
+      {{#if complete}}<span>Deck prêt</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>Encore {{remaining}}</span>{{/if}}{{/if}}
+    </div>
+  </header>
+
+  <section class="scg-builder-management">
+    <label class="scg-builder-name">
+      <span>Nom du deck</span>
+      <input type="text" name="deck-name" value="{{draft.name}}" maxlength="60" placeholder="Mon deck des Terres Dérobées">
+    </label>
+    <label>
+      <span>Decks enregistrés</span>
+      <select name="saved-deck">
+        <option value="">— Choisir un deck —</option>
+        {{#each decks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+      </select>
+    </label>
+    <div class="scg-builder-management-actions">
+      <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
+      <button type="button" data-action="new-deck"><i class="fa-solid fa-file-circle-plus"></i> Nouveau</button>
+      <button type="button" data-action="save-deck"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+      <button type="button" data-action="delete-deck" {{#unless canDelete}}disabled{{/unless}}><i class="fa-solid fa-trash"></i></button>
+    </div>
+  </section>
+
+  <div class="scg-builder-layout">
+    <section class="scg-builder-library">
+      <header>
+        <div>
+          <h2>Cartes disponibles</h2>
+          <p>Le nombre autorisé dépend à la fois de vos exemplaires et de la limite propre à la carte.</p>
+        </div>
+        <div class="scg-profile-filters scg-builder-filters">
+          <input type="search" name="builder-search" value="{{search}}" placeholder="Rechercher…">
+          <select name="builder-faction">
+            <option value="all">Toutes les collections</option>
+            {{#each factionOptions}}<option value="{{id}}">{{label}}</option>{{/each}}
+          </select>
+        </div>
+      </header>
+
+      <div class="scg-builder-card-list">
+        {{#each cards}}
+          <article class="scg-builder-card scg-rarity-{{rarity}}" data-builder-card data-faction="{{faction}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}}">
+            <span class="scg-builder-symbol">{{factionSymbol}}</span>
+            <div class="scg-builder-card-info">
+              <strong>{{name}}</strong>
+              <small>{{factionLabel}} · {{rarityLabel}} · Force {{strength}}</small>
+              <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+            </div>
+            <div class="scg-builder-owned">
+              <small>Possédées {{ownedCount}}</small>
+              <small>Limite {{maxCopies}}</small>
+            </div>
+            <div class="scg-builder-stepper">
+              <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}}>−</button>
+              <strong>{{inDeck}}</strong>
+              <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>
+            </div>
+          </article>
+        {{else}}
+          <div class="scg-builder-empty">
+            <i class="fa-solid fa-box-open"></i>
+            <strong>Aucune carte jouable possédée</strong>
+            <p>Ouvrez quelques boosters depuis le plateau ou la collection pour commencer.</p>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <aside class="scg-builder-deck-list">
+      <header><h2>Deck actuel</h2><span>{{total}} carte(s)</span></header>
+      <div class="scg-builder-selected-scroll">
+        {{#each selectedCards}}
+          <article class="scg-builder-selected scg-rarity-{{rarity}}">
+            <span>{{factionSymbol}}</span>
+            <div><strong>{{name}}</strong><small>{{rarityLabel}}</small></div>
+            <button type="button" data-action="remove-card" data-card-id="{{id}}">−</button>
+            <b>×{{inDeck}}</b>
+            <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>
+          </article>
+        {{else}}
+          <p class="scg-builder-empty-deck">Ajoutez des cartes depuis votre collection.</p>
+        {{/each}}
+      </div>
+    </aside>
+  </div>
+</section>

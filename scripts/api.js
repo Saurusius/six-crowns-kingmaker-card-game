@@ -1,4 +1,5 @@
 import { getCollection, loadCardCatalog, openBooster } from "./boosters.js";
+import { getCustomDecks, openCollection, openDeckBuilder, syncCustomDeckRegistry } from "./profile.js";
 
 let board;
 
@@ -15,4 +16,12 @@ export async function openBoard() {
   return board;
 }
 
-export { getCollection, loadCardCatalog, openBooster };
+export {
+  getCollection,
+  getCustomDecks,
+  loadCardCatalog,
+  openBooster,
+  openCollection,
+  openDeckBuilder,
+  syncCustomDeckRegistry
+};

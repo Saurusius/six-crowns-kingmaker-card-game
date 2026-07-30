@@ -1,0 +1,82 @@
+<section class="scg-profile-shell scg-collection-shell">
+  <header class="scg-profile-toolbar">
+    <div>
+      <h1>Collection de {{userName}}</h1>
+      <p>Les cartes non obtenues restent masquées : vous voyez leur emplacement, mais aucun détail révélateur.</p>
+    </div>
+    <div class="scg-profile-actions">
+      <button type="button" data-action="open-booster"><i class="fa-solid fa-box-open"></i> Ouvrir un booster</button>
+      <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
+    </div>
+  </header>
+
+  <section class="scg-collection-summary">
+    <strong>{{discovered}} / {{total}} cartes découvertes</strong>
+    <span>{{copies}} exemplaire(s) possédé(s)</span>
+    <span>{{completionPercent}} % de la collection révélée</span>
+  </section>
+
+  <section class="scg-profile-filters">
+    <label>
+      <span>Rechercher</span>
+      <input type="search" name="collection-search" value="{{search}}" placeholder="Nom d’une carte possédée…">
+    </label>
+    <label>
+      <span>Collection</span>
+      <select name="collection-faction">
+        <option value="all">Toutes les collections</option>
+        {{#each groups}}<option value="{{id}}">{{label}}</option>{{/each}}
+      </select>
+    </label>
+  </section>
+
+  <div class="scg-collection-scroll">
+    {{#each groups}}
+      <section class="scg-collection-group" data-collection-group="{{id}}">
+        <header class="scg-collection-group-header">
+          <div><span class="scg-collection-symbol">{{symbol}}</span><h2>{{label}}</h2></div>
+          <div class="scg-collection-progress">
+            <strong>{{discovered}} / {{total}}</strong>
+            <span>{{completionPercent}} %</span>
+          </div>
+        </header>
+
+        <div class="scg-collection-grid">
+          {{#each cards}}
+            <article class="scg-collection-card {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
+              data-collection-card
+              data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}">
+              {{#if discovered}}
+                <div class="scg-collection-card-art">
+                  <span class="scg-collection-card-symbol">{{factionSymbol}}</span>
+                  {{#if playable}}<strong class="scg-collection-strength">{{strength}}</strong>{{/if}}
+                  <span class="scg-rarity-badge scg-rarity-{{rarity}}">{{rarityLabel}}</span>
+                </div>
+                <div class="scg-collection-card-body">
+                  <strong>{{name}}</strong>
+                  <small>{{id}} · {{factionLabel}}</small>
+                  {{#if playable}}
+                    <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+                    {{#if text}}<p>{{text}}</p>{{/if}}
+                  {{else}}
+                    <span>Carte de {{kind}} — non jouable pour le moment</span>
+                  {{/if}}
+                  <footer>
+                    <span>Possédée ×{{ownedCount}}</span>
+                    <span>Maximum par deck : {{maxCopies}}</span>
+                  </footer>
+                </div>
+              {{else}}
+                <div class="scg-hidden-card-back">
+                  <span class="scg-hidden-question">?</span>
+                  <strong>Carte inconnue</strong>
+                  <small>{{id}}</small>
+                </div>
+              {{/if}}
+            </article>
+          {{/each}}
+        </div>
+      </section>
+    {{/each}}
+  </div>
+</section>

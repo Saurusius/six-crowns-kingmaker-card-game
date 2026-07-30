@@ -1,5 +1,6 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { openBooster } from "../boosters.js";
+import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import {
   PHASES,
   beginCoinToss,
@@ -45,9 +46,15 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.matchState = createPrototypeState();
     this.opponentTimer = null;
     this.coinTimer = null;
+    this._decksHook = Hooks.on(`${MODULE_ID}.decksUpdated`, async () => {
+      if (this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
+        await this.render({ force: true });
+      }
+    });
   }
 
   async _prepareContext() {
+    await syncCustomDeckRegistry();
     return createBoardViewModel(this.matchState);
   }
 
@@ -111,6 +118,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         console.error(`${MODULE_TITLE} | Ouverture du booster impossible`, error);
         ui.notifications.error(error.message);
       }
+    });
+
+    const refreshDecks = async () => {
+      await syncCustomDeckRegistry();
+      if (this.matchState.phase === PHASES.DECK_SELECTION) await this.render({ force: true });
+    };
+
+    this.element.querySelector("[data-action='open-collection']")?.addEventListener("click", async () => {
+      await openCollection({ onDecksChanged: refreshDecks });
+    });
+
+    this.element.querySelector("[data-action='open-deck-builder']")?.addEventListener("click", async () => {
+      await openDeckBuilder({ onDecksChanged: refreshDecks });
     });
 
     this.element.querySelectorAll("[data-action='flip-coin']").forEach((button) => {
@@ -203,6 +223,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   async close(options = {}) {
     this._clearTimers();
+    if (this._decksHook !== null) Hooks.off(`${MODULE_ID}.decksUpdated`, this._decksHook);
     return super.close(options);
   }
 }
