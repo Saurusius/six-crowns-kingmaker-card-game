@@ -2,7 +2,7 @@
   <header class="scg-profile-toolbar">
     <div>
       <h1>Collection de {{userName}}</h1>
-      <p>Les cartes non obtenues restent masquées : vous voyez leur emplacement, mais aucun détail révélateur.</p>
+      <p>Les cartes non obtenues restent masquées : leur nom, leur rareté, leur ligne et leurs effets ne sont pas révélés.</p>
     </div>
     <div class="scg-profile-actions">
       <button type="button" data-action="open-booster"><i class="fa-solid fa-box-open"></i> Ouvrir un booster</button>
@@ -16,19 +16,86 @@
     <span>{{completionPercent}} % de la collection révélée</span>
   </section>
 
-  <section class="scg-profile-filters">
-    <label>
-      <span>Rechercher</span>
+  <section class="scg-faction-counters" aria-label="Progression par collection">
+    {{#each factionCounters}}
+      <article class="scg-faction-counter">
+        <span class="scg-collection-symbol">{{symbol}}</span>
+        <div>
+          <strong>{{label}}</strong>
+          <small>{{discovered}} / {{total}} cartes · {{completionPercent}} %</small>
+        </div>
+      </article>
+    {{/each}}
+  </section>
+
+  <section class="scg-profile-filters scg-collection-filters">
+    <label class="scg-filter-search">
+      <span>Rechercher par nom</span>
       <input type="search" name="collection-search" value="{{search}}" placeholder="Nom d’une carte possédée…">
     </label>
     <label>
       <span>Collection</span>
       <select name="collection-faction">
         <option value="all">Toutes les collections</option>
-        {{#each groups}}<option value="{{id}}">{{label}}</option>{{/each}}
+        {{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
       </select>
     </label>
+    <label>
+      <span>Rareté</span>
+      <select name="collection-rarity">
+        <option value="all">Toutes les raretés</option>
+        {{#each rarityOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+    </label>
+    <label>
+      <span>Ligne</span>
+      <select name="collection-row">
+        <option value="all">Toutes les lignes</option>
+        {{#each rowOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+    </label>
+    <label>
+      <span>Possession</span>
+      <select name="collection-ownership">
+        {{#each ownershipOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+      </select>
+    </label>
+    <button type="button" class="scg-filter-reset" data-action="reset-filters"><i class="fa-solid fa-filter-circle-xmark"></i> Réinitialiser</button>
   </section>
+
+  {{#if isGM}}
+    <section class="scg-gm-tools">
+      <header>
+        <div>
+          <h2><i class="fa-solid fa-user-shield"></i> Outils MJ</h2>
+          <p>Ces actions modifient directement la collection liée au profil Foundry du joueur ciblé.</p>
+        </div>
+      </header>
+      <div class="scg-gm-tools-grid">
+        <label>
+          <span>Joueur ciblé</span>
+          <select name="gm-target-user">
+            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}}</option>{{/each}}
+          </select>
+        </label>
+        <label class="scg-gm-card-select">
+          <span>Carte à donner</span>
+          <select name="gm-card">
+            {{#each gmCards}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}
+          </select>
+        </label>
+        <label>
+          <span>Quantité</span>
+          <input type="number" name="gm-card-count" value="1" min="1" max="100">
+        </label>
+        <div class="scg-gm-actions">
+          <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner la carte</button>
+          <button type="button" data-action="gm-open-booster"><i class="fa-solid fa-box-open"></i> Ouvrir un booster</button>
+          <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
+        </div>
+      </div>
+    </section>
+  {{/if}}
 
   <div class="scg-collection-scroll">
     {{#each groups}}
@@ -37,7 +104,7 @@
           <div><span class="scg-collection-symbol">{{symbol}}</span><h2>{{label}}</h2></div>
           <div class="scg-collection-progress">
             <strong>{{discovered}} / {{total}}</strong>
-            <span>{{completionPercent}} %</span>
+            <span>{{completionPercent}} % · {{copies}} exemplaire(s)</span>
           </div>
         </header>
 
@@ -45,6 +112,9 @@
           {{#each cards}}
             <article class="scg-collection-card {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
               data-collection-card
+              data-rarity="{{filterRarity}}"
+              data-rows="{{filterRows}}"
+              data-ownership="{{ownershipState}}"
               data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}">
               {{#if discovered}}
                 <div class="scg-collection-card-art">

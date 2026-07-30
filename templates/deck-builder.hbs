@@ -6,7 +6,7 @@
     </div>
     <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
       <strong>{{total}} / {{requiredTotal}}</strong>
-      {{#if complete}}<span>Deck prêt</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>Encore {{remaining}}</span>{{/if}}{{/if}}
+      {{#if valid}}<span>Deck valide</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>Deck incomplet</span>{{/if}}{{/if}}
     </div>
   </header>
 
@@ -19,15 +19,58 @@
       <span>Decks enregistrés</span>
       <select name="saved-deck">
         <option value="">— Choisir un deck —</option>
-        {{#each decks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+        {{#each decks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>{{/each}}
       </select>
     </label>
     <div class="scg-builder-management-actions">
       <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
       <button type="button" data-action="new-deck"><i class="fa-solid fa-file-circle-plus"></i> Nouveau</button>
-      <button type="button" data-action="save-deck"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-      <button type="button" data-action="delete-deck" {{#unless canDelete}}disabled{{/unless}}><i class="fa-solid fa-trash"></i></button>
+      <button type="button" data-action="save-deck" {{#unless canSave}}disabled{{/unless}}><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+      <button type="button" data-action="rename-deck" {{#unless canRename}}disabled{{/unless}}><i class="fa-solid fa-pen"></i> Renommer</button>
+      <button type="button" data-action="duplicate-deck" {{#unless canDuplicate}}disabled{{/unless}}><i class="fa-solid fa-copy"></i> Dupliquer</button>
+      <button type="button" class="is-danger" data-action="delete-deck" {{#unless canDelete}}disabled{{/unless}} title="Supprimer"><i class="fa-solid fa-trash"></i></button>
     </div>
+  </section>
+
+  {{#if hasValidationErrors}}
+    <section class="scg-deck-validation is-invalid">
+      <div>
+        <strong><i class="fa-solid fa-triangle-exclamation"></i> Ce deck n’est pas encore valide</strong>
+        <span>Corrigez les points suivants avant de l’enregistrer ou de le jouer :</span>
+      </div>
+      <ul>{{#each validationErrors}}<li>{{this}}</li>{{/each}}</ul>
+    </section>
+  {{else}}
+    <section class="scg-deck-validation is-valid">
+      <strong><i class="fa-solid fa-circle-check"></i> Deck valide : 20 cartes et toutes les limites sont respectées.</strong>
+    </section>
+  {{/if}}
+
+  <section class="scg-deck-analysis">
+    <article class="scg-analysis-card">
+      <header><strong>Courbe de force</strong><span>Force moyenne : {{statistics.averageStrength}}</span></header>
+      <div class="scg-analysis-bars">
+        {{#each statistics.strengthCurve}}
+          <div class="scg-analysis-row">
+            <span>{{label}}</span>
+            <div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div>
+            <b>{{count}}</b>
+          </div>
+        {{/each}}
+      </div>
+    </article>
+    <article class="scg-analysis-card">
+      <header><strong>Répartition des lignes</strong><span>Une carte mobile compte sur chaque ligne autorisée.</span></header>
+      <div class="scg-analysis-bars">
+        {{#each statistics.rowDistribution}}
+          <div class="scg-analysis-row">
+            <span>{{label}}</span>
+            <div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div>
+            <b>{{count}}</b>
+          </div>
+        {{/each}}
+      </div>
+    </article>
   </section>
 
   <div class="scg-builder-layout">
@@ -35,13 +78,16 @@
       <header>
         <div>
           <h2>Cartes disponibles</h2>
-          <p>Le nombre autorisé dépend à la fois de vos exemplaires et de la limite propre à la carte.</p>
+          <p>Le nombre utilisable dépend de vos exemplaires possédés et de la limite propre à chaque carte.</p>
         </div>
         <div class="scg-profile-filters scg-builder-filters">
-          <input type="search" name="builder-search" value="{{search}}" placeholder="Rechercher…">
+          <input type="search" name="builder-search" value="{{search}}" placeholder="Rechercher par nom…">
           <select name="builder-faction">
             <option value="all">Toutes les collections</option>
-            {{#each factionOptions}}<option value="{{id}}">{{label}}</option>{{/each}}
+            {{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+          </select>
+          <select name="builder-sort" aria-label="Trier les cartes">
+            {{#each sortOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>Tri : {{label}}</option>{{/each}}
           </select>
         </div>
       </header>
@@ -56,8 +102,10 @@
               <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
             </div>
             <div class="scg-builder-owned">
-              <small>Possédées {{ownedCount}}</small>
-              <small>Limite {{maxCopies}}</small>
+              <strong>Possédées : {{ownedCount}}</strong>
+              <small>Utilisées : {{inDeck}}</small>
+              <small>Disponibles : {{availableCount}}</small>
+              <small>Limite du deck : {{maxCopies}}</small>
             </div>
             <div class="scg-builder-stepper">
               <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}}>−</button>
@@ -81,7 +129,10 @@
         {{#each selectedCards}}
           <article class="scg-builder-selected scg-rarity-{{rarity}}">
             <span>{{factionSymbol}}</span>
-            <div><strong>{{name}}</strong><small>{{rarityLabel}}</small></div>
+            <div>
+              <strong>{{name}}</strong>
+              <small>{{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
+            </div>
             <button type="button" data-action="remove-card" data-card-id="{{id}}">−</button>
             <b>×{{inDeck}}</b>
             <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>

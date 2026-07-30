@@ -37,6 +37,15 @@ async function loadJson(path) {
   return response.json();
 }
 
+function resolveUser({ user = null, userId = null } = {}) {
+  const targetUser = user ?? (userId ? game.users.get(userId) : game.user);
+  if (!targetUser) throw new Error("Profil Foundry introuvable.");
+  if (targetUser.id !== game.user.id && !game.user.isGM) {
+    throw new Error("Seul un MJ peut modifier la collection d’un autre joueur.");
+  }
+  return targetUser;
+}
+
 export async function loadCardCatalog() {
   catalogPromise ??= Promise.all(CARD_FILES.map((file) => loadJson(
     `modules/${MODULE_ID}/data/cards/${file}`
@@ -71,8 +80,9 @@ function shuffle(items, random = Math.random) {
   return result;
 }
 
-export async function getCollection() {
-  const collection = foundry.utils.deepClone(game.user.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {});
+export async function getCollection(options = {}) {
+  const targetUser = resolveUser(options);
+  const collection = foundry.utils.deepClone(targetUser.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {});
   const catalog = await loadCardCatalog();
   const cardsById = new Map(catalog.map((card) => [card.id, card]));
 
@@ -86,8 +96,9 @@ export async function getCollection() {
   return collection;
 }
 
-async function addCardsToCollection(cards) {
-  const collection = await getCollection();
+async function addCardsToCollection(cards, options = {}) {
+  const targetUser = resolveUser(options);
+  const collection = await getCollection({ user: targetUser });
   for (const card of cards) {
     const current = collection[card.id] ?? {
       id: card.id,
@@ -102,12 +113,31 @@ async function addCardsToCollection(cards) {
     current.count += 1;
     collection[card.id] = current;
   }
-  await game.user.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
-  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection);
+  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
   return collection;
 }
 
-function boosterChatContent(cards) {
+export async function grantCardToUser({ userId, cardId, count = 1 } = {}) {
+  if (!game.user.isGM) throw new Error("Seul un MJ peut donner des cartes.");
+  const targetUser = resolveUser({ userId });
+  const catalog = await loadCardCatalog();
+  const card = catalog.find((entry) => entry.id === cardId);
+  if (!card) throw new Error("Sélectionnez une carte valide.");
+  const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
+  await addCardsToCollection(Array.from({ length: quantity }, () => card), { user: targetUser });
+  return { user: targetUser, card, count: quantity };
+}
+
+export async function resetCollectionForUser({ userId } = {}) {
+  if (!game.user.isGM) throw new Error("Seul un MJ peut réinitialiser une collection.");
+  const targetUser = resolveUser({ userId });
+  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, {});
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, {}, targetUser.id);
+  return targetUser;
+}
+
+function boosterChatContent(cards, targetUser) {
   const rows = cards.map((card, index) => `
     <article class="scg-booster-card scg-booster-${escapeHtml(card.rarity)}">
       <span class="scg-booster-number">${index + 1}</span>
@@ -117,16 +147,22 @@ function boosterChatContent(cards) {
     </article>
   `).join("");
 
+  const openedForAnotherUser = targetUser.id !== game.user.id;
+  const introduction = openedForAnotherUser
+    ? `Booster ouvert par <strong>${escapeHtml(game.user.name)}</strong> pour <strong>${escapeHtml(targetUser.name)}</strong>.`
+    : `Ouvert par <strong>${escapeHtml(targetUser.name)}</strong>.`;
+
   return `
     <section class="scg-booster-result">
       <h2><i class="fa-solid fa-box-open"></i> Booster des Six Couronnes</h2>
-      <p>Ouvert par <strong>${escapeHtml(game.user.name)}</strong>. Les cartes ont été ajoutées à sa collection.</p>
+      <p>${introduction} Les cartes ont été ajoutées à sa collection.</p>
       <div class="scg-booster-list">${rows}</div>
     </section>
   `;
 }
 
-export async function openBooster({ random = Math.random } = {}) {
+export async function openBooster({ random = Math.random, user = null, userId = null } = {}) {
+  const targetUser = resolveUser({ user, userId });
   const catalog = await loadCardCatalog();
   const cards = [];
 
@@ -136,12 +172,13 @@ export async function openBooster({ random = Math.random } = {}) {
   cards.push(pickCard(catalog, drawGuaranteedRarity(random), random));
 
   const booster = shuffle(cards, random);
-  await addCardsToCollection(booster);
+  await addCardsToCollection(booster, { user: targetUser });
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-    content: boosterChatContent(booster)
+    content: boosterChatContent(booster, targetUser)
   });
-  ui.notifications.info("Booster ouvert : 5 cartes ajoutées à votre collection.");
+  const suffix = targetUser.id === game.user.id ? "votre collection" : `la collection de ${targetUser.name}`;
+  ui.notifications.info(`Booster ouvert : 5 cartes ajoutées à ${suffix}.`);
   return booster;
 }
 

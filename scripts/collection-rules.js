@@ -12,6 +12,12 @@ export const RARITY_DETAILS = Object.freeze({
   unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4 })
 });
 
+export const ROW_DETAILS = Object.freeze({
+  "avant-garde": Object.freeze({ label: "Avant-garde", order: 1 }),
+  escarmouche: Object.freeze({ label: "Escarmouche", order: 2 }),
+  domaine: Object.freeze({ label: "Domaine", order: 3 })
+});
+
 export const CUSTOM_DECK_SIZE = 20;
 
 export function isPlayableCard(card) {
@@ -79,6 +85,9 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       ...card,
       ownedCount,
       discovered,
+      ownershipState: discovered ? "owned" : "unowned",
+      filterRarity: discovered ? card.rarity : "hidden",
+      filterRows: discovered && Array.isArray(card.rows) && card.rows.length > 0 ? card.rows.join(" ") : "hidden",
       playable: isPlayableCard(card),
       displayName: discovered ? card.name : "Carte inconnue",
       rarityLabel: rarity.label,
@@ -113,6 +122,7 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
       const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
       const inDeck = normalizedDeck[card.id] ?? 0;
       const allowedCopies = Math.min(ownedCount, maxCopies);
+      const availableCount = Math.max(0, allowedCopies - inDeck);
       const faction = FACTION_DETAILS[card.faction] ?? { label: card.faction, symbol: "?" };
       const rarity = RARITY_DETAILS[card.rarity] ?? { label: card.rarity };
       return {
@@ -121,19 +131,136 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         inDeck,
         maxCopies,
         allowedCopies,
+        availableCount,
         canAdd: inDeck < allowedCopies,
         canRemove: inDeck > 0,
         factionLabel: faction.label,
         factionSymbol: faction.symbol,
         rarityLabel: rarity.label
       };
-    })
-    .sort((a, b) => {
-      const factionOrder = (FACTION_DETAILS[a.faction]?.order ?? 99) - (FACTION_DETAILS[b.faction]?.order ?? 99);
-      if (factionOrder !== 0) return factionOrder;
-      const rarityOrder = (RARITY_DETAILS[b.rarity]?.order ?? 0) - (RARITY_DETAILS[a.rarity]?.order ?? 0);
-      return rarityOrder || a.name.localeCompare(b.name, "fr");
     });
+}
+
+export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards = {}) {
+  const normalizedCollection = normalizeCollection(collection);
+  const normalizedDeck = normalizeDeckCards(deckCards);
+  const catalogById = new Map(catalog.map((card) => [card.id, card]));
+
+  return Object.entries(normalizedDeck).map(([cardId, inDeck]) => {
+    const card = catalogById.get(cardId);
+    if (!card) {
+      return {
+        id: cardId,
+        name: `Carte absente du catalogue (${cardId})`,
+        faction: "unknown",
+        factionLabel: "Carte inconnue",
+        factionSymbol: "?",
+        rarity: "commun",
+        rarityLabel: "Inconnue",
+        ownedCount: 0,
+        inDeck,
+        maxCopies: 0,
+        allowedCopies: 0,
+        availableCount: 0,
+        canAdd: false,
+        canRemove: true,
+        invalid: true
+      };
+    }
+
+    const ownedCount = normalizedCollection[cardId]?.count ?? 0;
+    const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
+    const allowedCopies = Math.min(ownedCount, maxCopies);
+    const faction = FACTION_DETAILS[card.faction] ?? { label: card.faction, symbol: "?" };
+    const rarity = RARITY_DETAILS[card.rarity] ?? { label: card.rarity };
+    return {
+      ...card,
+      ownedCount,
+      inDeck,
+      maxCopies,
+      allowedCopies,
+      availableCount: Math.max(0, allowedCopies - inDeck),
+      canAdd: inDeck < allowedCopies,
+      canRemove: true,
+      invalid: !isPlayableCard(card) || inDeck > allowedCopies,
+      factionLabel: faction.label,
+      factionSymbol: faction.symbol,
+      rarityLabel: rarity.label
+    };
+  });
+}
+
+export function sortOwnedPlayableCards(cards = [], sortBy = "name") {
+  const sorted = [...cards];
+  const byName = (a, b) => a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
+  const byFaction = (a, b) => (FACTION_DETAILS[a.faction]?.order ?? 99) - (FACTION_DETAILS[b.faction]?.order ?? 99);
+
+  sorted.sort((a, b) => {
+    if (sortBy === "strength") {
+      const strengthOrder = Number(b.strength ?? 0) - Number(a.strength ?? 0);
+      return strengthOrder || byName(a, b);
+    }
+    if (sortBy === "rarity") {
+      const rarityOrder = (RARITY_DETAILS[b.rarity]?.order ?? 0) - (RARITY_DETAILS[a.rarity]?.order ?? 0);
+      return rarityOrder || byName(a, b);
+    }
+    if (sortBy === "faction") {
+      return byFaction(a, b) || byName(a, b);
+    }
+    return byName(a, b);
+  });
+  return sorted;
+}
+
+function percentage(count, maximum) {
+  return maximum > 0 ? Math.round((count / maximum) * 100) : 0;
+}
+
+export function buildDeckStatistics(catalog = [], deckCards = {}) {
+  const normalizedDeck = normalizeDeckCards(deckCards);
+  const catalogById = new Map(catalog.map((card) => [card.id, card]));
+  const expanded = [];
+
+  for (const [cardId, count] of Object.entries(normalizedDeck)) {
+    const card = catalogById.get(cardId);
+    if (!card || !isPlayableCard(card)) continue;
+    for (let copy = 0; copy < count; copy += 1) expanded.push(card);
+  }
+
+  const total = expanded.length;
+  const totalStrength = expanded.reduce((sum, card) => sum + Number(card.strength ?? 0), 0);
+  const averageStrength = total > 0 ? Math.round((totalStrength / total) * 10) / 10 : 0;
+  const strengthBuckets = [
+    { id: "low", label: "1–3", min: 1, max: 3 },
+    { id: "medium", label: "4–5", min: 4, max: 5 },
+    { id: "high", label: "6–7", min: 6, max: 7 },
+    { id: "elite", label: "8+", min: 8, max: Infinity }
+  ].map((bucket) => ({
+    ...bucket,
+    count: expanded.filter((card) => card.strength >= bucket.min && card.strength <= bucket.max).length
+  }));
+  const maxStrengthBucket = Math.max(1, ...strengthBuckets.map((bucket) => bucket.count));
+
+  const rowDistribution = Object.entries(ROW_DETAILS).map(([id, details]) => ({
+    id,
+    label: details.label,
+    count: expanded.filter((card) => card.rows.includes(id)).length
+  }));
+  const maxRowCount = Math.max(1, ...rowDistribution.map((row) => row.count));
+
+  return {
+    total,
+    totalStrength,
+    averageStrength,
+    strengthCurve: strengthBuckets.map((bucket) => ({
+      ...bucket,
+      percent: percentage(bucket.count, maxStrengthBucket)
+    })),
+    rowDistribution: rowDistribution.map((row) => ({
+      ...row,
+      percent: percentage(row.count, maxRowCount)
+    }))
+  };
 }
 
 export function validateCustomDeck({ name, cards }, catalog = [], collection = {}) {
@@ -145,7 +272,8 @@ export function validateCustomDeck({ name, cards }, catalog = [], collection = {
   const total = countDeckCards(normalizedCards);
 
   if (!normalizedName) errors.push("Donnez un nom au deck.");
-  if (total !== CUSTOM_DECK_SIZE) errors.push(`Le deck doit contenir exactement ${CUSTOM_DECK_SIZE} cartes.`);
+  if (total < CUSTOM_DECK_SIZE) errors.push(`Il manque ${CUSTOM_DECK_SIZE - total} carte(s) : le deck doit en contenir exactement ${CUSTOM_DECK_SIZE}.`);
+  if (total > CUSTOM_DECK_SIZE) errors.push(`Retirez ${total - CUSTOM_DECK_SIZE} carte(s) : le deck doit en contenir exactement ${CUSTOM_DECK_SIZE}.`);
 
   for (const [cardId, count] of Object.entries(normalizedCards)) {
     const card = catalogById.get(cardId);
@@ -160,8 +288,8 @@ export function validateCustomDeck({ name, cards }, catalog = [], collection = {
 
     const ownedCount = normalizedCollection[cardId]?.count ?? 0;
     const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
-    if (count > ownedCount) errors.push(`Vous ne possédez que ${ownedCount} exemplaire(s) de ${card.name}.`);
-    if (count > maxCopies) errors.push(`${card.name} est limité à ${maxCopies} exemplaire(s) par deck.`);
+    if (count > ownedCount) errors.push(`${card.name} : vous utilisez ${count} exemplaire(s), mais vous n’en possédez que ${ownedCount}.`);
+    if (count > maxCopies) errors.push(`${card.name} : ${count} utilisée(s), alors que la limite est de ${maxCopies}.`);
   }
 
   return {

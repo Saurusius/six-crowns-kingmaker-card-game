@@ -2,13 +2,17 @@ import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { createBoosterMacro } from "./boosters.js";
 import { createProfileMacros } from "./profile.js";
 import {
+  duplicateCustomDeck,
   getCollection,
   getCustomDecks,
+  grantCardToUser,
   loadCardCatalog,
   openBoard,
   openBooster,
   openCollection,
   openDeckBuilder,
+  renameCustomDeck,
+  resetCollectionForUser,
   syncCustomDeckRegistry
 } from "./api.js";
 
@@ -20,6 +24,10 @@ const api = Object.freeze({
   getCollection,
   getCustomDecks,
   loadCardCatalog,
+  grantCardToUser,
+  resetCollectionForUser,
+  renameCustomDeck,
+  duplicateCustomDeck,
   syncCustomDeckRegistry
 });
 
@@ -62,6 +70,16 @@ Hooks.once("ready", async () => {
     console.error(`${MODULE_TITLE} | Initialisation des collections impossible`, error);
   }
   console.log(`${MODULE_TITLE} | Prêt. Commandes : /sixcouronnes, /sixcollection, /sixdecks`);
+});
+
+Hooks.on(`${MODULE_ID}.collectionUpdated`, async (_collection, userId) => {
+  if (userId && userId !== game.user.id) return;
+  try {
+    const decks = await syncCustomDeckRegistry();
+    Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
+  } catch (error) {
+    console.error(`${MODULE_TITLE} | Mise à jour des decks après modification de collection impossible`, error);
+  }
 });
 
 Hooks.on("chatMessage", (_chatLog, message) => {

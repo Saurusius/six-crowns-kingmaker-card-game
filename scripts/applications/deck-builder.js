@@ -3,11 +3,21 @@ import { getCollection, loadCardCatalog } from "../boosters.js";
 import {
   CUSTOM_DECK_SIZE,
   FACTION_DETAILS,
+  buildDeckStatistics,
   buildOwnedPlayableCards,
+  buildSelectedDeckCards,
   countDeckCards,
-  normalizeDeckCards
+  normalizeDeckCards,
+  sortOwnedPlayableCards,
+  validateCustomDeck
 } from "../collection-rules.js";
-import { deleteCustomDeck, getCustomDecks, saveCustomDeck } from "../profile.js";
+import {
+  deleteCustomDeck,
+  duplicateCustomDeck,
+  getCustomDecks,
+  renameCustomDeck,
+  saveCustomDeck
+} from "../profile.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -24,8 +34,8 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       resizable: true
     },
     position: {
-      width: 1240,
-      height: 850
+      width: 1360,
+      height: 890
     }
   };
 
@@ -42,6 +52,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this.draft = emptyDraft();
     this.search = "";
     this.factionFilter = "all";
+    this.sortBy = "name";
   }
 
   async _loadRequestedDeck(decks) {
@@ -59,26 +70,56 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     ]);
     await this._loadRequestedDeck(decks);
 
-    const cards = buildOwnedPlayableCards(catalog, collection, this.draft.cards);
+    const cards = sortOwnedPlayableCards(
+      buildOwnedPlayableCards(catalog, collection, this.draft.cards),
+      this.sortBy
+    );
     const total = countDeckCards(this.draft.cards);
-    const selectedCards = cards.filter((card) => card.inDeck > 0);
-    const factionOptions = Object.entries(FACTION_DETAILS).map(([id, details]) => ({ id, label: details.label }));
+    const selectedCards = sortOwnedPlayableCards(
+      buildSelectedDeckCards(catalog, collection, this.draft.cards),
+      "name"
+    );
+    const factionOptions = Object.entries(FACTION_DETAILS).map(([id, details]) => ({
+      id,
+      label: details.label,
+      selected: id === this.factionFilter
+    }));
+    const validation = validateCustomDeck(this.draft, catalog, collection);
+    const statistics = buildDeckStatistics(catalog, this.draft.cards);
 
     return {
       userName: game.user.name,
       draft: this.draft,
       cards,
       selectedCards,
-      decks: decks.map((deck) => ({ ...deck, selected: deck.id === this.draft.id })),
+      decks: decks.map((deck) => ({
+        ...deck,
+        cardCount: countDeckCards(deck.cards),
+        selected: deck.id === this.draft.id
+      })),
       total,
       requiredTotal: CUSTOM_DECK_SIZE,
       remaining: Math.max(0, CUSTOM_DECK_SIZE - total),
       overLimit: total > CUSTOM_DECK_SIZE,
       complete: total === CUSTOM_DECK_SIZE,
+      valid: validation.valid,
+      validationErrors: validation.errors,
+      hasValidationErrors: validation.errors.length > 0,
+      canSave: validation.valid,
       canDelete: Boolean(this.draft.id),
+      canRename: Boolean(this.draft.id),
+      canDuplicate: Boolean(this.draft.id),
       factionOptions,
       search: this.search,
-      factionFilter: this.factionFilter
+      factionFilter: this.factionFilter,
+      sortBy: this.sortBy,
+      sortOptions: [
+        { id: "name", label: "Nom", selected: this.sortBy === "name" },
+        { id: "strength", label: "Force décroissante", selected: this.sortBy === "strength" },
+        { id: "rarity", label: "Rareté décroissante", selected: this.sortBy === "rarity" },
+        { id: "faction", label: "Collection", selected: this.sortBy === "faction" }
+      ],
+      statistics
     };
   }
 
@@ -111,6 +152,11 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
 
     this.element.querySelector("[name='builder-search']")?.addEventListener("input", applyFilters);
     this.element.querySelector("[name='builder-faction']")?.addEventListener("change", applyFilters);
+    this.element.querySelector("[name='builder-sort']")?.addEventListener("change", async (event) => {
+      this._captureName();
+      this.sortBy = event.currentTarget.value;
+      await this.render({ force: true });
+    });
     this.element.querySelector("[name='deck-name']")?.addEventListener("input", (event) => {
       this.draft.name = event.currentTarget.value;
     });
@@ -157,6 +203,34 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
         await this.render({ force: true });
       } catch (error) {
         console.error(`${MODULE_TITLE} | Enregistrement du deck impossible`, error);
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='rename-deck']")?.addEventListener("click", async () => {
+      if (!this.draft.id) return;
+      const requestedName = globalThis.prompt("Nouveau nom du deck :", this.draft.name);
+      if (requestedName === null) return;
+      try {
+        const renamed = await renameCustomDeck(this.draft.id, requestedName);
+        this.draft = foundry.utils.deepClone(renamed);
+        await this.onDecksChanged?.();
+        ui.notifications.info(`Deck renommé « ${renamed.name} ».`);
+        await this.render({ force: true });
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='duplicate-deck']")?.addEventListener("click", async () => {
+      if (!this.draft.id) return;
+      try {
+        const duplicate = await duplicateCustomDeck(this.draft.id);
+        this.draft = foundry.utils.deepClone(duplicate);
+        await this.onDecksChanged?.();
+        ui.notifications.info(`Copie créée : « ${duplicate.name} ».`);
+        await this.render({ force: true });
+      } catch (error) {
         ui.notifications.warn(error.message);
       }
     });

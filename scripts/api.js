@@ -1,5 +1,18 @@
-import { getCollection, loadCardCatalog, openBooster } from "./boosters.js";
-import { getCustomDecks, openCollection, openDeckBuilder, syncCustomDeckRegistry } from "./profile.js";
+import {
+  getCollection,
+  grantCardToUser,
+  loadCardCatalog,
+  openBooster,
+  resetCollectionForUser
+} from "./boosters.js";
+import {
+  duplicateCustomDeck,
+  getCustomDecks,
+  openCollection,
+  openDeckBuilder,
+  renameCustomDeck,
+  syncCustomDeckRegistry
+} from "./profile.js";
 
 let board;
 
@@ -17,11 +30,15 @@ export async function openBoard() {
 }
 
 export {
+  duplicateCustomDeck,
   getCollection,
   getCustomDecks,
+  grantCardToUser,
   loadCardCatalog,
   openBooster,
   openCollection,
   openDeckBuilder,
+  renameCustomDeck,
+  resetCollectionForUser,
   syncCustomDeckRegistry
 };

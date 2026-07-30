@@ -2,9 +2,12 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildCollectionGroups,
+  buildDeckStatistics,
   buildOwnedPlayableCards,
+  buildSelectedDeckCards,
   countDeckCards,
   expandCustomDeckCards,
+  sortOwnedPlayableCards,
   validateCustomDeck
 } from "../scripts/collection-rules.js";
 import { cloneDeck, listDecks, registerCustomDecks } from "../scripts/rules/decks.js";
@@ -99,4 +102,43 @@ test("un deck personnalisé enregistré devient sélectionnable par le moteur", 
   assert.equal(definition.custom, true);
   assert.equal(cloneDeck("custom:mix").length, 20);
   registerCustomDecks([], []);
+});
+
+
+test("le tri du constructeur classe les cartes par force, rareté ou nom", () => {
+  const cards = buildOwnedPlayableCards(catalog, collection, {});
+  assert.deepEqual(sortOwnedPlayableCards(cards, "name").map((card) => card.id), ["AL-X", "SC-X"]);
+  assert.deepEqual(sortOwnedPlayableCards(cards, "strength").map((card) => card.id), ["AL-X", "SC-X"]);
+  assert.deepEqual(sortOwnedPlayableCards(cards, "rarity").map((card) => card.id), ["AL-X", "SC-X"]);
+});
+
+test("les statistiques du deck calculent la courbe de force et les lignes", () => {
+  const statistics = buildDeckStatistics(catalog, { "SC-X": 10, "AL-X": 10 });
+  assert.equal(statistics.total, 20);
+  assert.equal(statistics.averageStrength, 4.5);
+  assert.equal(statistics.strengthCurve.find((bucket) => bucket.label === "4–5").count, 20);
+  assert.equal(statistics.rowDistribution.find((row) => row.id === "avant-garde").count, 10);
+  assert.equal(statistics.rowDistribution.find((row) => row.id === "escarmouche").count, 10);
+  assert.equal(statistics.rowDistribution.find((row) => row.id === "domaine").count, 0);
+});
+
+test("les avertissements de validation détaillent les cartes manquantes", () => {
+  const validation = validateCustomDeck({
+    name: "Deck incomplet",
+    cards: { "SC-X": 8, "AL-X": 8 }
+  }, catalog, collection);
+  assert.equal(validation.valid, false);
+  assert.match(validation.errors.join(" "), /Il manque 4 carte/);
+});
+
+
+test("un deck invalide conserve ses cartes dans la liste afin de pouvoir les retirer", () => {
+  const selected = buildSelectedDeckCards(catalog, {}, { "SC-X": 2, "MISSING-X": 1 });
+  const unowned = selected.find((card) => card.id === "SC-X");
+  const missing = selected.find((card) => card.id === "MISSING-X");
+  assert.equal(unowned.canRemove, true);
+  assert.equal(unowned.canAdd, false);
+  assert.equal(unowned.invalid, true);
+  assert.equal(missing.canRemove, true);
+  assert.equal(missing.invalid, true);
 });

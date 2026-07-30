@@ -1,5 +1,18 @@
 # Journal des versions
 
+## 0.7.7 — Collection et decks sous contrôle
+
+- ajout de filtres de collection par faction, rareté, ligne et état de possession ;
+- ajout d’une recherche par nom et de compteurs globaux et par faction ;
+- ajout du tri du constructeur par nom, force, rareté ou collection ;
+- ajout d’un aperçu de la courbe de force et de la répartition des trois lignes ;
+- affichage détaillé des exemplaires possédés, utilisés, disponibles et de la limite par deck ;
+- ajout des actions explicites **Renommer** et **Dupliquer** pour les decks enregistrés ;
+- ajout d’un panneau détaillé listant toutes les causes d’invalidité d’un deck ;
+- ajout d’outils MJ pour donner une carte, ouvrir un booster pour un joueur ou réinitialiser sa collection ;
+- réduction visuelle des zones de défausse sur le plateau ;
+- ajout de tests pour les tris, les statistiques et les messages de validation.
+
 ## 0.7.6 — Quatre collections complètes
 
 - extension du catalogue à **160 cartes**, réparties en quatre collections de 40 cartes ;

@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.5
+## Règles du prototype 0.7.7
 
 Chaque joueur choisit un deck prédéfini d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -31,8 +31,8 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 
 Le catalogue comprend désormais **160 cartes**, réparties en **quatre collections de 40 cartes**, et utilise quatre raretés :
 
-- **Commun** — blanc : 39 cartes ;
-- **Peu commune** — orange : 15 cartes ;
+- **Commun** — blanc : 104 cartes ;
+- **Peu commune** — orange : 28 cartes ;
 - **Rare** — bleu : 25 cartes ;
 - **Unique** — violet : 3 cartes.
 
@@ -48,7 +48,7 @@ Chaque booster contient :
 
 Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante.
 
-L’écran **Ma collection** affiche les 160 cartes du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués.
+L’écran **Ma collection** affiche les 160 cartes du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués. La collection peut être filtrée par faction, rareté, ligne et état de possession, avec une recherche par nom et des compteurs par faction. Les MJ disposent aussi d’outils intégrés pour donner une carte, ouvrir un booster pour un joueur ou réinitialiser une collection.
 
 ## Constructeur de deck
 
@@ -58,7 +58,11 @@ Le constructeur permet :
 - d’utiliser uniquement les cartes réellement possédées par le profil connecté ;
 - de respecter la limite d’exemplaires indiquée par chaque carte ;
 - de sauvegarder plusieurs decks personnels ;
-- de sélectionner ces decks directement au lancement d’une partie.
+- de sélectionner ces decks directement au lancement d’une partie ;
+- de trier les cartes par nom, force, rareté ou faction ;
+- d’afficher la courbe de force et la répartition des lignes ;
+- de renommer ou dupliquer un deck enregistré ;
+- d’obtenir un diagnostic détaillé lorsqu’un deck est invalide.
 
 Un deck personnalisé doit contenir exactement 20 cartes. Les cartes de type Chef ou Spéciale restent visibles dans la collection, mais ne sont pas encore utilisables tant que leurs règles propres ne sont pas implémentées.
 
@@ -96,6 +100,11 @@ await api.openDeckBuilder();
 
 const collection = await api.getCollection();
 const decks = await api.getCustomDecks();
+
+// Outils MJ
+await api.grantCardToUser({ userId, cardId, count: 1 });
+await api.openBooster({ userId });
+await api.resetCollectionForUser({ userId });
 ```
 
 ## Illustrations de cartes

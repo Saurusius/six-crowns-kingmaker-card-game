@@ -21,9 +21,19 @@ export async function getCustomDecks() {
   return Array.isArray(stored) ? stored : [];
 }
 
+function registerValidDecks(decks, catalog, collection) {
+  const validDecks = decks.filter((deck) => validateCustomDeck(deck, catalog, collection).valid);
+  registerCustomDecks(validDecks, catalog);
+  return validDecks;
+}
+
 export async function syncCustomDeckRegistry() {
-  const [decks, catalog] = await Promise.all([getCustomDecks(), loadCardCatalog()]);
-  registerCustomDecks(decks, catalog);
+  const [decks, catalog, collection] = await Promise.all([
+    getCustomDecks(),
+    loadCardCatalog(),
+    getCollection()
+  ]);
+  registerValidDecks(decks, catalog, collection);
   return decks;
 }
 
@@ -52,17 +62,68 @@ export async function saveCustomDeck({ id = null, name, cards }) {
   else decks.push(saved);
 
   await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
-  registerCustomDecks(decks, catalog);
+  registerValidDecks(decks, catalog, collection);
   Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
   return saved;
 }
 
+export async function renameCustomDeck(deckId, newName) {
+  const [decks, catalog, collection] = await Promise.all([
+    getCustomDecks(),
+    loadCardCatalog(),
+    getCollection()
+  ]);
+  const index = decks.findIndex((entry) => entry.id === deckId);
+  if (index < 0) throw new Error("Deck personnalisé introuvable.");
+  const normalizedName = String(newName ?? "").trim();
+  if (!normalizedName) throw new Error("Donnez un nom au deck.");
+  const renamed = {
+    ...decks[index],
+    name: normalizedName,
+    updatedAt: new Date().toISOString()
+  };
+  decks.splice(index, 1, renamed);
+  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
+  registerValidDecks(decks, catalog, collection);
+  Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
+  return renamed;
+}
+
+export async function duplicateCustomDeck(deckId, name = null) {
+  const [decks, catalog, collection] = await Promise.all([
+    getCustomDecks(),
+    loadCardCatalog(),
+    getCollection()
+  ]);
+  const deck = decks.find((entry) => entry.id === deckId);
+  if (!deck) throw new Error("Deck personnalisé introuvable.");
+  const now = new Date().toISOString();
+  const normalizedName = String(name ?? `Copie de ${deck.name}`).trim();
+  if (!normalizedName) throw new Error("Donnez un nom au deck dupliqué.");
+  const duplicate = {
+    id: makeId(),
+    name: normalizedName,
+    cards: clone(deck.cards),
+    createdAt: now,
+    updatedAt: now
+  };
+  decks.push(duplicate);
+  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
+  registerValidDecks(decks, catalog, collection);
+  Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
+  return duplicate;
+}
+
 export async function deleteCustomDeck(deckId) {
-  const [decks, catalog] = await Promise.all([getCustomDecks(), loadCardCatalog()]);
+  const [decks, catalog, collection] = await Promise.all([
+    getCustomDecks(),
+    loadCardCatalog(),
+    getCollection()
+  ]);
   const nextDecks = decks.filter((deck) => deck.id !== deckId);
   if (nextDecks.length === decks.length) return false;
   await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, nextDecks);
-  registerCustomDecks(nextDecks, catalog);
+  registerValidDecks(nextDecks, catalog, collection);
   Hooks.callAll(`${MODULE_ID}.decksUpdated`, nextDecks);
   return true;
 }
