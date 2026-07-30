@@ -1,8 +1,12 @@
 import { ROWS } from "../constants.js";
 import { calculateSideScores, hasAbility } from "./scoring.js";
+import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
 
 export const SIDES = Object.freeze(["player", "opponent"]);
 export const PHASES = Object.freeze({
+  DECK_SELECTION: "deck-selection",
+  COIN_TOSS: "coin-toss",
+  MULLIGAN: "mulligan",
   PLAYING: "playing",
   ROUND_OVER: "round-over",
   GAME_OVER: "game-over"
@@ -23,7 +27,7 @@ const ROLE_LABELS = Object.freeze({
 });
 
 const ROLE_DESCRIPTIONS = Object.freeze({
-  hero: "Remporte les égalités de ligne si l’adversaire n’y oppose pas autant de Héros.",
+  hero: "Carte prestigieuse à forte valeur.",
   support: "Donne +1 à toutes les autres cartes de sa ligne.",
   bond: "Gagne +2 par autre copie identique sur la même ligne.",
   rally: "Déploie automatiquement toutes les autres copies présentes dans la pioche.",
@@ -32,60 +36,6 @@ const ROLE_DESCRIPTIONS = Object.freeze({
 
 function emptyRows() {
   return Object.fromEntries(ROWS.map((row) => [row, []]));
-}
-
-function makeCard(id, key, name, strength, rows, abilities = []) {
-  return {
-    id,
-    key,
-    name,
-    strength,
-    rows: [...rows],
-    abilities: [...abilities]
-  };
-}
-
-function makeCopies(prefix, key, name, strength, rows, count, abilities = []) {
-  return Array.from({ length: count }, (_, index) => makeCard(
-    `${prefix}-${index + 1}`,
-    key,
-    name,
-    strength,
-    rows,
-    abilities
-  ));
-}
-
-function createPlayerDeck() {
-  return [
-    makeCard("SC-P01", "champion-six-couronnes", "Champion des Six Couronnes", 10, ["avant-garde"], ["hero"]),
-    ...makeCopies("SC-P02", "chevaliers-six-couronnes", "Chevaliers des Six Couronnes", 8, ["avant-garde"], 2),
-    ...makeCopies("SC-P03", "garde-palais", "Garde du palais", 6, ["avant-garde"], 2),
-    ...makeCopies("SC-P04", "milice-moulin", "Milice du Moulin", 3, ["avant-garde"], 3, ["bond"]),
-    ...makeCopies("SC-P05", "eclaireurs-sellen", "Éclaireurs de la Sellen", 4, ["escarmouche"], 3, ["rally"]),
-    ...makeCopies("SC-P06", "archers-brumelande", "Archers de Brumelande", 5, ["escarmouche"], 2),
-    makeCard("SC-P07", "garde-chasse", "Garde-chasse royal", 5, ["avant-garde", "escarmouche"]),
-    makeCard("SC-P08", "cavaliers-marches", "Cavaliers des Marches", 6, ["avant-garde", "escarmouche"]),
-    makeCard("SC-P09", "conseil-royal", "Conseil royal", 4, ["domaine"], ["support"]),
-    makeCard("SC-P10", "temple-erastil", "Temple d’Erastil", 4, ["domaine"], ["support"]),
-    makeCard("SC-P11", "forteresse-frontaliere", "Forteresse frontalière", 6, ["domaine"], ["resilient"])
-  ];
-}
-
-function createOpponentDeck() {
-  return [
-    makeCard("AL-P01", "vera-sokolneva", "Vera Sokolneva", 10, ["avant-garde", "escarmouche"], ["hero"]),
-    ...makeCopies("AL-P02", "garde-honneur-restov", "Garde d’honneur de Restov", 8, ["avant-garde"], 2),
-    ...makeCopies("AL-P03", "duelliste-veteran", "Duelliste vétéran", 7, ["avant-garde"], 2),
-    ...makeCopies("AL-P04", "cadets-aldori", "Cadets aldori", 3, ["avant-garde"], 3, ["bond"]),
-    ...makeCopies("AL-P05", "epeistes-restov", "Épéistes de Restov", 4, ["avant-garde"], 3, ["rally"]),
-    ...makeCopies("AL-P06", "archers-restov", "Archers de Restov", 5, ["escarmouche"], 2),
-    makeCard("AL-P07", "danseuse-lame", "Danseuse à la lame", 6, ["avant-garde", "escarmouche"]),
-    makeCard("AL-P08", "messagere-aldori", "Messagère de la Maison Aldori", 4, ["escarmouche"]),
-    makeCard("AL-P09", "academie-aldori", "Académie aldori", 4, ["domaine"], ["support"]),
-    makeCard("AL-P10", "maitre-armes", "Maître d’armes aldori", 4, ["domaine"], ["support"]),
-    makeCard("AL-P11", "salon-lames", "Salon des Lames", 6, ["domaine"], ["resilient"])
-  ];
 }
 
 export function shuffleCards(cards, random = Math.random) {
@@ -104,31 +54,48 @@ export function drawCards(side, amount) {
   return drawn;
 }
 
-function createSide(name, deck, random) {
+function createSide(deckId, random) {
+  const definition = getDeckDefinition(deckId);
+  if (!definition) throw new Error(`Deck inconnu : ${deckId}`);
+  const cards = cloneDeck(deckId);
+  if (cards.length > 20) throw new Error(`${definition.name} dépasse la limite de 20 cartes.`);
+
   const side = {
-    name,
+    deckId,
+    name: definition.name,
+    description: definition.description,
     passed: false,
     lives: 2,
     rows: emptyRows(),
     hand: [],
-    deck: shuffleCards(deck, random),
-    discard: []
+    deck: shuffleCards(cards, random),
+    discard: [],
+    mulliganUsed: false
   };
   drawCards(side, 10);
   return side;
 }
 
-export function createPrototypeState({ random = Math.random } = {}) {
+export function createPrototypeState() {
   return {
-    round: 1,
-    phase: PHASES.PLAYING,
-    currentTurn: "player",
-    roundStarter: "player",
+    round: 0,
+    phase: PHASES.DECK_SELECTION,
+    selectedPlayerDeck: "six-crowns",
+    selectedOpponentDeck: "aldori",
+    currentTurn: null,
+    roundStarter: null,
     roundResult: null,
     gameWinner: null,
-    message: "Contrôlez deux lignes sur trois, ou passez pour préserver votre main.",
-    player: createSide("Royaume des Six Couronnes", createPlayerDeck(), random),
-    opponent: createSide("Maison Aldori", createOpponentDeck(), random)
+    mulliganSelection: [],
+    coin: {
+      flipping: false,
+      resolved: false,
+      face: null,
+      winner: null
+    },
+    message: "Choisissez les deux decks prédéfinis, puis lancez la partie.",
+    player: null,
+    opponent: null
   };
 }
 
@@ -148,52 +115,141 @@ function assertCanAct(state, side) {
 }
 
 function getScores(state) {
+  if (!state.player || !state.opponent) {
+    const zero = { rows: Object.fromEntries(ROWS.map((row) => [row, 0])), total: 0, rowDetails: {} };
+    return { player: zero, opponent: zero };
+  }
   return {
     player: calculateSideScores(state.player.rows),
     opponent: calculateSideScores(state.opponent.rows)
   };
 }
 
-export function determineRowWinner(playerCards = [], opponentCards = []) {
-  const playerScore = calculateSideScores({
-    "avant-garde": playerCards,
-    "escarmouche": [],
-    "domaine": []
-  }).rows["avant-garde"];
-  const opponentScore = calculateSideScores({
-    "avant-garde": opponentCards,
-    "escarmouche": [],
-    "domaine": []
-  }).rows["avant-garde"];
-
-  if (playerScore > opponentScore) return "player";
-  if (opponentScore > playerScore) return "opponent";
-
-  const playerHeroes = playerCards.filter((card) => hasAbility(card, "hero")).length;
-  const opponentHeroes = opponentCards.filter((card) => hasAbility(card, "hero")).length;
-  if (playerHeroes > opponentHeroes) return "player";
-  if (opponentHeroes > playerHeroes) return "opponent";
-  return "tie";
-}
-
 export function evaluateBoard(state) {
   const scores = getScores(state);
-  const rowWinners = Object.fromEntries(
-    ROWS.map((row) => [row, determineRowWinner(state.player.rows[row], state.opponent.rows[row])])
-  );
-
-  const controlledRows = {
-    player: ROWS.filter((row) => rowWinners[row] === "player").length,
-    opponent: ROWS.filter((row) => rowWinners[row] === "opponent").length
-  };
-
   let winner = "tie";
-  if (controlledRows.player > controlledRows.opponent) winner = "player";
-  else if (controlledRows.opponent > controlledRows.player) winner = "opponent";
-  else if (scores.player.total > scores.opponent.total) winner = "player";
+  if (scores.player.total > scores.opponent.total) winner = "player";
   else if (scores.opponent.total > scores.player.total) winner = "opponent";
+  return { scores, winner };
+}
 
-  return { scores, rowWinners, controlledRows, winner };
+export function selectDeck(state, side, deckId) {
+  if (state.phase !== PHASES.DECK_SELECTION) throw new Error("Le choix des decks est terminé.");
+  if (!getDeckDefinition(deckId)) throw new Error("Ce deck n’existe pas.");
+  if (side === "player") state.selectedPlayerDeck = deckId;
+  else if (side === "opponent") state.selectedOpponentDeck = deckId;
+  else throw new Error("Sélection de deck invalide.");
+  return state;
+}
+
+export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.random } = {}) {
+  if (state.phase !== PHASES.DECK_SELECTION) throw new Error("La partie a déjà commencé.");
+  const playerId = playerDeckId ?? state.selectedPlayerDeck;
+  const opponentId = opponentDeckId ?? state.selectedOpponentDeck;
+
+  state.selectedPlayerDeck = playerId;
+  state.selectedOpponentDeck = opponentId;
+  state.player = createSide(playerId, random);
+  state.opponent = createSide(opponentId, random);
+  state.round = 1;
+  state.phase = PHASES.COIN_TOSS;
+  state.currentTurn = null;
+  state.roundStarter = null;
+  state.roundResult = null;
+  state.gameWinner = null;
+  state.mulliganSelection = [];
+  state.coin = { flipping: false, resolved: false, face: null, winner: null };
+  state.message = "Les decks sont prêts. Lancez la pièce pour désigner le premier joueur.";
+  return state;
+}
+
+export function beginCoinToss(state) {
+  if (state.phase !== PHASES.COIN_TOSS) throw new Error("Le tirage au sort n’est pas disponible.");
+  if (state.coin.flipping) throw new Error("La pièce est déjà en l’air.");
+  if (state.coin.resolved) throw new Error("Le tirage au sort est déjà terminé.");
+  state.coin.flipping = true;
+  state.message = "La pièce tourne dans les airs…";
+  return state;
+}
+
+export function resolveCoinToss(state, random = Math.random) {
+  if (state.phase !== PHASES.COIN_TOSS || !state.coin.flipping) {
+    throw new Error("La pièce n’a pas été lancée.");
+  }
+  const playerStarts = random() < 0.5;
+  state.coin.flipping = false;
+  state.coin.resolved = true;
+  state.coin.face = playerStarts ? "face" : "pile";
+  state.coin.winner = playerStarts ? "player" : "opponent";
+  state.roundStarter = state.coin.winner;
+  state.currentTurn = state.coin.winner;
+  state.message = playerStarts
+    ? "Face ! Vous commencerez la première manche."
+    : `Pile ! ${state.opponent.name} commencera la première manche.`;
+  return state;
+}
+
+export function continueAfterCoinToss(state) {
+  if (state.phase !== PHASES.COIN_TOSS || !state.coin.resolved) {
+    throw new Error("Le résultat du tirage au sort n’est pas encore connu.");
+  }
+  state.phase = PHASES.MULLIGAN;
+  state.message = "Sélectionnez jusqu’à deux cartes à remplacer. Cette opération ne sera possible qu’une fois.";
+  return state;
+}
+
+export function toggleMulliganCard(state, cardId) {
+  if (state.phase !== PHASES.MULLIGAN) throw new Error("Le mulligan n’est pas disponible.");
+  if (state.player.mulliganUsed) throw new Error("Le mulligan a déjà été utilisé.");
+  if (!state.player.hand.some((card) => card.id === cardId)) throw new Error("Cette carte n’est pas dans votre main.");
+
+  const index = state.mulliganSelection.indexOf(cardId);
+  if (index >= 0) {
+    state.mulliganSelection.splice(index, 1);
+    return state;
+  }
+  if (state.mulliganSelection.length >= 2) throw new Error("Vous ne pouvez remplacer que deux cartes.");
+  state.mulliganSelection.push(cardId);
+  return state;
+}
+
+function performMulligan(side, selectedIds) {
+  if (side.mulliganUsed) throw new Error("Ce camp a déjà utilisé son mulligan.");
+  const ids = [...new Set(selectedIds)].slice(0, 2);
+  const selected = [];
+
+  for (const cardId of ids) {
+    const index = side.hand.findIndex((card) => card.id === cardId);
+    if (index < 0) continue;
+    const [card] = side.hand.splice(index, 1);
+    selected.push(card);
+  }
+
+  side.discard.push(...selected);
+  drawCards(side, selected.length);
+  side.mulliganUsed = true;
+  return selected;
+}
+
+function chooseOpponentMulligan(side) {
+  return [...side.hand]
+    .sort((a, b) => Number(a.strength ?? 0) - Number(b.strength ?? 0))
+    .slice(0, 2)
+    .map((card) => card.id);
+}
+
+export function confirmMulligan(state) {
+  if (state.phase !== PHASES.MULLIGAN) throw new Error("Le mulligan n’est pas disponible.");
+  const replaced = performMulligan(state.player, state.mulliganSelection);
+  const opponentSelection = chooseOpponentMulligan(state.opponent);
+  performMulligan(state.opponent, opponentSelection);
+
+  state.mulliganSelection = [];
+  state.phase = PHASES.PLAYING;
+  state.message = replaced.length > 0
+    ? `${replaced.length} carte(s) remplacée(s). ${state[state.currentTurn].name} commence.`
+    : `Vous conservez votre main. ${state[state.currentTurn].name} commence.`;
+  return state;
 }
 
 function resolveGameWinner(state) {
@@ -204,13 +260,11 @@ function resolveGameWinner(state) {
 
 function finishRound(state) {
   const evaluation = evaluateBoard(state);
-  const { winner, scores, controlledRows } = evaluation;
+  const { winner, scores } = evaluation;
 
-  if (winner === "player") {
-    state.opponent.lives = Math.max(0, state.opponent.lives - 1);
-  } else if (winner === "opponent") {
-    state.player.lives = Math.max(0, state.player.lives - 1);
-  } else {
+  if (winner === "player") state.opponent.lives = Math.max(0, state.opponent.lives - 1);
+  else if (winner === "opponent") state.player.lives = Math.max(0, state.player.lives - 1);
+  else {
     state.player.lives = Math.max(0, state.player.lives - 1);
     state.opponent.lives = Math.max(0, state.opponent.lives - 1);
   }
@@ -218,9 +272,7 @@ function finishRound(state) {
   state.roundResult = {
     winner,
     playerScore: scores.player.total,
-    opponentScore: scores.opponent.total,
-    playerRows: controlledRows.player,
-    opponentRows: controlledRows.opponent
+    opponentScore: scores.opponent.total
   };
   state.currentTurn = null;
 
@@ -229,50 +281,44 @@ function finishRound(state) {
     state.phase = PHASES.GAME_OVER;
     state.gameWinner = gameWinner;
     state.message = gameWinner === "tie"
-      ? "Égalité finale : les deux dernières couronnes tombent."
+      ? "Égalité finale : les deux dernières gemmes se brisent."
       : gameWinner === "player"
-        ? `Victoire ! Vous contrôlez ${controlledRows.player} ligne(s) contre ${controlledRows.opponent}.`
-        : `Défaite : la Maison Aldori contrôle ${controlledRows.opponent} ligne(s) contre ${controlledRows.player}.`;
+        ? `Victoire finale, ${scores.player.total} à ${scores.opponent.total} !`
+        : `Défaite finale, ${scores.opponent.total} à ${scores.player.total}.`;
     return state;
   }
 
   state.phase = PHASES.ROUND_OVER;
   state.message = winner === "tie"
-    ? `Égalité : ${controlledRows.player} ligne contrôlée de chaque côté et ${scores.player.total} à ${scores.opponent.total}.`
+    ? `Manche nulle : ${scores.player.total} à ${scores.opponent.total}. Chaque camp perd une gemme.`
     : winner === "player"
-      ? `Manche remportée : ${controlledRows.player} ligne(s) contre ${controlledRows.opponent}, total ${scores.player.total} à ${scores.opponent.total}.`
-      : `Manche perdue : ${controlledRows.opponent} ligne(s) contre ${controlledRows.player}, total ${scores.opponent.total} à ${scores.player.total}.`;
+      ? `Manche remportée : ${scores.player.total} à ${scores.opponent.total}.`
+      : `Manche perdue : ${scores.opponent.total} à ${scores.player.total}.`;
   return state;
 }
 
+function markEmptyHandsAsPassed(state) {
+  if (state.player.hand.length === 0) state.player.passed = true;
+  if (state.opponent.hand.length === 0) state.opponent.passed = true;
+}
+
 function advanceAfterAction(state, actingSide) {
-  const acting = state[actingSide];
-  const other = otherSide(actingSide);
-
-  if (acting.hand.length === 0) acting.passed = true;
-
+  markEmptyHandsAsPassed(state);
   if (state.player.passed && state.opponent.passed) return finishRound(state);
 
-  if (!state[other].passed) {
-    state.currentTurn = other;
-  } else if (!acting.passed) {
-    state.currentTurn = actingSide;
-  } else {
-    return finishRound(state);
-  }
+  const other = otherSide(actingSide);
+  if (!state[other].passed) state.currentTurn = other;
+  else if (!state[actingSide].passed) state.currentTurn = actingSide;
+  else return finishRound(state);
 
-  if (state[state.currentTurn].hand.length === 0) {
-    state[state.currentTurn].passed = true;
-    if (state.player.passed && state.opponent.passed) return finishRound(state);
-    state.currentTurn = otherSide(state.currentTurn);
-  }
-
+  markEmptyHandsAsPassed(state);
+  if (state.player.passed && state.opponent.passed) return finishRound(state);
+  if (state[state.currentTurn].passed) state.currentTurn = otherSide(state.currentTurn);
   return state;
 }
 
 function deployRallyCopies(side, card, row) {
   if (!hasAbility(card, "rally")) return [];
-
   const deployed = [];
   for (let index = side.deck.length - 1; index >= 0; index -= 1) {
     if (side.deck[index].key !== card.key) continue;
@@ -289,21 +335,17 @@ export function playCard(state, side, cardId, row) {
 
   const index = state[side].hand.findIndex((card) => card.id === cardId);
   if (index < 0) throw new Error("Cette carte n’est plus dans la main.");
-
   const card = state[side].hand[index];
   if (!card.rows.includes(row)) throw new Error("Cette carte ne peut pas être jouée sur cette ligne.");
 
   state[side].hand.splice(index, 1);
   state[side].rows[row].push(card);
   const reinforcements = deployRallyCopies(state[side], card, row);
-  const rallyText = reinforcements.length > 0
-    ? ` ${reinforcements.length} renfort(s) rejoignent immédiatement la ligne.`
-    : "";
+  const rallyText = reinforcements.length > 0 ? ` ${reinforcements.length} renfort(s) arrivent.` : "";
 
   state.message = side === "player"
     ? `${card.name} rejoint la ligne ${ROW_LABELS[row]}.${rallyText}`
-    : `${card.name} est jouée par la Maison Aldori sur la ligne ${ROW_LABELS[row]}.${rallyText}`;
-
+    : `${state.opponent.name} joue ${card.name} sur ${ROW_LABELS[row]}.${rallyText}`;
   return advanceAfterAction(state, side);
 }
 
@@ -311,45 +353,41 @@ export function passSide(state, side) {
   assertCanAct(state, side);
   state[side].passed = true;
   state.message = side === "player"
-    ? "Vous passez pour cette manche. La Maison Aldori peut continuer à jouer."
-    : "La Maison Aldori passe pour cette manche.";
+    ? "Vous passez pour cette manche. L’adversaire peut encore jouer avant de passer."
+    : `${state.opponent.name} passe. Vous pouvez encore jouer avant de passer.`;
   return advanceAfterAction(state, side);
 }
 
-function simulateRowAfterPlay(state, side, card, row) {
-  const rows = state[side].rows;
-  const simulatedCards = [...rows[row], card];
-  if (hasAbility(card, "rally")) {
-    simulatedCards.push(...state[side].deck.filter((deckCard) => deckCard.key === card.key));
-  }
-  return simulatedCards;
+function simulateCardValue(state, side, card, row) {
+  const cards = [...state[side].rows[row], card];
+  if (hasAbility(card, "rally")) cards.push(...state[side].deck.filter((candidate) => candidate.key === card.key));
+  const current = calculateSideScores(state[side].rows).rows[row];
+  const simulatedRows = { ...state[side].rows, [row]: cards };
+  const after = calculateSideScores(simulatedRows).rows[row];
+  return after - current;
 }
 
 function chooseOpponentMove(state) {
-  const hand = state.opponent.hand;
-  if (hand.length === 0) return null;
-
-  const currentEvaluation = evaluateBoard(state);
-  if (state.player.passed && currentEvaluation.winner === "opponent") return null;
+  if (state.opponent.hand.length === 0) return null;
+  const evaluation = evaluateBoard(state);
+  if (state.player.passed && evaluation.winner === "opponent") return null;
 
   const candidates = [];
-  for (const card of hand) {
+  for (const card of state.opponent.hand) {
     for (const row of card.rows) {
-      const simulatedOpponentRow = simulateRowAfterPlay(state, "opponent", card, row);
-      const winnerBefore = currentEvaluation.rowWinners[row];
-      const winnerAfter = determineRowWinner(state.player.rows[row], simulatedOpponentRow);
-      const improvesControl = winnerAfter === "opponent" && winnerBefore !== "opponent";
-      const printedCost = Number(card.strength ?? 0);
-      candidates.push({ card, row, improvesControl, printedCost });
+      candidates.push({ card, row, value: simulateCardValue(state, "opponent", card, row) });
     }
   }
 
-  const controlMove = candidates
-    .filter((candidate) => candidate.improvesControl)
-    .sort((a, b) => a.printedCost - b.printedCost)[0];
-  if (controlMove) return controlMove;
+  if (state.player.passed) {
+    const deficit = Math.max(0, evaluation.scores.player.total - evaluation.scores.opponent.total + 1);
+    const enough = candidates
+      .filter((candidate) => candidate.value >= deficit)
+      .sort((a, b) => a.value - b.value)[0];
+    if (enough) return enough;
+  }
 
-  return candidates.sort((a, b) => a.printedCost - b.printedCost)[0] ?? null;
+  return candidates.sort((a, b) => a.value - b.value)[0] ?? null;
 }
 
 export function takeOpponentTurn(state) {
@@ -360,12 +398,9 @@ export function takeOpponentTurn(state) {
 }
 
 function moveRowsToDiscardWithResilience(side) {
-  const resilientCards = ROWS.flatMap((row) =>
-    side.rows[row]
-      .filter((card) => hasAbility(card, "resilient"))
-      .map((card) => ({ card, row }))
-  );
-
+  const resilientCards = ROWS.flatMap((row) => side.rows[row]
+    .filter((card) => hasAbility(card, "resilient"))
+    .map((card) => ({ card, row })));
   const survivor = resilientCards.sort((a, b) => b.card.strength - a.card.strength)[0] ?? null;
   const nextRows = emptyRows();
 
@@ -377,22 +412,16 @@ function moveRowsToDiscardWithResilience(side) {
           strength: Math.ceil(card.strength / 2),
           abilities: card.abilities.filter((ability) => ability !== "resilient")
         });
-      } else {
-        side.discard.push(card);
-      }
+      } else side.discard.push(card);
     }
   }
-
   side.rows = nextRows;
 }
 
 export function startNextRound(state) {
   if (state.phase !== PHASES.ROUND_OVER) throw new Error("La manche suivante n’est pas disponible.");
-
   moveRowsToDiscardWithResilience(state.player);
   moveRowsToDiscardWithResilience(state.opponent);
-  drawCards(state.player, 2);
-  drawCards(state.opponent, 2);
 
   state.round += 1;
   state.player.passed = state.player.hand.length === 0;
@@ -400,15 +429,18 @@ export function startNextRound(state) {
   state.phase = PHASES.PLAYING;
 
   const previousWinner = state.roundResult?.winner;
-  const starter = previousWinner === "tie"
-    ? otherSide(state.roundStarter)
-    : previousWinner;
+  const starter = previousWinner === "player"
+    ? "opponent"
+    : previousWinner === "opponent"
+      ? "player"
+      : otherSide(state.roundStarter);
 
   state.roundStarter = starter;
   state.currentTurn = starter;
   state.roundResult = null;
-  state.message = `${state[starter].name} commence la manche ${state.round}. Les Bastions survivants restent en place.`;
+  state.message = `${state[starter].name} commence la manche ${state.round}. Aucune carte supplémentaire n’est piochée.`;
 
+  markEmptyHandsAsPassed(state);
   if (state.player.passed && state.opponent.passed) return finishRound(state);
   if (state[state.currentTurn].passed) state.currentTurn = otherSide(state.currentTurn);
   return state;
@@ -417,113 +449,96 @@ export function startNextRound(state) {
 function roleBadges(card) {
   const badges = card.abilities
     .filter((ability) => ROLE_LABELS[ability])
-    .map((ability) => ({
-      id: ability,
-      label: ROLE_LABELS[ability],
-      description: ROLE_DESCRIPTIONS[ability]
-    }));
-
-  if (card.rows.length > 1) {
-    badges.push({
-      id: "mobile",
-      label: "Mobile",
-      description: "Peut être jouée sur plusieurs lignes."
-    });
-  }
-
-  if (badges.length === 0) {
-    badges.push({ id: "troop", label: "Troupe", description: "Force directe, sans capacité spéciale." });
-  }
+    .map((ability) => ({ id: ability, label: ROLE_LABELS[ability], description: ROLE_DESCRIPTIONS[ability] }));
+  if (card.rows.length > 1) badges.push({ id: "mobile", label: "Mobile", description: "Peut être jouée sur plusieurs lignes." });
+  if (badges.length === 0) badges.push({ id: "troop", label: "Troupe", description: "Force directe, sans capacité spéciale." });
   return badges;
 }
 
-function prepareCardView(card, rowCards = null) {
+function prepareCardView(card, rowCards = null, mulliganSelection = []) {
   const effectiveStrength = rowCards
     ? calculateSideScores({ "avant-garde": rowCards, "escarmouche": [], "domaine": [] })
       .rowDetails["avant-garde"].cards.find((candidate) => candidate.id === card.id)?.effectiveStrength ?? card.strength
     : card.strength;
-
   return {
     ...card,
     effectiveStrength,
     isModified: effectiveStrength !== card.strength,
     rowChoices: card.rows.map((row) => ({ id: row, label: ROW_LABELS[row] })),
-    roleBadges: roleBadges(card)
+    roleBadges: roleBadges(card),
+    mulliganSelected: mulliganSelection.includes(card.id)
   };
 }
 
 function prepareRows(rows) {
-  return Object.fromEntries(
-    ROWS.map((row) => [row, rows[row].map((card) => prepareCardView(card, rows[row]))])
-  );
+  return Object.fromEntries(ROWS.map((row) => [row, rows[row].map((card) => prepareCardView(card, rows[row]))]));
 }
 
-function lifeMarkers(lives) {
-  return `${"◆".repeat(lives)}${"◇".repeat(Math.max(0, 2 - lives))}`;
+function gemMarkers(lives) {
+  return Array.from({ length: 2 }, (_, index) => ({ active: index < lives }));
 }
 
-function rowStatusMaps(evaluation, side) {
-  const labels = {};
-  const classes = {};
-  for (const row of ROWS) {
-    const winner = evaluation.rowWinners[row];
-    labels[row] = winner === "tie"
-      ? "Contestée"
-      : winner === side
-        ? "Contrôlée"
-        : "Perdue";
-    classes[row] = winner === "tie"
-      ? "is-tied"
-      : winner === side
-        ? "is-controlled"
-        : "is-lost";
-  }
-  return { labels, classes };
+function phaseLabel(phase) {
+  return {
+    [PHASES.DECK_SELECTION]: "Choix des decks",
+    [PHASES.COIN_TOSS]: "Tirage au sort",
+    [PHASES.MULLIGAN]: "Mulligan",
+    [PHASES.PLAYING]: "Manche en cours",
+    [PHASES.ROUND_OVER]: "Manche terminée",
+    [PHASES.GAME_OVER]: "Partie terminée"
+  }[phase] ?? phase;
 }
 
 export function createBoardViewModel(state) {
   const evaluation = evaluateBoard(state);
   const canPlayerAct = state.phase === PHASES.PLAYING
     && state.currentTurn === "player"
-    && !state.player.passed;
-  const playerStatuses = rowStatusMaps(evaluation, "player");
-  const opponentStatuses = rowStatusMaps(evaluation, "opponent");
+    && !state.player?.passed;
+  const decks = listDecks();
 
   return {
     ...state,
-    player: {
+    decks: decks.map((deck) => ({
+      ...deck,
+      playerSelected: deck.id === state.selectedPlayerDeck,
+      opponentSelected: deck.id === state.selectedOpponentDeck
+    })),
+    player: state.player ? {
       ...state.player,
       rows: prepareRows(state.player.rows),
-      hand: state.player.hand.map((card) => prepareCardView(card)),
-      lifeMarkers: lifeMarkers(state.player.lives)
-    },
-    opponent: {
+      hand: state.player.hand.map((card) => prepareCardView(card, null, state.mulliganSelection)),
+      gems: gemMarkers(state.player.lives)
+    } : null,
+    opponent: state.opponent ? {
       ...state.opponent,
       rows: prepareRows(state.opponent.rows),
-      lifeMarkers: lifeMarkers(state.opponent.lives),
-      handCount: state.opponent.hand.length
-    },
+      handCount: state.opponent.hand.length,
+      gems: gemMarkers(state.opponent.lives)
+    } : null,
     playerScore: evaluation.scores.player,
     opponentScore: evaluation.scores.opponent,
-    playerControlCount: evaluation.controlledRows.player,
-    opponentControlCount: evaluation.controlledRows.opponent,
-    playerRowStatus: playerStatuses.labels,
-    playerRowClass: playerStatuses.classes,
-    opponentRowStatus: opponentStatuses.labels,
-    opponentRowClass: opponentStatuses.classes,
     canPlayerAct,
-    isOpponentTurn: state.phase === PHASES.PLAYING && state.currentTurn === "opponent",
     canStartNextRound: state.phase === PHASES.ROUND_OVER,
-    isGameOver: state.phase === PHASES.GAME_OVER,
-    phaseLabel: state.phase === PHASES.PLAYING
-      ? "Manche en cours"
-      : state.phase === PHASES.ROUND_OVER
-        ? "Manche terminée"
-        : "Partie terminée",
+    isOpponentTurn: state.phase === PHASES.PLAYING && state.currentTurn === "opponent",
+    isDeckSelection: state.phase === PHASES.DECK_SELECTION,
+    isCoinToss: state.phase === PHASES.COIN_TOSS,
+    isMulligan: state.phase === PHASES.MULLIGAN,
+    showBoard: [PHASES.PLAYING, PHASES.ROUND_OVER, PHASES.GAME_OVER].includes(state.phase),
+    phaseLabel: phaseLabel(state.phase),
     turnLabel: state.phase !== PHASES.PLAYING
       ? "—"
       : state.currentTurn === "player"
         ? "À vous"
-        : "Maison Aldori"
+        : state.opponent.name,
+    coinClass: state.coin.flipping
+      ? "is-flipping"
+      : state.coin.resolved
+        ? `is-resolved is-${state.coin.face}`
+        : "",
+    coinFaceLabel: state.coin.face === "face" ? "Face" : state.coin.face === "pile" ? "Pile" : "?",
+    mulliganSelectedCount: state.mulliganSelection.length,
+    mulliganButtonLabel: state.mulliganSelection.length > 0
+      ? `Remplacer ${state.mulliganSelection.length} carte(s)`
+      : "Garder cette main"
   };
 }

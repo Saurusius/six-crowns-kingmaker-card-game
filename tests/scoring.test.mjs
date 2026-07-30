@@ -31,7 +31,7 @@ test("une force négative ne descend pas sous zéro", () => {
   assert.equal(calculateCardStrength({ strength: -3, abilities: [] }), 0);
 });
 
-test("les scores des trois lignes sont additionnés", () => {
+test("le total du joueur additionne les trois lignes", () => {
   const result = calculateSideScores({
     "avant-garde": [{ id: "a", strength: 5, abilities: [] }],
     "escarmouche": [{ id: "e", strength: 4, abilities: [] }],

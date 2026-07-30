@@ -1,204 +1,275 @@
 <section class="scg-shell">
   <header class="scg-toolbar">
     <div class="scg-round-heading">
-      <strong>Manche {{round}}</strong>
+      <strong>{{#if round}}Manche {{round}}{{else}}Nouvelle partie{{/if}}</strong>
       <span class="scg-status">{{phaseLabel}}</span>
-      <span class="scg-turn">Tour : {{turnLabel}}</span>
+      {{#if showBoard}}<span class="scg-turn">Tour : {{turnLabel}}</span>{{/if}}
     </div>
     <div class="scg-toolbar-actions">
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
       {{#if canStartNextRound}}
         <button type="button" data-action="next-round"><i class="fa-solid fa-forward"></i> Manche suivante</button>
       {{else}}
-        <button type="button" data-action="pass" {{#unless canPlayerAct}}disabled{{/unless}}><i class="fa-solid fa-flag"></i> Passer</button>
+        {{#if showBoard}}
+          <button type="button" data-action="pass" {{#unless canPlayerAct}}disabled{{/unless}}><i class="fa-solid fa-flag"></i> Passer</button>
+        {{/if}}
       {{/if}}
     </div>
   </header>
 
   <p class="scg-message">{{message}}</p>
 
-  <div class="scg-scorebar">
-    <div class="scg-score-side">
-      <span class="scg-muted">{{opponent.name}}</span>
-      <strong>{{opponentScore.total}}</strong>
-      <span class="scg-control-count">{{opponentControlCount}} ligne(s)</span>
-      <span class="scg-lives" title="Couronnes restantes">{{opponent.lifeMarkers}}</span>
-    </div>
-    <div class="scg-deck-status">
-      <span>La manche se gagne en contrôlant le plus de lignes.</span>
-      <span>Le total départage les égalités.</span>
-    </div>
-    <div class="scg-score-side scg-score-side-player">
-      <span class="scg-lives" title="Couronnes restantes">{{player.lifeMarkers}}</span>
-      <span class="scg-control-count">{{playerControlCount}} ligne(s)</span>
-      <strong>{{playerScore.total}}</strong>
-      <span class="scg-muted">{{player.name}}</span>
-    </div>
-  </div>
+  {{#if isDeckSelection}}
+    <section class="scg-setup-panel">
+      <div class="scg-setup-heading">
+        <h2>Choisissez les decks</h2>
+        <p>Chaque deck est prédéfini et contient au maximum 20 cartes.</p>
+      </div>
 
-  {{#if isOpponentTurn}}
-    <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> La Maison Aldori cherche une ligne à reprendre…</div>
+      <div class="scg-deck-select-grid">
+        <label class="scg-deck-select">
+          <span>Votre deck</span>
+          <select name="player-deck">
+            {{#each decks}}
+              <option value="{{id}}" {{#if playerSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
+            {{/each}}
+          </select>
+        </label>
+
+        <label class="scg-deck-select">
+          <span>Deck adverse</span>
+          <select name="opponent-deck">
+            {{#each decks}}
+              <option value="{{id}}" {{#if opponentSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+
+      <div class="scg-deck-gallery">
+        {{#each decks}}
+          <article class="scg-deck-summary">
+            <strong>{{name}}</strong>
+            <span>{{cardCount}} cartes</span>
+            <p>{{description}}</p>
+          </article>
+        {{/each}}
+      </div>
+
+      <button class="scg-primary-button" type="button" data-action="start-game">
+        <i class="fa-solid fa-play"></i> Préparer la partie
+      </button>
+    </section>
   {{/if}}
 
-  <div class="scg-battlefield">
-    <section class="scg-side scg-opponent {{#if opponent.passed}}is-passed{{/if}}">
-      <div class="scg-side-heading">
-        <strong>Camp adverse</strong>
-        {{#if opponent.passed}}<span class="scg-pass-badge">A passé</span>{{/if}}
+  {{#if isCoinToss}}
+    <section class="scg-coin-panel">
+      <div class="scg-versus">
+        <span>{{player.name}}</span>
+        <strong>contre</strong>
+        <span>{{opponent.name}}</span>
       </div>
 
-      <div class="scg-row {{lookup opponentRowClass 'domaine'}}" data-row="domaine">
-        <div class="scg-row-label">
-          <span>Domaine</span>
-          <strong>{{lookup opponentScore.rows "domaine"}}</strong>
-          <small class="scg-row-control">{{lookup opponentRowStatus "domaine"}}</small>
+      <div class="scg-coin-stage">
+        <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
+          <div class="scg-coin-face scg-coin-front">6</div>
+          <div class="scg-coin-face scg-coin-back">♛</div>
         </div>
-        <div class="scg-card-line">
-          {{#each opponent.rows.domaine}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
+        {{#if coin.resolved}}
+          <strong class="scg-coin-result">{{coinFaceLabel}}</strong>
+        {{/if}}
       </div>
 
-      <div class="scg-row {{lookup opponentRowClass 'escarmouche'}}" data-row="escarmouche">
-        <div class="scg-row-label">
-          <span>Escarmouche</span>
-          <strong>{{lookup opponentScore.rows "escarmouche"}}</strong>
-          <small class="scg-row-control">{{lookup opponentRowStatus "escarmouche"}}</small>
-        </div>
-        <div class="scg-card-line">
-          {{#each opponent.rows.escarmouche}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
+      {{#if coin.resolved}}
+        <button class="scg-primary-button" type="button" data-action="continue-after-coin">
+          Voir les mains
+        </button>
+      {{else}}
+        <button class="scg-primary-button" type="button" data-action="flip-coin" {{#if coin.flipping}}disabled{{/if}}>
+          <i class="fa-solid fa-coins"></i> {{#if coin.flipping}}La pièce tourne…{{else}}Lancer la pièce{{/if}}
+        </button>
+      {{/if}}
+    </section>
+  {{/if}}
+
+  {{#if isMulligan}}
+    <section class="scg-mulligan-panel">
+      <div class="scg-setup-heading">
+        <h2>Votre main de départ</h2>
+        <p>Sélectionnez jusqu’à deux cartes à défausser et remplacer. Sélection : {{mulliganSelectedCount}} / 2.</p>
       </div>
 
-      <div class="scg-row {{lookup opponentRowClass 'avant-garde'}}" data-row="avant-garde">
-        <div class="scg-row-label">
-          <span>Avant-garde</span>
-          <strong>{{lookup opponentScore.rows "avant-garde"}}</strong>
-          <small class="scg-row-control">{{lookup opponentRowStatus "avant-garde"}}</small>
-        </div>
-        <div class="scg-card-line">
-          {{#each opponent.rows.avant-garde}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
+      <div class="scg-mulligan-grid">
+        {{#each player.hand}}
+          <button type="button" class="scg-card scg-mulligan-card {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}">
+            <span class="scg-strength">{{strength}}</span>
+            <strong>{{name}}</strong>
+            <div class="scg-role-list">
+              {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
+            </div>
+            <small>{{#each rowChoices}}{{label}}{{#unless @last}} · {{/unless}}{{/each}}</small>
+            <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
+          </button>
+        {{/each}}
+      </div>
+
+      <div class="scg-mulligan-footer">
+        <span>Pioche restante : {{player.deck.length}} · Défausse : {{player.discard.length}}</span>
+        <button class="scg-primary-button" type="button" data-action="confirm-mulligan">{{mulliganButtonLabel}}</button>
       </div>
     </section>
+  {{/if}}
 
-    <div class="scg-divider"></div>
-
-    <section class="scg-side scg-player {{#if player.passed}}is-passed{{/if}}">
-      <div class="scg-side-heading">
-        <strong>Votre camp</strong>
-        {{#if player.passed}}<span class="scg-pass-badge">Vous avez passé</span>{{/if}}
+  {{#if showBoard}}
+    <div class="scg-scorebar">
+      <div class="scg-score-side">
+        <span class="scg-muted">{{opponent.name}}</span>
+        <strong>{{opponentScore.total}}</strong>
+        <span class="scg-gems" title="Points de manche restants">
+          {{#each opponent.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
+        </span>
       </div>
-
-      <div class="scg-row {{lookup playerRowClass 'avant-garde'}}" data-row="avant-garde">
-        <div class="scg-row-label">
-          <span>Avant-garde</span>
-          <strong>{{lookup playerScore.rows "avant-garde"}}</strong>
-          <small class="scg-row-control">{{lookup playerRowStatus "avant-garde"}}</small>
-        </div>
-        <div class="scg-card-line">
-          {{#each player.rows.avant-garde}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
+      <div class="scg-deck-status">
+        <span>La force totale remporte la manche.</span>
+        <span>Une carte par tour, sauf capacité spéciale.</span>
       </div>
-
-      <div class="scg-row {{lookup playerRowClass 'escarmouche'}}" data-row="escarmouche">
-        <div class="scg-row-label">
-          <span>Escarmouche</span>
-          <strong>{{lookup playerScore.rows "escarmouche"}}</strong>
-          <small class="scg-row-control">{{lookup playerRowStatus "escarmouche"}}</small>
-        </div>
-        <div class="scg-card-line">
-          {{#each player.rows.escarmouche}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
+      <div class="scg-score-side scg-score-side-player">
+        <span class="scg-gems" title="Points de manche restants">
+          {{#each player.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
+        </span>
+        <strong>{{playerScore.total}}</strong>
+        <span class="scg-muted">{{player.name}}</span>
       </div>
-
-      <div class="scg-row {{lookup playerRowClass 'domaine'}}" data-row="domaine">
-        <div class="scg-row-label">
-          <span>Domaine</span>
-          <strong>{{lookup playerScore.rows "domaine"}}</strong>
-          <small class="scg-row-control">{{lookup playerRowStatus "domaine"}}</small>
-        </div>
-        <div class="scg-card-line">
-          {{#each player.rows.domaine}}
-            <article class="scg-card">
-              <span class="scg-strength">{{effectiveStrength}}</span>
-              {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
-              <strong>{{name}}</strong>
-              <div class="scg-role-list">
-                {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <section class="scg-hand {{#unless canPlayerAct}}is-locked{{/unless}}">
-    <div class="scg-side-heading">
-      <strong>Votre main</strong>
-      <span>{{player.hand.length}} cartes · Pioche {{player.deck.length}} · Défausse {{player.discard.length}}</span>
     </div>
-    <div class="scg-hand-grid">
-      {{#each player.hand}}
-        <article class="scg-card scg-hand-card">
-          <span class="scg-strength">{{strength}}</span>
-          <strong>{{name}}</strong>
-          <div class="scg-role-list">
-            {{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}
-          </div>
-          <small>{{#each rowChoices}}{{label}}{{#unless @last}} · {{/unless}}{{/each}}</small>
-          <div class="scg-play-actions">
-            {{#each rowChoices}}
-              <button type="button" data-action="play-card" data-card-id="{{../id}}" data-row="{{id}}" {{#unless @root.canPlayerAct}}disabled{{/unless}}>{{label}}</button>
+
+    {{#if isOpponentTurn}}
+      <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> {{opponent.name}} réfléchit…</div>
+    {{/if}}
+
+    <div class="scg-battlefield">
+      <section class="scg-side scg-opponent {{#if opponent.passed}}is-passed{{/if}}">
+        <div class="scg-side-heading">
+          <strong>Camp adverse</strong>
+          <span>{{opponent.handCount}} cartes en main · Pioche {{opponent.deck.length}} · Défausse {{opponent.discard.length}}</span>
+          {{#if opponent.passed}}<span class="scg-pass-badge">A passé</span>{{/if}}
+        </div>
+
+        <div class="scg-row" data-row="domaine">
+          <div class="scg-row-label"><span>Domaine</span><strong>{{lookup opponentScore.rows "domaine"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each opponent.rows.domaine}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
             {{/each}}
           </div>
-        </article>
-      {{/each}}
+        </div>
+
+        <div class="scg-row" data-row="escarmouche">
+          <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup opponentScore.rows "escarmouche"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each opponent.rows.escarmouche}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="scg-row" data-row="avant-garde">
+          <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup opponentScore.rows "avant-garde"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each opponent.rows.avant-garde}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
+      <div class="scg-divider"></div>
+
+      <section class="scg-side scg-player {{#if player.passed}}is-passed{{/if}}">
+        <div class="scg-side-heading">
+          <strong>Votre camp</strong>
+          <span>{{player.hand.length}} cartes en main · Pioche {{player.deck.length}} · Défausse {{player.discard.length}}</span>
+          {{#if player.passed}}<span class="scg-pass-badge">Vous avez passé</span>{{/if}}
+        </div>
+
+        <div class="scg-row" data-row="avant-garde">
+          <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup playerScore.rows "avant-garde"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each player.rows.avant-garde}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="scg-row" data-row="escarmouche">
+          <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup playerScore.rows "escarmouche"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each player.rows.escarmouche}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="scg-row" data-row="domaine">
+          <div class="scg-row-label"><span>Domaine</span><strong>{{lookup playerScore.rows "domaine"}}</strong></div>
+          <div class="scg-card-line">
+            {{#each player.rows.domaine}}
+              <article class="scg-card">
+                <span class="scg-strength">{{effectiveStrength}}</span>
+                {{#if isModified}}<span class="scg-base-strength">base {{strength}}</span>{{/if}}
+                <strong>{{name}}</strong>
+                <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
+
+    <section class="scg-hand {{#unless canPlayerAct}}is-locked{{/unless}}">
+      <div class="scg-side-heading">
+        <strong>Votre main</strong>
+        <span>{{player.hand.length}} cartes · Une seule carte peut être jouée pendant votre tour.</span>
+      </div>
+      <div class="scg-hand-grid">
+        {{#each player.hand}}
+          <article class="scg-card scg-hand-card">
+            <span class="scg-strength">{{strength}}</span>
+            <strong>{{name}}</strong>
+            <div class="scg-role-list">{{#each roleBadges}}<span class="scg-role" title="{{description}}">{{label}}</span>{{/each}}</div>
+            <small>{{#each rowChoices}}{{label}}{{#unless @last}} · {{/unless}}{{/each}}</small>
+            <div class="scg-play-actions">
+              {{#each rowChoices}}
+                <button type="button" data-action="play-card" data-card-id="{{../id}}" data-row="{{id}}" {{#unless @root.canPlayerAct}}disabled{{/unless}}>{{label}}</button>
+              {{/each}}
+            </div>
+          </article>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
 </section>
