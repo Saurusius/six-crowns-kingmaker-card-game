@@ -15,6 +15,7 @@ import {
   buildCollectionGroups
 } from "../collection-rules.js";
 import { openDeckBuilder } from "../profile.js";
+import { bindFloatingOverlays } from "../ui/floating-overlays.js";
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -159,6 +160,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
   async _onRender(context, options) {
     await super._onRender(context, options);
 
+    this._floatingCleanup?.();
+    this._floatingCleanup = bindFloatingOverlays(this.element, {
+      ownerId: `${MODULE_ID}-collection`
+    });
+
     const applyFilters = () => {
       const query = String(this.element.querySelector("[name='collection-search']")?.value ?? "").trim().toLocaleLowerCase("fr");
       const faction = this.element.querySelector("[name='collection-faction']")?.value ?? "all";
@@ -302,6 +308,8 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
   }
 
   async close(options = {}) {
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
     if (this._collectionHook !== null) Hooks.off(`${MODULE_ID}.collectionUpdated`, this._collectionHook);
     if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
     return super.close(options);

@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.7.14 — Popups globales et repositionnement automatique
+
+- toutes les infobulles de traits sont désormais rendues dans une couche globale attachée au document ;
+- les fiches détaillées des cartes du plateau et de la main utilisent la même couche flottante ;
+- les popups choisissent automatiquement une ouverture au-dessus, en dessous ou sur le côté selon l’espace disponible ;
+- leur position est recalculée lors du défilement et du redimensionnement de la fenêtre ;
+- la prévisualisation du mulligan est déplacée hors de la fenêtre Foundry pour éviter tout rognage par les conteneurs parents ;
+- les anciens popups imbriqués restent uniquement des sources de contenu et ne s’affichent plus localement.
+
 ## 0.7.13 — Infobulles de prévisualisation réparées
 
 - les infobulles des traits s’ouvrent désormais sous leur pictogramme dans la fenêtre de prévisualisation ;

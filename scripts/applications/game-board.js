@@ -1,4 +1,5 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
+import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
 import { getBoosterCredits, openBooster } from "../boosters.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import {
@@ -107,25 +108,12 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   async _onRender(context, options) {
     await super._onRender(context, options);
 
-    // Une icône de trait et la fiche détaillée de la carte ne doivent jamais
-    // s’afficher simultanément. La classe est pilotée par pointeur et clavier.
-    this.element.querySelectorAll(".scg-trait-icon").forEach((traitIcon) => {
-      const card = traitIcon.closest(".scg-card");
-      if (!card) return;
-
-      const openTraitTooltip = () => card.classList.add("is-trait-tooltip-open");
-      const closeTraitTooltip = () => {
-        globalThis.setTimeout(() => {
-          const activeTrait = card.querySelector(".scg-trait-icon:hover, .scg-trait-icon:focus, .scg-trait-icon:focus-within");
-          if (!activeTrait) card.classList.remove("is-trait-tooltip-open");
-        }, 0);
-      };
-
-      traitIcon.addEventListener("pointerenter", openTraitTooltip);
-      traitIcon.addEventListener("pointerleave", closeTraitTooltip);
-      traitIcon.addEventListener("focusin", openTraitTooltip);
-      traitIcon.addEventListener("focusout", closeTraitTooltip);
+    this._floatingCleanup?.();
+    this._floatingCleanup = bindFloatingOverlays(this.element, {
+      ownerId: `${MODULE_ID}-board`
     });
+    this._mulliganModalCleanup?.();
+    this._mulliganModalCleanup = null;
 
     this.element.querySelector("[data-action='start-game']")?.addEventListener("click", async () => {
       try {
@@ -241,13 +229,18 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     });
 
-    this.element.querySelector("[data-action='close-mulligan-preview']")?.addEventListener("click", closeMulliganPreview);
+    mulliganPreview?.querySelector("[data-action='close-mulligan-preview']")?.addEventListener("click", closeMulliganPreview);
     mulliganPreview?.addEventListener("click", (event) => {
       if (event.target === mulliganPreview) closeMulliganPreview();
     });
     mulliganPreview?.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeMulliganPreview();
     });
+    if (mulliganPreview) {
+      this._mulliganModalCleanup = mountGlobalModal(mulliganPreview, {
+        ownerId: `${MODULE_ID}-mulligan-preview`
+      });
+    }
 
     this.element.querySelectorAll("[data-action='toggle-mulligan']").forEach((button) => {
       button.addEventListener("click", async () => {
@@ -309,6 +302,10 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   async close(options = {}) {
     this._clearTimers();
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
+    this._mulliganModalCleanup?.();
+    this._mulliganModalCleanup = null;
     if (this._decksHook !== null) Hooks.off(`${MODULE_ID}.decksUpdated`, this._decksHook);
     if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
     return super.close(options);

@@ -8,13 +8,17 @@ async function read(relativePath) {
   return readFile(new URL(relativePath, root), "utf8");
 }
 
-test("les infobulles de traits désactivent la fiche générale de la carte", async () => {
-  const [script, css] = await Promise.all([
+test("les infobulles de traits et les fiches de carte partagent la couche globale", async () => {
+  const [script, overlay, css] = await Promise.all([
     read("scripts/applications/game-board.js"),
+    read("scripts/ui/floating-overlays.js"),
     read("styles/six-crowns.css")
   ]);
-  assert.match(script, /is-trait-tooltip-open/);
-  assert.match(css, /\.scg-card\.is-trait-tooltip-open \.scg-card-popover/);
+  assert.match(script, /bindFloatingOverlays/);
+  assert.match(overlay, /kind: "trait"/);
+  assert.match(overlay, /kind: "card"/);
+  assert.match(css, /\.scg-floating-popup\.is-trait/);
+  assert.match(css, /\.scg-floating-popup\.is-card/);
 });
 
 test("les zones de deck et de défausse utilisent la présentation compacte", async () => {
@@ -77,9 +81,14 @@ test("le mulligan permet de prévisualiser les cartes sans modifier la sélectio
 });
 
 
-test("les infobulles de traits restent dans la prévisualisation du mulligan", async () => {
-  const css = await read("styles/six-crowns.css");
-  assert.match(css, /\.scg-mulligan-preview-traits \.scg-trait-tooltip \{[\s\S]*?top: calc\(100% \+ 8px\);[\s\S]*?bottom: auto;/);
-  assert.match(css, /\.scg-mulligan-preview-traits \.scg-trait-tooltip::after \{[\s\S]*?bottom: 100%;/);
-  assert.match(css, /\.scg-mulligan-preview-backdrop \{[\s\S]*?overflow: auto;/);
+test("la prévisualisation du mulligan et ses infobulles sont sorties de la fenêtre Foundry", async () => {
+  const [script, overlay, css] = await Promise.all([
+    read("scripts/applications/game-board.js"),
+    read("scripts/ui/floating-overlays.js"),
+    read("styles/six-crowns.css")
+  ]);
+  assert.match(script, /mountGlobalModal\(mulliganPreview/);
+  assert.match(overlay, /document\.body\.append\(element\)/);
+  assert.match(css, /body > \.scg-global-modal\.scg-mulligan-preview-backdrop/);
+  assert.match(css, /\.scg-floating-layer/);
 });

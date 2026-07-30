@@ -2462,3 +2462,145 @@
     transform: translate(-50%, 0);
   }
 }
+
+/* -------------------------------------------------------------------------
+ * v0.7.14 — couche globale pour toutes les infobulles et fiches flottantes
+ * ---------------------------------------------------------------------- */
+
+/* Les éléments imbriqués restent dans le DOM comme sources de contenu, mais
+ * leur affichage local est désactivé. La copie visible est montée sous body. */
+.scg-trait-tooltip,
+.scg-card-popover,
+.scg-trait-icon:hover .scg-trait-tooltip,
+.scg-trait-icon:focus .scg-trait-tooltip,
+.scg-trait-icon:focus-within .scg-trait-tooltip,
+.scg-board-card:hover .scg-card-popover,
+.scg-hand-card:hover .scg-hand-popover {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.scg-floating-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.scg-floating-popup {
+  --scg-popup-accent: #c8a94f;
+  position: fixed;
+  z-index: 1;
+  box-sizing: border-box;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  border: 1px solid var(--scg-popup-accent);
+  border-radius: 7px;
+  background: rgba(18, 16, 13, .985);
+  color: #eee7d4;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .78);
+  pointer-events: none;
+  scrollbar-width: thin;
+  scrollbar-color: #75643d rgba(0, 0, 0, .28);
+}
+
+.scg-floating-popup[hidden] {
+  display: none !important;
+}
+
+.scg-floating-popup.is-trait {
+  width: min(250px, calc(100vw - 24px));
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.scg-floating-popup.is-trait strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #f0cf6a;
+  font-size: .76rem;
+}
+
+.scg-floating-popup.is-trait small {
+  display: block;
+  color: #d7cfbd;
+  font-size: .69rem;
+  line-height: 1.34;
+}
+
+.scg-floating-popup.is-card {
+  width: min(280px, calc(100vw - 24px));
+  padding: 11px 12px;
+}
+
+.scg-floating-popup.is-card strong {
+  display: block;
+  color: #f0cf6a;
+  font-size: .93rem;
+}
+
+.scg-floating-popup.is-card span {
+  display: block;
+  margin-top: 4px;
+  color: #bfb6a0;
+  font-size: .7rem;
+}
+
+.scg-floating-popup.is-card p {
+  margin: 8px 0 0;
+  color: #eee7d4;
+  font-size: .76rem;
+  line-height: 1.38;
+}
+
+.scg-floating-popup::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: rgba(18, 16, 13, .985);
+  transform: rotate(45deg);
+}
+
+.scg-floating-popup[data-placement="top"]::after {
+  left: calc(50% - 5px);
+  bottom: -5px;
+  border-right: 1px solid var(--scg-popup-accent);
+  border-bottom: 1px solid var(--scg-popup-accent);
+}
+
+.scg-floating-popup[data-placement="bottom"]::after {
+  left: calc(50% - 5px);
+  top: -5px;
+  border-left: 1px solid var(--scg-popup-accent);
+  border-top: 1px solid var(--scg-popup-accent);
+}
+
+.scg-floating-popup[data-placement="left"]::after {
+  right: -5px;
+  top: calc(50% - 5px);
+  border-right: 1px solid var(--scg-popup-accent);
+  border-top: 1px solid var(--scg-popup-accent);
+}
+
+.scg-floating-popup[data-placement="right"]::after {
+  left: -5px;
+  top: calc(50% - 5px);
+  border-left: 1px solid var(--scg-popup-accent);
+  border-bottom: 1px solid var(--scg-popup-accent);
+}
+
+/* Les prévisualisations plein format sont également sorties de la fenêtre
+ * Foundry afin que leurs bords et leurs contenus ne soient jamais rognés. */
+body > .scg-global-modal.scg-mulligan-preview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482900;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: auto;
+}

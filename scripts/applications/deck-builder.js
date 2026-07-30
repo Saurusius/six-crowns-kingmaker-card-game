@@ -18,6 +18,7 @@ import {
   renameCustomDeck,
   saveCustomDeck
 } from "../profile.js";
+import { bindFloatingOverlays } from "../ui/floating-overlays.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -138,6 +139,11 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
   async _onRender(context, options) {
     await super._onRender(context, options);
 
+    this._floatingCleanup?.();
+    this._floatingCleanup = bindFloatingOverlays(this.element, {
+      ownerId: `${MODULE_ID}-deck-builder`
+    });
+
     const applyFilters = () => {
       const query = String(this.element.querySelector("[name='builder-search']")?.value ?? "").trim().toLocaleLowerCase("fr");
       const faction = this.element.querySelector("[name='builder-faction']")?.value ?? "all";
@@ -247,5 +253,11 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     });
 
     applyFilters();
+  }
+
+  async close(options = {}) {
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
+    return super.close(options);
   }
 }
