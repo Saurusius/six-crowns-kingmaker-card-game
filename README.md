@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.4
+## Règles du prototype 0.7.5
 
 Chaque joueur choisit un deck prédéfini d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -29,23 +29,26 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 
 ### Raretés
 
-Le catalogue de 82 cartes utilise quatre raretés :
+Le catalogue comprend désormais **160 cartes**, réparties en **quatre collections de 40 cartes**, et utilise quatre raretés :
 
-- **Commun** — blanc : 53 cartes ;
-- **Peu commune** — orange : 20 cartes ;
-- **Rare** — bleu : 7 cartes ;
-- **Unique** — violet : 2 cartes.
+- **Commun** — blanc : 39 cartes ;
+- **Peu commune** — orange : 15 cartes ;
+- **Rare** — bleu : 25 cartes ;
+- **Unique** — violet : 3 cartes.
+
+Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les PNJ nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
 ## Boosters et collection personnelle
 
 Chaque booster contient :
 
 - 4 cartes avec les probabilités normales : 65 % Commun, 25 % Peu commune, 8 % Rare, 2 % Unique ;
-- 1 carte garantie : 90 % Rare, 10 % Unique.
+- 1 carte garantie : 99 % Rare, 1 % Unique.
+- Toute carte représentant un PNJ nommé est au minimum Rare.
 
 Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante.
 
-L’écran **Ma collection** affiche toutes les cartes du module regroupées par collection. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués.
+L’écran **Ma collection** affiche les 160 cartes du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués.
 
 ## Constructeur de deck
 

@@ -2,8 +2,7 @@ export const FACTION_DETAILS = Object.freeze({
   "six-crowns": Object.freeze({ label: "Royaume des Six Couronnes", symbol: "♛", order: 1 }),
   aldori: Object.freeze({ label: "Maison Aldori", symbol: "⚔", order: 2 }),
   "iron-khans": Object.freeze({ label: "Khans de Fer", symbol: "♞", order: 3 }),
-  "stolen-lands-arcana": Object.freeze({ label: "Arcanes des Terres Dérobées", symbol: "✦", order: 4 }),
-  neutral: Object.freeze({ label: "Neutres et cartes spéciales", symbol: "◆", order: 5 })
+  "stolen-lands-arcana": Object.freeze({ label: "Arcanes des Terres Dérobées", symbol: "✦", order: 4 })
 });
 
 export const RARITY_DETAILS = Object.freeze({
@@ -192,6 +191,7 @@ export function expandCustomDeckCards(deck, catalog = []) {
         abilities: [...(card.abilities ?? [])],
         image: card.image ?? null,
         rarity: card.rarity ?? "commun",
+        isNpc: Boolean(card.isNpc),
         factionId: card.faction === "stolen-lands-arcana" ? "arcana" : (card.faction ?? "neutral")
       });
     }

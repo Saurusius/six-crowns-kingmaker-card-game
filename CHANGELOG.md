@@ -1,5 +1,23 @@
 # Journal des versions
 
+## 0.7.6 — Quatre collections complètes
+
+- extension du catalogue à **160 cartes**, réparties en quatre collections de 40 cartes ;
+- conservation des anciennes cartes neutres et spéciales, redistribuées dans les quatre collections principales ;
+- ajout de 78 nouvelles cartes de collection ;
+- maintien des quatre decks prédéfinis à 20 cartes ;
+- élargissement de la fenêtre du plateau à 1560 pixels et agrandissement de la zone centrale ;
+- ajout d’une validation imposant exactement quatre fichiers de collection et 40 cartes par collection.
+
+## 0.7.5 — Les visages du Royaume
+
+- la carte garantie des boosters utilise désormais **99 % Rare / 1 % Unique** ;
+- ajout d’une règle de validation : toute carte représentant un PNJ nommé doit être **Rare** ou **Unique** ;
+- refonte complète de la collection du Royaume des Six Couronnes autour de douze personnages obligatoires ;
+- ajout de **Aethryn, Alistair Veyron, Dame Blanche de Surtova, Daowen, Elias Thornwell, Harald Lodovka Menak, Lucy, Lysa, Mama Oluda, Odéon de Saulébène, Sery et Thea** ;
+- mise à niveau des raretés des PNJ déjà présents dans les autres collections ;
+- le deck prédéfini du Royaume conserve exactement 20 cartes et utilise désormais ce nouveau roster.
+
 ## 0.7.4 — Collection personnelle et constructeur de deck
 
 - ajout d’un écran **Ma collection** affichant les 82 cartes du module, regroupées par collection ;

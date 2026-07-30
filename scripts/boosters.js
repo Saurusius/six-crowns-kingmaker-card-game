@@ -6,8 +6,7 @@ const CARD_FILES = Object.freeze([
   "six-crowns.json",
   "aldori.json",
   "iron-khans.json",
-  "stolen-lands-arcana.json",
-  "neutral-and-special.json"
+  "stolen-lands-arcana.json"
 ]);
 
 const RARITY_LABELS = Object.freeze({
@@ -54,7 +53,7 @@ export function drawNormalRarity(random = Math.random) {
 }
 
 export function drawGuaranteedRarity(random = Math.random) {
-  return random() * 100 < 90 ? "rare" : "unique";
+  return random() * 100 < 99 ? "rare" : "unique";
 }
 
 function pickCard(cards, rarity, random = Math.random) {
@@ -161,7 +160,7 @@ export async function createBoosterMacro() {
 
 export const BOOSTER_RULES = Object.freeze({
   normal: Object.freeze({ commun: 65, peuCommune: 25, rare: 8, unique: 2 }),
-  guaranteed: Object.freeze({ rare: 90, unique: 10 })
+  guaranteed: Object.freeze({ rare: 99, unique: 1 })
 });
 
 console.debug(`${MODULE_TITLE} | Système de boosters chargé`);

@@ -102,7 +102,7 @@ const RULEBOOK = Object.freeze([
       "Renfort : déploie toutes les autres copies présentes dans la pioche.",
       "Bastion : la meilleure carte Bastion peut rester pour la manche suivante avec une force réduite de moitié.",
       "Mobile : peut être jouée sur plusieurs lignes.",
-      "Rareté : Commun, Peu commune, Rare ou Unique. Les Héros et personnages majeurs sont répartis dans les raretés supérieures."
+      "Rareté : Commun, Peu commune, Rare ou Unique. Toute carte représentant un PNJ nommé est au minimum Rare."
     ]
   },
   {
@@ -120,9 +120,9 @@ const RULEBOOK = Object.freeze([
     items: [
       "Un booster contient 5 cartes : 4 tirages normaux et 1 carte Rare ou Unique garantie.",
       "Tirage normal : 65 % Commun, 25 % Peu commune, 8 % Rare et 2 % Unique.",
-      "Carte garantie : 90 % Rare et 10 % Unique.",
+      "Carte garantie : 99 % Rare et 1 % Unique.",
       "Les doublons sont autorisés et chaque carte ouverte est sauvegardée dans la collection de l’utilisateur.",
-      "Le constructeur de decks personnalisés utilisera cette collection dans une prochaine version."
+      "La collection et les decks personnalisés sont propres au profil Foundry connecté."
     ]
   }
 ]);

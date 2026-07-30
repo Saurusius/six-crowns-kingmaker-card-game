@@ -1,49 +1,12 @@
 [
   {
     "id": "SC-01",
-    "name": "Odéon, le Roi bâtisseur",
-    "faction": "six-crowns",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
-    "maxCopies": 1,
-    "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare"
-  },
-  {
-    "id": "SC-02",
-    "name": "Odéon, la Couronne en guerre",
-    "faction": "six-crowns",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
-    "maxCopies": 1,
-    "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "peuCommune"
-  },
-  {
-    "id": "SC-03",
-    "name": "Elias, maître espion",
+    "name": "Odéon de Saulébène",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
-      "escarmouche"
-    ],
-    "strength": 4,
-    "maxCopies": 1,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
-  },
-  {
-    "id": "SC-04",
-    "name": "Champion des Six Couronnes",
-    "faction": "six-crowns",
-    "kind": "unit",
-    "rows": [
-      "avant-garde"
+      "avant-garde",
+      "domaine"
     ],
     "strength": 10,
     "maxCopies": 1,
@@ -51,11 +14,65 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "peuCommune"
+    "rarity": "unique",
+    "isNpc": true
+  },
+  {
+    "id": "SC-02",
+    "name": "Aethryn",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-03",
+    "name": "Alistair Veyron",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-04",
+    "name": "Dame Blanche de Surtova",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "SC-05",
-    "name": "Conseil royal",
+    "name": "Daowen",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
@@ -67,68 +84,172 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "peuCommune"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "SC-06",
-    "name": "Chevaliers des Six Couronnes",
+    "name": "Elias Thornwell",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-07",
+    "name": "Harald Lodovka Menak",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
       "avant-garde"
     ],
     "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-08",
+    "name": "Lucy",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-09",
+    "name": "Lysa",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-10",
+    "name": "Mama Oluda",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-11",
+    "name": "Sery",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-12",
+    "name": "Thea",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SC-13",
+    "name": "Chevaliers des Six Couronnes",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
-    "id": "SC-07",
+    "id": "SC-14",
     "name": "Garde du palais",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
       "avant-garde"
     ],
-    "strength": 6,
+    "strength": 5,
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
-    "id": "SC-08",
+    "id": "SC-15",
     "name": "Éclaireurs de la Sellen",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
       "escarmouche"
     ],
-    "strength": 4,
+    "strength": 3,
     "maxCopies": 3,
     "abilities": [
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
-    "id": "SC-09",
-    "name": "Archers de Brumelande",
-    "faction": "six-crowns",
-    "kind": "unit",
-    "rows": [
-      "escarmouche"
-    ],
-    "strength": 5,
-    "maxCopies": 2,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
-  },
-  {
-    "id": "SC-10",
+    "id": "SC-16",
     "name": "Milice du Moulin",
     "faction": "six-crowns",
     "kind": "unit",
@@ -141,38 +262,11 @@
       "bond"
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
-    "id": "SC-11",
-    "name": "Ingénieurs royaux",
-    "faction": "six-crowns",
-    "kind": "unit",
-    "rows": [
-      "domaine"
-    ],
-    "strength": 4,
-    "maxCopies": 2,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
-  },
-  {
-    "id": "SC-12",
-    "name": "Temple d’Erastil",
-    "faction": "six-crowns",
-    "kind": "unit",
-    "rows": [
-      "domaine"
-    ],
-    "strength": 5,
-    "maxCopies": 1,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
-  },
-  {
-    "id": "SC-13",
+    "id": "SC-17",
     "name": "Forteresse frontalière",
     "faction": "six-crowns",
     "kind": "unit",
@@ -185,39 +279,284 @@
       "resilient"
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
-    "rarity": "commun"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
-    "id": "SC-14",
-    "name": "Routes royales",
+    "id": "NE-01",
+    "name": "Maegar Varn",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
       "domaine"
     ],
-    "strength": 2,
-    "maxCopies": 2,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "rare",
+    "isNpc": true
   },
   {
-    "id": "SC-15",
-    "name": "Ambassadeurs du Royaume",
+    "id": "NE-02",
+    "name": "Bokken, alchimiste des Marches",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "NE-03",
+    "name": "Linzi, chroniqueuse du royaume",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "support"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros. Donne aussi +1 aux autres unités de sa ligne.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "NE-04",
+    "name": "Jubilost Narthropple",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "SP-01",
+    "name": "Bannière royale",
+    "faction": "six-crowns",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "banner"
+    ],
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SP-02",
+    "name": "Étendard des Marches",
+    "faction": "six-crowns",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "banner"
+    ],
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SP-05",
+    "name": "Diversion diplomatique",
+    "faction": "six-crowns",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "recall"
+    ],
+    "text": "Reprend une unité alliée du plateau dans votre main.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SP-07",
+    "name": "Bannière des Frontières",
+    "faction": "six-crowns",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "banner"
+    ],
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SC-18",
+    "name": "Arbalétriers de la Couronne",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe régulière sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-19",
+    "name": "Gardiens des Béliers Noirs",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-20",
+    "name": "Meuniers de Brumelande",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
       "domaine"
     ],
     "strength": 3,
-    "maxCopies": 1,
-    "abilities": [],
-    "text": "",
-    "rarity": "commun"
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
   },
   {
-    "id": "SC-16",
-    "name": "Garde-chasse royal",
+    "id": "SC-21",
+    "name": "Chasseurs d’Erastil",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-22",
+    "name": "Passeurs de la Sellen",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-23",
+    "name": "Sapeurs des Six Couronnes",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-24",
+    "name": "Émissaires de la Cour",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-25",
+    "name": "Gardes de l’Avant-poste",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-26",
+    "name": "Patrouille des Routes royales",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une patrouille régulière sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-27",
+    "name": "Veilleurs des Hautes Marches",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
@@ -227,12 +566,13 @@
     "strength": 5,
     "maxCopies": 2,
     "abilities": [],
-    "text": "",
-    "rarity": "commun"
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
   },
   {
-    "id": "SC-17",
-    "name": "Intendant des Frontières",
+    "id": "SC-28",
+    "name": "Alchimistes de la Couronne",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
@@ -240,8 +580,77 @@
     ],
     "strength": 4,
     "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-29",
+    "name": "Archivistes du Palais",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
     "abilities": [],
-    "text": "",
-    "rarity": "commun"
+    "text": "Une unité de domaine sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-30",
+    "name": "Patrouilleurs du Fleuve",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SC-31",
+    "name": "Ingénieurs des Frontières",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SC-32",
+    "name": "Conseil des Six Couronnes",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "peuCommune",
+    "isNpc": false
   }
 ]

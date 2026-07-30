@@ -9,7 +9,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "unique"
+    "rarity": "unique",
+    "isNpc": true
   },
   {
     "id": "AA-02",
@@ -21,7 +22,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AA-03",
@@ -37,7 +39,8 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "AA-04",
@@ -53,7 +56,8 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "AA-05",
@@ -69,7 +73,8 @@
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-06",
@@ -85,7 +90,8 @@
       "bond"
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-07",
@@ -99,7 +105,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-08",
@@ -115,7 +122,8 @@
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-09",
@@ -129,7 +137,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-10",
@@ -144,7 +153,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-11",
@@ -158,7 +168,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-12",
@@ -172,7 +183,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-13",
@@ -187,7 +199,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-14",
@@ -203,7 +216,8 @@
       "resilient"
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "AA-15",
@@ -217,7 +231,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-16",
@@ -233,7 +248,8 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-17",
@@ -247,7 +263,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AA-18",
@@ -264,6 +281,376 @@
       "resilient"
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
-    "rarity": "rare"
+    "rarity": "rare",
+    "isNpc": false
+  },
+  {
+    "id": "NE-05",
+    "name": "Vordakai",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "rare",
+    "isNpc": true
+  },
+  {
+    "id": "AA-19",
+    "name": "Pixies des clairières",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-20",
+    "name": "Champignons marcheurs",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-21",
+    "name": "Loups à ramures",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-22",
+    "name": "Serviteurs de l’Épine",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-23",
+    "name": "Ondines de la Sellen",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-24",
+    "name": "Gobelins féeriques",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-25",
+    "name": "Arbres éveillés",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-26",
+    "name": "Corbeaux prophétiques",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-27",
+    "name": "Tertre aux murmures",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-28",
+    "name": "Lianes étrangleuses",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-29",
+    "name": "Esprits des sources",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-30",
+    "name": "Boggards enchantés",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une créature féerique sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-31",
+    "name": "Papillons de nuit géants",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-32",
+    "name": "Chevreuils de verre",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-33",
+    "name": "Ronces animées",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-34",
+    "name": "Farfadets des pierres",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-35",
+    "name": "Serpents des brumes",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une créature féerique sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AA-36",
+    "name": "Treant du Bois oublié",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AA-37",
+    "name": "Licorne des chemins perdus",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AA-38",
+    "name": "Cour des Feux follets",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AA-39",
+    "name": "Géant couvert de mousse",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Une créature massive sans effet supplémentaire.",
+    "rarity": "peuCommune",
+    "isNpc": false
   }
 ]

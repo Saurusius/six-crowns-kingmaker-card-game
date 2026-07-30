@@ -9,7 +9,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AL-02",
@@ -21,7 +22,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "peuCommune"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AL-03",
@@ -38,7 +40,8 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "rare"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AL-04",
@@ -53,7 +56,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AL-05",
@@ -67,7 +71,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "AL-06",
@@ -83,7 +88,8 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "AL-07",
@@ -97,7 +103,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-08",
@@ -113,7 +120,8 @@
       "bond"
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-09",
@@ -129,7 +137,8 @@
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-10",
@@ -144,7 +153,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-11",
@@ -158,7 +168,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-12",
@@ -174,7 +185,8 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-13",
@@ -188,7 +200,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-14",
@@ -202,7 +215,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-15",
@@ -216,7 +230,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-16",
@@ -230,7 +245,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "AL-17",
@@ -244,6 +260,384 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SP-03",
+    "name": "Manœuvre tactique",
+    "faction": "aldori",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "maneuver"
+    ],
+    "text": "Déplace une unité alliée vers une autre ligne autorisée.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "SP-06",
+    "name": "Leurre de cour",
+    "faction": "aldori",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "recall"
+    ],
+    "text": "Reprend une unité alliée du plateau dans votre main.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AL-18",
+    "name": "Lames de la Porte rouge",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe aldori sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-19",
+    "name": "Éclaireurs de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-20",
+    "name": "Maîtres de posture",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-21",
+    "name": "Gardes du quartier des Épées",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-22",
+    "name": "Duellistes de l’Aube",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-23",
+    "name": "Instructrices de la Lame",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-24",
+    "name": "Messagers de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-25",
+    "name": "Gardes des salles d’armes",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une unité de domaine sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-26",
+    "name": "Cadets de la Lame argentée",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-27",
+    "name": "Archers des remparts",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe de tir sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-28",
+    "name": "Épéistes du marché haut",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-29",
+    "name": "Espions du Filigrane",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-30",
+    "name": "Serviteurs de la Première Épée",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-31",
+    "name": "Porte-lames de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe aldori sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-32",
+    "name": "Éclaireuses du Bois rouge",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe mobile sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-33",
+    "name": "Arbitres itinérants",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-34",
+    "name": "Sentinelles du Pont du Dragon",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-35",
+    "name": "Compagnie des Rubans rouges",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "AL-36",
+    "name": "Championne du Cercle aldori",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AL-37",
+    "name": "Académicien du Duel parfait",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "AL-38",
+    "name": "Garde du Serment de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "peuCommune",
+    "isNpc": false
   }
 ]

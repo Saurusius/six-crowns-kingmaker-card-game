@@ -7,12 +7,15 @@ Exemple :
 ```js
 makeCard(
   "SC-01",
-  "champion-six-couronnes",
-  "Champion des Six Couronnes",
+  "odeon-de-saulebene",
+  "Odéon de Saulébène",
   10,
-  ["avant-garde"],
+  ["avant-garde", "domaine"],
   ["hero"],
-  "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/champion-six-couronnes.webp"
+  "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene.webp",
+  "unique",
+  1,
+  true
 )
 ```
 

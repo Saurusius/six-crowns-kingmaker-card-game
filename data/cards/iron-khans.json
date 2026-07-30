@@ -9,7 +9,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "unique"
+    "rarity": "unique",
+    "isNpc": true
   },
   {
     "id": "KF-02",
@@ -21,7 +22,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "peuCommune"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "KF-03",
@@ -37,7 +39,8 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "rare"
+    "rarity": "rare",
+    "isNpc": true
   },
   {
     "id": "KF-04",
@@ -54,7 +57,8 @@
       "hero"
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "KF-05",
@@ -70,7 +74,8 @@
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-06",
@@ -85,7 +90,8 @@
     "maxCopies": 3,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-07",
@@ -101,7 +107,8 @@
       "bond"
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-08",
@@ -117,7 +124,8 @@
       "rally"
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-09",
@@ -131,7 +139,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-10",
@@ -145,7 +154,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-11",
@@ -161,7 +171,8 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-12",
@@ -175,7 +186,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-13",
@@ -189,7 +201,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-14",
@@ -205,7 +218,8 @@
       "resilient"
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-15",
@@ -219,7 +233,8 @@
     "maxCopies": 1,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-16",
@@ -235,7 +250,8 @@
       "support"
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
-    "rarity": "peuCommune"
+    "rarity": "peuCommune",
+    "isNpc": false
   },
   {
     "id": "KF-17",
@@ -250,7 +266,8 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
   },
   {
     "id": "KF-18",
@@ -264,6 +281,368 @@
     "maxCopies": 2,
     "abilities": [],
     "text": "",
-    "rarity": "commun"
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "SP-04",
+    "name": "Redéploiement éclair",
+    "faction": "iron-khans",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "maneuver"
+    ],
+    "text": "Déplace une unité alliée vers une autre ligne autorisée.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "KF-19",
+    "name": "Éclaireurs des herbes hautes",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe mobile sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-20",
+    "name": "Cavaliers des gués noirs",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-21",
+    "name": "Porte-haches nomades",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-22",
+    "name": "Traqueurs de la steppe",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-23",
+    "name": "Gardiennes des troupeaux",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-24",
+    "name": "Forgerons de campagne",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-25",
+    "name": "Braconniers des collines",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe de tir sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-26",
+    "name": "Lanciers du Tonnerre",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-27",
+    "name": "Gardes du cercle de chariots",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-28",
+    "name": "Messagers à cheval",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-29",
+    "name": "Pillards des cols",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-30",
+    "name": "Archers du vent sec",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une troupe de tir sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-31",
+    "name": "Tentes du conseil khan",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-32",
+    "name": "Chasseurs de chevaux",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-33",
+    "name": "Béliers de siège nomades",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Une unité de choc sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-34",
+    "name": "Veilleurs des feux de camp",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [],
+    "text": "Une unité de domaine sans effet supplémentaire.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-35",
+    "name": "Meute des plaines grises",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "bond"
+    ],
+    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "rarity": "commun",
+    "isNpc": false
+  },
+  {
+    "id": "KF-36",
+    "name": "Garde montée de la Khanesse",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "KF-37",
+    "name": "Tambours de la Horde",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "support"
+    ],
+    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "KF-38",
+    "name": "Brise-portes cuirassé",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "Une unité de choc sans effet supplémentaire.",
+    "rarity": "peuCommune",
+    "isNpc": false
+  },
+  {
+    "id": "KF-39",
+    "name": "Faucons de guerre",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "rally"
+    ],
+    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "rarity": "peuCommune",
+    "isNpc": false
   }
 ]

@@ -1,23 +1,36 @@
 import { expandCustomDeckCards } from "../collection-rules.js";
 
 const UNIQUE_CARD_KEYS = new Set([
+  "odeon-de-saulebene",
   "khanesse-reine-sans-couronne",
   "nyrissa-reine-epines"
 ]);
 
 const RARE_CARD_KEYS = new Set([
+  "aethryn",
+  "alistair-veyron",
+  "dame-blanche-surtova",
+  "daowen",
+  "elias-thornwell",
+  "harald-lodovka-menak",
+  "lucy",
+  "lysa",
+  "mama-oluda",
+  "sery",
+  "thea",
   "vera-sokolneva",
+  "elenais-heritiere-dechue",
+  "mikhail-rassvet",
   "iron-wrath"
 ]);
 
 const UNCOMMON_CARD_KEYS = new Set([
-  "champion-six-couronnes",
+  "chevaliers-six-couronnes",
+  "forteresse-frontaliere",
   "jabberwock-clairieres",
   "hamadryade-millenaire",
-  "conseil-royal",
   "maitre-armes",
   "portail-premier-monde",
-  "forteresse-frontaliere",
   "camp-guerre-nomade",
   "salon-lames",
   "academie-aldori",
@@ -25,9 +38,9 @@ const UNCOMMON_CARD_KEYS = new Set([
   "chariot-guerre"
 ]);
 
-function inferRarity({ key, strength, rows, abilities, maxCopies = 1 }) {
+function inferRarity({ key, strength, rows, abilities, maxCopies = 1, isNpc = false }) {
   if (UNIQUE_CARD_KEYS.has(key)) return "unique";
-  if (RARE_CARD_KEYS.has(key)) return "rare";
+  if (isNpc || RARE_CARD_KEYS.has(key)) return "rare";
   if (UNCOMMON_CARD_KEYS.has(key)) return "peuCommune";
 
   const abilitySet = new Set(abilities);
@@ -38,7 +51,11 @@ function inferRarity({ key, strength, rows, abilities, maxCopies = 1 }) {
   return "commun";
 }
 
-function makeCard(id, key, name, strength, rows, abilities = [], image = null, rarity = null, maxCopies = 1) {
+function makeCard(id, key, name, strength, rows, abilities = [], image = null, rarity = null, maxCopies = 1, isNpc = false) {
+  const resolvedRarity = rarity ?? inferRarity({ key, strength, rows, abilities, maxCopies, isNpc });
+  if (isNpc && !["rare", "unique"].includes(resolvedRarity)) {
+    throw new Error(`La carte de PNJ ${name} ne peut pas être ${resolvedRarity}.`);
+  }
   return {
     id,
     key,
@@ -47,7 +64,8 @@ function makeCard(id, key, name, strength, rows, abilities = [], image = null, r
     rows: [...rows],
     abilities: [...abilities],
     image,
-    rarity: rarity ?? inferRarity({ key, strength, rows, abilities, maxCopies })
+    rarity: resolvedRarity,
+    isNpc
   };
 }
 
@@ -61,7 +79,8 @@ function makeCopies(prefix, key, name, strength, rows, count, abilities = [], im
     abilities,
     image,
     rarity,
-    count
+    count,
+    false
   ));
 }
 
@@ -69,21 +88,25 @@ const DECK_DEFINITIONS = {
   "six-crowns": {
     id: "six-crowns",
     name: "Royaume des Six Couronnes",
-    description: "Un deck équilibré fondé sur les formations, les soutiens et la polyvalence.",
+    description: "Un deck de personnages du royaume, soutenu par les troupes et fortifications des Six Couronnes.",
     cards: [
-      makeCard("SC-01", "champion-six-couronnes", "Champion des Six Couronnes", 10, ["avant-garde"], ["hero"]),
-      ...makeCopies("SC-02", "chevaliers-six-couronnes", "Chevaliers des Six Couronnes", 8, ["avant-garde"], 2),
-      ...makeCopies("SC-03", "garde-palais", "Garde du palais", 6, ["avant-garde"], 2),
-      ...makeCopies("SC-04", "milice-moulin", "Milice du Moulin", 3, ["avant-garde"], 3, ["bond"]),
-      ...makeCopies("SC-05", "eclaireurs-sellen", "Éclaireurs de la Sellen", 4, ["escarmouche"], 3, ["rally"]),
-      ...makeCopies("SC-06", "archers-brumelande", "Archers de Brumelande", 5, ["escarmouche"], 2),
-      makeCard("SC-07", "garde-chasse", "Garde-chasse royal", 5, ["avant-garde", "escarmouche"]),
-      makeCard("SC-08", "cavaliers-marches", "Cavaliers des Marches", 6, ["avant-garde", "escarmouche"]),
-      makeCard("SC-09", "conseil-royal", "Conseil royal", 4, ["domaine"], ["support"]),
-      makeCard("SC-10", "temple-erastil", "Temple d’Erastil", 4, ["domaine"], ["support"]),
-      makeCard("SC-11", "forteresse-frontaliere", "Forteresse frontalière", 6, ["domaine"], ["resilient"]),
-      makeCard("SC-12", "elias-maitre-espion", "Elias, maître espion", 5, ["escarmouche"]),
-      makeCard("SC-13", "routes-royales", "Routes royales", 3, ["domaine"], ["support"])
+      makeCard("SC-01", "odeon-de-saulebene", "Odéon de Saulébène", 10, ["avant-garde", "domaine"], ["hero"], null, "unique", 1, true),
+      makeCard("SC-02", "aethryn", "Aethryn", 7, ["escarmouche", "domaine"], ["support"], null, "rare", 1, true),
+      makeCard("SC-03", "alistair-veyron", "Alistair Veyron", 8, ["avant-garde"], ["resilient"], null, "rare", 1, true),
+      makeCard("SC-04", "dame-blanche-surtova", "Dame Blanche de Surtova", 8, ["escarmouche", "domaine"], ["hero"], null, "rare", 1, true),
+      makeCard("SC-05", "daowen", "Daowen", 6, ["domaine"], ["support"], null, "rare", 1, true),
+      makeCard("SC-06", "elias-thornwell", "Elias Thornwell", 7, ["escarmouche"], [], null, "rare", 1, true),
+      makeCard("SC-07", "harald-lodovka-menak", "Harald Lodovka Menak", 8, ["avant-garde"], ["resilient"], null, "rare", 1, true),
+      makeCard("SC-08", "lucy", "Lucy", 5, ["avant-garde", "escarmouche"], [], null, "rare", 1, true),
+      makeCard("SC-09", "lysa", "Lysa", 6, ["domaine"], ["support"], null, "rare", 1, true),
+      makeCard("SC-10", "mama-oluda", "Mama Oluda", 7, ["domaine"], ["resilient"], null, "rare", 1, true),
+      makeCard("SC-11", "sery", "Sery", 6, ["avant-garde", "escarmouche"], [], null, "rare", 1, true),
+      makeCard("SC-12", "thea", "Thea", 6, ["escarmouche", "domaine"], [], null, "rare", 1, true),
+      ...makeCopies("SC-13", "chevaliers-six-couronnes", "Chevaliers des Six Couronnes", 7, ["avant-garde"], 2, [], null, "peuCommune"),
+      makeCard("SC-14", "garde-palais", "Garde du palais", 5, ["avant-garde"], [], null, "commun"),
+      ...makeCopies("SC-15", "eclaireurs-sellen", "Éclaireurs de la Sellen", 3, ["escarmouche"], 2, ["rally"], null, "commun"),
+      ...makeCopies("SC-16", "milice-moulin", "Milice du Moulin", 3, ["avant-garde"], 2, ["bond"], null, "commun"),
+      makeCard("SC-17", "forteresse-frontaliere", "Forteresse frontalière", 6, ["domaine"], ["resilient"], null, "peuCommune")
     ]
   },
   aldori: {
@@ -91,7 +114,7 @@ const DECK_DEFINITIONS = {
     name: "Maison Aldori",
     description: "Des unités puissantes et mobiles qui dominent l’Avant-garde.",
     cards: [
-      makeCard("AL-01", "vera-sokolneva", "Vera Sokolneva", 10, ["avant-garde", "escarmouche"], ["hero"]),
+      makeCard("AL-01", "vera-sokolneva", "Vera Sokolneva", 10, ["avant-garde", "escarmouche"], ["hero"], null, "rare", 1, true),
       ...makeCopies("AL-02", "garde-honneur-restov", "Garde d’honneur de Restov", 8, ["avant-garde"], 2),
       ...makeCopies("AL-03", "duelliste-veteran", "Duelliste vétéran", 7, ["avant-garde"], 2),
       ...makeCopies("AL-04", "cadets-aldori", "Cadets aldori", 3, ["avant-garde"], 3, ["bond"]),
@@ -102,8 +125,8 @@ const DECK_DEFINITIONS = {
       makeCard("AL-09", "academie-aldori", "Académie aldori", 4, ["domaine"], ["support"]),
       makeCard("AL-10", "maitre-armes", "Maître d’armes aldori", 4, ["domaine"], ["support"]),
       makeCard("AL-11", "salon-lames", "Salon des Lames", 6, ["domaine"], ["resilient"]),
-      makeCard("AL-12", "elenais-heritiere-dechue", "Elénaïs, l’Héritière déchue", 7, ["avant-garde", "escarmouche"]),
-      makeCard("AL-13", "mikhail-rassvet", "Mikhaïl Rassvet", 5, ["escarmouche"])
+      makeCard("AL-12", "elenais-heritiere-dechue", "Elénaïs, l’Héritière déchue", 7, ["avant-garde", "escarmouche"], [], null, "rare", 1, true),
+      makeCard("AL-13", "mikhail-rassvet", "Mikhaïl Rassvet", 5, ["escarmouche"], [], null, "rare", 1, true)
     ]
   },
   "iron-khans": {
@@ -111,12 +134,12 @@ const DECK_DEFINITIONS = {
     name: "Khans de Fer",
     description: "Un deck agressif rempli de cavaliers mobiles et de renforts rapides.",
     cards: [
-      makeCard("KF-01", "khanesse-reine-sans-couronne", "La Khanesse, Reine sans couronne", 10, ["avant-garde", "escarmouche"], ["hero"]),
+      makeCard("KF-01", "khanesse-reine-sans-couronne", "La Khanesse, Reine sans couronne", 10, ["avant-garde", "escarmouche"], ["hero"], null, "unique", 1, true),
       ...makeCopies("KF-02", "cavaliers-fer", "Cavaliers de fer", 5, ["avant-garde"], 3, ["rally"]),
       ...makeCopies("KF-03", "lanciers-nomades", "Lanciers nomades", 4, ["avant-garde"], 3, ["bond"]),
       ...makeCopies("KF-04", "archers-montes", "Archers montés", 5, ["avant-garde", "escarmouche"], 3),
       ...makeCopies("KF-05", "loups-steppes", "Loups des steppes", 3, ["escarmouche"], 3, ["rally"]),
-      makeCard("KF-06", "iron-wrath", "Iron Wrath", 9, ["avant-garde"], ["hero"]),
+      makeCard("KF-06", "iron-wrath", "Iron Wrath", 9, ["avant-garde"], ["hero"], null, "rare", 1, true),
       makeCard("KF-07", "brise-lignes", "Brise-lignes", 7, ["avant-garde"]),
       makeCard("KF-08", "arbaletrier-lourd", "Arbalétrier lourd", 6, ["escarmouche"]),
       makeCard("KF-09", "porte-banniere-fer", "Porte-bannière de fer", 4, ["avant-garde"], ["support"]),
@@ -130,7 +153,7 @@ const DECK_DEFINITIONS = {
     name: "Arcanes des Terres Dérobées",
     description: "Des créatures féeriques flexibles, persistantes et difficiles à anticiper.",
     cards: [
-      makeCard("AA-01", "nyrissa-reine-epines", "Nyrissa, Reine des Épines", 10, ["domaine"], ["hero"]),
+      makeCard("AA-01", "nyrissa-reine-epines", "Nyrissa, Reine des Épines", 10, ["domaine"], ["hero"], null, "unique", 1, true),
       makeCard("AA-02", "jabberwock-clairieres", "Jabberwock des clairières", 9, ["avant-garde"], ["hero"]),
       ...makeCopies("AA-03", "chevaliers-epines", "Chevaliers d’épines", 4, ["avant-garde"], 3, ["bond"]),
       ...makeCopies("AA-04", "feux-follets", "Feux follets", 3, ["escarmouche"], 3, ["rally"]),

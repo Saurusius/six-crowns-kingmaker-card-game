@@ -60,7 +60,15 @@ test("toutes les cartes de deck utilisent les quatre nouvelles raretés", () => 
   }
 });
 
-test("les boosters utilisent les seuils 65 / 25 / 8 / 2", () => {
+test("les PNJ des decks prédéfinis sont au minimum Rares", () => {
+  for (const deck of Object.values(PREDEFINED_DECKS)) {
+    for (const card of deck.cards.filter((entry) => entry.isNpc)) {
+      assert.equal(["rare", "unique"].includes(card.rarity), true, `${card.name} est ${card.rarity}`);
+    }
+  }
+});
+
+test("les boosters utilisent les seuils 65 / 25 / 8 / 2 et une garantie 99 / 1", () => {
   assert.equal(drawNormalRarity(() => 0), "commun");
   assert.equal(drawNormalRarity(() => 0.6499), "commun");
   assert.equal(drawNormalRarity(() => 0.65), "peuCommune");
@@ -68,8 +76,8 @@ test("les boosters utilisent les seuils 65 / 25 / 8 / 2", () => {
   assert.equal(drawNormalRarity(() => 0.90), "rare");
   assert.equal(drawNormalRarity(() => 0.9799), "rare");
   assert.equal(drawNormalRarity(() => 0.98), "unique");
-  assert.equal(drawGuaranteedRarity(() => 0.89), "rare");
-  assert.equal(drawGuaranteedRarity(() => 0.90), "unique");
+  assert.equal(drawGuaranteedRarity(() => 0.9899), "rare");
+  assert.equal(drawGuaranteedRarity(() => 0.99), "unique");
 });
 
 test("chaque camp reçoit dix cartes après la sélection des decks", () => {
