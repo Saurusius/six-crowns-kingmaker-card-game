@@ -1,14 +1,19 @@
 .six-crowns-kingmaker-card-game .window-content {
+  height: 100%;
   padding: 0;
+  overflow: hidden;
   background: #171714;
   color: #eee8d5;
 }
 
 .scg-shell {
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
   padding: 14px;
   display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
   gap: 10px;
+  overflow: hidden;
   background:
     linear-gradient(rgba(20, 19, 15, 0.92), rgba(20, 19, 15, 0.92)),
     radial-gradient(circle at center, #514526, #171714 70%);
@@ -41,6 +46,17 @@
 .scg-scorebar > div { display: flex; align-items: center; gap: 10px; }
 .scg-scorebar strong { font-size: 1.6rem; color: #f0cf6a; }
 .scg-round-score { color: #c7b36d; }
+
+
+.scg-battlefield {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-right: 4px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
 
 .scg-side { display: grid; gap: 6px; }
 .scg-side-heading { padding: 0 4px; }
@@ -109,9 +125,22 @@
 }
 
 .scg-divider { height: 2px; background: linear-gradient(90deg, transparent, #c8a94f, transparent); }
-.scg-hand { padding-top: 4px; }
-.scg-hand-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-.scg-hand-card { width: 158px; min-height: 126px; }
+.scg-hand {
+  min-height: 0;
+  padding: 8px;
+  border: 1px solid #756a4d;
+  background: rgba(23, 23, 20, 0.98);
+}
+.scg-hand-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  margin-top: 6px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+}
+.scg-hand-card { flex: 0 0 158px; }
+.scg-hand-card { min-height: 126px; }
 .scg-play-actions { display: grid; gap: 4px; margin-top: 8px; }
 .scg-play-actions button { font-size: 0.72rem; padding: 3px 5px; text-transform: capitalize; }
 

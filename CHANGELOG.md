@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 — 2026-07-30
+
+- Garde la main du joueur visible en permanence.
+- Rend le champ de bataille défilable verticalement.
+- Rend la main défilable horizontalement sur les petites fenêtres.
+
 ## 0.1.2
 
 - Corrige le plantage du plateau sous Foundry V14.
