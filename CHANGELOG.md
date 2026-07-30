@@ -1,12 +1,33 @@
 # Journal des versions
 
-## 0.8.0 — Interface illustrée et deck aléatoire
+## 0.7.3 — Vingt cartes dans chaque deck
 
-- intégration du nouveau pack de visuels d’interface : plateau, dos de carte, défausse, gemmes, pièce et médaillons de ligne ;
-- ajout d’une option **Deck aléatoire** pour le joueur et pour l’adversaire au moment de préparer la partie ;
-- réduction de l’emprise visuelle du champ de bataille pour gagner en lisibilité ;
-- réorganisation de la main en deux colonnes afin de voir davantage de cartes sans avoir à trop défiler ;
-- agrandissement de la fenêtre par défaut pour mieux exploiter le nouveau layout.
+- ajout du **Fauconnier des steppes** au deck des Khans de Fer ;
+- ajout du **Cerf blanc du Premier Monde** au deck des Arcanes des Terres Dérobées ;
+- les quatre decks prédéfinis contiennent désormais exactement 20 cartes ;
+- le test des decks échoue désormais si un deck contient plus ou moins de 20 cartes ;
+- catalogue étendu à 82 cartes : 53 Communes, 20 Peu communes, 7 Rares et 2 Uniques.
+
+## 0.7.2 — Nouvelle répartition des raretés
+
+- remplacement de **Commune / Épique** par **Commun / Unique** ;
+- nouvelles couleurs : blanc, orange, bleu et violet ;
+- redistribution exacte du catalogue : 52 Communes, 20 Peu communes, 6 Rares et 2 Uniques ;
+- mise à jour des boosters avec 65 % Commun, 25 % Peu commune, 8 % Rare et 2 % Unique ;
+- carte garantie des boosters : 90 % Rare et 10 % Unique ;
+- validation automatique de la répartition dans les 80 cartes.
+
+## 0.7.1 — Raretés, boosters et ergonomie ciblée
+
+- reprise propre depuis la v0.7.0, sans intégrer le pack visuel de la v0.8.0 abandonnée ;
+- réduction de la taille des cartes et des rangées du champ de bataille ;
+- nouvelle main compacte en deux colonnes permettant d’afficher les dix cartes avec très peu de défilement ;
+- ajout de l’option **Deck aléatoire** pour le joueur et l’adversaire ;
+- ajout des raretés Commune, Peu commune, Rare et Épique aux 80 cartes du catalogue ;
+- les Héros et les cartes Chef sont systématiquement Épiques ;
+- intégration du système de boosters : 4 tirages normaux et 1 carte Rare ou Épique garantie ;
+- sauvegarde des cartes obtenues dans la collection personnelle de l’utilisateur ;
+- ajout d’un bouton d’ouverture de booster, d’une macro Foundry et d’une API dédiée.
 
 ## 0.7.0 — Plateau réorganisé et règlement intégré
 

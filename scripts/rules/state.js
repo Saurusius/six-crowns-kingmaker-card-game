@@ -2,6 +2,8 @@ import { ROWS } from "../constants.js";
 import { calculateSideScores, hasAbility } from "./scoring.js";
 import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
 
+const RANDOM_DECK_ID = "random";
+
 export const SIDES = Object.freeze(["player", "opponent"]);
 export const PHASES = Object.freeze({
   DECK_SELECTION: "deck-selection",
@@ -18,7 +20,19 @@ const ROW_LABELS = Object.freeze({
   "domaine": "Domaine"
 });
 
-const RANDOM_DECK_ID = "random";
+const RARITY_LABELS = Object.freeze({
+  commun: "Commun",
+  peuCommune: "Peu commune",
+  rare: "Rare",
+  unique: "Unique"
+});
+
+const RARITY_ICONS = Object.freeze({
+  commun: "fa-regular fa-circle",
+  peuCommune: "fa-solid fa-star",
+  rare: "fa-solid fa-gem",
+  unique: "fa-solid fa-crown"
+});
 
 const ROLE_LABELS = Object.freeze({
   hero: "Héros",
@@ -65,7 +79,7 @@ const RULEBOOK = Object.freeze([
   {
     title: "Déroulement d’une partie",
     items: [
-      "Chaque joueur choisit un deck prédéfini de 20 cartes maximum.",
+      "Chaque joueur choisit un deck prédéfini d’exactement 20 cartes.",
       "Un lancer de pièce oppose Bouclier et Épée pour déterminer qui commence.",
       "Chaque joueur pioche 10 cartes, puis peut remplacer jusqu’à 2 cartes une seule fois.",
       "À son tour, un joueur joue 1 carte sur une ligne autorisée ou passe pour la manche."
@@ -87,7 +101,8 @@ const RULEBOOK = Object.freeze([
       "Formation : gagne +2 par autre copie identique sur la même ligne.",
       "Renfort : déploie toutes les autres copies présentes dans la pioche.",
       "Bastion : la meilleure carte Bastion peut rester pour la manche suivante avec une force réduite de moitié.",
-      "Mobile : peut être jouée sur plusieurs lignes."
+      "Mobile : peut être jouée sur plusieurs lignes.",
+      "Rareté : Commun, Peu commune, Rare ou Unique. Les Héros et personnages majeurs sont répartis dans les raretés supérieures."
     ]
   },
   {
@@ -98,6 +113,16 @@ const RULEBOOK = Object.freeze([
       "En cas d’égalité sur les lignes contrôlées, la force totale départage les deux camps.",
       "Chaque camp possède 2 gemmes rouges ; perdre une manche fait perdre 1 gemme.",
       "Quand un camp perd ses 2 gemmes, la partie est terminée."
+    ]
+  },
+  {
+    title: "Boosters et collection",
+    items: [
+      "Un booster contient 5 cartes : 4 tirages normaux et 1 carte Rare ou Unique garantie.",
+      "Tirage normal : 65 % Commun, 25 % Peu commune, 8 % Rare et 2 % Unique.",
+      "Carte garantie : 90 % Rare et 10 % Unique.",
+      "Les doublons sont autorisés et chaque carte ouverte est sauvegardée dans la collection de l’utilisateur.",
+      "Le constructeur de decks personnalisés utilisera cette collection dans une prochaine version."
     ]
   }
 ]);
@@ -126,7 +151,7 @@ function createSide(deckId, random) {
   const definition = getDeckDefinition(deckId);
   if (!definition) throw new Error(`Deck inconnu : ${deckId}`);
   const cards = cloneDeck(deckId);
-  if (cards.length > 20) throw new Error(`${definition.name} dépasse la limite de 20 cartes.`);
+  if (cards.length !== 20) throw new Error(`${definition.name} doit contenir exactement 20 cartes.`);
 
   const side = {
     deckId,
@@ -163,7 +188,7 @@ export function createPrototypeState() {
       face: null,
       winner: null
     },
-    message: "Choisissez les deux decks prédéfinis — ou utilisez l’option Deck aléatoire — puis lancez la partie.",
+    message: "Choisissez les deux decks prédéfinis — ou un Deck aléatoire — puis lancez la partie.",
     player: null,
     opponent: null
   };
@@ -631,6 +656,9 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
     factionSymbol: faction.symbol,
     factionLabel: faction.label,
     factionClass: `scg-faction-${card.factionId ?? "neutral"}`,
+    rarityLabel: RARITY_LABELS[card.rarity] ?? card.rarity,
+    rarityClass: `scg-rarity-${card.rarity ?? "commun"}`,
+    rarityIcon: RARITY_ICONS[card.rarity] ?? RARITY_ICONS.commun,
     rowChoices,
     rowSummary: rowChoices.map((row) => row.label).join(" · "),
     primaryRowIcon: rowChoices[0]?.icon ?? ROW_ICONS["avant-garde"],

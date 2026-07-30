@@ -8,7 +8,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "unique"
   },
   {
     "id": "AA-02",
@@ -19,7 +20,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "rare"
   },
   {
     "id": "AA-03",
@@ -34,7 +36,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune"
   },
   {
     "id": "AA-04",
@@ -49,7 +52,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune"
   },
   {
     "id": "AA-05",
@@ -64,7 +68,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "AA-06",
@@ -79,7 +84,8 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent."
+    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "rarity": "commun"
   },
   {
     "id": "AA-07",
@@ -92,7 +98,8 @@
     "strength": 5,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-08",
@@ -107,7 +114,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "AA-09",
@@ -120,7 +128,8 @@
     "strength": 7,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-10",
@@ -134,7 +143,8 @@
     "strength": 3,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-11",
@@ -147,7 +157,8 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-12",
@@ -160,7 +171,8 @@
     "strength": 4,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-13",
@@ -174,7 +186,8 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-14",
@@ -189,7 +202,8 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "peuCommune"
   },
   {
     "id": "AA-15",
@@ -202,7 +216,8 @@
     "strength": 0,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AA-16",
@@ -217,7 +232,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "commun"
   },
   {
     "id": "AA-17",
@@ -230,6 +246,24 @@
     "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
+  },
+  {
+    "id": "AA-18",
+    "name": "Cerf blanc du Premier Monde",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "rare"
   }
 ]

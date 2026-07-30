@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { listDecks } from "../scripts/rules/decks.js";
+import { PREDEFINED_DECKS, listDecks } from "../scripts/rules/decks.js";
+import { drawGuaranteedRarity, drawNormalRarity } from "../scripts/boosters.js";
 import {
   PHASES,
   beginCoinToss,
@@ -28,9 +29,9 @@ function readyGame() {
   return state;
 }
 
-test("tous les decks prédéfinis respectent la limite de vingt cartes", () => {
+test("tous les decks prédéfinis contiennent exactement vingt cartes", () => {
   for (const deck of listDecks()) {
-    assert.ok(deck.cardCount <= 20, `${deck.name} contient ${deck.cardCount} cartes`);
+    assert.equal(deck.cardCount, 20, `${deck.name} contient ${deck.cardCount} cartes`);
   }
 });
 
@@ -40,7 +41,7 @@ test("la partie commence par le choix des decks", () => {
   assert.equal(state.player, null);
 });
 
-test("l’option deck aléatoire sélectionne un deck valide avant le lancer", () => {
+test("l’option Deck aléatoire choisit un deck prédéfini valide", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "random", opponentDeckId: "random", random: () => 0.99 });
   const validIds = listDecks().map((deck) => deck.id);
@@ -48,6 +49,27 @@ test("l’option deck aléatoire sélectionne un deck valide avant le lancer", (
   assert.equal(validIds.includes(state.selectedOpponentDeck), true);
   assert.equal(state.player.hand.length, 10);
   assert.equal(state.opponent.hand.length, 10);
+});
+
+test("toutes les cartes de deck utilisent les quatre nouvelles raretés", () => {
+  const rarities = new Set(["commun", "peuCommune", "rare", "unique"]);
+  for (const deck of Object.values(PREDEFINED_DECKS)) {
+    for (const card of deck.cards) {
+      assert.equal(rarities.has(card.rarity), true, `${card.name} n’a pas de rareté valide`);
+    }
+  }
+});
+
+test("les boosters utilisent les seuils 65 / 25 / 8 / 2", () => {
+  assert.equal(drawNormalRarity(() => 0), "commun");
+  assert.equal(drawNormalRarity(() => 0.6499), "commun");
+  assert.equal(drawNormalRarity(() => 0.65), "peuCommune");
+  assert.equal(drawNormalRarity(() => 0.8999), "peuCommune");
+  assert.equal(drawNormalRarity(() => 0.90), "rare");
+  assert.equal(drawNormalRarity(() => 0.9799), "rare");
+  assert.equal(drawNormalRarity(() => 0.98), "unique");
+  assert.equal(drawGuaranteedRarity(() => 0.89), "rare");
+  assert.equal(drawGuaranteedRarity(() => 0.90), "unique");
 });
 
 test("chaque camp reçoit dix cartes après la sélection des decks", () => {
@@ -187,6 +209,8 @@ test("le modèle d’affichage prépare les cartes pour les futures illustration
   assert.equal(typeof card.factionClass, "string");
   assert.equal(typeof card.factionSymbol, "string");
   assert.equal(typeof card.effectText, "string");
+  assert.equal(typeof card.rarityLabel, "string");
+  assert.equal(typeof card.rarityClass, "string");
   assert.equal(Array.isArray(card.rowChoices), true);
   assert.equal(typeof card.rowChoices[0].icon, "string");
 });

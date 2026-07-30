@@ -8,7 +8,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "rare"
   },
   {
     "id": "AL-02",
@@ -19,7 +20,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "peuCommune"
   },
   {
     "id": "AL-03",
@@ -35,7 +37,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "rare"
   },
   {
     "id": "AL-04",
@@ -49,7 +52,8 @@
     "strength": 7,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-05",
@@ -62,7 +66,8 @@
     "strength": 5,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-06",
@@ -77,7 +82,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "peuCommune"
   },
   {
     "id": "AL-07",
@@ -90,7 +96,8 @@
     "strength": 7,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-08",
@@ -105,7 +112,8 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent."
+    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "rarity": "commun"
   },
   {
     "id": "AL-09",
@@ -120,7 +128,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "AL-10",
@@ -134,7 +143,8 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-11",
@@ -147,7 +157,8 @@
     "strength": 1,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-12",
@@ -162,7 +173,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "commun"
   },
   {
     "id": "AL-13",
@@ -175,7 +187,8 @@
     "strength": 4,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-14",
@@ -188,7 +201,8 @@
     "strength": 3,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-15",
@@ -201,7 +215,8 @@
     "strength": 8,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-16",
@@ -214,7 +229,8 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "AL-17",
@@ -227,6 +243,7 @@
     "strength": 9,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   }
 ]

@@ -1,4 +1,42 @@
-function makeCard(id, key, name, strength, rows, abilities = [], image = null) {
+const UNIQUE_CARD_KEYS = new Set([
+  "khanesse-reine-sans-couronne",
+  "nyrissa-reine-epines"
+]);
+
+const RARE_CARD_KEYS = new Set([
+  "vera-sokolneva",
+  "iron-wrath"
+]);
+
+const UNCOMMON_CARD_KEYS = new Set([
+  "champion-six-couronnes",
+  "jabberwock-clairieres",
+  "hamadryade-millenaire",
+  "conseil-royal",
+  "maitre-armes",
+  "portail-premier-monde",
+  "forteresse-frontaliere",
+  "camp-guerre-nomade",
+  "salon-lames",
+  "academie-aldori",
+  "porte-banniere-fer",
+  "chariot-guerre"
+]);
+
+function inferRarity({ key, strength, rows, abilities, maxCopies = 1 }) {
+  if (UNIQUE_CARD_KEYS.has(key)) return "unique";
+  if (RARE_CARD_KEYS.has(key)) return "rare";
+  if (UNCOMMON_CARD_KEYS.has(key)) return "peuCommune";
+
+  const abilitySet = new Set(abilities);
+  if (abilitySet.has("hero") || strength >= 8) return "peuCommune";
+  if (maxCopies >= 3) return "commun";
+  if (maxCopies === 2 && abilitySet.size === 0) return "commun";
+  if (abilitySet.size > 0 || rows.length > 1 || strength >= 6) return "peuCommune";
+  return "commun";
+}
+
+function makeCard(id, key, name, strength, rows, abilities = [], image = null, rarity = null, maxCopies = 1) {
   return {
     id,
     key,
@@ -6,11 +44,12 @@ function makeCard(id, key, name, strength, rows, abilities = [], image = null) {
     strength,
     rows: [...rows],
     abilities: [...abilities],
-    image
+    image,
+    rarity: rarity ?? inferRarity({ key, strength, rows, abilities, maxCopies })
   };
 }
 
-function makeCopies(prefix, key, name, strength, rows, count, abilities = [], image = null) {
+function makeCopies(prefix, key, name, strength, rows, count, abilities = [], image = null, rarity = null) {
   return Array.from({ length: count }, (_, index) => makeCard(
     `${prefix}-${index + 1}`,
     key,
@@ -18,7 +57,9 @@ function makeCopies(prefix, key, name, strength, rows, count, abilities = [], im
     strength,
     rows,
     abilities,
-    image
+    image,
+    rarity,
+    count
   ));
 }
 
@@ -78,7 +119,8 @@ const DECK_DEFINITIONS = {
       makeCard("KF-08", "arbaletrier-lourd", "Arbalétrier lourd", 6, ["escarmouche"]),
       makeCard("KF-09", "porte-banniere-fer", "Porte-bannière de fer", 4, ["avant-garde"], ["support"]),
       makeCard("KF-10", "chamane-steppes", "Chamane des steppes", 4, ["domaine"], ["support"]),
-      makeCard("KF-11", "camp-guerre-nomade", "Camp de guerre nomade", 6, ["domaine"], ["resilient"])
+      makeCard("KF-11", "camp-guerre-nomade", "Camp de guerre nomade", 6, ["domaine"], ["resilient"]),
+      makeCard("KF-12", "fauconnier-steppes", "Fauconnier des steppes", 4, ["escarmouche"], [], null, "commun")
     ]
   },
   arcana: {
@@ -97,14 +139,15 @@ const DECK_DEFINITIONS = {
       makeCard("AA-09", "mimique-clairiere", "Mimique de la clairière", 5, ["avant-garde", "domaine"]),
       makeCard("AA-10", "troll-moussu", "Troll moussu", 7, ["avant-garde"], ["resilient"]),
       makeCard("AA-11", "portail-premier-monde", "Portail du Premier Monde", 6, ["domaine"], ["resilient"]),
-      makeCard("AA-12", "nixie-eaux-vertes", "Nixie des eaux vertes", 4, ["escarmouche"])
+      makeCard("AA-12", "nixie-eaux-vertes", "Nixie des eaux vertes", 4, ["escarmouche"]),
+      makeCard("AA-13", "cerf-blanc-premier-monde", "Cerf blanc du Premier Monde", 8, ["avant-garde", "domaine"], ["resilient"], null, "rare")
     ]
   }
 };
 
 for (const deck of Object.values(DECK_DEFINITIONS)) {
-  if (deck.cards.length > 20) {
-    throw new Error(`Le deck ${deck.name} dépasse la limite de 20 cartes.`);
+  if (deck.cards.length !== 20) {
+    throw new Error(`Le deck ${deck.name} doit contenir exactement 20 cartes, trouvé : ${deck.cards.length}.`);
   }
 }
 

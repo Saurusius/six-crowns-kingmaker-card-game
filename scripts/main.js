@@ -1,7 +1,8 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
-import { openBoard } from "./api.js";
+import { createBoosterMacro } from "./boosters.js";
+import { getCollection, loadCardCatalog, openBoard, openBooster } from "./api.js";
 
-const api = Object.freeze({ openBoard });
+const api = Object.freeze({ openBoard, openBooster, getCollection, loadCardCatalog });
 
 function exposeApi() {
   const moduleEntry = game.modules.get(MODULE_ID);
@@ -32,8 +33,13 @@ Hooks.once("init", () => {
   exposeApi();
 });
 
-Hooks.once("ready", () => {
+Hooks.once("ready", async () => {
   exposeApi();
+  try {
+    await createBoosterMacro();
+  } catch (error) {
+    console.error(`${MODULE_TITLE} | Création de la macro booster impossible`, error);
+  }
   console.log(`${MODULE_TITLE} | Prêt. Commande : /sixcouronnes`);
 });
 

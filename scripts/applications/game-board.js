@@ -1,4 +1,5 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
+import { openBooster } from "../boosters.js";
 import {
   PHASES,
   beginCoinToss,
@@ -28,8 +29,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       resizable: true
     },
     position: {
-      width: 1360,
-      height: 900
+      width: 1280,
+      height: 860
     }
   };
 
@@ -101,6 +102,15 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         toggleRules(this.matchState);
         await this.render({ force: true });
       });
+    });
+
+    this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
+      try {
+        await openBooster();
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Ouverture du booster impossible`, error);
+        ui.notifications.error(error.message);
+      }
     });
 
     this.element.querySelectorAll("[data-action='flip-coin']").forEach((button) => {

@@ -8,7 +8,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "unique"
   },
   {
     "id": "KF-02",
@@ -19,7 +20,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "peuCommune"
   },
   {
     "id": "KF-03",
@@ -34,7 +36,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "rare"
   },
   {
     "id": "KF-04",
@@ -50,7 +53,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune"
   },
   {
     "id": "KF-05",
@@ -65,7 +69,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "KF-06",
@@ -79,7 +84,8 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-07",
@@ -94,7 +100,8 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent."
+    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "rarity": "commun"
   },
   {
     "id": "KF-08",
@@ -109,7 +116,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "KF-09",
@@ -122,7 +130,8 @@
     "strength": 7,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-10",
@@ -135,7 +144,8 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-11",
@@ -150,7 +160,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "commun"
   },
   {
     "id": "KF-12",
@@ -163,7 +174,8 @@
     "strength": 5,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-13",
@@ -176,7 +188,8 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-14",
@@ -191,7 +204,8 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "commun"
   },
   {
     "id": "KF-15",
@@ -204,7 +218,8 @@
     "strength": 2,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "KF-16",
@@ -219,7 +234,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "peuCommune"
   },
   {
     "id": "KF-17",
@@ -233,6 +249,21 @@
     "strength": 5,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
+  },
+  {
+    "id": "KF-18",
+    "name": "Fauconnier des steppes",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": "",
+    "rarity": "commun"
   }
 ]

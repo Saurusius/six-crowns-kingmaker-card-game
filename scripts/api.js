@@ -1,3 +1,5 @@
+import { getCollection, loadCardCatalog, openBooster } from "./boosters.js";
+
 let board;
 
 /**
@@ -12,3 +14,5 @@ export async function openBoard() {
   await board.render({ force: true });
   return board;
 }
+
+export { getCollection, loadCardCatalog, openBooster };

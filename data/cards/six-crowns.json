@@ -8,7 +8,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "rare"
   },
   {
     "id": "SC-02",
@@ -19,7 +20,8 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure."
+    "text": "Effet de chef réservé à une version ultérieure.",
+    "rarity": "peuCommune"
   },
   {
     "id": "SC-03",
@@ -32,7 +34,8 @@
     "strength": 4,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-04",
@@ -47,7 +50,8 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "rarity": "peuCommune"
   },
   {
     "id": "SC-05",
@@ -62,7 +66,8 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Donne +1 aux autres unités de sa ligne.",
+    "rarity": "peuCommune"
   },
   {
     "id": "SC-06",
@@ -75,7 +80,8 @@
     "strength": 8,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-07",
@@ -88,7 +94,8 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-08",
@@ -103,7 +110,8 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck."
+    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "rarity": "commun"
   },
   {
     "id": "SC-09",
@@ -116,7 +124,8 @@
     "strength": 5,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-10",
@@ -131,7 +140,8 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent."
+    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "rarity": "commun"
   },
   {
     "id": "SC-11",
@@ -144,7 +154,8 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-12",
@@ -157,7 +168,8 @@
     "strength": 5,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-13",
@@ -172,7 +184,8 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "rarity": "commun"
   },
   {
     "id": "SC-14",
@@ -185,7 +198,8 @@
     "strength": 2,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-15",
@@ -198,7 +212,8 @@
     "strength": 3,
     "maxCopies": 1,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-16",
@@ -212,7 +227,8 @@
     "strength": 5,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   },
   {
     "id": "SC-17",
@@ -225,6 +241,7 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [],
-    "text": ""
+    "text": "",
+    "rarity": "commun"
   }
 ]
