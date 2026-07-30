@@ -75,3 +75,11 @@ test("le mulligan permet de prévisualiser les cartes sans modifier la sélectio
   assert.match(css, /\.scg-mulligan-preview-backdrop/);
   assert.match(css, /\.scg-mulligan-preview-card/);
 });
+
+
+test("les infobulles de traits restent dans la prévisualisation du mulligan", async () => {
+  const css = await read("styles/six-crowns.css");
+  assert.match(css, /\.scg-mulligan-preview-traits \.scg-trait-tooltip \{[\s\S]*?top: calc\(100% \+ 8px\);[\s\S]*?bottom: auto;/);
+  assert.match(css, /\.scg-mulligan-preview-traits \.scg-trait-tooltip::after \{[\s\S]*?bottom: 100%;/);
+  assert.match(css, /\.scg-mulligan-preview-backdrop \{[\s\S]*?overflow: auto;/);
+});

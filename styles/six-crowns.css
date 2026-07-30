@@ -2393,3 +2393,72 @@
     border-top: 1px solid color-mix(in srgb, var(--scg-card-accent) 68%, transparent);
   }
 }
+
+
+/* -------------------------------------------------------------------------
+ * v0.7.13 — infobulles confinées dans la prévisualisation du mulligan
+ * ---------------------------------------------------------------------- */
+
+.scg-mulligan-preview-traits {
+  position: relative;
+  isolation: isolate;
+  min-height: 38px;
+  padding-bottom: 2px;
+}
+
+.scg-mulligan-preview-traits .scg-trait-icon {
+  position: relative;
+  z-index: 2;
+}
+
+.scg-mulligan-preview-traits .scg-trait-tooltip {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: 0;
+  width: min(250px, calc(100vw - 96px));
+  transform: translate(0, -4px);
+}
+
+.scg-mulligan-preview-traits .scg-trait-tooltip::after {
+  top: auto;
+  bottom: 100%;
+  left: 16px;
+  border-top-color: transparent;
+  border-bottom-color: #b99a50;
+  transform: none;
+}
+
+.scg-mulligan-preview-traits .scg-trait-icon:hover .scg-trait-tooltip,
+.scg-mulligan-preview-traits .scg-trait-icon:focus .scg-trait-tooltip,
+.scg-mulligan-preview-traits .scg-trait-icon:focus-within .scg-trait-tooltip {
+  transform: translate(0, 0);
+}
+
+.scg-mulligan-preview-dialog,
+.scg-mulligan-preview-card,
+.scg-mulligan-preview-body {
+  overflow: visible;
+}
+
+.scg-mulligan-preview-backdrop {
+  overflow: auto;
+}
+
+@media (max-width: 760px) {
+  .scg-mulligan-preview-traits .scg-trait-tooltip {
+    left: 50%;
+    width: min(230px, calc(100vw - 72px));
+    transform: translate(-50%, -4px);
+  }
+
+  .scg-mulligan-preview-traits .scg-trait-tooltip::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .scg-mulligan-preview-traits .scg-trait-icon:hover .scg-trait-tooltip,
+  .scg-mulligan-preview-traits .scg-trait-icon:focus .scg-trait-tooltip,
+  .scg-mulligan-preview-traits .scg-trait-icon:focus-within .scg-trait-tooltip {
+    transform: translate(-50%, 0);
+  }
+}

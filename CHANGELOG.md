@@ -1,5 +1,12 @@
 # Journal des versions
 
+## 0.7.13 — Infobulles de prévisualisation réparées
+
+- les infobulles des traits s’ouvrent désormais sous leur pictogramme dans la fenêtre de prévisualisation ;
+- elles restent confinées à la modale et ne dépassent plus au-dessus du cadre ;
+- la flèche de l’infobulle est repositionnée pour pointer correctement vers le trait ;
+- la prévisualisation reste défilable sur les écrans plus petits.
+
 ## 0.7.12 — Lignes de bataille recalibrées
 
 - ajout d’une prévisualisation agrandie des cartes pendant le choix de la main, accessible au clic ou après un survol prolongé de la loupe ;
