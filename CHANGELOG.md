@@ -1,3 +1,11 @@
+# Changelog
+
+## 0.1.2
+
+- Corrige le plantage du plateau sous Foundry V14.
+- Renomme l’état interne du match pour éviter le conflit avec `ApplicationV2.state`, propriété en lecture seule de Foundry.
+- Conserve le diagnostic visible lors de l’ouverture.
+
 # Journal des versions
 
 ## 0.1.0 — Prototype

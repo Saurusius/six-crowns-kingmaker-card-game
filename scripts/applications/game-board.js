@@ -25,11 +25,11 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
   constructor(options = {}) {
     super(options);
-    this.state = createPrototypeState();
+    this.matchState = createPrototypeState();
   }
 
   async _prepareContext() {
-    return createBoardViewModel(this.state);
+    return createBoardViewModel(this.matchState);
   }
 
   async _onRender(context, options) {
@@ -38,7 +38,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelectorAll("[data-action='play-card']").forEach((button) => {
       button.addEventListener("click", () => {
         try {
-          playPrototypeCard(this.state, button.dataset.cardId, button.dataset.row);
+          playPrototypeCard(this.matchState, button.dataset.cardId, button.dataset.row);
           this.render({ force: true });
         } catch (error) {
           ui.notifications.warn(error.message);
@@ -47,13 +47,13 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     });
 
     this.element.querySelector("[data-action='pass']")?.addEventListener("click", () => {
-      this.state.player.passed = true;
-      this.state.message = "Vous passez. L’adversaire peut désormais vider sa main avec un sourire insupportable.";
+      this.matchState.player.passed = true;
+      this.matchState.message = "Vous passez. L’adversaire peut désormais vider sa main avec un sourire insupportable.";
       this.render({ force: true });
     });
 
     this.element.querySelector("[data-action='reset']")?.addEventListener("click", () => {
-      this.state = createPrototypeState();
+      this.matchState = createPrototypeState();
       this.render({ force: true });
     });
 
@@ -61,8 +61,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       button.addEventListener("click", () => {
         const row = button.dataset.row;
         if (!ROWS.includes(row)) return;
-        this.state.weather[row] = !this.state.weather[row];
-        this.state.message = this.state.weather[row]
+        this.matchState.weather[row] = !this.matchState.weather[row];
+        this.matchState.message = this.matchState.weather[row]
           ? `La météo frappe la ligne ${row}.`
           : `La météo se dissipe sur la ligne ${row}.`;
         this.render({ force: true });
