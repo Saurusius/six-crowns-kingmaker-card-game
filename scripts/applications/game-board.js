@@ -94,23 +94,25 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
 
-    this.element.querySelector("[data-action='flip-coin']")?.addEventListener("click", async () => {
-      try {
-        beginCoinToss(this.matchState);
-        await this.render({ force: true });
-        this.coinTimer = globalThis.setTimeout(async () => {
-          this.coinTimer = null;
-          try {
-            resolveCoinToss(this.matchState);
-            await this.render({ force: true });
-          } catch (error) {
-            console.error(`${MODULE_TITLE} | Tirage au sort impossible`, error);
-            ui.notifications.error(error.message);
-          }
-        }, 1450);
-      } catch (error) {
-        ui.notifications.warn(error.message);
-      }
+    this.element.querySelectorAll("[data-action='flip-coin']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          beginCoinToss(this.matchState, button.dataset.choice);
+          await this.render({ force: true });
+          this.coinTimer = globalThis.setTimeout(async () => {
+            this.coinTimer = null;
+            try {
+              resolveCoinToss(this.matchState);
+              await this.render({ force: true });
+            } catch (error) {
+              console.error(`${MODULE_TITLE} | Tirage au sort impossible`, error);
+              ui.notifications.error(error.message);
+            }
+          }, 1450);
+        } catch (error) {
+          ui.notifications.warn(error.message);
+        }
+      });
     });
 
     this.element.querySelector("[data-action='continue-after-coin']")?.addEventListener("click", async () => {

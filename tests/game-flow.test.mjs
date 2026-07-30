@@ -21,7 +21,7 @@ const fixedRandom = () => 0.42;
 function readyGame() {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state);
+  beginCoinToss(state, "face");
   resolveCoinToss(state, () => 0.1);
   continueAfterCoinToss(state);
   confirmMulligan(state);
@@ -48,19 +48,36 @@ test("chaque camp reçoit dix cartes après la sélection des decks", () => {
   assert.equal(state.opponent.hand.length, 10);
 });
 
-test("le tirage à pile ou face désigne le premier joueur", () => {
+test("le joueur choisit pile ou face avant le lancer", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state);
+  assert.throws(() => beginCoinToss(state));
+  beginCoinToss(state, "pile");
+  assert.equal(state.coin.choice, "pile");
+});
+
+test("un bon choix au lancer de pièce donne le premier tour", () => {
+  const state = createPrototypeState();
+  startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
+  beginCoinToss(state, "face");
   resolveCoinToss(state, () => 0.1);
   assert.equal(state.coin.face, "face");
   assert.equal(state.currentTurn, "player");
 });
 
+test("un mauvais choix au lancer de pièce donne le premier tour à l’adversaire", () => {
+  const state = createPrototypeState();
+  startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
+  beginCoinToss(state, "pile");
+  resolveCoinToss(state, () => 0.1);
+  assert.equal(state.coin.face, "face");
+  assert.equal(state.currentTurn, "opponent");
+});
+
 test("le mulligan remplace au maximum deux cartes et ne peut être utilisé qu’une fois", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
-  beginCoinToss(state);
+  beginCoinToss(state, "face");
   resolveCoinToss(state, () => 0.1);
   continueAfterCoinToss(state);
 
@@ -86,7 +103,7 @@ test("jouer une carte la déplace sur sa ligne et passe le tour", () => {
   assert.equal(state.currentTurn, "opponent");
 });
 
-test("la manche est gagnée par la force totale, pas par le nombre de lignes", () => {
+test("le contrôle de deux lignes remporte la manche malgré un total inférieur", () => {
   const state = readyGame();
   state.player.rows = {
     "avant-garde": [{ id: "p1", key: "p1", strength: 3, abilities: [] }],
@@ -99,8 +116,28 @@ test("la manche est gagnée par la force totale, pas par le nombre de lignes", (
     "domaine": [{ id: "o1", key: "o1", strength: 20, abilities: [] }]
   };
   const evaluation = evaluateBoard(state);
-  assert.equal(evaluation.winner, "opponent");
+  assert.equal(evaluation.winner, "player");
+  assert.equal(evaluation.decidedBy, "lines");
+  assert.deepEqual(evaluation.controlledLines, { player: 2, opponent: 1 });
   assert.equal(evaluation.scores.opponent.total, 20);
+});
+
+test("la force totale départage une égalité de contrôle", () => {
+  const state = readyGame();
+  state.player.rows = {
+    "avant-garde": [{ id: "p1", key: "p1", strength: 8, abilities: [] }],
+    "escarmouche": [],
+    "domaine": [{ id: "p2", key: "p2", strength: 2, abilities: [] }]
+  };
+  state.opponent.rows = {
+    "avant-garde": [],
+    "escarmouche": [{ id: "o1", key: "o1", strength: 7, abilities: [] }],
+    "domaine": [{ id: "o2", key: "o2", strength: 2, abilities: [] }]
+  };
+  const evaluation = evaluateBoard(state);
+  assert.equal(evaluation.winner, "player");
+  assert.equal(evaluation.decidedBy, "total");
+  assert.deepEqual(evaluation.controlledLines, { player: 1, opponent: 1 });
 });
 
 test("un joueur qui passe laisse l’adversaire continuer avant la fin de manche", () => {

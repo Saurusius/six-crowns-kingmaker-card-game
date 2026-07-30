@@ -81,13 +81,30 @@
       </div>
 
       {{#if coin.resolved}}
+        <div class="scg-coin-summary {{#if coinPlayerWon}}is-win{{else}}is-loss{{/if}}">
+          Votre choix : <strong>{{coinChoiceLabel}}</strong> · Résultat : <strong>{{coinFaceLabel}}</strong>
+        </div>
         <button class="scg-primary-button" type="button" data-action="continue-after-coin">
           Voir les mains
         </button>
       {{else}}
-        <button class="scg-primary-button" type="button" data-action="flip-coin" {{#if coin.flipping}}disabled{{/if}}>
-          <i class="fa-solid fa-coins"></i> {{#if coin.flipping}}La pièce tourne…{{else}}Lancer la pièce{{/if}}
-        </button>
+        {{#if coin.flipping}}
+          <div class="scg-coin-summary">Votre choix : <strong>{{coinChoiceLabel}}</strong></div>
+          <button class="scg-primary-button" type="button" disabled>
+            <i class="fa-solid fa-coins"></i> La pièce tourne…
+          </button>
+        {{else}}
+          <div class="scg-coin-choice" role="group" aria-label="Choisissez pile ou face">
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="pile">
+              <span class="scg-choice-symbol">♛</span>
+              <strong>Pile</strong>
+            </button>
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="face">
+              <span class="scg-choice-symbol">6</span>
+              <strong>Face</strong>
+            </button>
+          </div>
+        {{/if}}
       {{/if}}
     </section>
   {{/if}}
@@ -125,19 +142,21 @@
       <div class="scg-score-side">
         <span class="scg-muted">{{opponent.name}}</span>
         <strong>{{opponentScore.total}}</strong>
+        <span class="scg-line-count">{{opponent.controlledLines}} ligne(s)</span>
         <span class="scg-gems" title="Points de manche restants">
           {{#each opponent.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
         </span>
       </div>
       <div class="scg-deck-status">
-        <span>La force totale remporte la manche.</span>
-        <span>Une carte par tour, sauf capacité spéciale.</span>
+        <span>Le contrôle des lignes remporte la manche.</span>
+        <span>Le total départage une égalité de contrôle.</span>
       </div>
       <div class="scg-score-side scg-score-side-player">
         <span class="scg-gems" title="Points de manche restants">
           {{#each player.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
         </span>
         <strong>{{playerScore.total}}</strong>
+        <span class="scg-line-count">{{player.controlledLines}} ligne(s)</span>
         <span class="scg-muted">{{player.name}}</span>
       </div>
     </div>
@@ -155,7 +174,9 @@
         </div>
 
         <div class="scg-row" data-row="domaine">
-          <div class="scg-row-label"><span>Domaine</span><strong>{{lookup opponentScore.rows "domaine"}}</strong></div>
+          {{#with (lookup opponent.rowStatuses "domaine")}}
+            <div class="scg-row-label {{className}}"><span>Domaine</span><strong>{{lookup @root.opponentScore.rows "domaine"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each opponent.rows.domaine}}
               <article class="scg-card">
@@ -169,7 +190,9 @@
         </div>
 
         <div class="scg-row" data-row="escarmouche">
-          <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup opponentScore.rows "escarmouche"}}</strong></div>
+          {{#with (lookup opponent.rowStatuses "escarmouche")}}
+            <div class="scg-row-label {{className}}"><span>Escarmouche</span><strong>{{lookup @root.opponentScore.rows "escarmouche"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each opponent.rows.escarmouche}}
               <article class="scg-card">
@@ -183,7 +206,9 @@
         </div>
 
         <div class="scg-row" data-row="avant-garde">
-          <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup opponentScore.rows "avant-garde"}}</strong></div>
+          {{#with (lookup opponent.rowStatuses "avant-garde")}}
+            <div class="scg-row-label {{className}}"><span>Avant-garde</span><strong>{{lookup @root.opponentScore.rows "avant-garde"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each opponent.rows.avant-garde}}
               <article class="scg-card">
@@ -207,7 +232,9 @@
         </div>
 
         <div class="scg-row" data-row="avant-garde">
-          <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup playerScore.rows "avant-garde"}}</strong></div>
+          {{#with (lookup player.rowStatuses "avant-garde")}}
+            <div class="scg-row-label {{className}}"><span>Avant-garde</span><strong>{{lookup @root.playerScore.rows "avant-garde"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each player.rows.avant-garde}}
               <article class="scg-card">
@@ -221,7 +248,9 @@
         </div>
 
         <div class="scg-row" data-row="escarmouche">
-          <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup playerScore.rows "escarmouche"}}</strong></div>
+          {{#with (lookup player.rowStatuses "escarmouche")}}
+            <div class="scg-row-label {{className}}"><span>Escarmouche</span><strong>{{lookup @root.playerScore.rows "escarmouche"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each player.rows.escarmouche}}
               <article class="scg-card">
@@ -235,7 +264,9 @@
         </div>
 
         <div class="scg-row" data-row="domaine">
-          <div class="scg-row-label"><span>Domaine</span><strong>{{lookup playerScore.rows "domaine"}}</strong></div>
+          {{#with (lookup player.rowStatuses "domaine")}}
+            <div class="scg-row-label {{className}}"><span>Domaine</span><strong>{{lookup @root.playerScore.rows "domaine"}}</strong><small class="scg-row-control">{{label}}</small></div>
+          {{/with}}
           <div class="scg-card-line">
             {{#each player.rows.domaine}}
               <article class="scg-card">

@@ -90,6 +90,7 @@ export function createPrototypeState() {
     coin: {
       flipping: false,
       resolved: false,
+      choice: null,
       face: null,
       winner: null
     },
@@ -125,12 +126,44 @@ function getScores(state) {
   };
 }
 
-export function evaluateBoard(state) {
-  const scores = getScores(state);
+function evaluateScores(scores) {
+  const rowControl = Object.fromEntries(ROWS.map((row) => {
+    const playerScore = scores.player.rows[row];
+    const opponentScore = scores.opponent.rows[row];
+    const winner = playerScore > opponentScore
+      ? "player"
+      : opponentScore > playerScore
+        ? "opponent"
+        : "tie";
+    return [row, { winner, playerScore, opponentScore }];
+  }));
+
+  const controlledLines = {
+    player: ROWS.filter((row) => rowControl[row].winner === "player").length,
+    opponent: ROWS.filter((row) => rowControl[row].winner === "opponent").length
+  };
+
   let winner = "tie";
-  if (scores.player.total > scores.opponent.total) winner = "player";
-  else if (scores.opponent.total > scores.player.total) winner = "opponent";
-  return { scores, winner };
+  let decidedBy = "tie";
+  if (controlledLines.player > controlledLines.opponent) {
+    winner = "player";
+    decidedBy = "lines";
+  } else if (controlledLines.opponent > controlledLines.player) {
+    winner = "opponent";
+    decidedBy = "lines";
+  } else if (scores.player.total > scores.opponent.total) {
+    winner = "player";
+    decidedBy = "total";
+  } else if (scores.opponent.total > scores.player.total) {
+    winner = "opponent";
+    decidedBy = "total";
+  }
+
+  return { scores, rowControl, controlledLines, winner, decidedBy };
+}
+
+export function evaluateBoard(state) {
+  return evaluateScores(getScores(state));
 }
 
 export function selectDeck(state, side, deckId) {
@@ -158,17 +191,19 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   state.roundResult = null;
   state.gameWinner = null;
   state.mulliganSelection = [];
-  state.coin = { flipping: false, resolved: false, face: null, winner: null };
+  state.coin = { flipping: false, resolved: false, choice: null, face: null, winner: null };
   state.message = "Les decks sont prêts. Lancez la pièce pour désigner le premier joueur.";
   return state;
 }
 
-export function beginCoinToss(state) {
+export function beginCoinToss(state, choice) {
   if (state.phase !== PHASES.COIN_TOSS) throw new Error("Le tirage au sort n’est pas disponible.");
   if (state.coin.flipping) throw new Error("La pièce est déjà en l’air.");
   if (state.coin.resolved) throw new Error("Le tirage au sort est déjà terminé.");
+  if (!["pile", "face"].includes(choice)) throw new Error("Choisissez Pile ou Face avant de lancer la pièce.");
+  state.coin.choice = choice;
   state.coin.flipping = true;
-  state.message = "La pièce tourne dans les airs…";
+  state.message = `Vous choisissez ${choice === "face" ? "Face" : "Pile"}. La pièce tourne dans les airs…`;
   return state;
 }
 
@@ -176,16 +211,17 @@ export function resolveCoinToss(state, random = Math.random) {
   if (state.phase !== PHASES.COIN_TOSS || !state.coin.flipping) {
     throw new Error("La pièce n’a pas été lancée.");
   }
-  const playerStarts = random() < 0.5;
+  const result = random() < 0.5 ? "face" : "pile";
+  const playerStarts = result === state.coin.choice;
   state.coin.flipping = false;
   state.coin.resolved = true;
-  state.coin.face = playerStarts ? "face" : "pile";
+  state.coin.face = result;
   state.coin.winner = playerStarts ? "player" : "opponent";
   state.roundStarter = state.coin.winner;
   state.currentTurn = state.coin.winner;
   state.message = playerStarts
-    ? "Face ! Vous commencerez la première manche."
-    : `Pile ! ${state.opponent.name} commencera la première manche.`;
+    ? `${result === "face" ? "Face" : "Pile"} ! Bon choix : vous commencerez la première manche.`
+    : `${result === "face" ? "Face" : "Pile"} ! Mauvais choix : ${state.opponent.name} commencera la première manche.`;
   return state;
 }
 
@@ -260,7 +296,7 @@ function resolveGameWinner(state) {
 
 function finishRound(state) {
   const evaluation = evaluateBoard(state);
-  const { winner, scores } = evaluation;
+  const { winner, scores, controlledLines, decidedBy } = evaluation;
 
   if (winner === "player") state.opponent.lives = Math.max(0, state.opponent.lives - 1);
   else if (winner === "opponent") state.player.lives = Math.max(0, state.player.lives - 1);
@@ -271,8 +307,11 @@ function finishRound(state) {
 
   state.roundResult = {
     winner,
+    decidedBy,
     playerScore: scores.player.total,
-    opponentScore: scores.opponent.total
+    opponentScore: scores.opponent.total,
+    playerControlledLines: controlledLines.player,
+    opponentControlledLines: controlledLines.opponent
   };
   state.currentTurn = null;
 
@@ -289,11 +328,17 @@ function finishRound(state) {
   }
 
   state.phase = PHASES.ROUND_OVER;
+  const controlSummary = `${controlledLines.player} ligne(s) à ${controlledLines.opponent}`;
+  const totalSummary = `${scores.player.total} à ${scores.opponent.total}`;
   state.message = winner === "tie"
-    ? `Manche nulle : ${scores.player.total} à ${scores.opponent.total}. Chaque camp perd une gemme.`
+    ? `Manche nulle : contrôle ${controlSummary}, total ${totalSummary}. Chaque camp perd une gemme.`
     : winner === "player"
-      ? `Manche remportée : ${scores.player.total} à ${scores.opponent.total}.`
-      : `Manche perdue : ${scores.opponent.total} à ${scores.player.total}.`;
+      ? decidedBy === "lines"
+        ? `Manche remportée au contrôle des lignes : ${controlSummary} (total ${totalSummary}).`
+        : `Contrôle égal ; manche remportée au total : ${totalSummary}.`
+      : decidedBy === "lines"
+        ? `Manche perdue au contrôle des lignes : ${controlledLines.opponent} à ${controlledLines.player} (total ${scores.opponent.total} à ${scores.player.total}).`
+        : `Contrôle égal ; manche perdue au total : ${scores.opponent.total} à ${scores.player.total}.`;
   return state;
 }
 
@@ -358,36 +403,53 @@ export function passSide(state, side) {
   return advanceAfterAction(state, side);
 }
 
-function simulateCardValue(state, side, card, row) {
-  const cards = [...state[side].rows[row], card];
-  if (hasAbility(card, "rally")) cards.push(...state[side].deck.filter((candidate) => candidate.key === card.key));
-  const current = calculateSideScores(state[side].rows).rows[row];
-  const simulatedRows = { ...state[side].rows, [row]: cards };
-  const after = calculateSideScores(simulatedRows).rows[row];
-  return after - current;
+function simulateOpponentMove(state, card, row) {
+  const cards = [...state.opponent.rows[row], card];
+  if (hasAbility(card, "rally")) {
+    cards.push(...state.opponent.deck.filter((candidate) => candidate.key === card.key));
+  }
+  const simulatedRows = { ...state.opponent.rows, [row]: cards };
+  const scores = {
+    player: calculateSideScores(state.player.rows),
+    opponent: calculateSideScores(simulatedRows)
+  };
+  return evaluateScores(scores);
 }
 
 function chooseOpponentMove(state) {
   if (state.opponent.hand.length === 0) return null;
-  const evaluation = evaluateBoard(state);
-  if (state.player.passed && evaluation.winner === "opponent") return null;
+  const current = evaluateBoard(state);
+  if (state.player.passed && current.winner === "opponent") return null;
 
   const candidates = [];
   for (const card of state.opponent.hand) {
     for (const row of card.rows) {
-      candidates.push({ card, row, value: simulateCardValue(state, "opponent", card, row) });
+      const evaluation = simulateOpponentMove(state, card, row);
+      candidates.push({
+        card,
+        row,
+        evaluation,
+        controlledGain: evaluation.controlledLines.opponent - current.controlledLines.opponent,
+        totalGain: evaluation.scores.opponent.total - current.scores.opponent.total
+      });
     }
   }
 
   if (state.player.passed) {
-    const deficit = Math.max(0, evaluation.scores.player.total - evaluation.scores.opponent.total + 1);
-    const enough = candidates
-      .filter((candidate) => candidate.value >= deficit)
-      .sort((a, b) => a.value - b.value)[0];
-    if (enough) return enough;
+    const winningMoves = candidates
+      .filter((candidate) => candidate.evaluation.winner === "opponent")
+      .sort((a, b) => Number(a.card.strength ?? 0) - Number(b.card.strength ?? 0)
+        || a.totalGain - b.totalGain);
+    if (winningMoves.length > 0) return winningMoves[0];
   }
 
-  return candidates.sort((a, b) => a.value - b.value)[0] ?? null;
+  return candidates.sort((a, b) =>
+    b.controlledGain - a.controlledGain
+    || (b.evaluation.controlledLines.opponent - b.evaluation.controlledLines.player)
+      - (a.evaluation.controlledLines.opponent - a.evaluation.controlledLines.player)
+    || Number(a.card.strength ?? 0) - Number(b.card.strength ?? 0)
+    || a.totalGain - b.totalGain
+  )[0] ?? null;
 }
 
 export function takeOpponentTurn(state) {
@@ -489,6 +551,13 @@ function phaseLabel(phase) {
   }[phase] ?? phase;
 }
 
+function rowStatusFor(side, rowControl) {
+  const winner = rowControl?.winner ?? "tie";
+  if (winner === "tie") return { label: "Contestée", className: "is-contested" };
+  if (winner === side) return { label: "Contrôlée", className: "is-controlled" };
+  return { label: "Perdue", className: "is-lost" };
+}
+
 export function createBoardViewModel(state) {
   const evaluation = evaluateBoard(state);
   const canPlayerAct = state.phase === PHASES.PLAYING
@@ -507,13 +576,17 @@ export function createBoardViewModel(state) {
       ...state.player,
       rows: prepareRows(state.player.rows),
       hand: state.player.hand.map((card) => prepareCardView(card, null, state.mulliganSelection)),
-      gems: gemMarkers(state.player.lives)
+      gems: gemMarkers(state.player.lives),
+      controlledLines: evaluation.controlledLines.player,
+      rowStatuses: Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("player", evaluation.rowControl[row])]))
     } : null,
     opponent: state.opponent ? {
       ...state.opponent,
       rows: prepareRows(state.opponent.rows),
       handCount: state.opponent.hand.length,
-      gems: gemMarkers(state.opponent.lives)
+      gems: gemMarkers(state.opponent.lives),
+      controlledLines: evaluation.controlledLines.opponent,
+      rowStatuses: Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("opponent", evaluation.rowControl[row])]))
     } : null,
     playerScore: evaluation.scores.player,
     opponentScore: evaluation.scores.opponent,
@@ -536,6 +609,8 @@ export function createBoardViewModel(state) {
         ? `is-resolved is-${state.coin.face}`
         : "",
     coinFaceLabel: state.coin.face === "face" ? "Face" : state.coin.face === "pile" ? "Pile" : "?",
+    coinChoiceLabel: state.coin.choice === "face" ? "Face" : state.coin.choice === "pile" ? "Pile" : "—",
+    coinPlayerWon: state.coin.resolved && state.coin.winner === "player",
     mulliganSelectedCount: state.mulliganSelection.length,
     mulliganButtonLabel: state.mulliganSelection.length > 0
       ? `Remplacer ${state.mulliganSelection.length} carte(s)`

@@ -192,6 +192,61 @@
   100% { transform: translateY(28px) rotateY(1800deg) rotateX(360deg) scale(1); }
 }
 
+
+.scg-coin-choice {
+  width: min(420px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.scg-choice-button {
+  min-height: 92px;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #c8a94f;
+  background: linear-gradient(145deg, #3f3722, #211d15);
+  color: #f5e7b3;
+}
+
+.scg-choice-button:hover {
+  border-color: #f0cf6a;
+  background: linear-gradient(145deg, #554925, #292217);
+}
+
+.scg-choice-symbol {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 3px double #8a6924;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6dfa0, #b98526 62%, #694714);
+  color: #402b0f;
+  font-size: 1.55rem;
+  font-weight: 900;
+}
+
+.scg-coin-summary {
+  padding: 7px 12px;
+  border: 1px solid #756a4d;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.24);
+  color: #d8c98e;
+}
+
+.scg-coin-summary.is-win {
+  border-color: #668b5f;
+  color: #cce3c7;
+}
+
+.scg-coin-summary.is-loss {
+  border-color: #8d5f4b;
+  color: #e8b69c;
+}
+
 .scg-coin-result {
   position: absolute;
   bottom: 0;
@@ -238,6 +293,7 @@
 }
 
 .scg-score-side strong { font-size: 1.6rem; color: #f0cf6a; }
+.scg-line-count { color: #d8c98e; font-size: 0.72rem; white-space: nowrap; }
 .scg-score-side-player { justify-content: flex-end; }
 .scg-deck-status { color: #b7ae94; font-size: 0.78rem; flex-direction: column; }
 
@@ -308,6 +364,30 @@
 }
 
 .scg-row-label strong { font-size: 1.55rem; color: #f0cf6a; }
+
+.scg-row-label.is-controlled {
+  background: rgba(67, 103, 57, 0.28);
+  box-shadow: inset 3px 0 0 #739b68;
+}
+
+.scg-row-label.is-lost {
+  background: rgba(120, 55, 50, 0.24);
+  box-shadow: inset 3px 0 0 #a35e57;
+}
+
+.scg-row-label.is-contested {
+  background: rgba(115, 99, 55, 0.2);
+  box-shadow: inset 3px 0 0 #aa9453;
+}
+
+.scg-row-control {
+  margin-top: 4px;
+  color: #d8c98e;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .scg-card-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 
 .scg-card {
@@ -380,7 +460,8 @@
   .scg-scorebar,
   .scg-mulligan-footer { align-items: flex-start; flex-direction: column; }
   .scg-deck-select-grid,
-  .scg-deck-gallery { grid-template-columns: 1fr; }
+  .scg-deck-gallery,
+  .scg-coin-choice { grid-template-columns: 1fr; }
   .scg-mulligan-grid { grid-template-columns: repeat(2, minmax(125px, 1fr)); }
   .scg-row { grid-template-columns: 84px 1fr; }
   .scg-card { width: 96px; }
