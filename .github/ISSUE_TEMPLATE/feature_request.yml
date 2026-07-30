@@ -1,0 +1,12 @@
+name: Proposition
+description: Proposer une carte, une règle ou une fonctionnalité
+title: "[Proposition] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposition
+      description: Décrivez le besoin et son intérêt en jeu.
+    validations:
+      required: true

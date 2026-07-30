@@ -1,0 +1,244 @@
+[
+  {
+    "id": "SC-01",
+    "name": "Odéon, le Roi bâtisseur",
+    "faction": "six-crowns",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Joue immédiatement une carte Domaine depuis le deck."
+  },
+  {
+    "id": "SC-02",
+    "name": "Odéon, la Couronne en guerre",
+    "faction": "six-crowns",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Donne +1 à toutes les unités non-héros d’une ligne jusqu’à la fin de la manche."
+  },
+  {
+    "id": "SC-03",
+    "name": "Elias, maître espion",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": "Se joue chez l’adversaire et fait piocher deux cartes."
+  },
+  {
+    "id": "SC-04",
+    "name": "Champion des Six Couronnes",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-05",
+    "name": "Conseil royal",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "morale"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-06",
+    "name": "Chevaliers des Six Couronnes",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": ""
+  },
+  {
+    "id": "SC-07",
+    "name": "Garde du palais",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": ""
+  },
+  {
+    "id": "SC-08",
+    "name": "Éclaireurs de la Sellen",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-09",
+    "name": "Archers de Brumelande",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": ""
+  },
+  {
+    "id": "SC-10",
+    "name": "Milice du Moulin",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "tight-bond"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-11",
+    "name": "Ingénieurs royaux",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Donne +2 à la prochaine carte Domaine jouée."
+  },
+  {
+    "id": "SC-12",
+    "name": "Temple d’Erastil",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "medic"
+    ],
+    "text": "Rejoue une unité de force 5 ou moins depuis la défausse."
+  },
+  {
+    "id": "SC-13",
+    "name": "Forteresse frontalière",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-14",
+    "name": "Routes royales",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 2,
+    "maxCopies": 2,
+    "abilities": [
+      "logistics"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-15",
+    "name": "Ambassadeurs du Royaume",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-16",
+    "name": "Garde-chasse royal",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "agile"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SC-17",
+    "name": "Intendant des Frontières",
+    "faction": "six-crowns",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Gagne +1 pour chaque autre carte Domaine alliée."
+  }
+]

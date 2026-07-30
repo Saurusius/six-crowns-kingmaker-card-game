@@ -1,0 +1,115 @@
+<section class="scg-shell">
+  <header class="scg-toolbar">
+    <div>
+      <strong>Manche {{round}}</strong>
+      <span class="scg-muted">Prototype local</span>
+    </div>
+    <div class="scg-toolbar-actions">
+      <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Réinitialiser</button>
+      <button type="button" data-action="pass" {{#if player.passed}}disabled{{/if}}><i class="fa-solid fa-flag"></i> Passer</button>
+    </div>
+  </header>
+
+  <p class="scg-message">{{message}}</p>
+
+  <div class="scg-scorebar">
+    <div>
+      <span class="scg-muted">{{opponent.name}}</span>
+      <strong>{{opponentScore.total}}</strong>
+    </div>
+    <div class="scg-round-score">{{opponent.lives}} ◆ — ◆ {{player.lives}}</div>
+    <div>
+      <strong>{{playerScore.total}}</strong>
+      <span class="scg-muted">{{player.name}}</span>
+    </div>
+  </div>
+
+  <section class="scg-side scg-opponent">
+    <div class="scg-side-heading">
+      <strong>Main adverse</strong>
+      <span>{{opponent.handCount}} cartes</span>
+    </div>
+
+    <div class="scg-row" data-row="domaine">
+      <button class="scg-weather {{#if (lookup weather "domaine")}}is-active{{/if}}" type="button" data-action="toggle-weather" data-row="domaine" title="Activer ou dissiper la météo">☁</button>
+      <div class="scg-row-label"><span>Domaine</span><strong>{{lookup opponentScore.rows "domaine"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each opponent.rows.domaine}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="scg-row" data-row="escarmouche">
+      <button class="scg-weather {{#if (lookup weather "escarmouche")}}is-active{{/if}}" type="button" data-action="toggle-weather" data-row="escarmouche">☁</button>
+      <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup opponentScore.rows "escarmouche"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each opponent.rows.escarmouche}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="scg-row" data-row="avant-garde">
+      <button class="scg-weather {{#if (lookup weather "avant-garde")}}is-active{{/if}}" type="button" data-action="toggle-weather" data-row="avant-garde">☁</button>
+      <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup opponentScore.rows "avant-garde"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each opponent.rows.avant-garde}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <div class="scg-divider"></div>
+
+  <section class="scg-side scg-player">
+    <div class="scg-row" data-row="avant-garde">
+      <div class="scg-row-label"><span>Avant-garde</span><strong>{{lookup playerScore.rows "avant-garde"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each player.rows.avant-garde}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="scg-row" data-row="escarmouche">
+      <div class="scg-row-label"><span>Escarmouche</span><strong>{{lookup playerScore.rows "escarmouche"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each player.rows.escarmouche}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="scg-row" data-row="domaine">
+      <div class="scg-row-label"><span>Domaine</span><strong>{{lookup playerScore.rows "domaine"}}</strong></div>
+      <div class="scg-card-line">
+        {{#each player.rows.domaine}}
+          <article class="scg-card"><span class="scg-strength">{{strength}}</span><strong>{{name}}</strong></article>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  <section class="scg-hand">
+    <div class="scg-side-heading">
+      <strong>Votre main</strong>
+      <span>{{player.hand.length}} cartes</span>
+    </div>
+    <div class="scg-hand-grid">
+      {{#each player.hand}}
+        <article class="scg-card scg-hand-card">
+          <span class="scg-strength">{{strength}}</span>
+          <strong>{{name}}</strong>
+          <small>{{#each abilities}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</small>
+          <div class="scg-play-actions">
+            {{#each rows}}
+              <button type="button" data-action="play-card" data-card-id="{{../id}}" data-row="{{this}}">{{this}}</button>
+            {{/each}}
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  </section>
+</section>

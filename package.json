@@ -1,0 +1,17 @@
+{
+  "name": "six-crowns-kingmaker-card-game",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Foundry VTT module for Le Jeu des Six Couronnes.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node tools/validate-data.mjs",
+    "check": "npm run validate && npm test",
+    "prepare-release": "node tools/prepare-release.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

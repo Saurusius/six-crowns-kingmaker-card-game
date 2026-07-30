@@ -1,0 +1,53 @@
+name: Publication Foundry
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Valider et tester
+        run: npm run check
+
+      - name: Vérifier le tag et préparer le module
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag invalide : $GITHUB_REF_NAME"
+            exit 1
+          fi
+          node tools/prepare-release.mjs "$VERSION"
+
+      - name: Construire le ZIP Foundry
+        shell: bash
+        run: |
+          cd dist/module
+          zip -r ../../six-crowns-kingmaker-card-game.zip .
+          cd ../..
+          cp dist/module/module.json ./module.json
+
+      - name: Créer la GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "$GITHUB_REF_NAME"             module.json             six-crowns-kingmaker-card-game.zip             --title "Le Jeu des Six Couronnes $GITHUB_REF_NAME"             --generate-notes

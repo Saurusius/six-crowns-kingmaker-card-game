@@ -1,0 +1,254 @@
+[
+  {
+    "id": "KF-01",
+    "name": "La Khanesse, Reine sans couronne",
+    "faction": "iron-khans",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Déplace toutes les cartes Agile alliées vers la ligne de votre choix."
+  },
+  {
+    "id": "KF-02",
+    "name": "La Khanesse, Serment de Fer",
+    "faction": "iron-khans",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Rejoue depuis la défausse une carte Cavalier ou Archer monté."
+  },
+  {
+    "id": "KF-03",
+    "name": "Iron Wrath",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-04",
+    "name": "Chevaucheuse de l’Orage",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 9,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "agile"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-05",
+    "name": "Cavaliers de fer",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-06",
+    "name": "Archers montés",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "agile"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-07",
+    "name": "Lanciers nomades",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
+    "maxCopies": 3,
+    "abilities": [
+      "tight-bond"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-08",
+    "name": "Loups des steppes",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-09",
+    "name": "Brise-lignes",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Gagne +3 si l’Avant-garde adverse est plus forte lorsqu’il est joué."
+  },
+  {
+    "id": "KF-10",
+    "name": "Arbalétrier lourd",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "scorch"
+    ],
+    "text": "Brûlure sur l’Escarmouche adverse si sa force totale atteint 20."
+  },
+  {
+    "id": "KF-11",
+    "name": "Porte-bannière de fer",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "morale"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-12",
+    "name": "Chamane des steppes",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "medic"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-13",
+    "name": "Maréchal-ferrant khan",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Donne +2 à la plus forte unité alliée non-héros."
+  },
+  {
+    "id": "KF-14",
+    "name": "Camp de guerre nomade",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-15",
+    "name": "Éclaireuse khan",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 2,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "KF-16",
+    "name": "Chariot de guerre",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "horn"
+    ],
+    "text": "Double la force de l’Avant-garde alliée."
+  },
+  {
+    "id": "KF-17",
+    "name": "Pillards du gué",
+    "faction": "iron-khans",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 2,
+    "abilities": [
+      "agile",
+      "custom"
+    ],
+    "text": "Gagne +1 par unité alliée déjà détruite durant la manche."
+  }
+]

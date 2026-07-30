@@ -1,0 +1,252 @@
+[
+  {
+    "id": "AL-01",
+    "name": "Jamandi Aldori, Première Épée",
+    "faction": "aldori",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Détruit la plus forte unité non-héros de l’Avant-garde adverse."
+  },
+  {
+    "id": "AL-02",
+    "name": "Jamandi Aldori, Hôtesse de Restov",
+    "faction": "aldori",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Pioche une carte supplémentaire au début de la deuxième manche."
+  },
+  {
+    "id": "AL-03",
+    "name": "Vera Sokolneva, Lame noire",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "agile"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-04",
+    "name": "Elénaïs, l’Héritière déchue",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "agile",
+      "duel"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-05",
+    "name": "Mikhaïl Rassvet",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-06",
+    "name": "Maître d’armes aldori",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "morale"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-07",
+    "name": "Duelliste vétéran",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "duel"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-08",
+    "name": "Cadets aldori",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "tight-bond"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-09",
+    "name": "Épéistes de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-10",
+    "name": "Danseuse à la lame",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "agile"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-11",
+    "name": "Espion de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 1,
+    "maxCopies": 2,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-12",
+    "name": "Académie aldori",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "horn"
+    ],
+    "text": "Double la force de l’Avant-garde alliée."
+  },
+  {
+    "id": "AL-13",
+    "name": "Salon des Lames",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 4,
+    "maxCopies": 1,
+    "abilities": [
+      "medic"
+    ],
+    "text": "Rejoue une carte possédant Duel."
+  },
+  {
+    "id": "AL-14",
+    "name": "Arbitre du duel",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 1,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Supprime tous les bonus et malus d’une ligne."
+  },
+  {
+    "id": "AL-15",
+    "name": "Garde d’honneur de Restov",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
+    "maxCopies": 2,
+    "abilities": [],
+    "text": ""
+  },
+  {
+    "id": "AL-16",
+    "name": "Messagère de la Maison Aldori",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "logistics"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AL-17",
+    "name": "Lame de la Première Épée",
+    "faction": "aldori",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 9,
+    "maxCopies": 1,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Immunisée aux capacités Duel ennemies."
+  }
+]

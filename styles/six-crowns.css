@@ -1,0 +1,122 @@
+.six-crowns-kingmaker-card-game .window-content {
+  padding: 0;
+  background: #171714;
+  color: #eee8d5;
+}
+
+.scg-shell {
+  min-height: 100%;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  background:
+    linear-gradient(rgba(20, 19, 15, 0.92), rgba(20, 19, 15, 0.92)),
+    radial-gradient(circle at center, #514526, #171714 70%);
+}
+
+.scg-toolbar,
+.scg-scorebar,
+.scg-side-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.scg-toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.scg-muted { color: #b7ae94; }
+.scg-message { margin: 0; padding: 8px 12px; border-left: 3px solid #c8a94f; background: rgba(255,255,255,0.04); }
+
+.scg-scorebar {
+  padding: 8px 14px;
+  border: 1px solid #756a4d;
+  background: rgba(0,0,0,0.3);
+  font-size: 1.15rem;
+}
+
+.scg-scorebar > div { display: flex; align-items: center; gap: 10px; }
+.scg-scorebar strong { font-size: 1.6rem; color: #f0cf6a; }
+.scg-round-score { color: #c7b36d; }
+
+.scg-side { display: grid; gap: 6px; }
+.scg-side-heading { padding: 0 4px; }
+
+.scg-row {
+  min-height: 90px;
+  display: grid;
+  grid-template-columns: 36px 120px 1fr;
+  align-items: stretch;
+  gap: 8px;
+  padding: 7px;
+  border: 1px solid #5d563f;
+  background: rgba(54, 58, 45, 0.34);
+}
+
+.scg-opponent .scg-row { background: rgba(72, 45, 40, 0.34); }
+
+.scg-weather {
+  min-width: 32px;
+  border: 1px solid #5d563f;
+  background: rgba(0,0,0,0.25);
+  color: #b7ae94;
+}
+
+.scg-weather.is-active { color: #fff; background: #4f6270; }
+
+.scg-row-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid #5d563f;
+}
+
+.scg-row-label strong { font-size: 1.55rem; color: #f0cf6a; }
+.scg-card-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+
+.scg-card {
+  position: relative;
+  width: 112px;
+  min-height: 70px;
+  padding: 10px 8px 7px 32px;
+  border: 1px solid #8a7950;
+  border-radius: 5px;
+  background: linear-gradient(145deg, #3b3629, #22201a);
+  color: #f3ead4;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.scg-card strong { display: block; font-size: 0.84rem; line-height: 1.15; }
+.scg-card small { display: block; margin-top: 6px; color: #b7ae94; }
+
+.scg-strength {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #e3d08b;
+  color: #1d1b16;
+  font-weight: 800;
+}
+
+.scg-divider { height: 2px; background: linear-gradient(90deg, transparent, #c8a94f, transparent); }
+.scg-hand { padding-top: 4px; }
+.scg-hand-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.scg-hand-card { width: 158px; min-height: 126px; }
+.scg-play-actions { display: grid; gap: 4px; margin-top: 8px; }
+.scg-play-actions button { font-size: 0.72rem; padding: 3px 5px; text-transform: capitalize; }
+
+@media (max-width: 760px) {
+  .scg-row { grid-template-columns: 32px 84px 1fr; }
+  .scg-card { width: 96px; }
+  .scg-hand-card { width: 140px; }
+}

@@ -1,0 +1,252 @@
+[
+  {
+    "id": "AA-01",
+    "name": "Nyrissa, Reine des Épines",
+    "faction": "stolen-lands-arcana",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Déplace une unité ennemie vers une autre ligne et lui inflige −2."
+  },
+  {
+    "id": "AA-02",
+    "name": "Le Roi-Lanterne",
+    "faction": "stolen-lands-arcana",
+    "kind": "leader",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Transforme la plus forte unité non-héros adverse en Bouffon de force 1."
+  },
+  {
+    "id": "AA-03",
+    "name": "Jabberwock des clairières",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-04",
+    "name": "Hamadryade millénaire",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 9,
+    "maxCopies": 1,
+    "abilities": [
+      "hero"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-05",
+    "name": "Feux follets",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 2,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-06",
+    "name": "Chevaliers d’épines",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 4,
+    "maxCopies": 3,
+    "abilities": [
+      "tight-bond"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-07",
+    "name": "Dryade guérisseuse",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "medic"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-08",
+    "name": "Quicklings du sous-bois",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 3,
+    "maxCopies": 3,
+    "abilities": [
+      "muster"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-09",
+    "name": "Ankou du Premier Monde",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 7,
+    "maxCopies": 1,
+    "abilities": [
+      "scorch"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-10",
+    "name": "Mimique de la clairière",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 3,
+    "maxCopies": 2,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Copie la force imprimée d’une unité alliée adjacente."
+  },
+  {
+    "id": "AA-11",
+    "name": "Nixie des eaux vertes",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 2,
+    "abilities": [
+      "weather-immune"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-12",
+    "name": "Satyre rieur",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 4,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-13",
+    "name": "Chat-sorcier",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 6,
+    "maxCopies": 2,
+    "abilities": [
+      "agile",
+      "custom"
+    ],
+    "text": "Peut échanger sa place avec une unité alliée."
+  },
+  {
+    "id": "AA-14",
+    "name": "Portail du Premier Monde",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "resilient"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-15",
+    "name": "Brume vivante",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 0,
+    "maxCopies": 1,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Applique immédiatement un effet de météo sur une ligne au choix."
+  },
+  {
+    "id": "AA-16",
+    "name": "Dryade ancienne",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 7,
+    "maxCopies": 2,
+    "abilities": [
+      "morale"
+    ],
+    "text": ""
+  },
+  {
+    "id": "AA-17",
+    "name": "Troll moussu",
+    "faction": "stolen-lands-arcana",
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "custom"
+    ],
+    "text": "Lorsqu’il est détruit, revient dans la défausse avec une force de 4."
+  }
+]

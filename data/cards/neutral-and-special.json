@@ -1,0 +1,163 @@
+[
+  {
+    "id": "NE-01",
+    "name": "Maegar Varn",
+    "faction": "neutral",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 8,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "medic"
+    ],
+    "text": "Rejoue une unité alliée de force 5 ou moins."
+  },
+  {
+    "id": "NE-02",
+    "name": "Bokken, alchimiste des Marches",
+    "faction": "neutral",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
+    "maxCopies": 1,
+    "abilities": [
+      "logistics"
+    ],
+    "text": "Pioche deux cartes puis défausse-en une."
+  },
+  {
+    "id": "NE-03",
+    "name": "Linzi, chroniqueuse du royaume",
+    "faction": "neutral",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "morale"
+    ],
+    "text": ""
+  },
+  {
+    "id": "NE-04",
+    "name": "Jubilost Narthropple",
+    "faction": "neutral",
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
+    "maxCopies": 1,
+    "abilities": [
+      "spy"
+    ],
+    "text": ""
+  },
+  {
+    "id": "NE-05",
+    "name": "Vordakai",
+    "faction": "neutral",
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 10,
+    "maxCopies": 1,
+    "abilities": [
+      "hero",
+      "medic"
+    ],
+    "text": ""
+  },
+  {
+    "id": "SP-01",
+    "name": "Brouillard des Terres Dérobées",
+    "faction": "neutral",
+    "kind": "weather",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Fixe la force des unités d’Escarmouche non-héros à 1."
+  },
+  {
+    "id": "SP-02",
+    "name": "Crue de la Sellen",
+    "faction": "neutral",
+    "kind": "weather",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Fixe la force des unités d’Avant-garde non-héros à 1."
+  },
+  {
+    "id": "SP-03",
+    "name": "Tempête sur les Pics",
+    "faction": "neutral",
+    "kind": "weather",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Fixe la force des cartes Domaine non-héros à 1."
+  },
+  {
+    "id": "SP-04",
+    "name": "Éclaircie royale",
+    "faction": "neutral",
+    "kind": "weather",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [],
+    "text": "Dissipe tous les effets météorologiques."
+  },
+  {
+    "id": "SP-05",
+    "name": "Bannière de guerre",
+    "faction": "neutral",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "horn"
+    ],
+    "text": "Double la force d’une ligne alliée."
+  },
+  {
+    "id": "SP-06",
+    "name": "Leurre diplomatique",
+    "faction": "neutral",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "decoy"
+    ],
+    "text": "Reprend une unité alliée en main et prend sa place."
+  },
+  {
+    "id": "SP-07",
+    "name": "Sentence du Royaume",
+    "faction": "neutral",
+    "kind": "special",
+    "rows": [],
+    "strength": null,
+    "maxCopies": 1,
+    "abilities": [
+      "scorch"
+    ],
+    "text": "Détruit les unités non-héros possédant la force la plus élevée sur le plateau."
+  }
+]
