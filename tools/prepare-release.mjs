@@ -26,6 +26,5 @@ for (const entry of entries) {
 const manifestPath = path.join(target, "module.json");
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 manifest.version = version;
-manifest.download = `https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v${version}/six-crowns-kingmaker-card-game.zip`;
 await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 console.log(`Release ${version} préparée dans dist/module.`);

@@ -1,9 +1,14 @@
-import { SixCrownsBoard } from "./applications/game-board.js";
-
 let board;
 
-export function openBoard() {
+/**
+ * Ouvre le plateau du Jeu des Six Couronnes.
+ * L'import est volontairement différé afin de ne charger ApplicationV2
+ * qu'une fois Foundry complètement initialisé.
+ */
+export async function openBoard() {
+  const { SixCrownsBoard } = await import("./applications/game-board.js");
+
   board ??= new SixCrownsBoard();
-  board.render({ force: true });
+  await board.render({ force: true });
   return board;
 }

@@ -2,7 +2,7 @@
 
 Module communautaire gratuit pour **Foundry Virtual Tabletop V14**. Il propose un jeu de cartes tactique en trois lignes, conçu pour une campagne dans les Terres Dérobées.
 
-> État actuel : **prototype v0.1.0**. Le plateau local fonctionne, le catalogue des 80 cartes est présent, mais les parties réseau, les piles Foundry natives et les capacités avancées restent à implémenter.
+> État actuel : **prototype v0.1.1**. Le plateau local fonctionne, le catalogue des 80 cartes est présent, mais les parties réseau, les piles Foundry natives et les capacités avancées restent à implémenter.
 
 ## Tester le prototype
 
@@ -22,7 +22,14 @@ git clone https://github.com/Saurusius/six-crowns-kingmaker-card-game.git
 Une macro peut aussi appeler :
 
 ```js
-game.modules.get("six-crowns-kingmaker-card-game").api.openBoard();
+const moduleId = "six-crowns-kingmaker-card-game";
+const moduleEntry = game.modules.get(moduleId);
+
+if (!moduleEntry?.active) {
+  ui.notifications.error("Le module n’est pas actif dans ce monde.");
+} else {
+  await (moduleEntry.api ?? globalThis.SixCrownsCardGame).openBoard();
+}
 ```
 
 ## Commandes de développement
@@ -40,7 +47,17 @@ npm run check
 - `templates/` : gabarits Handlebars.
 - `.github/workflows/` : validation et publication automatique.
 
-## Publier une version
+## Dépôt privé et mises à jour
+
+Foundry charge les fichiers depuis le clone local du dépôt. Pour récupérer les changements :
+
+```powershell
+git pull
+```
+
+Puis redémarrez Foundry. Un dépôt GitHub privé ne permet pas l’installation automatique par URL de manifeste sans mécanisme d’authentification supplémentaire.
+
+## Archiver une version privée
 
 1. Modifiez la version si nécessaire et poussez vos changements.
 2. Créez puis poussez un tag :
@@ -54,12 +71,6 @@ GitHub Actions vérifie les données, exécute les tests, fabrique le ZIP Foundr
 
 - `module.json`
 - `six-crowns-kingmaker-card-game.zip`
-
-Lien d’installation Foundry :
-
-```text
-https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/latest/download/module.json
-```
 
 ## Feuille de route
 
