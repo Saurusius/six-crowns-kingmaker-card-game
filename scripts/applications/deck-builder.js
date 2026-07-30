@@ -54,6 +54,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this.search = "";
     this.factionFilter = "all";
     this.sortBy = "name";
+    this.analysisCompact = false;
   }
 
   async _loadRequestedDeck(decks) {
@@ -120,7 +121,10 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
         { id: "rarity", label: "Rareté décroissante", selected: this.sortBy === "rarity" },
         { id: "faction", label: "Collection", selected: this.sortBy === "faction" }
       ],
-      statistics
+      statistics,
+      analysisCompact: this.analysisCompact,
+      analysisToggleLabel: this.analysisCompact ? "Afficher l’analyse" : "Réduire l’analyse",
+      analysisToggleIcon: this.analysisCompact ? "fa-solid fa-chart-column" : "fa-solid fa-compress"
     };
   }
 
@@ -165,6 +169,12 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     });
     this.element.querySelector("[name='deck-name']")?.addEventListener("input", (event) => {
       this.draft.name = event.currentTarget.value;
+    });
+
+    this.element.querySelector("[data-action='toggle-analysis-size']")?.addEventListener("click", async () => {
+      this._captureName();
+      this.analysisCompact = !this.analysisCompact;
+      await this.render({ force: true });
     });
 
     this.element.querySelectorAll("[data-action='add-card']").forEach((button) => {

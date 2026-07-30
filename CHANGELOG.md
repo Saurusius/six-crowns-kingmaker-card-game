@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.7.15 — Deckbuilder recalibré et analyse réductible
+
+- correction des lignes de cartes du constructeur afin que les traits, compteurs et boutons n’empiètent plus sur les entrées voisines ;
+- ajout d’une hauteur minimale et d’une zone réservée aux pictogrammes de traits ;
+- amélioration de l’alignement des informations « possédées / utilisées / disponibles » et du sélecteur de quantité ;
+- ajout d’un bouton **Réduire l’analyse** pour replier la courbe de force et la répartition des lignes ;
+- le mode compact conserve les valeurs moyennes et les titres tout en masquant les barres détaillées.
+
 ## 0.7.14 — Popups globales et repositionnement automatique
 
 - toutes les infobulles de traits sont désormais rendues dans une couche globale attachée au document ;

@@ -1,4 +1,4 @@
-<section class="scg-profile-shell scg-builder-shell">
+<section class="scg-profile-shell scg-builder-shell {{#if analysisCompact}}is-analysis-compact{{/if}}">
   <header class="scg-profile-toolbar">
     <div>
       <h1>Constructeur de deck</h1>
@@ -45,6 +45,13 @@
       <strong><i class="fa-solid fa-circle-check"></i> Deck valide : 20 cartes et toutes les limites sont respectées.</strong>
     </section>
   {{/if}}
+
+  <div class="scg-deck-analysis-toolbar">
+    <strong><i class="fa-solid fa-chart-simple"></i> Analyse du deck</strong>
+    <button type="button" data-action="toggle-analysis-size" aria-pressed="{{analysisCompact}}">
+      <i class="{{analysisToggleIcon}}"></i> {{analysisToggleLabel}}
+    </button>
+  </div>
 
   <section class="scg-deck-analysis">
     <article class="scg-analysis-card">
@@ -104,13 +111,13 @@
                 {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </div>
             </div>
-            <div class="scg-builder-owned">
+            <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
               <strong>Possédées : {{ownedCount}}</strong>
               <small>Utilisées : {{inDeck}}</small>
               <small>Disponibles : {{availableCount}}</small>
               <small>Limite du deck : {{maxCopies}}</small>
             </div>
-            <div class="scg-builder-stepper">
+            <div class="scg-builder-stepper" aria-label="Quantité dans le deck">
               <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}}>−</button>
               <strong>{{inDeck}}</strong>
               <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>

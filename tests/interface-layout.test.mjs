@@ -92,3 +92,26 @@ test("la prévisualisation du mulligan et ses infobulles sont sorties de la fen�
   assert.match(css, /body > \.scg-global-modal\.scg-mulligan-preview-backdrop/);
   assert.match(css, /\.scg-floating-layer/);
 });
+
+
+test("les lignes du deckbuilder réservent une zone stable aux traits et aux compteurs", async () => {
+  const [template, css] = await Promise.all([
+    read("templates/deck-builder.hbs"),
+    read("styles/six-crowns.css")
+  ]);
+  assert.match(template, /scg-builder-owned" aria-label="Exemplaires de la carte"/);
+  assert.match(template, /scg-builder-stepper" aria-label="Quantité dans le deck"/);
+  assert.match(css, /\.scg-builder-card \{[\s\S]*?min-height: 82px;[\s\S]*?height: auto;/);
+  assert.match(css, /\.scg-builder-traits \{[\s\S]*?min-height: 24px;/);
+});
+
+test("le constructeur permet de réduire la courbe de force et la répartition des lignes", async () => {
+  const [template, script, css] = await Promise.all([
+    read("templates/deck-builder.hbs"),
+    read("scripts/applications/deck-builder.js"),
+    read("styles/six-crowns.css")
+  ]);
+  assert.match(template, /data-action="toggle-analysis-size"/);
+  assert.match(script, /this\.analysisCompact = !this\.analysisCompact/);
+  assert.match(css, /\.scg-builder-shell\.is-analysis-compact \.scg-analysis-bars \{[\s\S]*?display: none;/);
+});
