@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.9
+## Règles du prototype 0.7.10
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -18,7 +18,7 @@ Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un dec
 
 Aucune carte supplémentaire n’est piochée entre les manches : la main initiale est une ressource pour toute la partie.
 
-### Rôles actifs
+### Traits actifs
 
 - **Héros** : carte prestigieuse à forte valeur.
 - **Soutien** : +1 aux autres cartes de sa ligne.
@@ -26,6 +26,8 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 - **Renfort** : déploie les copies restantes depuis la pioche.
 - **Bastion** : reste entre deux manches à demi-force.
 - **Mobile** : peut choisir entre plusieurs lignes.
+
+Les traits sont représentés par des pictogrammes SVG sur les cartes. Leur effet complet apparaît au survol de l’icône.
 
 ### Raretés
 
@@ -36,7 +38,7 @@ Le catalogue comprend désormais **160 cartes**, réparties en **quatre collecti
 - **Rare** — bleu : 25 cartes ;
 - **Unique** — violet : 3 cartes.
 
-Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les PNJ nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
+Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les personnages nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
 ## Boosters et collection personnelle
 
@@ -44,7 +46,7 @@ Chaque booster contient :
 
 - 4 cartes avec les probabilités normales : 65 % Commun, 25 % Peu commune, 8 % Rare, 2 % Unique ;
 - 1 carte garantie : 99 % Rare, 1 % Unique.
-- Toute carte représentant un PNJ nommé est au minimum Rare.
+- Toute carte représentant un personnage nommé est au minimum Rare.
 
 Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante. Les cartes des quatre decks de démonstration utilisent des identifiants séparés et ne figurent jamais dans cette collection.
 

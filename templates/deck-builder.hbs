@@ -100,6 +100,9 @@
               <strong>{{name}}</strong>
               <small>{{factionLabel}} · {{rarityLabel}} · Force {{strength}}</small>
               <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+              <div class="scg-effect-icons scg-builder-traits">
+                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+              </div>
             </div>
             <div class="scg-builder-owned">
               <strong>Possédées : {{ownedCount}}</strong>
@@ -132,6 +135,9 @@
             <div>
               <strong>{{name}}</strong>
               <small>{{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
+              <div class="scg-effect-icons scg-builder-selected-traits">
+                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+              </div>
             </div>
             <button type="button" data-action="remove-card" data-card-id="{{id}}">−</button>
             <b>×{{inDeck}}</b>

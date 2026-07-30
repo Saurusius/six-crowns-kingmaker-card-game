@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.7.10 — Traits simplifiés et pictogrammes
+
+- suppression complète des traits complexes `maneuver`, `banner` et `recall` ;
+- réattribution des anciennes cartes concernées à Soutien, Renfort ou Bastion ;
+- remplacement du terme PNJ par **personnage** dans les données, validations et textes du module ;
+- ajout de sept pictogrammes SVG originaux pour Héros, Soutien, Formation, Renfort, Bastion, Mobile et Troupe ;
+- affichage compact des traits sur les cartes du board, la main, la collection et le constructeur de deck ;
+- infobulle détaillée au survol ou au focus de chaque pictogramme.
+
 ## 0.7.9 — Decks de démonstration et boosters attribués
 
 - reconstruction des quatre decks prédéfinis comme decks de démonstration indépendants des collections personnelles ;
@@ -45,10 +54,10 @@
 ## 0.7.5 — Les visages du Royaume
 
 - la carte garantie des boosters utilise désormais **99 % Rare / 1 % Unique** ;
-- ajout d’une règle de validation : toute carte représentant un PNJ nommé doit être **Rare** ou **Unique** ;
+- ajout d’une règle de validation : toute carte représentant un personnage nommé doit être **Rare** ou **Unique** ;
 - refonte complète de la collection du Royaume des Six Couronnes autour de douze personnages obligatoires ;
 - ajout de **Aethryn, Alistair Veyron, Dame Blanche de Surtova, Daowen, Elias Thornwell, Harald Lodovka Menak, Lucy, Lysa, Mama Oluda, Odéon de Saulébène, Sery et Thea** ;
-- mise à niveau des raretés des PNJ déjà présents dans les autres collections ;
+- mise à niveau des raretés des personnages déjà présents dans les autres collections ;
 - le deck prédéfini du Royaume conserve exactement 20 cartes et utilise désormais ce nouveau roster.
 
 ## 0.7.4 — Collection personnelle et constructeur de deck

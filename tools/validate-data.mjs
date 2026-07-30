@@ -21,12 +21,9 @@ const allowedAbilities = new Set([
   "rally",
   "bond",
   "support",
-  "recall",
   "resilient",
-  "banner",
-  "maneuver"
 ]);
-const requiredSixCrownsNpcNames = new Set([
+const requiredSixCrownsCharacterNames = new Set([
   "Aethryn",
   "Alistair Veyron",
   "Dame Blanche de Surtova",
@@ -43,7 +40,7 @@ const requiredSixCrownsNpcNames = new Set([
 const foundRequiredNames = new Set();
 const ids = new Set();
 let count = 0;
-let npcCount = 0;
+let characterCount = 0;
 
 for (const file of files) {
   const cards = JSON.parse(await readFile(new URL(file, root), "utf8"));
@@ -53,7 +50,7 @@ for (const file of files) {
 
   for (const [index, card] of cards.entries()) {
     const where = `${file}[${index}]`;
-    for (const key of ["id", "name", "faction", "kind", "rows", "maxCopies", "abilities", "text", "rarity", "isNpc"]) {
+    for (const key of ["id", "name", "faction", "kind", "rows", "maxCopies", "abilities", "text", "rarity", "isCharacter"]) {
       if (!(key in card)) throw new Error(`${where}: champ manquant ${key}.`);
     }
     if (ids.has(card.id)) throw new Error(`${where}: identifiant dupliqué ${card.id}.`);
@@ -63,11 +60,11 @@ for (const file of files) {
     }
     if (!allowedKinds.has(card.kind)) throw new Error(`${where}: type invalide ${card.kind}.`);
     if (!allowedRarities.has(card.rarity)) throw new Error(`${where}: rareté invalide ${card.rarity}.`);
-    if (typeof card.isNpc !== "boolean") throw new Error(`${where}: isNpc doit être un booléen.`);
-    if (card.isNpc && !highRarities.has(card.rarity)) {
-      throw new Error(`${where}: le PNJ nommé ${card.name} doit être Rare ou Unique.`);
+    if (typeof card.isCharacter !== "boolean") throw new Error(`${where}: isCharacter doit être un booléen.`);
+    if (card.isCharacter && !highRarities.has(card.rarity)) {
+      throw new Error(`${where}: le personnage nommé ${card.name} doit être Rare ou Unique.`);
     }
-    if (card.isNpc) npcCount += 1;
+    if (card.isCharacter) characterCount += 1;
     rarityCounts[card.rarity] += 1;
     if (!Array.isArray(card.rows) || card.rows.some((row) => !allowedRows.has(row))) {
       throw new Error(`${where}: ligne invalide.`);
@@ -84,22 +81,22 @@ for (const file of files) {
     if (card.kind !== "unit" && card.strength !== null) {
       throw new Error(`${where}: une carte non-unité doit avoir strength = null.`);
     }
-    if (file === "six-crowns.json" && requiredSixCrownsNpcNames.has(card.name)) {
+    if (file === "six-crowns.json" && requiredSixCrownsCharacterNames.has(card.name)) {
       foundRequiredNames.add(card.name);
-      if (!card.isNpc) throw new Error(`${where}: ${card.name} doit être marqué comme PNJ.`);
+      if (!card.isCharacter) throw new Error(`${where}: ${card.name} doit être marqué comme personnage.`);
     }
     count += 1;
   }
 }
 
 if (count !== 160) throw new Error(`Le catalogue doit contenir 160 cartes uniques, trouvé : ${count}.`);
-const missingNames = [...requiredSixCrownsNpcNames].filter((name) => !foundRequiredNames.has(name));
+const missingNames = [...requiredSixCrownsCharacterNames].filter((name) => !foundRequiredNames.has(name));
 if (missingNames.length > 0) {
-  throw new Error(`PNJ obligatoires manquants du Royaume des Six Couronnes : ${missingNames.join(", ")}.`);
+  throw new Error(`Personnages obligatoires manquants du Royaume des Six Couronnes : ${missingNames.join(", ")}.`);
 }
 
 console.log(
-  `Catalogue valide : ${count} cartes réparties en 4 collections de 40, ${npcCount} PNJ nommés — `
+  `Catalogue valide : ${count} cartes réparties en 4 collections de 40, ${characterCount} personnages nommés — `
   + `${rarityCounts.commun} Communes, ${rarityCounts.peuCommune} Peu communes, `
   + `${rarityCounts.rare} Rares et ${rarityCounts.unique} Uniques.`
 );

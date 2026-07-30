@@ -62,9 +62,9 @@ test("chaque deck de démonstration respecte la répartition 75 / 20 / 5", () =>
   }
 });
 
-test("les PNJ des decks prédéfinis sont au minimum Rares", () => {
+test("les personnages des decks prédéfinis sont au minimum Rares", () => {
   for (const deck of Object.values(PREDEFINED_DECKS)) {
-    for (const card of deck.cards.filter((entry) => entry.isNpc)) {
+    for (const card of deck.cards.filter((entry) => entry.isCharacter)) {
       assert.equal(["rare", "unique"].includes(card.rarity), true, `${card.name} est ${card.rarity}`);
     }
   }
@@ -221,6 +221,8 @@ test("le modèle d’affichage prépare les cartes pour les futures illustration
   assert.equal(typeof card.effectText, "string");
   assert.equal(typeof card.rarityLabel, "string");
   assert.equal(typeof card.rarityClass, "string");
+  assert.equal(Array.isArray(card.traitBadges), true);
+  assert.match(card.traitBadges[0].iconUrl, /assets\/traits\/.+\.svg$/);
   assert.equal(Array.isArray(card.rowChoices), true);
   assert.equal(typeof card.rowChoices[0].icon, "string");
 });

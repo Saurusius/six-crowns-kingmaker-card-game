@@ -163,7 +163,7 @@
             <span class="scg-card-body">
               <strong class="scg-card-name">{{name}}</strong>
               <span class="scg-effect-icons">
-                {{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}
+                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </span>
               <small class="scg-card-effect">{{effectText}}</small>
               <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
@@ -235,7 +235,7 @@
                   <div class="scg-hand-card-info">
                     <strong class="scg-card-name">{{name}}</strong>
                     <span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span>
-                    <div class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</div>
+                    <div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
                   </div>
                 </div>
                 <div class="scg-play-actions">
@@ -286,7 +286,7 @@
                     </div>
                     <div class="scg-card-caption">
                       <strong>{{name}}</strong>
-                      <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
                     </div>
                     <div class="scg-card-popover">
                       <strong>{{name}}</strong>
@@ -327,7 +327,7 @@
                     </div>
                     <div class="scg-card-caption">
                       <strong>{{name}}</strong>
-                      <span class="scg-effect-icons">{{#each roleBadges}}<span title="{{label}} — {{description}}"><i class="{{icon}}"></i></span>{{/each}}</span>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
                     </div>
                     <div class="scg-card-popover">
                       <strong>{{name}}</strong>

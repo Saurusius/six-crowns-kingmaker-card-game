@@ -132,10 +132,13 @@
                   <small>{{id}} · {{factionLabel}}</small>
                   {{#if playable}}
                     <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
-                    {{#if text}}<p>{{text}}</p>{{/if}}
                   {{else}}
                     <span>Carte de {{kind}} — non jouable pour le moment</span>
                   {{/if}}
+                  <div class="scg-effect-icons scg-collection-traits">
+                    {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                  </div>
+                  {{#if text}}<p>{{text}}</p>{{/if}}
                   <footer>
                     <span>Possédée ×{{ownedCount}}</span>
                     <span>Maximum par deck : {{maxCopies}}</span>

@@ -12,9 +12,9 @@ async function loadCatalog() {
   return groups.flat();
 }
 
-test("tous les PNJ nommés sont au minimum Rares", async () => {
+test("tous les personnages nommés sont au minimum Rares", async () => {
   const catalog = await loadCatalog();
-  const invalid = catalog.filter((card) => card.isNpc && !["rare", "unique"].includes(card.rarity));
+  const invalid = catalog.filter((card) => card.isCharacter && !["rare", "unique"].includes(card.rarity));
   assert.deepEqual(invalid.map((card) => card.name), []);
 });
 

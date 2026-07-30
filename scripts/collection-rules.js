@@ -1,3 +1,4 @@
+import { buildTraitBadges, describeTraits } from "./traits.js";
 export const FACTION_DETAILS = Object.freeze({
   "six-crowns": Object.freeze({ label: "Royaume des Six Couronnes", symbol: "♛", order: 1 }),
   aldori: Object.freeze({ label: "Maison Aldori", symbol: "⚔", order: 2 }),
@@ -94,7 +95,9 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       rarityOrder: rarity.order,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
-      maxCopies: Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1)
+      maxCopies: Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1),
+      traitBadges: buildTraitBadges(card),
+      traitSummary: describeTraits(card)
     });
   }
 
@@ -136,7 +139,9 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         canRemove: inDeck > 0,
         factionLabel: faction.label,
         factionSymbol: faction.symbol,
-        rarityLabel: rarity.label
+        rarityLabel: rarity.label,
+        traitBadges: buildTraitBadges(card),
+        traitSummary: describeTraits(card)
       };
     });
 }
@@ -185,7 +190,9 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       invalid: !isPlayableCard(card) || inDeck > allowedCopies,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
-      rarityLabel: rarity.label
+      rarityLabel: rarity.label,
+      traitBadges: buildTraitBadges(card),
+      traitSummary: describeTraits(card)
     };
   });
 }
@@ -319,7 +326,7 @@ export function expandCustomDeckCards(deck, catalog = []) {
         abilities: [...(card.abilities ?? [])],
         image: card.image ?? null,
         rarity: card.rarity ?? "commun",
-        isNpc: Boolean(card.isNpc),
+        isCharacter: Boolean(card.isCharacter),
         factionId: card.faction === "stolen-lands-arcana" ? "arcana" : (card.faction ?? "neutral")
       });
     }

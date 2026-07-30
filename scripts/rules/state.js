@@ -1,4 +1,5 @@
 import { ROWS } from "../constants.js";
+import { buildTraitBadges, describeTraits } from "../traits.js";
 import { calculateSideScores, hasAbility } from "./scoring.js";
 import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
 
@@ -34,14 +35,6 @@ const RARITY_ICONS = Object.freeze({
   unique: "fa-solid fa-crown"
 });
 
-const ROLE_LABELS = Object.freeze({
-  hero: "Héros",
-  support: "Soutien",
-  bond: "Formation",
-  rally: "Renfort",
-  resilient: "Bastion"
-});
-
 
 const ROW_ICONS = Object.freeze({
   "avant-garde": "fa-solid fa-shield-halved",
@@ -49,29 +42,11 @@ const ROW_ICONS = Object.freeze({
   "domaine": "fa-solid fa-chess-rook"
 });
 
-const ROLE_ICONS = Object.freeze({
-  hero: "fa-solid fa-crown",
-  support: "fa-solid fa-handshake-angle",
-  bond: "fa-solid fa-link",
-  rally: "fa-solid fa-people-group",
-  resilient: "fa-solid fa-shield",
-  mobile: "fa-solid fa-arrows-left-right",
-  troop: "fa-solid fa-helmet-safety"
-});
-
 const FACTION_VISUALS = Object.freeze({
   "six-crowns": { symbol: "♛", label: "Six Couronnes" },
   aldori: { symbol: "⚔", label: "Maison Aldori" },
   "iron-khans": { symbol: "♞", label: "Khans de Fer" },
   arcana: { symbol: "✦", label: "Arcanes" }
-});
-
-const ROLE_DESCRIPTIONS = Object.freeze({
-  hero: "Carte prestigieuse à forte valeur.",
-  support: "Donne +1 à toutes les autres cartes de sa ligne.",
-  bond: "Gagne +2 par autre copie identique sur la même ligne.",
-  rally: "Déploie automatiquement toutes les autres copies présentes dans la pioche.",
-  resilient: "Peut rester entre deux manches avec une force réduite de moitié."
 });
 
 
@@ -102,7 +77,7 @@ const RULEBOOK = Object.freeze([
       "Renfort : déploie toutes les autres copies présentes dans la pioche.",
       "Bastion : la meilleure carte Bastion peut rester pour la manche suivante avec une force réduite de moitié.",
       "Mobile : peut être jouée sur plusieurs lignes.",
-      "Rareté : Commun, Peu commune, Rare ou Unique. Toute carte représentant un PNJ nommé est au minimum Rare."
+      "Rareté : Commun, Peu commune, Rare ou Unique. Toute carte représentant un personnage nommé est au minimum Rare."
     ]
   },
   {
@@ -618,28 +593,8 @@ export function startNextRound(state) {
   return state;
 }
 
-function roleBadges(card) {
-  const badges = card.abilities
-    .filter((ability) => ROLE_LABELS[ability])
-    .map((ability) => ({
-      id: ability,
-      label: ROLE_LABELS[ability],
-      description: ROLE_DESCRIPTIONS[ability],
-      icon: ROLE_ICONS[ability]
-    }));
-  if (card.rows.length > 1) badges.push({
-    id: "mobile",
-    label: "Mobile",
-    description: "Peut être jouée sur plusieurs lignes.",
-    icon: ROLE_ICONS.mobile
-  });
-  if (badges.length === 0) badges.push({
-    id: "troop",
-    label: "Troupe",
-    description: "Force directe, sans capacité spéciale.",
-    icon: ROLE_ICONS.troop
-  });
-  return badges;
+function traitBadges(card) {
+  return buildTraitBadges(card);
 }
 
 function prepareCardView(card, rowCards = null, mulliganSelection = []) {
@@ -647,7 +602,7 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
     ? calculateSideScores({ "avant-garde": rowCards, "escarmouche": [], "domaine": [] })
       .rowDetails["avant-garde"].cards.find((candidate) => candidate.id === card.id)?.effectiveStrength ?? card.strength
     : card.strength;
-  const badges = roleBadges(card);
+  const badges = traitBadges(card);
   const faction = FACTION_VISUALS[card.factionId] ?? { symbol: "◆", label: "Neutre" };
   const rowChoices = card.rows.map((row) => ({ id: row, label: ROW_LABELS[row], icon: ROW_ICONS[row] }));
   return {
@@ -664,8 +619,8 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
     rowChoices,
     rowSummary: rowChoices.map((row) => row.label).join(" · "),
     primaryRowIcon: rowChoices[0]?.icon ?? ROW_ICONS["avant-garde"],
-    roleBadges: badges,
-    effectText: badges.map((badge) => `${badge.label} — ${badge.description}`).join(" "),
+    traitBadges: badges,
+    effectText: describeTraits(card),
     mulliganSelected: mulliganSelection.includes(card.id)
   };
 }

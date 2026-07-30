@@ -15,11 +15,11 @@ function makeDemoCard(
   rows,
   abilities = [],
   rarity = "commun",
-  isNpc = false,
+  isCharacter = false,
   image = null
 ) {
-  if (isNpc && !["rare", "unique"].includes(rarity)) {
-    throw new Error(`La carte de PNJ ${name} ne peut pas être ${rarity}.`);
+  if (isCharacter && !["rare", "unique"].includes(rarity)) {
+    throw new Error(`La carte de personnage ${name} ne peut pas être ${rarity}.`);
   }
   return {
     id,
@@ -29,7 +29,7 @@ function makeDemoCard(
     rows: [...rows],
     abilities: [...abilities],
     rarity,
-    isNpc,
+    isCharacter,
     image,
     demoOnly: true
   };

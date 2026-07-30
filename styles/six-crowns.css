@@ -1700,3 +1700,118 @@
     grid-column: 1 / -1;
   }
 }
+
+/* v0.7.10 — pictogrammes de traits */
+.scg-effect-icons {
+  overflow: visible;
+}
+
+.scg-effect-icons > .scg-trait-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--scg-card-accent, #c8a94f) 70%, transparent);
+  border-radius: 50%;
+  background: rgba(5, 5, 5, .58);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
+  cursor: help;
+  overflow: visible;
+}
+
+.scg-trait-icon > img {
+  display: block;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.scg-trait-tooltip {
+  position: absolute;
+  z-index: 250;
+  left: 50%;
+  bottom: calc(100% + 7px);
+  width: 210px;
+  padding: 7px 9px;
+  border: 1px solid #b99a50;
+  border-radius: 5px;
+  background: rgba(18, 16, 13, .98);
+  color: #eee7d4;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .72);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 5px);
+  transition: opacity .12s ease, transform .12s ease, visibility .12s ease;
+}
+
+.scg-trait-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 5px solid transparent;
+  border-top-color: #b99a50;
+  transform: translateX(-50%);
+}
+
+.scg-trait-tooltip strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #f0cf6a;
+  font-size: .72rem;
+}
+
+.scg-trait-tooltip small {
+  display: block;
+  color: #d7cfbd;
+  font-size: .66rem;
+  line-height: 1.28;
+}
+
+.scg-trait-icon:hover .scg-trait-tooltip,
+.scg-trait-icon:focus .scg-trait-tooltip,
+.scg-trait-icon:focus-within .scg-trait-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.scg-opponent .scg-trait-tooltip {
+  top: calc(100% + 7px);
+  bottom: auto;
+}
+
+.scg-opponent .scg-trait-tooltip::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: #b99a50;
+}
+
+.scg-board-card .scg-effect-icons > .scg-trait-icon {
+  width: 16px;
+  height: 16px;
+  border-width: 1px;
+}
+
+.scg-hand-card-info .scg-effect-icons > .scg-trait-icon {
+  width: 19px;
+  height: 19px;
+}
+
+.scg-collection-traits,
+.scg-builder-traits,
+.scg-builder-selected-traits {
+  margin-top: 3px;
+}
+
+.scg-collection-traits .scg-trait-tooltip,
+.scg-builder-traits .scg-trait-tooltip,
+.scg-builder-selected-traits .scg-trait-tooltip {
+  width: 225px;
+}
