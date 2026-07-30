@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.7.11 — Interface resserrée et infobulles disciplinées
+
+- les infobulles de traits masquent désormais temporairement la fiche détaillée de la carte afin d’éviter tout chevauchement ;
+- les zones de deck et de défausse du plateau deviennent des compteurs horizontaux compacts ;
+- les pictogrammes de traits de la collection sont plus grands, plus contrastés et leurs infobulles ne sont plus rognées ;
+- ajout d’un bouton **Réduire les options** dans la collection pour compacter les compteurs, filtres et outils MJ ;
+- ajout de tests de structure pour verrouiller ces ajustements d’interface.
+
 ## 0.7.10 — Traits simplifiés et pictogrammes
 
 - suppression complète des traits complexes `maneuver`, `banner` et `recall` ;

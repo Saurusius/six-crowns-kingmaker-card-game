@@ -1815,3 +1815,240 @@
 .scg-builder-selected-traits .scg-trait-tooltip {
   width: 225px;
 }
+
+
+/* -------------------------------------------------------------------------
+ * v0.7.11 — infobulles exclusives, réserves compactes et options réduisibles
+ * ---------------------------------------------------------------------- */
+
+/* Lorsqu’un trait est consulté, la fiche générale de la carte s’efface. */
+.scg-card.is-trait-tooltip-open .scg-card-popover,
+.scg-card:has(.scg-trait-icon:hover) .scg-card-popover,
+.scg-card:has(.scg-trait-icon:focus) .scg-card-popover,
+.scg-card:has(.scg-trait-icon:focus-within) .scg-card-popover {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.scg-trait-tooltip {
+  z-index: 1200;
+}
+
+/* La collection laisse sortir les infobulles et rend les traits plus lisibles. */
+.scg-collection-group,
+.scg-collection-grid,
+.scg-collection-card {
+  overflow: visible;
+}
+
+.scg-collection-card {
+  position: relative;
+}
+
+.scg-collection-card:hover,
+.scg-collection-card:focus-within {
+  z-index: 80;
+}
+
+.scg-collection-card-art {
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+}
+
+.scg-collection-card-body {
+  border-radius: 0 0 6px 6px;
+  background: #232019;
+}
+
+.scg-collection-traits {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 3px 0;
+  padding: 5px 6px;
+  border: 1px solid rgba(200, 169, 79, .38);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, .28);
+}
+
+.scg-collection-traits .scg-trait-icon {
+  width: 28px;
+  height: 28px;
+  border-color: #b89545;
+  background: radial-gradient(circle at 35% 30%, #4e4126, #17140f 72%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+.scg-collection-traits .scg-trait-icon > img {
+  width: 78%;
+  height: 78%;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.7));
+}
+
+.scg-collection-traits .scg-trait-tooltip {
+  width: 230px;
+}
+
+/* Decks et défausses deviennent de simples compteurs compacts. */
+.scg-board-layout {
+  grid-template-columns: 390px minmax(0, 1fr) 150px;
+  gap: 10px;
+}
+
+.scg-reserve-sidebar {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 6px;
+  padding: 6px;
+}
+
+.scg-zone-stack {
+  gap: 6px;
+}
+
+.scg-zone-card,
+.scg-zone-card-discard {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 7px;
+  row-gap: 0;
+  padding: 5px 6px;
+}
+
+.scg-zone-card .scg-zone-visual,
+.scg-zone-card-discard .scg-zone-visual {
+  grid-row: 1 / 3;
+  width: 36px;
+  height: 36px;
+  min-height: 0;
+  font-size: 1rem;
+}
+
+.scg-zone-card strong,
+.scg-zone-card-discard strong {
+  align-self: end;
+  overflow: hidden;
+  font-size: .68rem;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+}
+
+.scg-zone-card small,
+.scg-zone-card-discard small {
+  align-self: start;
+  font-size: .62rem;
+  line-height: 1.1;
+}
+
+.scg-turn-card {
+  min-height: 0;
+  align-content: start;
+  gap: 5px;
+  padding: 7px;
+  overflow-y: auto;
+}
+
+.scg-turn-card strong {
+  font-size: .74rem;
+}
+
+.scg-turn-card p,
+.scg-turn-meta span {
+  font-size: .64rem;
+  line-height: 1.28;
+}
+
+.scg-turn-meta {
+  gap: 3px;
+}
+
+/* Bouton « Réduire les options » de la collection. */
+.scg-collection-shell.is-options-compact {
+  gap: 6px;
+}
+
+.scg-collection-shell.is-options-compact .scg-collection-summary {
+  gap: 4px;
+  padding: 5px 8px;
+  font-size: .7rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-faction-counters {
+  gap: 4px;
+}
+
+.scg-collection-shell.is-options-compact .scg-faction-counter {
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 5px;
+  padding: 4px 6px;
+}
+
+.scg-collection-shell.is-options-compact .scg-faction-counter .scg-collection-symbol {
+  width: 25px;
+  height: 25px;
+  font-size: .8rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-faction-counter strong {
+  font-size: .66rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-faction-counter small {
+  font-size: .58rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-collection-filters {
+  gap: 5px;
+}
+
+.scg-collection-shell.is-options-compact .scg-collection-filters label > span,
+.scg-collection-shell.is-options-compact .scg-gm-tools label > span {
+  display: none;
+}
+
+.scg-collection-shell.is-options-compact .scg-collection-filters input,
+.scg-collection-shell.is-options-compact .scg-collection-filters select,
+.scg-collection-shell.is-options-compact .scg-filter-reset,
+.scg-collection-shell.is-options-compact .scg-gm-tools select,
+.scg-collection-shell.is-options-compact .scg-gm-tools input,
+.scg-collection-shell.is-options-compact .scg-gm-actions button {
+  min-height: 28px;
+  height: 28px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: .66rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-gm-tools > header {
+  padding: 4px 8px;
+}
+
+.scg-collection-shell.is-options-compact .scg-gm-tools h2 {
+  font-size: .78rem;
+}
+
+.scg-collection-shell.is-options-compact .scg-gm-tools p {
+  display: none;
+}
+
+.scg-collection-shell.is-options-compact .scg-gm-tools-grid {
+  gap: 5px;
+  padding: 5px 7px;
+}
+
+@media (max-width: 1350px) {
+  .scg-board-layout {
+    grid-template-columns: 350px minmax(0, 1fr) 140px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .scg-board-layout {
+    grid-template-columns: 320px minmax(0, 1fr) 130px;
+  }
+}

@@ -54,6 +54,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     this.rarityFilter = "all";
     this.rowFilter = "all";
     this.ownershipFilter = "all";
+    this.compactOptions = false;
     this.gmTargetUserId = game.user.id;
     this.gmCardId = "";
     this._collectionHook = Hooks.on(`${MODULE_ID}.collectionUpdated`, (_collection, userId) => {
@@ -122,6 +123,9 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
+      compactOptions: this.compactOptions,
+      optionsToggleLabel: this.compactOptions ? "Agrandir les options" : "Réduire les options",
+      optionsToggleIcon: this.compactOptions ? "fa-solid fa-expand" : "fa-solid fa-compress",
       search: this.search,
       factionFilter: this.factionFilter,
       rarityFilter: this.rarityFilter,
@@ -217,6 +221,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
 
     this.element.querySelector("[data-action='open-deck-builder']")?.addEventListener("click", async () => {
       await openDeckBuilder({ onDecksChanged: this.onDecksChanged });
+    });
+
+    this.element.querySelector("[data-action='toggle-options-size']")?.addEventListener("click", async () => {
+      this.compactOptions = !this.compactOptions;
+      await this.render({ force: true });
     });
 
     this.element.querySelector("[name='gm-target-user']")?.addEventListener("change", () => this._captureGmSelection());

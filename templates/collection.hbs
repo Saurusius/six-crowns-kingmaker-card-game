@@ -1,4 +1,4 @@
-<section class="scg-profile-shell scg-collection-shell">
+<section class="scg-profile-shell scg-collection-shell {{#if compactOptions}}is-options-compact{{/if}}">
   <header class="scg-profile-toolbar">
     <div>
       <h1>Collection de {{userName}}</h1>
@@ -8,6 +8,7 @@
       <span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Ouverture MJ illimitée{{else}}{{boosterCredits}} booster(s) à ouvrir{{/if}}</span>
       <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
       <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
+      <button type="button" data-action="toggle-options-size" aria-pressed="{{compactOptions}}"><i class="{{optionsToggleIcon}}"></i> {{optionsToggleLabel}}</button>
     </div>
   </header>
 

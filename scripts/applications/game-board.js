@@ -107,6 +107,26 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   async _onRender(context, options) {
     await super._onRender(context, options);
 
+    // Une icône de trait et la fiche détaillée de la carte ne doivent jamais
+    // s’afficher simultanément. La classe est pilotée par pointeur et clavier.
+    this.element.querySelectorAll(".scg-trait-icon").forEach((traitIcon) => {
+      const card = traitIcon.closest(".scg-card");
+      if (!card) return;
+
+      const openTraitTooltip = () => card.classList.add("is-trait-tooltip-open");
+      const closeTraitTooltip = () => {
+        globalThis.setTimeout(() => {
+          const activeTrait = card.querySelector(".scg-trait-icon:hover, .scg-trait-icon:focus, .scg-trait-icon:focus-within");
+          if (!activeTrait) card.classList.remove("is-trait-tooltip-open");
+        }, 0);
+      };
+
+      traitIcon.addEventListener("pointerenter", openTraitTooltip);
+      traitIcon.addEventListener("pointerleave", closeTraitTooltip);
+      traitIcon.addEventListener("focusin", openTraitTooltip);
+      traitIcon.addEventListener("focusout", closeTraitTooltip);
+    });
+
     this.element.querySelector("[data-action='start-game']")?.addEventListener("click", async () => {
       try {
         const playerDeckId = this.element.querySelector("[name='player-deck']")?.value;
