@@ -1,6 +1,6 @@
 {
   "name": "six-crowns-kingmaker-card-game",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Foundry VTT module for Le Jeu des Six Couronnes.",

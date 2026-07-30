@@ -34,7 +34,7 @@
     "abilities": [
       "hero"
     ],
-    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
   },
   {
     "id": "KF-04",
@@ -50,7 +50,7 @@
     "abilities": [
       "hero"
     ],
-    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
   },
   {
     "id": "KF-05",

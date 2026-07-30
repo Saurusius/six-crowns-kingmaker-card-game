@@ -187,3 +187,59 @@
   .scg-card { width: 96px; }
   .scg-hand-card { flex-basis: 140px; }
 }
+
+/* v0.3.0 — contrôle des lignes et rôles */
+.scg-control-count {
+  padding: 2px 7px;
+  border: 1px solid #756a4d;
+  border-radius: 999px;
+  color: #d8c98e;
+  font-size: 0.76rem;
+}
+
+.scg-row.is-controlled {
+  border-color: #9d8742;
+  box-shadow: inset 3px 0 0 #c8a94f;
+}
+
+.scg-row.is-lost {
+  border-color: #765148;
+  box-shadow: inset 3px 0 0 #8d5f4b;
+}
+
+.scg-row.is-tied {
+  border-color: #5d563f;
+}
+
+.scg-row-control {
+  margin-top: 2px;
+  color: #b7ae94;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.scg-role-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 6px;
+}
+
+.scg-role {
+  padding: 1px 5px;
+  border: 1px solid #756a4d;
+  border-radius: 999px;
+  color: #d8c98e;
+  background: rgba(0, 0, 0, 0.22);
+  font-size: 0.62rem;
+  line-height: 1.25;
+}
+
+.scg-base-strength {
+  position: absolute;
+  top: 30px;
+  left: 5px;
+  color: #b7ae94;
+  font-size: 0.58rem;
+}

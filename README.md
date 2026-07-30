@@ -1,23 +1,26 @@
 # Le Jeu des Six Couronnes
 
-Module Foundry VTT 14 proposant un jeu de cartes tactique original en trois lignes, inspiré des Terres Dérobées de Kingmaker.
+Prototype Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Prototype 0.2.0
+## Règles du prototype 0.3.0
 
-Le prototype permet désormais de jouer une partie locale complète contre une Maison Aldori automatisée :
+Chaque joueur dispose de deux couronnes. Une partie se joue en manches :
 
-- main d’ouverture de 10 cartes ;
-- trois lignes : Avant-garde, Escarmouche et Domaine ;
-- une carte jouée par tour ;
-- alternance automatique des tours ;
-- passage définitif pour la manche ;
-- fin de manche après le passage des deux camps ;
-- deux couronnes par camp ;
-- pioche de 2 cartes entre les manches ;
-- défausse automatique des cartes jouées ;
-- victoire lorsque le camp adverse n’a plus de couronne.
+1. Jouez une carte ou passez définitivement pour la manche.
+2. Les cartes sont placées sur Avant-garde, Escarmouche ou Domaine.
+3. Lorsque les deux camps ont passé, chaque ligne est comparée séparément.
+4. Le camp qui contrôle le plus de lignes remporte la manche.
+5. Le score total départage les égalités de contrôle.
+6. Le premier camp à faire tomber les deux couronnes adverses remporte la partie.
 
-Le système de météo a été entièrement supprimé. Les capacités avancées du catalogue ne sont pas encore actives dans le prototype : la version 0.2.0 sert à valider la boucle fondamentale et l’économie de cartes.
+### Rôles actifs
+
+- **Héros** : remporte les égalités de ligne en l’absence d’un Héros adverse équivalent.
+- **Soutien** : +1 aux autres cartes de sa ligne.
+- **Formation** : +2 par autre copie identique sur la ligne.
+- **Renfort** : déploie les copies restantes depuis la pioche.
+- **Bastion** : reste entre deux manches à demi-force.
+- **Mobile** : peut choisir entre plusieurs lignes.
 
 ## Ouvrir le plateau
 
@@ -26,23 +29,3 @@ Dans le chat Foundry :
 ```text
 /sixcouronnes
 ```
-
-Ou depuis une macro de type Script :
-
-```js
-await game.modules
-  .get("six-crowns-kingmaker-card-game")
-  .api
-  .openBoard();
-```
-
-## Développement
-
-```bash
-npm install
-npm run check
-```
-
-## Licence
-
-Le code original du module est distribué sous licence MIT. Les références à Pathfinder et Kingmaker restent la propriété de leurs ayants droit. Consultez `NOTICE.md` avant toute publication publique.

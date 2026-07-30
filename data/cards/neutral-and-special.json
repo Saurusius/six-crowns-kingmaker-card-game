@@ -12,7 +12,7 @@
     "abilities": [
       "hero"
     ],
-    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
   },
   {
     "id": "NE-02",
@@ -41,7 +41,7 @@
       "hero",
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros. Donne aussi +1 aux autres unités de sa ligne."
   },
   {
     "id": "NE-04",
@@ -69,7 +69,7 @@
     "abilities": [
       "hero"
     ],
-    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
+    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros."
   },
   {
     "id": "SP-01",

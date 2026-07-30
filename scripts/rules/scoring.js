@@ -1,25 +1,65 @@
 import { ROWS } from "../constants.js";
 
+export function hasAbility(card, ability) {
+  return Array.isArray(card?.abilities) && card.abilities.includes(ability);
+}
+
+function cardKey(card) {
+  return card?.key ?? card?.name ?? card?.id;
+}
+
 /**
- * Calcule la force effective d'une carte.
- * La version 0.2.0 ne gère volontairement aucun modificateur :
- * le score est égal à la force imprimée.
+ * Calcule la force effective d'une carte dans sa ligne.
+ * - Soutien : chaque carte Soutien donne +1 à toutes les autres cartes de la ligne.
+ * - Lien : une carte Lien gagne +2 par autre copie identique sur la ligne.
  */
-export function calculateCardStrength(card) {
-  return Math.max(0, Number(card?.strength ?? 0));
+export function calculateCardStrength(card, rowCards = []) {
+  const baseStrength = Math.max(0, Number(card?.strength ?? 0));
+  const supportBonus = rowCards.filter(
+    (other) => other?.id !== card?.id && hasAbility(other, "support")
+  ).length;
+
+  const identicalCopies = rowCards.filter(
+    (other) => cardKey(other) === cardKey(card)
+  ).length;
+  const bondBonus = hasAbility(card, "bond")
+    ? Math.max(0, identicalCopies - 1) * 2
+    : 0;
+
+  return baseStrength + supportBonus + bondBonus;
+}
+
+export function calculateRowDetails(cards = []) {
+  const cardDetails = cards.map((card) => {
+    const effectiveStrength = calculateCardStrength(card, cards);
+    return {
+      ...card,
+      effectiveStrength,
+      isModified: effectiveStrength !== Math.max(0, Number(card?.strength ?? 0))
+    };
+  });
+
+  return {
+    cards: cardDetails,
+    total: cardDetails.reduce((sum, card) => sum + card.effectiveStrength, 0),
+    heroCount: cards.filter((card) => hasAbility(card, "hero")).length
+  };
 }
 
 export function calculateRowScore(cards = []) {
-  return cards.reduce((total, card) => total + calculateCardStrength(card), 0);
+  return calculateRowDetails(cards).total;
 }
 
 export function calculateSideScores(rows = {}) {
-  const rowScores = Object.fromEntries(
-    ROWS.map((row) => [row, calculateRowScore(rows[row] ?? [])])
+  const rowDetails = Object.fromEntries(
+    ROWS.map((row) => [row, calculateRowDetails(rows[row] ?? [])])
   );
 
   return {
-    rows: rowScores,
-    total: Object.values(rowScores).reduce((sum, value) => sum + value, 0)
+    rows: Object.fromEntries(
+      ROWS.map((row) => [row, rowDetails[row].total])
+    ),
+    rowDetails,
+    total: ROWS.reduce((sum, row) => sum + rowDetails[row].total, 0)
   };
 }

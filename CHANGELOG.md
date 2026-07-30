@@ -1,26 +1,18 @@
-# Changelog
+# Journal des versions
+
+## 0.3.0 — Les lignes ont enfin une opinion
+
+- La manche est désormais gagnée en contrôlant le plus de lignes sur trois.
+- Le score total sert uniquement à départager une égalité de contrôle.
+- Les Héros remportent les égalités de leur ligne.
+- Soutien donne +1 aux autres cartes de la même ligne.
+- Formation donne +2 par autre copie identique sur la ligne.
+- Renfort déploie les copies restantes depuis la pioche.
+- Bastion conserve une carte entre deux manches à demi-force.
+- Les rôles et forces effectives sont affichés directement sur les cartes.
+- L’adversaire choisit désormais une carte capable de reprendre une ligne avant de jouer au hasard.
 
 ## 0.2.0 — Boucle de jeu simplifiée
 
-- Suppression complète de la météo et de ses exceptions.
-- Ajout de l’alternance des tours.
-- Ajout d’un adversaire local automatique pour tester le jeu en solo.
-- Ajout du passage définitif pour la manche.
-- Fin automatique de manche lorsque les deux camps ont passé.
-- Comparaison des scores et perte d’une couronne pour le camp vaincu.
-- Gestion d’une partie en deux couronnes, avec égalité pouvant pénaliser les deux camps.
-- Ajout du bouton « Manche suivante ».
-- Défausse des cartes jouées et pioche de deux cartes entre les manches.
-- Main d’ouverture de dix cartes et réserve de pioche.
-- Catalogue de 80 cartes débarrassé des cartes météo et des capacités complexes hors périmètre.
-- Nouvelles catégories spéciales : Bannière, Manœuvre et Rappel.
-
-## 0.1.3 — Main toujours visible
-
-- Le champ de bataille défile verticalement.
-- La main reste visible en bas de la fenêtre.
-- La main défile horizontalement lorsque nécessaire.
-
-## 0.1.2 — Correction ApplicationV2
-
-- Remplacement de la propriété `state` par `matchState` pour éviter un conflit avec l’état interne d’ApplicationV2.
+- Suppression de la météo.
+- Alternance des tours, passages, manches et adversaire automatique.
