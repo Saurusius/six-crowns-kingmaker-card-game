@@ -8,7 +8,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Joue immédiatement une carte Domaine depuis le deck."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "SC-02",
@@ -19,7 +19,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Donne +1 à toutes les unités non-héros d’une ligne jusqu’à la fin de la manche."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "SC-03",
@@ -31,10 +31,8 @@
     ],
     "strength": 4,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
-    "text": "Se joue chez l’adversaire et fait piocher deux cartes."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "SC-04",
@@ -49,7 +47,7 @@
     "abilities": [
       "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "SC-05",
@@ -62,9 +60,9 @@
     "strength": 6,
     "maxCopies": 1,
     "abilities": [
-      "morale"
+      "support"
     ],
-    "text": ""
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "SC-06",
@@ -103,9 +101,9 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "SC-09",
@@ -131,9 +129,9 @@
     "strength": 3,
     "maxCopies": 3,
     "abilities": [
-      "tight-bond"
+      "bond"
     ],
-    "text": ""
+    "text": "Les copies identiques présentes sur la ligne se renforcent."
   },
   {
     "id": "SC-11",
@@ -145,10 +143,8 @@
     ],
     "strength": 4,
     "maxCopies": 2,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Donne +2 à la prochaine carte Domaine jouée."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "SC-12",
@@ -160,10 +156,8 @@
     ],
     "strength": 5,
     "maxCopies": 1,
-    "abilities": [
-      "medic"
-    ],
-    "text": "Rejoue une unité de force 5 ou moins depuis la défausse."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "SC-13",
@@ -178,7 +172,7 @@
     "abilities": [
       "resilient"
     ],
-    "text": ""
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
   },
   {
     "id": "SC-14",
@@ -190,9 +184,7 @@
     ],
     "strength": 2,
     "maxCopies": 2,
-    "abilities": [
-      "logistics"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -205,9 +197,7 @@
     ],
     "strength": 3,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -221,9 +211,7 @@
     ],
     "strength": 5,
     "maxCopies": 2,
-    "abilities": [
-      "agile"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -236,9 +224,7 @@
     ],
     "strength": 4,
     "maxCopies": 2,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Gagne +1 pour chaque autre carte Domaine alliée."
+    "abilities": [],
+    "text": ""
   }
 ]

@@ -1,26 +1,21 @@
 import { ROWS } from "../constants.js";
 
 /**
- * Calcule la force effective d'une carte dans un contexte de ligne.
- * Le prototype ne gère que la météo et les héros.
+ * Calcule la force effective d'une carte.
+ * La version 0.2.0 ne gère volontairement aucun modificateur :
+ * le score est égal à la force imprimée.
  */
-export function calculateCardStrength(card, context = {}) {
-  const printedStrength = Number(card?.strength ?? 0);
-  if (card?.abilities?.includes("hero")) return printedStrength;
-  if (context.weatherActive) return Math.min(1, printedStrength);
-  return Math.max(0, printedStrength + Number(context.flatBonus ?? 0));
+export function calculateCardStrength(card) {
+  return Math.max(0, Number(card?.strength ?? 0));
 }
 
-export function calculateRowScore(cards = [], context = {}) {
-  return cards.reduce((total, card) => total + calculateCardStrength(card, context), 0);
+export function calculateRowScore(cards = []) {
+  return cards.reduce((total, card) => total + calculateCardStrength(card), 0);
 }
 
-export function calculateSideScores(rows = {}, weather = {}) {
+export function calculateSideScores(rows = {}) {
   const rowScores = Object.fromEntries(
-    ROWS.map((row) => [
-      row,
-      calculateRowScore(rows[row] ?? [], { weatherActive: Boolean(weather[row]) })
-    ])
+    ROWS.map((row) => [row, calculateRowScore(rows[row] ?? [])])
   );
 
   return {

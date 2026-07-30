@@ -1,31 +1,26 @@
 # Changelog
 
-## 0.1.3 — 2026-07-30
+## 0.2.0 — Boucle de jeu simplifiée
 
-- Garde la main du joueur visible en permanence.
-- Rend le champ de bataille défilable verticalement.
-- Rend la main défilable horizontalement sur les petites fenêtres.
+- Suppression complète de la météo et de ses exceptions.
+- Ajout de l’alternance des tours.
+- Ajout d’un adversaire local automatique pour tester le jeu en solo.
+- Ajout du passage définitif pour la manche.
+- Fin automatique de manche lorsque les deux camps ont passé.
+- Comparaison des scores et perte d’une couronne pour le camp vaincu.
+- Gestion d’une partie en deux couronnes, avec égalité pouvant pénaliser les deux camps.
+- Ajout du bouton « Manche suivante ».
+- Défausse des cartes jouées et pioche de deux cartes entre les manches.
+- Main d’ouverture de dix cartes et réserve de pioche.
+- Catalogue de 80 cartes débarrassé des cartes météo et des capacités complexes hors périmètre.
+- Nouvelles catégories spéciales : Bannière, Manœuvre et Rappel.
 
-## 0.1.2
+## 0.1.3 — Main toujours visible
 
-- Corrige le plantage du plateau sous Foundry V14.
-- Renomme l’état interne du match pour éviter le conflit avec `ApplicationV2.state`, propriété en lecture seule de Foundry.
-- Conserve le diagnostic visible lors de l’ouverture.
+- Le champ de bataille défile verticalement.
+- La main reste visible en bas de la fenêtre.
+- La main défile horizontalement lorsque nécessaire.
 
-# Journal des versions
+## 0.1.2 — Correction ApplicationV2
 
-## 0.1.0 — Prototype
-
-- Ajout du manifeste Foundry V14.
-- Ajout d’un plateau local ApplicationV2.
-- Ajout du catalogue initial de 80 cartes.
-- Ajout du calcul des scores et des tests unitaires.
-- Ajout des workflows GitHub de validation et de release.
-
-## 0.1.1
-
-- Diffère le chargement du plateau jusqu'à l'ouverture effective.
-- Attend correctement le rendu ApplicationV2.
-- Affiche les erreurs d'ouverture dans les notifications Foundry et la console.
-- Expose une API de secours via `globalThis.SixCrownsCardGame`.
-- Retire les URL de mise à jour publiques du manifeste pour le flux GitHub privé.
+- Remplacement de la propriété `state` par `matchState` pour éviter un conflit avec l’état interne d’ApplicationV2.

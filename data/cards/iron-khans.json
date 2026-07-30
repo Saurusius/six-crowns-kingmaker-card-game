@@ -8,7 +8,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Déplace toutes les cartes Agile alliées vers la ligne de votre choix."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "KF-02",
@@ -19,7 +19,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Rejoue depuis la défausse une carte Cavalier ou Archer monté."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "KF-03",
@@ -34,7 +34,7 @@
     "abilities": [
       "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "KF-04",
@@ -48,10 +48,9 @@
     "strength": 9,
     "maxCopies": 1,
     "abilities": [
-      "hero",
-      "agile"
+      "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "KF-05",
@@ -64,9 +63,9 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "KF-06",
@@ -79,9 +78,7 @@
     ],
     "strength": 4,
     "maxCopies": 3,
-    "abilities": [
-      "agile"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -95,9 +92,9 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [
-      "tight-bond"
+      "bond"
     ],
-    "text": ""
+    "text": "Les copies identiques présentes sur la ligne se renforcent."
   },
   {
     "id": "KF-08",
@@ -110,9 +107,9 @@
     "strength": 3,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "KF-09",
@@ -124,10 +121,8 @@
     ],
     "strength": 7,
     "maxCopies": 2,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Gagne +3 si l’Avant-garde adverse est plus forte lorsqu’il est joué."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "KF-10",
@@ -139,10 +134,8 @@
     ],
     "strength": 6,
     "maxCopies": 2,
-    "abilities": [
-      "scorch"
-    ],
-    "text": "Brûlure sur l’Escarmouche adverse si sa force totale atteint 20."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "KF-11",
@@ -155,9 +148,9 @@
     "strength": 4,
     "maxCopies": 2,
     "abilities": [
-      "morale"
+      "support"
     ],
-    "text": ""
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "KF-12",
@@ -169,9 +162,7 @@
     ],
     "strength": 5,
     "maxCopies": 1,
-    "abilities": [
-      "medic"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -184,10 +175,8 @@
     ],
     "strength": 4,
     "maxCopies": 2,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Donne +2 à la plus forte unité alliée non-héros."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "KF-14",
@@ -202,7 +191,7 @@
     "abilities": [
       "resilient"
     ],
-    "text": ""
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
   },
   {
     "id": "KF-15",
@@ -214,9 +203,7 @@
     ],
     "strength": 2,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -230,9 +217,9 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [
-      "horn"
+      "support"
     ],
-    "text": "Double la force de l’Avant-garde alliée."
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "KF-17",
@@ -245,10 +232,7 @@
     ],
     "strength": 5,
     "maxCopies": 2,
-    "abilities": [
-      "agile",
-      "custom"
-    ],
-    "text": "Gagne +1 par unité alliée déjà détruite durant la manche."
+    "abilities": [],
+    "text": ""
   }
 ]

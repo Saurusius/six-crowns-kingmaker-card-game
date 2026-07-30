@@ -1,10 +1,19 @@
 import { readdir, readFile } from "node:fs/promises";
-import path from "node:path";
 
 const root = new URL("../data/cards/", import.meta.url);
 const files = (await readdir(root)).filter((file) => file.endsWith(".json"));
-const allowedKinds = new Set(["leader", "unit", "weather", "special"]);
+const allowedKinds = new Set(["leader", "unit", "special"]);
 const allowedRows = new Set(["avant-garde", "escarmouche", "domaine"]);
+const allowedAbilities = new Set([
+  "hero",
+  "rally",
+  "bond",
+  "support",
+  "recall",
+  "resilient",
+  "banner",
+  "maneuver"
+]);
 const ids = new Set();
 let count = 0;
 
@@ -26,7 +35,9 @@ for (const file of files) {
     if (!Number.isInteger(card.maxCopies) || card.maxCopies < 1 || card.maxCopies > 3) {
       throw new Error(`${where}: maxCopies doit être compris entre 1 et 3.`);
     }
-    if (!Array.isArray(card.abilities)) throw new Error(`${where}: abilities doit être un tableau.`);
+    if (!Array.isArray(card.abilities) || card.abilities.some((ability) => !allowedAbilities.has(ability))) {
+      throw new Error(`${where}: capacité non prise en charge.`);
+    }
     if (card.kind === "unit" && !Number.isFinite(card.strength)) {
       throw new Error(`${where}: une unité doit avoir une force numérique.`);
     }
@@ -38,4 +49,4 @@ for (const file of files) {
 }
 
 if (count !== 80) throw new Error(`Le catalogue doit contenir 80 cartes uniques, trouvé : ${count}.`);
-console.log(`Catalogue valide : ${count} cartes uniques dans ${files.length} fichiers.`);
+console.log(`Catalogue simplifié valide : ${count} cartes uniques dans ${files.length} fichiers.`);

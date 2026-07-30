@@ -10,10 +10,9 @@
     "strength": 8,
     "maxCopies": 1,
     "abilities": [
-      "hero",
-      "medic"
+      "hero"
     ],
-    "text": "Rejoue une unité alliée de force 5 ou moins."
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "NE-02",
@@ -25,10 +24,8 @@
     ],
     "strength": 5,
     "maxCopies": 1,
-    "abilities": [
-      "logistics"
-    ],
-    "text": "Pioche deux cartes puis défausse-en une."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "NE-03",
@@ -42,9 +39,9 @@
     "maxCopies": 1,
     "abilities": [
       "hero",
-      "morale"
+      "support"
     ],
-    "text": ""
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "NE-04",
@@ -56,9 +53,7 @@
     ],
     "strength": 6,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -72,92 +67,99 @@
     "strength": 10,
     "maxCopies": 1,
     "abilities": [
-      "hero",
-      "medic"
+      "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "SP-01",
-    "name": "Brouillard des Terres Dérobées",
+    "name": "Bannière royale",
     "faction": "neutral",
-    "kind": "weather",
+    "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Fixe la force des unités d’Escarmouche non-héros à 1."
+    "abilities": [
+      "banner"
+    ],
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche."
   },
   {
     "id": "SP-02",
-    "name": "Crue de la Sellen",
+    "name": "Étendard des Marches",
     "faction": "neutral",
-    "kind": "weather",
+    "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Fixe la force des unités d’Avant-garde non-héros à 1."
+    "abilities": [
+      "banner"
+    ],
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche."
   },
   {
     "id": "SP-03",
-    "name": "Tempête sur les Pics",
+    "name": "Manœuvre tactique",
     "faction": "neutral",
-    "kind": "weather",
+    "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Fixe la force des cartes Domaine non-héros à 1."
+    "abilities": [
+      "maneuver"
+    ],
+    "text": "Déplace une unité alliée vers une autre ligne autorisée."
   },
   {
     "id": "SP-04",
-    "name": "Éclaircie royale",
+    "name": "Redéploiement éclair",
     "faction": "neutral",
-    "kind": "weather",
+    "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Dissipe tous les effets météorologiques."
+    "abilities": [
+      "maneuver"
+    ],
+    "text": "Déplace une unité alliée vers une autre ligne autorisée."
   },
   {
     "id": "SP-05",
-    "name": "Bannière de guerre",
+    "name": "Diversion diplomatique",
     "faction": "neutral",
     "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
     "abilities": [
-      "horn"
+      "recall"
     ],
-    "text": "Double la force d’une ligne alliée."
+    "text": "Reprend une unité alliée du plateau dans votre main."
   },
   {
     "id": "SP-06",
-    "name": "Leurre diplomatique",
+    "name": "Leurre de cour",
     "faction": "neutral",
     "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
     "abilities": [
-      "decoy"
+      "recall"
     ],
-    "text": "Reprend une unité alliée en main et prend sa place."
+    "text": "Reprend une unité alliée du plateau dans votre main."
   },
   {
     "id": "SP-07",
-    "name": "Sentence du Royaume",
+    "name": "Bannière des Frontières",
     "faction": "neutral",
     "kind": "special",
     "rows": [],
     "strength": null,
     "maxCopies": 1,
     "abilities": [
-      "scorch"
+      "banner"
     ],
-    "text": "Détruit les unités non-héros possédant la force la plus élevée sur le plateau."
+    "text": "Donne +1 à toutes les unités d’une ligne alliée jusqu’à la fin de la manche."
   }
 ]

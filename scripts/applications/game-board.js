@@ -1,5 +1,13 @@
-import { MODULE_ID, MODULE_TITLE, ROWS } from "../constants.js";
-import { createBoardViewModel, createPrototypeState, playPrototypeCard } from "../rules/state.js";
+import { MODULE_ID, MODULE_TITLE } from "../constants.js";
+import {
+  PHASES,
+  createBoardViewModel,
+  createPrototypeState,
+  passSide,
+  playCard,
+  startNextRound,
+  takeOpponentTurn
+} from "../rules/state.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -26,47 +34,80 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor(options = {}) {
     super(options);
     this.matchState = createPrototypeState();
+    this.opponentTimer = null;
   }
 
   async _prepareContext() {
     return createBoardViewModel(this.matchState);
   }
 
+  _clearOpponentTimer() {
+    if (this.opponentTimer !== null) {
+      globalThis.clearTimeout(this.opponentTimer);
+      this.opponentTimer = null;
+    }
+  }
+
+  _scheduleOpponentTurn() {
+    this._clearOpponentTimer();
+    if (this.matchState.phase !== PHASES.PLAYING) return;
+    if (this.matchState.currentTurn !== "opponent") return;
+
+    this.opponentTimer = globalThis.setTimeout(async () => {
+      this.opponentTimer = null;
+      try {
+        takeOpponentTurn(this.matchState);
+        await this.render({ force: true });
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Tour adverse impossible`, error);
+        ui.notifications.error(error.message);
+      }
+    }, 650);
+  }
+
   async _onRender(context, options) {
     await super._onRender(context, options);
 
     this.element.querySelectorAll("[data-action='play-card']").forEach((button) => {
-      button.addEventListener("click", () => {
+      button.addEventListener("click", async () => {
         try {
-          playPrototypeCard(this.matchState, button.dataset.cardId, button.dataset.row);
-          this.render({ force: true });
+          playCard(this.matchState, "player", button.dataset.cardId, button.dataset.row);
+          await this.render({ force: true });
         } catch (error) {
           ui.notifications.warn(error.message);
         }
       });
     });
 
-    this.element.querySelector("[data-action='pass']")?.addEventListener("click", () => {
-      this.matchState.player.passed = true;
-      this.matchState.message = "Vous passez. L’adversaire peut désormais vider sa main avec un sourire insupportable.";
-      this.render({ force: true });
+    this.element.querySelector("[data-action='pass']")?.addEventListener("click", async () => {
+      try {
+        passSide(this.matchState, "player");
+        await this.render({ force: true });
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
     });
 
-    this.element.querySelector("[data-action='reset']")?.addEventListener("click", () => {
+    this.element.querySelector("[data-action='next-round']")?.addEventListener("click", async () => {
+      try {
+        startNextRound(this.matchState);
+        await this.render({ force: true });
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='reset']")?.addEventListener("click", async () => {
+      this._clearOpponentTimer();
       this.matchState = createPrototypeState();
-      this.render({ force: true });
+      await this.render({ force: true });
     });
 
-    this.element.querySelectorAll("[data-action='toggle-weather']").forEach((button) => {
-      button.addEventListener("click", () => {
-        const row = button.dataset.row;
-        if (!ROWS.includes(row)) return;
-        this.matchState.weather[row] = !this.matchState.weather[row];
-        this.matchState.message = this.matchState.weather[row]
-          ? `La météo frappe la ligne ${row}.`
-          : `La météo se dissipe sur la ligne ${row}.`;
-        this.render({ force: true });
-      });
-    });
+    this._scheduleOpponentTurn();
+  }
+
+  async close(options = {}) {
+    this._clearOpponentTimer();
+    return super.close(options);
   }
 }

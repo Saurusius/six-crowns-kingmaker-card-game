@@ -8,7 +8,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Détruit la plus forte unité non-héros de l’Avant-garde adverse."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "AL-02",
@@ -19,7 +19,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Pioche une carte supplémentaire au début de la deuxième manche."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "AL-03",
@@ -33,10 +33,9 @@
     "strength": 10,
     "maxCopies": 1,
     "abilities": [
-      "hero",
-      "agile"
+      "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "AL-04",
@@ -49,10 +48,7 @@
     ],
     "strength": 7,
     "maxCopies": 1,
-    "abilities": [
-      "agile",
-      "duel"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -65,9 +61,7 @@
     ],
     "strength": 5,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -81,9 +75,9 @@
     "strength": 6,
     "maxCopies": 2,
     "abilities": [
-      "morale"
+      "support"
     ],
-    "text": ""
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "AL-07",
@@ -95,9 +89,7 @@
     ],
     "strength": 7,
     "maxCopies": 2,
-    "abilities": [
-      "duel"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -111,9 +103,9 @@
     "strength": 3,
     "maxCopies": 3,
     "abilities": [
-      "tight-bond"
+      "bond"
     ],
-    "text": ""
+    "text": "Les copies identiques présentes sur la ligne se renforcent."
   },
   {
     "id": "AL-09",
@@ -126,9 +118,9 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "AL-10",
@@ -141,9 +133,7 @@
     ],
     "strength": 6,
     "maxCopies": 2,
-    "abilities": [
-      "agile"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -156,9 +146,7 @@
     ],
     "strength": 1,
     "maxCopies": 2,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -172,9 +160,9 @@
     "strength": 5,
     "maxCopies": 1,
     "abilities": [
-      "horn"
+      "support"
     ],
-    "text": "Double la force de l’Avant-garde alliée."
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "AL-13",
@@ -186,10 +174,8 @@
     ],
     "strength": 4,
     "maxCopies": 1,
-    "abilities": [
-      "medic"
-    ],
-    "text": "Rejoue une carte possédant Duel."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "AL-14",
@@ -201,10 +187,8 @@
     ],
     "strength": 3,
     "maxCopies": 1,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Supprime tous les bonus et malus d’une ligne."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "AL-15",
@@ -229,9 +213,7 @@
     ],
     "strength": 4,
     "maxCopies": 2,
-    "abilities": [
-      "logistics"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -244,9 +226,7 @@
     ],
     "strength": 9,
     "maxCopies": 1,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Immunisée aux capacités Duel ennemies."
+    "abilities": [],
+    "text": ""
   }
 ]

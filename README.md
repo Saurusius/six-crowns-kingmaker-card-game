@@ -1,79 +1,48 @@
 # Le Jeu des Six Couronnes
 
-Module communautaire gratuit pour **Foundry Virtual Tabletop V14**. Il propose un jeu de cartes tactique en trois lignes, conçu pour une campagne dans les Terres Dérobées.
+Module Foundry VTT 14 proposant un jeu de cartes tactique original en trois lignes, inspiré des Terres Dérobées de Kingmaker.
 
-> État actuel : **prototype v0.1.0**. Le plateau local fonctionne, le catalogue des 80 cartes est présent, mais les parties réseau, les piles Foundry natives et les capacités avancées restent à implémenter.
+## Prototype 0.2.0
 
-## Tester le prototype
+Le prototype permet désormais de jouer une partie locale complète contre une Maison Aldori automatisée :
 
-1. Clonez ce dépôt dans le dossier `Data/modules` de Foundry :
+- main d’ouverture de 10 cartes ;
+- trois lignes : Avant-garde, Escarmouche et Domaine ;
+- une carte jouée par tour ;
+- alternance automatique des tours ;
+- passage définitif pour la manche ;
+- fin de manche après le passage des deux camps ;
+- deux couronnes par camp ;
+- pioche de 2 cartes entre les manches ;
+- défausse automatique des cartes jouées ;
+- victoire lorsque le camp adverse n’a plus de couronne.
 
-```powershell
-git clone https://github.com/Saurusius/six-crowns-kingmaker-card-game.git
-```
+Le système de météo a été entièrement supprimé. Les capacités avancées du catalogue ne sont pas encore actives dans le prototype : la version 0.2.0 sert à valider la boucle fondamentale et l’économie de cartes.
 
-2. Activez **Le Jeu des Six Couronnes** dans votre monde.
-3. Dans le chat Foundry, saisissez :
+## Ouvrir le plateau
+
+Dans le chat Foundry :
 
 ```text
 /sixcouronnes
 ```
 
-Une macro peut aussi appeler :
+Ou depuis une macro de type Script :
 
 ```js
-game.modules.get("six-crowns-kingmaker-card-game").api.openBoard();
+await game.modules
+  .get("six-crowns-kingmaker-card-game")
+  .api
+  .openBoard();
 ```
 
-## Commandes de développement
+## Développement
 
-```powershell
+```bash
 npm install
 npm run check
 ```
 
-## Organisation
+## Licence
 
-- `data/cards/` : catalogue de cartes indépendant du moteur.
-- `scripts/rules/` : fonctions pures de calcul et validation.
-- `scripts/applications/` : interface Foundry ApplicationV2.
-- `templates/` : gabarits Handlebars.
-- `.github/workflows/` : validation et publication automatique.
-
-## Publier une version
-
-1. Modifiez la version si nécessaire et poussez vos changements.
-2. Créez puis poussez un tag :
-
-```powershell
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-GitHub Actions vérifie les données, exécute les tests, fabrique le ZIP Foundry et crée la release avec :
-
-- `module.json`
-- `six-crowns-kingmaker-card-game.zip`
-
-Lien d’installation Foundry :
-
-```text
-https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/latest/download/module.json
-```
-
-## Feuille de route
-
-- [x] Catalogue initial de 80 cartes
-- [x] Prototype de plateau et calcul des scores
-- [x] Validation des données et tests unitaires
-- [x] Publication automatisée par tag Git
-- [ ] Création de partie et attribution des joueurs
-- [ ] Decks, mains, lignes et défausses avec les documents `Cards`
-- [ ] Synchronisation socket validée par le MJ actif
-- [ ] Capacités de cartes
-- [ ] Constructeur de decks
-- [ ] Illustrations et sons originaux
-
-## Contributions et droits
-
-Consultez [CONTRIBUTING.md](CONTRIBUTING.md) et [NOTICE.md](NOTICE.md). Le code original est sous licence MIT. Les éléments appartenant à Paizo restent la propriété de Paizo et sont utilisés dans le cadre de sa Community Use Policy.
+Le code original du module est distribué sous licence MIT. Les références à Pathfinder et Kingmaker restent la propriété de leurs ayants droit. Consultez `NOTICE.md` avant toute publication publique.

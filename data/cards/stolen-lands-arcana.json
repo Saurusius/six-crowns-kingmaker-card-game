@@ -8,7 +8,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Déplace une unité ennemie vers une autre ligne et lui inflige −2."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "AA-02",
@@ -19,7 +19,7 @@
     "strength": null,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Transforme la plus forte unité non-héros adverse en Bouffon de force 1."
+    "text": "Effet de chef réservé à une version ultérieure."
   },
   {
     "id": "AA-03",
@@ -34,7 +34,7 @@
     "abilities": [
       "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "AA-04",
@@ -49,7 +49,7 @@
     "abilities": [
       "hero"
     ],
-    "text": ""
+    "text": "Ne peut pas être détruite ou ciblée par une capacité adverse."
   },
   {
     "id": "AA-05",
@@ -62,9 +62,9 @@
     "strength": 2,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "AA-06",
@@ -77,9 +77,9 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [
-      "tight-bond"
+      "bond"
     ],
-    "text": ""
+    "text": "Les copies identiques présentes sur la ligne se renforcent."
   },
   {
     "id": "AA-07",
@@ -91,9 +91,7 @@
     ],
     "strength": 5,
     "maxCopies": 1,
-    "abilities": [
-      "medic"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -107,9 +105,9 @@
     "strength": 3,
     "maxCopies": 3,
     "abilities": [
-      "muster"
+      "rally"
     ],
-    "text": ""
+    "text": "Joue les autres copies de cette carte depuis le deck."
   },
   {
     "id": "AA-09",
@@ -121,9 +119,7 @@
     ],
     "strength": 7,
     "maxCopies": 1,
-    "abilities": [
-      "scorch"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -137,10 +133,8 @@
     ],
     "strength": 3,
     "maxCopies": 2,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Copie la force imprimée d’une unité alliée adjacente."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "AA-11",
@@ -152,9 +146,7 @@
     ],
     "strength": 4,
     "maxCopies": 2,
-    "abilities": [
-      "weather-immune"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -167,9 +159,7 @@
     ],
     "strength": 4,
     "maxCopies": 1,
-    "abilities": [
-      "spy"
-    ],
+    "abilities": [],
     "text": ""
   },
   {
@@ -183,11 +173,8 @@
     ],
     "strength": 6,
     "maxCopies": 2,
-    "abilities": [
-      "agile",
-      "custom"
-    ],
-    "text": "Peut échanger sa place avec une unité alliée."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "AA-14",
@@ -202,7 +189,7 @@
     "abilities": [
       "resilient"
     ],
-    "text": ""
+    "text": "Peut rester sur le plateau entre deux manches avec une force réduite."
   },
   {
     "id": "AA-15",
@@ -214,10 +201,8 @@
     ],
     "strength": 0,
     "maxCopies": 1,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Applique immédiatement un effet de météo sur une ligne au choix."
+    "abilities": [],
+    "text": ""
   },
   {
     "id": "AA-16",
@@ -230,9 +215,9 @@
     "strength": 7,
     "maxCopies": 2,
     "abilities": [
-      "morale"
+      "support"
     ],
-    "text": ""
+    "text": "Donne +1 aux autres unités de sa ligne."
   },
   {
     "id": "AA-17",
@@ -244,9 +229,7 @@
     ],
     "strength": 8,
     "maxCopies": 1,
-    "abilities": [
-      "custom"
-    ],
-    "text": "Lorsqu’il est détruit, revient dans la défausse avec une force de 4."
+    "abilities": [],
+    "text": ""
   }
 ]
