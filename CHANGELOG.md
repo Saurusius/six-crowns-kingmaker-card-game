@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.8.0 — Interface illustrée et deck aléatoire
+
+- intégration du nouveau pack de visuels d’interface : plateau, dos de carte, défausse, gemmes, pièce et médaillons de ligne ;
+- ajout d’une option **Deck aléatoire** pour le joueur et pour l’adversaire au moment de préparer la partie ;
+- réduction de l’emprise visuelle du champ de bataille pour gagner en lisibilité ;
+- réorganisation de la main en deux colonnes afin de voir davantage de cartes sans avoir à trop défiler ;
+- agrandissement de la fenêtre par défaut pour mieux exploiter le nouveau layout.
+
 ## 0.7.0 — Plateau réorganisé et règlement intégré
 
 - refonte ergonomique du plateau : main verticale à gauche, champ de bataille au centre, deck et défausse à droite ;

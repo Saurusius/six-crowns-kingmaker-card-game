@@ -18,6 +18,8 @@ const ROW_LABELS = Object.freeze({
   "domaine": "Domaine"
 });
 
+const RANDOM_DECK_ID = "random";
+
 const ROLE_LABELS = Object.freeze({
   hero: "Héros",
   support: "Soutien",
@@ -161,7 +163,7 @@ export function createPrototypeState() {
       face: null,
       winner: null
     },
-    message: "Choisissez les deux decks prédéfinis, puis lancez la partie.",
+    message: "Choisissez les deux decks prédéfinis — ou utilisez l’option Deck aléatoire — puis lancez la partie.",
     player: null,
     opponent: null
   };
@@ -238,9 +240,15 @@ export function toggleRules(state, forceValue = null) {
   return state;
 }
 
+function resolveDeckSelection(deckId, random = Math.random) {
+  if (deckId !== RANDOM_DECK_ID) return deckId;
+  const deckIds = listDecks().map((deck) => deck.id);
+  return deckIds[Math.floor(random() * deckIds.length)];
+}
+
 export function selectDeck(state, side, deckId) {
   if (state.phase !== PHASES.DECK_SELECTION) throw new Error("Le choix des decks est terminé.");
-  if (!getDeckDefinition(deckId)) throw new Error("Ce deck n’existe pas.");
+  if (deckId !== RANDOM_DECK_ID && !getDeckDefinition(deckId)) throw new Error("Ce deck n’existe pas.");
   if (side === "player") state.selectedPlayerDeck = deckId;
   else if (side === "opponent") state.selectedOpponentDeck = deckId;
   else throw new Error("Sélection de deck invalide.");
@@ -249,8 +257,10 @@ export function selectDeck(state, side, deckId) {
 
 export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.random } = {}) {
   if (state.phase !== PHASES.DECK_SELECTION) throw new Error("La partie a déjà commencé.");
-  const playerId = playerDeckId ?? state.selectedPlayerDeck;
-  const opponentId = opponentDeckId ?? state.selectedOpponentDeck;
+  const playerSelection = playerDeckId ?? state.selectedPlayerDeck;
+  const opponentSelection = opponentDeckId ?? state.selectedOpponentDeck;
+  const playerId = resolveDeckSelection(playerSelection, random);
+  const opponentId = resolveDeckSelection(opponentSelection, random);
 
   state.selectedPlayerDeck = playerId;
   state.selectedOpponentDeck = opponentId;
@@ -682,6 +692,8 @@ export function createBoardViewModel(state) {
       playerSelected: deck.id === state.selectedPlayerDeck,
       opponentSelected: deck.id === state.selectedOpponentDeck
     })),
+    playerDeckIsRandom: state.selectedPlayerDeck === RANDOM_DECK_ID,
+    opponentDeckIsRandom: state.selectedOpponentDeck === RANDOM_DECK_ID,
     player: state.player ? {
       ...state.player,
       rows: preparedPlayerRows,

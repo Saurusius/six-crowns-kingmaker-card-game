@@ -40,6 +40,16 @@ test("la partie commence par le choix des decks", () => {
   assert.equal(state.player, null);
 });
 
+test("l’option deck aléatoire sélectionne un deck valide avant le lancer", () => {
+  const state = createPrototypeState();
+  startMatch(state, { playerDeckId: "random", opponentDeckId: "random", random: () => 0.99 });
+  const validIds = listDecks().map((deck) => deck.id);
+  assert.equal(validIds.includes(state.selectedPlayerDeck), true);
+  assert.equal(validIds.includes(state.selectedOpponentDeck), true);
+  assert.equal(state.player.hand.length, 10);
+  assert.equal(state.opponent.hand.length, 10);
+});
+
 test("chaque camp reçoit dix cartes après la sélection des decks", () => {
   const state = createPrototypeState();
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });

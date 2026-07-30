@@ -28,8 +28,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       resizable: true
     },
     position: {
-      width: 1120,
-      height: 840
+      width: 1360,
+      height: 900
     }
   };
 

@@ -46,13 +46,14 @@
     <section class="scg-setup-panel">
       <div class="scg-setup-heading">
         <h2>Choisissez les decks</h2>
-        <p>Chaque deck est prédéfini et contient au maximum 20 cartes.</p>
+        <p>Chaque deck est prédéfini et contient au maximum 20 cartes. Vous pouvez aussi laisser le destin choisir avec <strong>Deck aléatoire</strong>.</p>
       </div>
 
       <div class="scg-deck-select-grid">
         <label class="scg-deck-select">
           <span>Votre deck</span>
           <select name="player-deck">
+            <option value="random" {{#if playerDeckIsRandom}}selected{{/if}}>Deck aléatoire</option>
             {{#each decks}}
               <option value="{{id}}" {{#if playerSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
             {{/each}}
@@ -62,6 +63,7 @@
         <label class="scg-deck-select">
           <span>Deck adverse</span>
           <select name="opponent-deck">
+            <option value="random" {{#if opponentDeckIsRandom}}selected{{/if}}>Deck aléatoire</option>
             {{#each decks}}
               <option value="{{id}}" {{#if opponentSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
             {{/each}}
@@ -98,8 +100,8 @@
 
       <div class="scg-coin-stage">
         <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
-          <div class="scg-coin-face scg-coin-front"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="scg-coin-face scg-coin-back"><i class="fa-solid fa-sword"></i></div>
+          <div class="scg-coin-face scg-coin-front"></div>
+          <div class="scg-coin-face scg-coin-back"></div>
         </div>
         {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
       </div>
@@ -116,10 +118,10 @@
         {{else}}
           <div class="scg-coin-choice" role="group" aria-label="Choisissez Bouclier ou Épée">
             <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="shield">
-              <span class="scg-choice-symbol"><i class="fa-solid fa-shield-halved"></i></span><strong>Bouclier</strong>
+              <span class="scg-choice-symbol scg-choice-symbol-shield"></span><strong>Bouclier</strong>
             </button>
             <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="sword">
-              <span class="scg-choice-symbol"><i class="fa-solid fa-sword"></i></span><strong>Épée</strong>
+              <span class="scg-choice-symbol scg-choice-symbol-sword"></span><strong>Épée</strong>
             </button>
           </div>
         {{/if}}
@@ -206,7 +208,7 @@
             <strong>Votre main</strong>
             <span>{{player.hand.length}} cartes à jouer</span>
           </div>
-          <div class="scg-hand-column">
+          <div class="scg-hand-column" data-card-count="{{player.hand.length}}">
             {{#each player.hand}}
               <article class="scg-card scg-detail-card scg-hand-card {{factionClass}}">
                 <div class="scg-card-art">
@@ -245,7 +247,7 @@
           {{#each opponent.rowList}}
             <div class="scg-row" data-row="{{id}}">
               <div class="scg-row-label {{status.className}}">
-                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span class="scg-row-icon scg-row-icon-{{id}}" aria-hidden="true"></span>
                 <span>{{label}}</span>
                 <strong>{{score}}</strong>
                 <small class="scg-row-control">{{status.label}}</small>
@@ -285,7 +287,7 @@
           {{#each player.rowList}}
             <div class="scg-row" data-row="{{id}}">
               <div class="scg-row-label {{status.className}}">
-                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span class="scg-row-icon scg-row-icon-{{id}}" aria-hidden="true"></span>
                 <span>{{label}}</span>
                 <strong>{{score}}</strong>
                 <small class="scg-row-control">{{status.label}}</small>
@@ -323,12 +325,12 @@
       <aside class="scg-reserve-sidebar">
         <div class="scg-zone-stack scg-zone-stack-opponent">
           <article class="scg-zone-card">
-            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <div class="scg-zone-visual is-deck"></div>
             <strong>Deck adverse</strong>
             <small>{{opponent.deck.length}} carte(s)</small>
           </article>
           <article class="scg-zone-card">
-            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-skull"></i></span></div>
+            <div class="scg-zone-visual is-discard"></div>
             <strong>Défausse adverse</strong>
             <small>{{opponent.discard.length}} carte(s)</small>
           </article>
@@ -345,12 +347,12 @@
 
         <div class="scg-zone-stack scg-zone-stack-player">
           <article class="scg-zone-card">
-            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <div class="scg-zone-visual is-deck"></div>
             <strong>Votre deck</strong>
             <small>{{player.deck.length}} carte(s)</small>
           </article>
           <article class="scg-zone-card">
-            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-fire"></i></span></div>
+            <div class="scg-zone-visual is-discard"></div>
             <strong>Votre défausse</strong>
             <small>{{player.discard.length}} carte(s)</small>
           </article>
