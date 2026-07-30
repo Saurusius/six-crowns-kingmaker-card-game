@@ -2052,3 +2052,344 @@
     grid-template-columns: 320px minmax(0, 1fr) 130px;
   }
 }
+
+
+/* -------------------------------------------------------------------------
+ * v0.7.12 — lignes de bataille recalibrées
+ * ---------------------------------------------------------------------- */
+
+/* Les deux camps occupent chacun exactement la moitié du champ de bataille. */
+.scg-battlefield-panel {
+  grid-template-rows: minmax(0, 1fr) 1px minmax(0, 1fr);
+  gap: 4px;
+  padding: 6px;
+  overflow: hidden;
+}
+
+.scg-side {
+  min-height: 0;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+
+/* Chaque rangée reste contenue dans son tiers, même dans une fenêtre moins haute. */
+.scg-row {
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 5px;
+  padding: 4px;
+}
+
+.scg-row-label {
+  min-height: 0;
+  padding: 2px;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.scg-row-icon {
+  width: 27px;
+  height: 27px;
+  font-size: .72rem;
+}
+
+.scg-row-label > span:not(.scg-row-icon) {
+  font-size: .72rem;
+  line-height: 1.05;
+}
+
+.scg-row-label strong {
+  font-size: 1.18rem;
+  line-height: 1;
+}
+
+.scg-row-control {
+  margin-top: 2px;
+  font-size: .53rem;
+  line-height: 1;
+}
+
+/* Une seule rangée horizontale : aucune carte ne tombe sur la ligne suivante. */
+.scg-card-line {
+  min-height: 0;
+  height: 100%;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-content: center;
+  gap: 5px;
+}
+
+.scg-board-card {
+  flex: 0 1 72px;
+  width: 72px;
+  min-width: 60px;
+  max-width: 72px;
+  height: 92px;
+  min-height: 92px;
+}
+
+.scg-board-card .scg-card-art {
+  height: 62px;
+  flex: 0 0 62px;
+}
+
+.scg-board-card .scg-card-caption {
+  min-height: 26px;
+  padding: 3px 4px;
+}
+
+.scg-board-card .scg-card-caption strong {
+  font-size: .52rem;
+  line-height: 1;
+}
+
+.scg-board-card .scg-strength {
+  width: 21px;
+  height: 21px;
+  font-size: .68rem;
+}
+
+.scg-board-card .scg-row-emblem {
+  width: 17px;
+  height: 17px;
+  font-size: .5rem;
+}
+
+.scg-board-card .scg-effect-icons > .scg-trait-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.scg-divider {
+  height: 1px;
+  margin: 0;
+}
+
+@media (max-height: 820px) {
+  .scg-battlefield-panel {
+    gap: 3px;
+    padding: 4px;
+  }
+
+  .scg-side {
+    gap: 3px;
+  }
+
+  .scg-row {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 4px;
+    padding: 3px;
+  }
+
+  .scg-board-card {
+    flex-basis: 66px;
+    width: 66px;
+    max-width: 66px;
+    height: 84px;
+    min-height: 84px;
+  }
+
+  .scg-board-card .scg-card-art {
+    height: 56px;
+    flex-basis: 56px;
+  }
+
+  .scg-row-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+ * v0.7.12 — prévisualisation des cartes pendant le mulligan
+ * ---------------------------------------------------------------------- */
+
+.scg-mulligan-card-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.scg-mulligan-preview-trigger {
+  position: absolute;
+  z-index: 15;
+  right: 7px;
+  bottom: 7px;
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #d5b65d;
+  border-radius: 50%;
+  background: rgba(18, 16, 13, .94);
+  color: #f3d77e;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, .6);
+}
+
+.scg-mulligan-preview-trigger:hover,
+.scg-mulligan-preview-trigger:focus-visible {
+  border-color: #fff0b2;
+  background: #4a3d22;
+  color: #fff4c7;
+  outline: none;
+  transform: scale(1.06);
+}
+
+.scg-mulligan-preview-backdrop {
+  position: absolute;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(4, 4, 3, .78);
+  backdrop-filter: blur(3px);
+}
+
+.scg-mulligan-preview-backdrop[hidden] {
+  display: none;
+}
+
+.scg-mulligan-preview-dialog {
+  position: relative;
+  width: min(720px, 92%);
+  max-height: calc(100% - 24px);
+  padding: 24px;
+  border: 1px solid #9c8244;
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgba(35, 31, 24, .99), rgba(15, 14, 12, .99));
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .82), inset 0 0 0 1px rgba(255, 255, 255, .05);
+  overflow: auto;
+}
+
+.scg-mulligan-preview-close {
+  position: absolute;
+  z-index: 4;
+  top: 9px;
+  right: 9px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #8f7845;
+  border-radius: 50%;
+  background: rgba(10, 9, 8, .88);
+  color: #f4df9b;
+}
+
+.scg-mulligan-preview-card {
+  width: min(620px, 100%);
+  min-height: 390px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(220px, 42%) minmax(0, 1fr);
+  overflow: visible;
+}
+
+.scg-mulligan-preview-card[hidden] {
+  display: none;
+}
+
+.scg-mulligan-preview-art {
+  position: relative;
+  min-height: 390px;
+  overflow: hidden;
+  border-radius: 7px 0 0 7px;
+  background: radial-gradient(circle at 50% 18%, rgba(255,255,255,.22), transparent 32%), linear-gradient(150deg, var(--scg-card-mid), var(--scg-card-dark) 72%);
+}
+
+.scg-mulligan-preview-art > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.scg-mulligan-preview-art .scg-card-placeholder {
+  min-height: 390px;
+}
+
+.scg-mulligan-preview-art .scg-card-placeholder > span {
+  font-size: 5rem;
+}
+
+.scg-mulligan-preview-art .scg-strength {
+  width: 44px;
+  height: 44px;
+  font-size: 1.35rem;
+}
+
+.scg-mulligan-preview-art .scg-row-emblem,
+.scg-mulligan-preview-art .scg-rarity-badge {
+  width: 34px;
+  height: 34px;
+}
+
+.scg-mulligan-preview-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 34px 24px 24px;
+  border-left: 1px solid color-mix(in srgb, var(--scg-card-accent) 68%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--scg-card-dark) 82%, black), var(--scg-card-dark));
+}
+
+.scg-mulligan-preview-body h3 {
+  margin: 0;
+  color: #fff7dc;
+  font-size: 1.55rem;
+  line-height: 1.12;
+}
+
+.scg-mulligan-preview-meta {
+  margin: 0;
+  color: #d3cab4;
+  font-size: .84rem;
+}
+
+.scg-mulligan-preview-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.scg-mulligan-preview-traits .scg-trait-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.scg-mulligan-preview-effect {
+  margin: 0;
+  padding: 13px;
+  border: 1px solid rgba(202, 171, 91, .38);
+  background: rgba(0, 0, 0, .22);
+  color: #eee5d0;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  .scg-mulligan-preview-card {
+    grid-template-columns: 1fr;
+  }
+
+  .scg-mulligan-preview-art {
+    min-height: 230px;
+    border-radius: 7px 7px 0 0;
+  }
+
+  .scg-mulligan-preview-art .scg-card-placeholder {
+    min-height: 230px;
+  }
+
+  .scg-mulligan-preview-body {
+    padding-top: 20px;
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--scg-card-accent) 68%, transparent);
+  }
+}

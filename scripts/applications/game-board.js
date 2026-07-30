@@ -201,6 +201,54 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
 
+    const mulliganPreview = this.element.querySelector("[data-mulligan-preview]");
+    const closeMulliganPreview = () => {
+      if (!mulliganPreview) return;
+      mulliganPreview.hidden = true;
+      mulliganPreview.setAttribute("aria-hidden", "true");
+      mulliganPreview.querySelectorAll("[data-preview-card-id]").forEach((card) => {
+        card.hidden = true;
+      });
+    };
+    const openMulliganPreview = (cardId, { focus = true } = {}) => {
+      if (!mulliganPreview || !cardId) return;
+      const previewCard = mulliganPreview.querySelector(`[data-preview-card-id="${CSS.escape(cardId)}"]`);
+      if (!previewCard) return;
+      mulliganPreview.querySelectorAll("[data-preview-card-id]").forEach((card) => {
+        card.hidden = card !== previewCard;
+      });
+      mulliganPreview.hidden = false;
+      mulliganPreview.setAttribute("aria-hidden", "false");
+      if (focus) mulliganPreview.querySelector("[data-action='close-mulligan-preview']")?.focus();
+    };
+
+    this.element.querySelectorAll("[data-action='preview-mulligan']").forEach((button) => {
+      let hoverTimer = null;
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openMulliganPreview(button.dataset.cardId);
+      });
+      button.addEventListener("pointerenter", (event) => {
+        if (event.pointerType && event.pointerType !== "mouse") return;
+        hoverTimer = globalThis.setTimeout(() => {
+          openMulliganPreview(button.dataset.cardId, { focus: false });
+        }, 550);
+      });
+      button.addEventListener("pointerleave", () => {
+        if (hoverTimer !== null) globalThis.clearTimeout(hoverTimer);
+        hoverTimer = null;
+      });
+    });
+
+    this.element.querySelector("[data-action='close-mulligan-preview']")?.addEventListener("click", closeMulliganPreview);
+    mulliganPreview?.addEventListener("click", (event) => {
+      if (event.target === mulliganPreview) closeMulliganPreview();
+    });
+    mulliganPreview?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMulliganPreview();
+    });
+
     this.element.querySelectorAll("[data-action='toggle-mulligan']").forEach((button) => {
       button.addEventListener("click", async () => {
         try {

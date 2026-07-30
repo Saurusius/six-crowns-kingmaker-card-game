@@ -149,27 +149,66 @@
 
       <div class="scg-mulligan-grid">
         {{#each player.hand}}
-          <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}">
-            <span class="scg-card-art">
-              {{#if hasImage}}
-                <img src="{{image}}" alt="Illustration de {{name}}">
-              {{else}}
-                <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
-              {{/if}}
-              <span class="scg-strength">{{strength}}</span>
-              <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
-              <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
-            </span>
-            <span class="scg-card-body">
-              <strong class="scg-card-name">{{name}}</strong>
-              <span class="scg-effect-icons">
-                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+          <article class="scg-mulligan-card-wrap" data-mulligan-card-id="{{id}}">
+            <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}">
+              <span class="scg-card-art">
+                {{#if hasImage}}
+                  <img src="{{image}}" alt="Illustration de {{name}}">
+                {{else}}
+                  <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
+                {{/if}}
+                <span class="scg-strength">{{strength}}</span>
+                <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+                <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
               </span>
-              <small class="scg-card-effect">{{effectText}}</small>
-              <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
-            </span>
-          </button>
+              <span class="scg-card-body">
+                <strong class="scg-card-name">{{name}}</strong>
+                <span class="scg-effect-icons">
+                  {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                </span>
+                <small class="scg-card-effect">{{effectText}}</small>
+                <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              class="scg-mulligan-preview-trigger"
+              data-action="preview-mulligan"
+              data-card-id="{{id}}"
+              title="Prévisualiser {{name}}"
+              aria-label="Prévisualiser {{name}}"
+            ><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+          </article>
         {{/each}}
+      </div>
+
+      <div class="scg-mulligan-preview-backdrop" data-mulligan-preview hidden tabindex="-1" aria-hidden="true">
+        <div class="scg-mulligan-preview-dialog" role="dialog" aria-modal="true" aria-label="Prévisualisation de la carte">
+          <button type="button" class="scg-mulligan-preview-close" data-action="close-mulligan-preview" title="Fermer la prévisualisation" aria-label="Fermer la prévisualisation"><i class="fa-solid fa-xmark"></i></button>
+          {{#each player.hand}}
+            <article class="scg-card scg-mulligan-preview-card {{factionClass}} {{rarityClass}}" data-preview-card-id="{{id}}" hidden>
+              <div class="scg-mulligan-preview-art">
+                {{#if hasImage}}
+                  <img src="{{image}}" alt="Illustration de {{name}}">
+                {{else}}
+                  <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
+                {{/if}}
+                <span class="scg-strength">{{strength}}</span>
+                <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+                <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+              </div>
+              <div class="scg-mulligan-preview-body">
+                <span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span>
+                <h3>{{name}}</h3>
+                <p class="scg-mulligan-preview-meta"><strong>Ligne(s) :</strong> {{rowSummary}} · <strong>Force :</strong> {{strength}}</p>
+                <div class="scg-mulligan-preview-traits">
+                  {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                </div>
+                <p class="scg-mulligan-preview-effect">{{effectText}}</p>
+              </div>
+            </article>
+          {{/each}}
+        </div>
       </div>
 
       <div class="scg-mulligan-footer">

@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 0.7.12 — Lignes de bataille recalibrées
+
+- ajout d’une prévisualisation agrandie des cartes pendant le choix de la main, accessible au clic ou après un survol prolongé de la loupe ;
+
+- le champ de bataille répartit désormais sa hauteur en deux camps de taille identique ;
+- chaque camp réserve exactement un tiers de son espace à chacune des trois lignes ;
+- réduction contrôlée de la hauteur des cartes du plateau afin qu’elles restent dans leur ligne ;
+- diminution des marges, des pictogrammes et des libellés de ligne sans supprimer d’information ;
+- suppression du retour à la ligne des cartes sur le plateau pour éviter les débordements verticaux ;
+- séparateur central aminci et espacement vertical régularisé.
+
 ## 0.7.11 — Interface resserrée et infobulles disciplinées
 
 - les infobulles de traits masquent désormais temporairement la fiche détaillée de la carte afin d’éviter tout chevauchement ;
