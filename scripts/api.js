@@ -5,6 +5,8 @@ import {
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  executeTrade,
+  recycleCardsForBooster,
   resetCollectionForUser
 } from "./boosters.js";
 import {
@@ -40,6 +42,8 @@ export {
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  executeTrade,
+  recycleCardsForBooster,
   openCollection,
   openDeckBuilder,
   renameCustomDeck,

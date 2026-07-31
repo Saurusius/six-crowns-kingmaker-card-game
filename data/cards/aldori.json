@@ -3,13 +3,15 @@
     "id": "AL-01",
     "name": "Jamandi Aldori, Première Épée",
     "faction": "aldori",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare",
+    "text": "Carte unique. Personnage majeur de sa collection.",
+    "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/full.webp",
@@ -21,13 +23,15 @@
     "id": "AL-02",
     "name": "Jamandi Aldori, Hôtesse de Restov",
     "faction": "aldori",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare",
+    "text": "Carte unique. Personnage majeur de sa collection.",
+    "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/full.webp",

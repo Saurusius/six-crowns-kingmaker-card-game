@@ -1,5 +1,16 @@
 # Journal des versions
 
+## 0.8.0 — Collections, échanges et boosters animés
+
+- rareté affichée par une icône seule dans les collections ;
+- prévisualisation plein écran des cartes ;
+- suppression du type Chef et conversion des anciennes cartes Chef en cartes uniques jouables ;
+- échange de cartes entre joueurs avec acceptation et validation par un MJ actif ;
+- recyclage de 10 cartes contre un ticket de booster ;
+- animation d’ouverture de booster et effet spécial pour une carte Unique ;
+- limite de 3 exemplaires par carte et de 2 cartes Unique par deck ;
+- règlement mis à jour.
+
 ## 0.7.19 — Premier lot d’illustrations intégré
 
 - intégration de 20 premières illustrations de cartes fournies par l’utilisateur ;

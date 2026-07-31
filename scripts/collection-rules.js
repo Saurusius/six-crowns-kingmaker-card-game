@@ -21,6 +21,8 @@ export const ROW_DETAILS = Object.freeze({
 });
 
 export const CUSTOM_DECK_SIZE = 20;
+export const MAX_COPIES_PER_CARD = 3;
+export const MAX_UNIQUE_CARDS = 2;
 
 export function isPlayableCard(card) {
   return card?.kind === "unit"
@@ -124,7 +126,7 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
     .filter((card) => (normalizedCollection[card.id]?.count ?? 0) > 0)
     .map((card) => {
       const ownedCount = normalizedCollection[card.id]?.count ?? 0;
-      const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
+      const maxCopies = Math.min(MAX_COPIES_PER_CARD, Math.max(1, Number.parseInt(card.maxCopies ?? MAX_COPIES_PER_CARD, 10) || MAX_COPIES_PER_CARD));
       const inDeck = normalizedDeck[card.id] ?? 0;
       const allowedCopies = Math.min(ownedCount, maxCopies);
       const availableCount = Math.max(0, allowedCopies - inDeck);
@@ -176,8 +178,9 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       };
     }
 
+    if (card.rarity === "unique") uniqueCount += count;
     const ownedCount = normalizedCollection[cardId]?.count ?? 0;
-    const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
+    const maxCopies = Math.min(MAX_COPIES_PER_CARD, Math.max(1, Number.parseInt(card.maxCopies ?? MAX_COPIES_PER_CARD, 10) || MAX_COPIES_PER_CARD));
     const allowedCopies = Math.min(ownedCount, maxCopies);
     const faction = FACTION_DETAILS[card.faction] ?? { label: card.faction, symbol: "?" };
     const rarity = RARITY_DETAILS[card.rarity] ?? { label: card.rarity };
@@ -286,6 +289,8 @@ export function validateCustomDeck({ name, cards }, catalog = [], collection = {
   if (total < CUSTOM_DECK_SIZE) errors.push(`Il manque ${CUSTOM_DECK_SIZE - total} carte(s) : le deck doit en contenir exactement ${CUSTOM_DECK_SIZE}.`);
   if (total > CUSTOM_DECK_SIZE) errors.push(`Retirez ${total - CUSTOM_DECK_SIZE} carte(s) : le deck doit en contenir exactement ${CUSTOM_DECK_SIZE}.`);
 
+  let uniqueCount = 0;
+
   for (const [cardId, count] of Object.entries(normalizedCards)) {
     const card = catalogById.get(cardId);
     if (!card) {
@@ -298,10 +303,12 @@ export function validateCustomDeck({ name, cards }, catalog = [], collection = {
     }
 
     const ownedCount = normalizedCollection[cardId]?.count ?? 0;
-    const maxCopies = Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1);
+    const maxCopies = Math.min(MAX_COPIES_PER_CARD, Math.max(1, Number.parseInt(card.maxCopies ?? MAX_COPIES_PER_CARD, 10) || MAX_COPIES_PER_CARD));
     if (count > ownedCount) errors.push(`${card.name} : vous utilisez ${count} exemplaire(s), mais vous n’en possédez que ${ownedCount}.`);
     if (count > maxCopies) errors.push(`${card.name} : ${count} utilisée(s), alors que la limite est de ${maxCopies}.`);
   }
+
+  if (uniqueCount > MAX_UNIQUE_CARDS) errors.push(`Le deck contient ${uniqueCount} cartes uniques : maximum ${MAX_UNIQUE_CARDS}.`);
 
   return {
     valid: errors.length === 0,

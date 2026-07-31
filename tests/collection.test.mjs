@@ -68,14 +68,14 @@ test("le constructeur ne propose que les cartes jouables possédées", () => {
   assert.equal(cards.find((card) => card.id === "SC-X").inDeck, 2);
 });
 
-test("un deck personnalisé peut mélanger plusieurs collections et doit contenir vingt cartes", () => {
+test("un deck refuse plus de trois exemplaires de la même carte", () => {
   const validation = validateCustomDeck({
     name: "Alliance improbable",
     cards: { "SC-X": 10, "AL-X": 10 }
   }, catalog, collection);
-  assert.equal(validation.valid, true);
+  assert.equal(validation.valid, false);
   assert.equal(validation.total, 20);
-  assert.equal(countDeckCards(validation.cards), 20);
+  assert.match(validation.errors.join(" "), /limite est de 3/);
 });
 
 test("un deck ne peut pas utiliser plus de cartes que la collection personnelle", () => {

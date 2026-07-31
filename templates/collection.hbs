@@ -65,6 +65,23 @@
     <button type="button" class="scg-filter-reset" data-action="reset-filters"><i class="fa-solid fa-filter-circle-xmark"></i> Réinitialiser</button>
   </section>
 
+
+  <section class="scg-exchange-tools">
+    <h2><i class="fa-solid fa-arrows-rotate"></i> Échanges et recyclage</h2>
+    <div class="scg-recycle-grid">
+      {{#each ownedCards}}<label><span>{{name}} (×{{count}})</span><input type="number" min="0" max="{{count}}" value="0" data-recycle-count data-card-id="{{id}}"></label>{{/each}}
+    </div>
+    <button type="button" data-action="recycle-cards"><i class="fa-solid fa-ticket"></i> Échanger exactement 10 cartes contre 1 ticket</button>
+    <div class="scg-trade-grid">
+      <select name="trade-user"><option value="">Joueur destinataire…</option>{{#each tradeUsers}}<option value="{{id}}">{{name}}</option>{{/each}}</select>
+      <select name="trade-offered"><option value="">Carte proposée…</option>{{#each ownedCards}}<option value="{{id}}">{{name}} (×{{count}})</option>{{/each}}</select>
+      <input name="trade-offered-count" type="number" min="1" value="1">
+      <select name="trade-requested"><option value="">Carte demandée…</option>{{#each gmCards}}<option value="{{id}}">{{name}}</option>{{/each}}</select>
+      <input name="trade-requested-count" type="number" min="1" value="1">
+      <button type="button" data-action="propose-trade"><i class="fa-solid fa-handshake"></i> Proposer l’échange</button>
+    </div>
+  </section>
+
   {{#if isGM}}
     <section class="scg-gm-tools">
       <header>
@@ -121,7 +138,7 @@
               data-rarity="{{filterRarity}}"
               data-rows="{{filterRows}}"
               data-ownership="{{ownershipState}}"
-              data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}">
+              data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
               {{#if discovered}}
                 <div class="scg-collection-card-art {{#if hasArt}}has-art{{/if}}">
                   {{#if hasArt}}
@@ -130,7 +147,7 @@
                     <span class="scg-collection-card-symbol">{{factionSymbol}}</span>
                   {{/if}}
                   {{#if playable}}<strong class="scg-collection-strength">{{strength}}</strong>{{/if}}
-                  <span class="scg-rarity-badge scg-rarity-{{rarity}}">{{rarityLabel}}</span>
+                  <span class="scg-rarity-dot scg-rarity-{{rarity}}" title="{{rarityLabel}}" aria-label="Rareté : {{rarityLabel}}"></span>
                 </div>
                 <div class="scg-collection-card-body">
                   <strong>{{name}}</strong>
@@ -144,6 +161,7 @@
                     {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                   </div>
                   {{#if text}}<p>{{text}}</p>{{/if}}
+                  <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
                   <footer>
                     <span>Possédée ×{{ownedCount}}</span>
                     <span>Maximum par deck : {{maxCopies}}</span>
@@ -168,4 +186,5 @@
       </section>
     {{/each}}
   </div>
+  <div class="scg-card-preview" data-card-preview hidden><button type="button" data-action="close-preview" aria-label="Fermer">×</button><div><img src="" alt=""><h2></h2><p></p></div></div>
 </section>

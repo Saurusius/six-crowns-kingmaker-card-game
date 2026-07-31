@@ -3,12 +3,14 @@
     "id": "AA-01",
     "name": "Nyrissa, Reine des Épines",
     "faction": "stolen-lands-arcana",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
+    "text": "Carte unique. Personnage majeur de sa collection.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
@@ -21,13 +23,15 @@
     "id": "AA-02",
     "name": "Le Roi-Lanterne",
     "faction": "stolen-lands-arcana",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "domaine"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare",
+    "text": "Carte unique. Personnage majeur de sa collection.",
+    "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/full.webp",

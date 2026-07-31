@@ -3,12 +3,14 @@
     "id": "KF-01",
     "name": "La Khanesse, Reine sans couronne",
     "faction": "iron-khans",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
+    "text": "Carte unique. Personnage majeur de sa collection.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
@@ -21,13 +23,15 @@
     "id": "KF-02",
     "name": "La Khanesse, Serment de Fer",
     "faction": "iron-khans",
-    "kind": "leader",
-    "rows": [],
-    "strength": null,
+    "kind": "unit",
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 8,
     "maxCopies": 1,
     "abilities": [],
-    "text": "Effet de chef réservé à une version ultérieure.",
-    "rarity": "rare",
+    "text": "Carte unique. Personnage majeur de sa collection.",
+    "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": null,

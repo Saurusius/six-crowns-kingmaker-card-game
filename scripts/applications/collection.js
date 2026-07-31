@@ -6,6 +6,7 @@ import {
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  recycleCardsForBooster,
   resetCollectionForUser
 } from "../boosters.js";
 import {
@@ -121,6 +122,8 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       completionPercent: total > 0 ? Math.round((discovered / total) * 100) : 0,
       boosterCredits,
       canOpenBooster: game.user.isGM || boosterCredits > 0,
+      tradeUsers: users.filter(user => user.id !== game.user.id).map(user => ({ id:user.id, name:user.name })),
+      ownedCards: catalog.filter(card => (collection[card.id]?.count ?? 0) > 0).map(card => ({ id:card.id, name:card.name, count:collection[card.id].count })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
@@ -223,6 +226,34 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
         console.error(`${MODULE_TITLE} | Booster impossible`, error);
         ui.notifications.error(error.message);
       }
+    });
+
+    this.element.querySelectorAll("[data-action='preview-card']").forEach((button) => button.addEventListener("click", () => {
+      const card = button.closest("[data-collection-card]");
+      const modal = this.element.querySelector("[data-card-preview]");
+      modal.querySelector("img").src = card.dataset.art || "";
+      modal.querySelector("h2").textContent = card.dataset.name || "Carte";
+      modal.querySelector("p").textContent = card.dataset.text || "";
+      modal.hidden = false;
+    }));
+    this.element.querySelectorAll("[data-action='close-preview']").forEach((button)=>button.addEventListener("click",()=>{ this.element.querySelector("[data-card-preview]").hidden=true; }));
+
+    this.element.querySelector("[data-action='recycle-cards']")?.addEventListener("click", async () => {
+      const selected=[];
+      this.element.querySelectorAll("[data-recycle-count]").forEach(input=>{ for(let i=0;i<(parseInt(input.value,10)||0);i++) selected.push(input.dataset.cardId); });
+      try { await recycleCardsForBooster(selected); ui.notifications.info("10 cartes recyclées : 1 ticket de booster obtenu."); await this.render({force:true}); }
+      catch(error){ ui.notifications.warn(error.message); }
+    });
+
+    this.element.querySelector("[data-action='propose-trade']")?.addEventListener("click", async () => {
+      const toUserId=this.element.querySelector("[name='trade-user']")?.value;
+      const offeredId=this.element.querySelector("[name='trade-offered']")?.value;
+      const requestedId=this.element.querySelector("[name='trade-requested']")?.value;
+      const offeredCount=Math.max(1,parseInt(this.element.querySelector("[name='trade-offered-count']")?.value,10)||1);
+      const requestedCount=Math.max(1,parseInt(this.element.querySelector("[name='trade-requested-count']")?.value,10)||1);
+      if(!toUserId||!offeredId||!requestedId) return ui.notifications.warn("Complétez l’offre d’échange.");
+      game.socket.emit(`module.${MODULE_ID}`, { type:"trade-proposal", fromUserId:game.user.id, toUserId, offered:{[offeredId]:offeredCount}, requested:{[requestedId]:requestedCount} });
+      ui.notifications.info("Proposition d’échange envoyée.");
     });
 
     this.element.querySelector("[data-action='open-deck-builder']")?.addEventListener("click", async () => {

@@ -254,9 +254,62 @@ export async function openBooster({ random = Math.random, user = null, userId = 
     console.error(`${MODULE_TITLE} | Publication du booster dans le chat impossible`, error);
   }
 
+  if (targetUser.id === game.user.id) animateBooster(booster);
   const suffix = targetUser.id === game.user.id ? "votre collection" : `la collection de ${targetUser.name}`;
   ui.notifications.info(`Booster ouvert : 5 cartes ajoutées à ${suffix}.`);
   return booster;
+}
+
+export async function recycleCardsForBooster(cardIds = []) {
+  const targetUser = resolveUser();
+  const ids = Array.isArray(cardIds) ? cardIds : [];
+  if (ids.length !== 10) throw new Error("Sélectionnez exactement 10 exemplaires à recycler.");
+  const collection = await getCollection({ user: targetUser });
+  const requested = {};
+  for (const id of ids) requested[id] = (requested[id] ?? 0) + 1;
+  for (const [id, count] of Object.entries(requested)) {
+    if ((collection[id]?.count ?? 0) < count) throw new Error(`Vous ne possédez pas assez d’exemplaires de ${collection[id]?.name ?? id}.`);
+  }
+  for (const [id, count] of Object.entries(requested)) {
+    collection[id].count -= count;
+    if (collection[id].count <= 0) delete collection[id];
+  }
+  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
+  const credits = await setBoosterCredits(targetUser, (await getBoosterCredits({ user: targetUser })) + 1);
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
+  return { credits };
+}
+
+export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {} } = {}) {
+  if (!game.user.isGM) throw new Error("Un MJ actif doit valider l’échange.");
+  const fromUser = game.users.get(fromUserId);
+  const toUser = game.users.get(toUserId);
+  if (!fromUser || !toUser || fromUser.id === toUser.id) throw new Error("Joueurs invalides.");
+  const fromCollection = await getCollection({ user: fromUser });
+  const toCollection = await getCollection({ user: toUser });
+  const normalize = value => Object.fromEntries(Object.entries(value ?? {}).map(([id,c])=>[id,Math.max(0,parseInt(c,10)||0)]).filter(([,c])=>c>0));
+  const give = normalize(offered), take = normalize(requested);
+  for (const [id,count] of Object.entries(give)) if ((fromCollection[id]?.count ?? 0) < count) throw new Error(`${fromUser.name} ne possède plus assez de ${id}.`);
+  for (const [id,count] of Object.entries(take)) if ((toCollection[id]?.count ?? 0) < count) throw new Error(`${toUser.name} ne possède plus assez de ${id}.`);
+  const move=(source,target,items)=>{ for(const [id,count] of Object.entries(items)){ const entry=source[id]; source[id].count-=count; target[id]={...(target[id]??entry),count:(target[id]?.count??0)+count}; if(source[id].count<=0) delete source[id]; }};
+  move(fromCollection,toCollection,give); move(toCollection,fromCollection,take);
+  await fromUser.setFlag(MODULE_ID,COLLECTION_FLAG,fromCollection);
+  await toUser.setFlag(MODULE_ID,COLLECTION_FLAG,toCollection);
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, fromCollection, fromUser.id);
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, toCollection, toUser.id);
+  return true;
+}
+
+function animateBooster(cards) {
+  if (typeof document === "undefined") return;
+  const unique = cards.some(card => card.rarity === "unique");
+  const overlay = document.createElement("div");
+  overlay.className = `scg-booster-opening${unique ? " has-unique" : ""}`;
+  overlay.innerHTML = `<div class="scg-booster-pack"><i class="fa-solid fa-box-open"></i><strong>Ouverture du booster…</strong></div><div class="scg-booster-reveal">${cards.map((card,index)=>`<article class="scg-reveal-card scg-rarity-${card.rarity}" style="--delay:${index}"><img src="${card.artMedium ?? card.artFull ?? ''}" alt=""><strong>${escapeHtml(card.name)}</strong></article>`).join('')}</div>${unique ? '<div class="scg-unique-flash">CARTE UNIQUE !</div>' : ''}<button type="button">Continuer</button>`;
+  document.body.appendChild(overlay);
+  const close=()=>overlay.remove(); overlay.querySelector('button').addEventListener('click',close);
+  setTimeout(()=>overlay.classList.add('is-revealed'),150);
+  setTimeout(close, unique ? 9000 : 7000);
 }
 
 export async function createBoosterMacro() {

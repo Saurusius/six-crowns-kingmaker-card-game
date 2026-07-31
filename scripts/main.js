@@ -11,6 +11,7 @@ import {
   loadCardCatalog,
   openBoard,
   openBooster,
+  executeTrade,
   openCollection,
   openDeckBuilder,
   renameCustomDeck,
@@ -21,6 +22,7 @@ import {
 const api = Object.freeze({
   openBoard,
   openBooster,
+  executeTrade,
   openCollection,
   openDeckBuilder,
   getBoosterCredits,
@@ -101,4 +103,19 @@ Hooks.on("chatMessage", (_chatLog, message) => {
     return false;
   }
   return true;
+});
+
+Hooks.once("ready", () => {
+  game.socket.on(`module.${MODULE_ID}`, async data => {
+    if (data.type === "trade-proposal" && data.toUserId === game.user.id) {
+      const from = game.users.get(data.fromUserId);
+      const accepted = await Dialog.confirm({ title:"Proposition d’échange", content:`<p><strong>${from?.name ?? "Un joueur"}</strong> vous propose un échange de cartes.</p><p>Accepter cette transaction ?</p>` });
+      if (accepted) game.socket.emit(`module.${MODULE_ID}`, { ...data, type:"trade-accepted" });
+    }
+    if (data.type === "trade-accepted" && game.user.isGM) {
+      try { await executeTrade(data); game.socket.emit(`module.${MODULE_ID}`, { type:"trade-complete", users:[data.fromUserId,data.toUserId] }); }
+      catch(error){ ui.notifications.error(error.message); }
+    }
+    if (data.type === "trade-complete" && data.users.includes(game.user.id)) ui.notifications.info("Échange de cartes terminé.");
+  });
 });
