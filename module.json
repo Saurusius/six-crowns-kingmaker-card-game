@@ -2,7 +2,7 @@
     "id":  "six-crowns-kingmaker-card-game",
     "title":  "Le Jeu des Six Couronnes",
     "description":  "Jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspirÃ© des Terres DÃ©robÃ©es.",
-    "version":  "0.10.0",
+    "version":  "0.10.1",
     "authors":  [
                     {
                         "name":  "Saurusius",
@@ -35,5 +35,5 @@
     "url":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game",
     "license":  "LICENSE",
     "manifest":  "https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json",
-    "download":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.10.0/six-crowns-kingmaker-card-game-v0.10.0.zip"
+    "download":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.10.1/six-crowns-kingmaker-card-game-v0.10.1.zip"
 }

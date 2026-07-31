@@ -7,6 +7,7 @@ import {
   createBoardViewModel,
   createPrototypeState,
   lockEventSpellSelection,
+  prepareEventSpellSelection,
   selectEventSpell,
   startMatch,
   startNextRound
@@ -17,6 +18,7 @@ const fixedRandom = () => 0.2;
 
 function playingState(spellId) {
   const state = createPrototypeState();
+  prepareEventSpellSelection(state);
   selectEventSpell(state, spellId);
   lockEventSpellSelection(state, fixedRandom);
   startMatch(state, { playerDeckId: "six-crowns", opponentDeckId: "aldori", random: fixedRandom });
@@ -42,14 +44,20 @@ function card(id, strength, extra = {}) {
   };
 }
 
-test("le sortilège est verrouillé avant le choix des decks et le choix adverse reste secret", () => {
+test("le sortilège est choisi après les decks et avant le lancer de pièce", () => {
   const state = createPrototypeState();
+  assert.equal(state.phase, PHASES.DECK_SELECTION);
+  prepareEventSpellSelection(state);
+  assert.equal(state.phase, PHASES.SPELL_SELECTION);
   selectEventSpell(state, "EV-TD-01");
   lockEventSpellSelection(state, fixedRandom);
-  assert.equal(state.phase, PHASES.DECK_SELECTION);
+  assert.equal(state.phase, PHASES.SPELL_SELECTION);
+  assert.equal(state.spellsLocked, true);
   assert.equal(state.spells.player.id, "EV-TD-01");
   assert.ok(EVENT_SPELL_IDS.includes(state.spells.opponent.id));
   assert.equal(state.spells.opponent.revealed, false);
+  startMatch(state, { random: fixedRandom });
+  assert.equal(state.phase, PHASES.COIN_TOSS);
 });
 
 test("le booster Terres Dérobées contient exactement une carte parmi les cinq dorées", () => {

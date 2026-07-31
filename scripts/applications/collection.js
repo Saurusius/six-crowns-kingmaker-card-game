@@ -217,7 +217,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       comparisonCount: comparisonCards.length,
       hasComparison: comparisonCards.length > 0,
       comparisonFull: comparisonCards.length >= 2,
-      optionsToggleLabel: this.compactOptions ? "Agrandir les options" : "Réduire les options",
+      optionsToggleLabel: this.compactOptions ? "Afficher les options" : "Réduire les options",
       optionsToggleIcon: this.compactOptions ? "fa-solid fa-expand" : "fa-solid fa-compress",
       search: this.search,
       factionFilter: this.factionFilter,

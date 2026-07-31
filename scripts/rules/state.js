@@ -106,7 +106,7 @@ const RULEBOOK = Object.freeze([
   {
     title: "Sortilèges événementiels",
     items: [
-      "Chaque joueur choisit secrètement un seul sortilège avant le choix des decks et avant le lancer de pièce.",
+      "Chaque joueur choisit secrètement un seul sortilège après avoir sélectionné les decks et avant le lancer de pièce.",
       "Le sortilège équipé ne fait pas partie du deck et ne peut être activé qu’une seule fois pendant la partie.",
       "L’activation se fait pendant votre tour, avant de jouer une carte ou de passer, selon les cibles indiquées.",
       "Un sortilège peut invoquer une carte, modifier une ligne, agir sur la défausse ou changer le calcul du score.",
@@ -197,13 +197,14 @@ export function createPrototypeState() {
   return {
     matchId: null,
     round: 0,
-    phase: PHASES.SPELL_SELECTION,
+    phase: PHASES.DECK_SELECTION,
     selectedPlayerDeck: "six-crowns",
     selectedOpponentDeck: "aldori",
     spells: {
       player: { id: null, used: false, revealed: true },
       opponent: { id: null, used: false, revealed: false }
     },
+    spellsLocked: false,
     currentTurn: null,
     roundStarter: null,
     roundResult: null,
@@ -217,7 +218,7 @@ export function createPrototypeState() {
       face: null,
       winner: null
     },
-    message: "Choisissez secrètement un sortilège événementiel avant de découvrir les decks de la partie.",
+    message: "Choisissez les decks de la confrontation. Le sortilège sera sélectionné juste après, avant le lancer de pièce.",
     log: [],
     playedCards: [],
     analyticsRecorded: false,
@@ -304,26 +305,50 @@ export function ensureSpellState(state) {
   return state.spells;
 }
 
+export function prepareEventSpellSelection(state) {
+  if (state.phase !== PHASES.DECK_SELECTION) throw new Error("Le choix des decks est déjà terminé.");
+  if (!getDeckDefinition(state.selectedPlayerDeck) && state.selectedPlayerDeck !== RANDOM_DECK_ID) {
+    throw new Error("Sélectionnez un deck joueur valide.");
+  }
+  if (!getDeckDefinition(state.selectedOpponentDeck) && state.selectedOpponentDeck !== RANDOM_DECK_ID) {
+    throw new Error("Sélectionnez un deck adverse valide.");
+  }
+  ensureSpellState(state);
+  state.spellsLocked = false;
+  state.phase = PHASES.SPELL_SELECTION;
+  state.message = "Les decks sont sélectionnés. Choisissez maintenant un sortilège possédé avant le lancer de pièce.";
+  return state;
+}
+
+export function returnToDeckSelection(state) {
+  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Les decks ne peuvent plus être modifiés.");
+  state.spellsLocked = false;
+  state.phase = PHASES.DECK_SELECTION;
+  state.message = "Modifiez vos decks, puis confirmez-les pour choisir votre sortilège.";
+  return state;
+}
+
 export function selectEventSpell(state, spellId = null) {
-  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège est déjà verrouillé.");
+  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège n’est pas disponible maintenant.");
   if (spellId && !getEventSpellDefinition(spellId)) throw new Error("Ce sortilège événementiel n’existe pas.");
   ensureSpellState(state);
   state.spells.player = { id: spellId || null, used: false, revealed: true };
+  state.spellsLocked = false;
   state.message = spellId
-    ? `${getEventSpellDefinition(spellId).name} est sélectionné. Verrouillez votre choix pour continuer.`
-    : "Vous jouerez sans sortilège. Verrouillez votre choix pour continuer.";
+    ? `${getEventSpellDefinition(spellId).name} est sélectionné. Verrouillez votre choix pour passer au lancer de pièce.`
+    : "Vous jouerez sans sortilège. Verrouillez votre choix pour passer au lancer de pièce.";
   return state;
 }
 
 export function lockEventSpellSelection(state, random = Math.random) {
-  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège est déjà verrouillé.");
+  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège n’est pas disponible maintenant.");
   ensureSpellState(state);
   const opponentId = EVENT_SPELL_IDS[Math.floor(random() * EVENT_SPELL_IDS.length)] ?? null;
   state.spells.player.used = false;
   state.spells.player.revealed = true;
   state.spells.opponent = { id: opponentId, used: false, revealed: false };
-  state.phase = PHASES.DECK_SELECTION;
-  state.message = "Les sortilèges sont verrouillés. Choisissez maintenant les decks de la confrontation.";
+  state.spellsLocked = true;
+  state.message = "Les sortilèges sont verrouillés. Le lancer de pièce peut commencer.";
   return state;
 }
 
@@ -370,8 +395,10 @@ export function selectDeck(state, side, deckId) {
 }
 
 export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.random } = {}) {
-  if (state.phase === PHASES.SPELL_SELECTION) lockEventSpellSelection(state, random);
-  if (state.phase !== PHASES.DECK_SELECTION) throw new Error("La partie a déjà commencé.");
+  if (state.phase !== PHASES.SPELL_SELECTION) {
+    throw new Error("Choisissez d’abord les decks, puis un sortilège avant de lancer la partie.");
+  }
+  if (!state.spellsLocked) lockEventSpellSelection(state, random);
   const playerSelection = playerDeckId ?? state.selectedPlayerDeck;
   const opponentSelection = opponentDeckId ?? state.selectedOpponentDeck;
   const playerId = resolveDeckSelection(playerSelection, random);
@@ -406,7 +433,7 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   state.playedCards = [];
   state.analyticsRecorded = false;
   state.coin = { flipping: false, resolved: false, choice: null, face: null, winner: null };
-  state.message = "Les decks sont prêts. Lancez la pièce pour désigner le premier joueur.";
+  state.message = "Les decks et les sortilèges sont verrouillés. Lancez la pièce pour désigner le premier joueur.";
   recordLog(state, "match-start", `${state.player.name} affronte ${state.opponent.name}.`);
   return state;
 }
@@ -749,7 +776,7 @@ export function createRematchState(state, random = Math.random) {
   next.selectedPlayerDeck = state.selectedPlayerDeck;
   next.selectedOpponentDeck = state.selectedOpponentDeck;
   next.spells.player.id = state.spells?.player?.id ?? null;
-  next.message = "Choisissez ou confirmez votre sortilège pour la revanche.";
+  next.message = "Confirmez les decks de la revanche, puis choisissez votre sortilège avant le lancer de pièce.";
   return next;
 }
 

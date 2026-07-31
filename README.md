@@ -2,22 +2,25 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.10.0
+## Règles du prototype 0.10.1
 
-Avant de choisir son deck et avant le lancer de pièce, chaque joueur équipe secrètement **un seul sortilège événementiel** possédé dans sa collection. Ce sortilège reste caché à l’adversaire jusqu’à son activation et ne peut être utilisé qu’une seule fois pendant la partie.
+Chaque joueur choisit d’abord un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu.
 
-Chaque joueur choisit ensuite un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
+Après la validation des decks et avant le lancer de pièce, chaque joueur équipe secrètement **un seul sortilège événementiel** réellement possédé dans sa collection. Les sortilèges non obtenus ne sont ni proposés ni révélés. Le sortilège équipé reste caché à l’adversaire jusqu’à son activation et ne peut être utilisé qu’une seule fois pendant la partie.
 
-1. Les deux joueurs verrouillent secrètement leur sortilège événementiel.
-2. Le joueur choisit **Bouclier** ou **Épée**.
-3. Une pièce animée désigne le camp qui commence.
-4. Chaque camp joue une carte par tour, ou passe définitivement pour la manche.
-5. Les cartes sont placées sur **Avant-garde**, **Escarmouche** ou **Domaine**.
-6. Lorsque les deux camps ont passé ou n’ont plus de cartes, chaque ligne est comparée séparément.
-7. Le camp qui contrôle le plus de lignes remporte la manche.
-8. Si les deux camps contrôlent autant de lignes, la force totale départage la manche.
-9. Une égalité parfaite fait perdre une gemme à chaque camp.
-10. Le premier camp à faire tomber les deux gemmes adverses remporte la partie.
+Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
+
+1. Les deux joueurs choisissent et valident leur deck.
+2. Les deux joueurs verrouillent secrètement leur sortilège événementiel, ou choisissent de jouer sans sortilège.
+3. Le joueur choisit **Bouclier** ou **Épée**.
+4. Une pièce animée désigne le camp qui commence.
+5. Chaque camp joue une carte par tour, ou passe définitivement pour la manche.
+6. Les cartes sont placées sur **Avant-garde**, **Escarmouche** ou **Domaine**.
+7. Lorsque les deux camps ont passé ou n’ont plus de cartes, chaque ligne est comparée séparément.
+8. Le camp qui contrôle le plus de lignes remporte la manche.
+9. Si les deux camps contrôlent autant de lignes, la force totale départage la manche.
+10. Une égalité parfaite fait perdre une gemme à chaque camp.
+11. Le premier camp à faire tomber les deux gemmes adverses remporte la partie.
 
 Aucune carte supplémentaire n’est piochée entre les manches : la main initiale est une ressource pour toute la partie.
 
@@ -50,9 +53,18 @@ Le catalogue comprend désormais **165 cartes collectionnables** : 160 cartes de
 
 La rareté Dorée n’est pas une rareté de construction de deck : les sortilèges disposent de leur propre emplacement avant la partie. Les probabilités des boosters classiques restent indépendantes de la répartition du catalogue.
 
+## Nouveautés de la v0.10.1
+
+- ordre de préparation clarifié : **decks → sortilège → lancer de pièce** ;
+- sélection limitée aux sortilèges réellement possédés, sans spoiler les cartes manquantes ;
+- révélation des sortilèges maintenue jusqu’à dix secondes, avec fermeture anticipée possible ;
+- apparition centrale et mise en scène renforcée des sortilèges pendant les parties ;
+- carte unique des boosters événementiels centrée avec une révélation dorée dédiée ;
+- libellé **Afficher les options** et maintien permanent du bouton **Vue compacte / Vue détaillée**.
+
 ## Nouveautés de la v0.10.0
 
-- nouvelle phase de sélection secrète d’un sortilège avant le lancer de pièce et avant la découverte des decks ;
+- nouvelle phase de sélection secrète d’un sortilège après le choix des decks et avant le lancer de pièce ;
 - cinq cartes événementielles dorées dans la suite **Terres Dérobées** ;
 - activation unique par partie, ciblage interactif, révélation animée et état **Utilisé** ;
 - adversaire automatisé capable d’équiper et d’utiliser ses propres sortilèges ;

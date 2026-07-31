@@ -12,7 +12,7 @@
       <button type="button" class="scg-option-control" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
       <button type="button" class="scg-option-control" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
       <button type="button" class="scg-option-control" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
-      <button type="button" class="scg-option-control" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
+      <button type="button" class="scg-option-control scg-card-view-toggle" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
       <button type="button" data-action="toggle-options-size" aria-pressed="{{compactOptions}}"><i class="{{optionsToggleIcon}}"></i> {{optionsToggleLabel}}</button>
     </div>
   </header>

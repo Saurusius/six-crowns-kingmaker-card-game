@@ -19,7 +19,8 @@ import {
   createRematchState,
   ensureSpellState,
   getEventSpellActivationOptions,
-  lockEventSpellSelection,
+  prepareEventSpellSelection,
+  returnToDeckSelection,
   maybeUseOpponentEventSpell,
   passSide,
   playCard,
@@ -144,19 +145,22 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       getEventBoosterCredits(),
       getCollection()
     ]);
-    const eventSpellChoices = listEventSpellDefinitions().map((spell) => {
-      const ownedCount = Math.max(0, Number(collection?.[spell.id]?.count ?? 0));
-      const available = game.user.isGM || ownedCount > 0;
-      return {
-        ...spell,
-        ownedCount,
-        available,
-        selected: this.matchState.spells?.player?.id === spell.id,
-        artFull: spell.art.full,
-        artMedium: spell.art.medium,
-        availabilityLabel: available ? (game.user.isGM && ownedCount === 0 ? "Accès MJ" : `Possédée ×${ownedCount}`) : "Non possédée"
-      };
-    });
+    const eventSpellChoices = listEventSpellDefinitions()
+      .map((spell) => {
+        const ownedCount = Math.max(0, Number(collection?.[spell.id]?.count ?? 0));
+        return {
+          ...spell,
+          ownedCount,
+          available: ownedCount > 0,
+          selected: this.matchState.spells?.player?.id === spell.id,
+          artFull: spell.art.full,
+          artMedium: spell.art.medium,
+          availabilityLabel: `Possédée ×${ownedCount}`
+        };
+      })
+      .filter((spell) => spell.ownedCount > 0);
+    const selectedPlayerDeckDefinition = getDeckDefinition(this.matchState.selectedPlayerDeck);
+    const selectedOpponentDeckDefinition = getDeckDefinition(this.matchState.selectedOpponentDeck);
     return {
       ...view,
       ...resolveBoardProfiles(this.matchState),
@@ -164,6 +168,9 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       boosterCredits,
       eventBoosterCredits,
       eventSpellChoices,
+      hasOwnedEventSpells: eventSpellChoices.length > 0,
+      selectedPlayerDeckLabel: this.matchState.selectedPlayerDeck === "random" ? "Deck aléatoire" : selectedPlayerDeckDefinition?.name ?? "Deck joueur",
+      selectedOpponentDeckLabel: this.matchState.selectedOpponentDeck === "random" ? "Deck aléatoire" : selectedOpponentDeckDefinition?.name ?? "Deck adverse",
       noSpellSelected: !this.matchState.spells?.player?.id,
       selectedSpellLockedLabel: view.playerSpell?.equipped ? view.playerSpell.name : "Sans sortilège",
       canOpenEventBooster: game.user.isGM || eventBoosterCredits > 0,
@@ -277,16 +284,46 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   _showSpellReveal(result, side = "player") {
-    if (!result?.spell) return;
+    if (!result?.spell) return Promise.resolve();
     const escape = (value) => foundry.utils.escapeHTML(String(value ?? ""));
-    const overlay = document.createElement("div");
-    overlay.className = `scg-spell-reveal-overlay is-${side}`;
-    overlay.dataset.scgSpellOverlayOwner = this.id;
-    overlay.innerHTML = `<article class="scg-spell-reveal-card"><small>${side === "player" ? "Votre sortilège" : "Sortilège adverse révélé"}</small><img src="${escape(result.spell.art.full)}" alt=""><div><i class="${escape(result.spell.icon)}"></i><h2>${escape(result.spell.name)}</h2><p>${escape(result.message)}</p></div></article>`;
-    document.body.append(overlay);
-    const close = () => overlay.remove();
-    overlay.addEventListener("click", close);
-    globalThis.setTimeout(close, side === "opponent" ? 2200 : 1750);
+    return new Promise((resolve) => {
+      this._removeSpellOverlays();
+      const overlay = document.createElement("div");
+      overlay.className = `scg-spell-reveal-overlay is-${side}`;
+      overlay.dataset.scgSpellOverlayOwner = this.id;
+      overlay.innerHTML = `
+        <span class="scg-spell-reveal-aura" aria-hidden="true"></span>
+        <span class="scg-spell-reveal-runes" aria-hidden="true"><i></i><i></i><i></i></span>
+        <article class="scg-spell-reveal-card">
+          <small>${side === "player" ? "Votre sortilège" : "Sortilège adverse révélé"}</small>
+          <div class="scg-spell-reveal-art"><img src="${escape(result.spell.art.full)}" alt="Illustration de ${escape(result.spell.name)}"><span aria-hidden="true"></span></div>
+          <div class="scg-spell-reveal-copy"><i class="${escape(result.spell.icon)}"></i><h2>${escape(result.spell.name)}</h2><p>${escape(result.message)}</p><em data-spell-reveal-countdown>Fermeture automatique dans 10 s · cliquez pour fermer</em></div>
+        </article>`;
+      document.body.append(overlay);
+      let remaining = 10;
+      let closed = false;
+      const countdown = overlay.querySelector("[data-spell-reveal-countdown]");
+      const interval = globalThis.setInterval(() => {
+        remaining -= 1;
+        if (countdown && remaining > 0) countdown.textContent = `Fermeture automatique dans ${remaining} s · cliquez pour fermer`;
+      }, 1000);
+      const timer = globalThis.setTimeout(() => close(), 10000);
+      const close = () => {
+        if (closed) return;
+        closed = true;
+        globalThis.clearInterval(interval);
+        globalThis.clearTimeout(timer);
+        overlay.classList.add("is-closing");
+        globalThis.setTimeout(() => {
+          overlay.remove();
+          resolve();
+        }, 260);
+      };
+      overlay.addEventListener("click", close);
+      overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") close(); });
+      overlay.tabIndex = -1;
+      overlay.focus({ preventScroll: true });
+    });
   }
 
   _scheduleOpponentTurn() {
@@ -301,8 +338,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         const spellResult = maybeUseOpponentEventSpell(this.matchState);
         if (spellResult) {
           await this._renderState();
-          this._showSpellReveal(spellResult, "opponent");
-          await new Promise((resolve) => globalThis.setTimeout(resolve, 950));
+          await this._showSpellReveal(spellResult, "opponent");
         }
         if (this.matchState.phase === PHASES.PLAYING && this.matchState.currentTurn === "opponent") {
           takeOpponentTurn(this.matchState);
@@ -353,7 +389,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
           const choice = context.eventSpellChoices?.find((entry) => entry.id === selectedId);
           if (!choice?.available) throw new Error("Vous devez posséder ce sortilège pour l’équiper.");
         }
-        lockEventSpellSelection(this.matchState);
+        startMatch(this.matchState, {
+          playerDeckId: this.matchState.selectedPlayerDeck,
+          opponentDeckId: this.matchState.selectedOpponentDeck
+        });
+        await this._renderState();
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='back-to-decks']")?.addEventListener("click", async () => {
+      try {
+        returnToDeckSelection(this.matchState);
         await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
@@ -389,7 +437,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         const opponentDeckId = this.element.querySelector("[name='opponent-deck']")?.value;
         selectDeck(this.matchState, "player", playerDeckId);
         selectDeck(this.matchState, "opponent", opponentDeckId);
-        startMatch(this.matchState, { playerDeckId, opponentDeckId });
+        prepareEventSpellSelection(this.matchState);
         await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
@@ -538,7 +586,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!payload) return;
         const result = activateEventSpell(this.matchState, "player", payload);
         await this._renderState();
-        this._showSpellReveal(result, "player");
+        await this._showSpellReveal(result, "player");
       } catch (error) {
         ui.notifications.warn(error.message);
       }

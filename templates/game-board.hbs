@@ -47,11 +47,17 @@
     <section class="scg-setup-panel scg-spell-selection-panel">
       <div class="scg-setup-heading scg-spell-selection-heading">
         <div>
-          <small>Avant les decks et le lancer de pièce</small>
+          <small>Après les decks · avant le lancer de pièce</small>
           <h2>Choisissez votre sortilège</h2>
-          <p>Votre choix sera verrouillé avant de connaître le deck adverse. Une seule activation sera possible pendant toute la partie.</p>
+          <p>Les decks sont maintenant sélectionnés. Choisissez secrètement un sortilège de votre collection ; une seule activation sera possible pendant toute la partie.</p>
         </div>
         <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> Terres Dérobées · 5 cartes dorées</span>
+      </div>
+
+      <div class="scg-selected-decks-summary">
+        <article><i class="fa-solid fa-crown"></i><span><small>Votre deck</small><strong>{{selectedPlayerDeckLabel}}</strong></span></article>
+        <i class="fa-solid fa-arrow-right"></i>
+        <article><i class="fa-solid fa-chess-knight"></i><span><small>Deck adverse</small><strong>{{selectedOpponentDeckLabel}}</strong></span></article>
       </div>
 
       <div class="scg-spell-choice-grid">
@@ -61,7 +67,7 @@
           <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
         </button>
         {{#each eventSpellChoices}}
-          <button type="button" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}} {{#unless available}}is-locked{{/unless}}" data-action="select-event-spell" data-spell-id="{{id}}" {{#unless available}}disabled{{/unless}}>
+          <button type="button" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}}" data-action="select-event-spell" data-spell-id="{{id}}">
             <span class="scg-spell-choice-art"><img src="{{artMedium}}" alt="Illustration de {{name}}"></span>
             <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p>{{text}}</p></span>
             <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
@@ -69,14 +75,19 @@
         {{/each}}
       </div>
 
+      {{#unless hasOwnedEventSpells}}
+        <div class="scg-spell-empty-state"><i class="fa-solid fa-lock"></i><div><strong>Aucun sortilège possédé</strong><p>Les cartes non obtenues restent entièrement secrètes. Ouvrez un booster événementiel ou consultez votre collection pour en débloquer.</p></div></div>
+      {{/unless}}
+
       <div class="scg-spell-selection-note">
         <i class="fa-solid fa-user-secret"></i>
         <span><strong>Choix secret</strong> Le sortilège adverse sera lui aussi verrouillé maintenant, puis restera face cachée jusqu’à son activation.</span>
       </div>
       <div class="scg-setup-actions">
+        <button class="scg-secondary-button" type="button" data-action="back-to-decks"><i class="fa-solid fa-arrow-left"></i> Modifier les decks</button>
         <button class="scg-secondary-button" type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{eventBoosterButtonLabel}}</button>
         <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Voir la collection</button>
-        <button class="scg-primary-button" type="button" data-action="lock-event-spell"><i class="fa-solid fa-lock"></i> Verrouiller et choisir les decks</button>
+        <button class="scg-primary-button" type="button" data-action="lock-event-spell"><i class="fa-solid fa-coins"></i> Verrouiller et passer au lancer de pièce</button>
       </div>
     </section>
   {{/if}}
@@ -92,16 +103,12 @@
         <span class="scg-deck-rule-chip"><i class="fa-solid fa-layer-group"></i> 20 cartes par deck</span>
       </div>
 
-      <div class="scg-locked-spells-summary">
-        <article class="is-player">
-          {{#if playerSpell.equipped}}<img src="{{playerSpell.artThumb}}" alt="">{{else}}<span><i class="fa-solid fa-ban"></i></span>{{/if}}
-          <div><small>Votre choix verrouillé</small><strong>{{selectedSpellLockedLabel}}</strong><em>Une utilisation maximum</em></div>
-        </article>
-        <i class="fa-solid fa-lock"></i>
-        <article class="is-opponent">
-          <img src="{{opponentSpell.artThumb}}" alt="Dos du sortilège adverse">
-          <div><small>Choix adverse</small><strong>Sortilège secret</strong><em>Révélé à l’activation</em></div>
-        </article>
+      <div class="scg-setup-sequence" aria-label="Étapes de préparation">
+        <span class="is-current"><i class="fa-solid fa-layer-group"></i> 1. Decks</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span><i class="fa-solid fa-wand-sparkles"></i> 2. Sortilège</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span><i class="fa-solid fa-coins"></i> 3. Lancer de pièce</span>
       </div>
 
       <div class="scg-deck-choice-columns">
@@ -140,7 +147,7 @@
         <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
         <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Ma collection</button>
         <button class="scg-secondary-button" type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Mes decks</button>
-        <button class="scg-primary-button" type="button" data-action="start-game"><i class="fa-solid fa-play"></i> Préparer la partie</button>
+        <button class="scg-primary-button" type="button" data-action="start-game"><i class="fa-solid fa-wand-sparkles"></i> Valider les decks et choisir un sortilège</button>
       </div>
     </section>
   {{/if}}

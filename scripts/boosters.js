@@ -594,7 +594,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   const hasGolden = eventMode || highestRarity === "doree";
   const themeRarity = hasGolden ? "golden" : hasUnique ? "unique" : highestRarity === "rare" ? "rare" : "neutral";
   const overlay = document.createElement("div");
-  overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}${hasGolden ? " has-golden" : ""}`;
+  overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}${hasGolden ? " has-golden" : ""}${eventMode ? " is-event-booster" : ""}`;
   overlay.dataset.highestRarity = highestRarity;
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
@@ -612,12 +612,13 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
       <span class="scg-pack-sigil"><i class="fa-solid fa-crown"></i></span>
     </div>
     <section class="scg-booster-results" aria-live="polite">
+      ${eventMode ? `<div class="scg-event-reveal-emblem" aria-hidden="true"><i class="fa-solid fa-crown"></i><span></span></div>` : ""}
       <header>
-        <span><i class="fa-solid fa-star"></i></span>
+        <span><i class="fa-solid ${eventMode ? "fa-crown" : "fa-star"}"></i></span>
         <div>
           <small>${escapeHtml(boosterLabel)} · ${packIndex} / ${totalPacks}</small>
-          <h2>Révélation des cartes</h2>
-          <p class="scg-booster-progress" data-reveal-status>La magie se rassemble…</p>
+          <h2>${eventMode ? "Révélation événementielle" : "Révélation des cartes"}</h2>
+          <p class="scg-booster-progress" data-reveal-status>${eventMode ? "Une carte dorée émerge des Terres Dérobées…" : "La magie se rassemble…"}</p>
         </div>
       </header>
       <div class="scg-booster-reveal scg-booster-reveal--count-${orderedCards.length}">
@@ -766,7 +767,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     resultsShown = true;
     overlay.classList.remove("is-pack-charged", "is-pack-burst");
     overlay.classList.add("is-results");
-    if (status) status.textContent = `Révélation 1 / ${orderedCards.length}…`;
+    if (status) status.textContent = eventMode ? "La carte dorée se révèle…" : `Révélation 1 / ${orderedCards.length}…`;
     schedule(revealNext, 520);
   };
 

@@ -8538,3 +8538,511 @@ body.scg-booster-open {
   .scg-spell-reveal-card img { width:100%; height:auto; max-height:56vh; }
   .scg-spell-reveal-card > small { position:static; transform:none; text-align:center; }
 }
+
+/* v0.10.1 — options de collection et préparation deck → sortilège */
+.scg-collection-shell.is-options-compact .scg-profile-actions .scg-card-view-toggle {
+  display: inline-flex !important;
+}
+
+.scg-setup-sequence,
+.scg-selected-decks-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(216, 178, 83, .24);
+  border-radius: 10px;
+  background: rgba(11, 11, 14, .62);
+}
+
+.scg-setup-sequence > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #a99d84;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.scg-setup-sequence > span.is-current {
+  color: #ffe5a0;
+  text-shadow: 0 0 12px rgba(242, 198, 87, .36);
+}
+
+.scg-setup-sequence > i {
+  color: rgba(226, 190, 99, .48);
+  font-size: .64rem;
+}
+
+.scg-selected-decks-summary {
+  width: min(760px, 100%);
+  margin-inline: auto;
+  background: linear-gradient(135deg, rgba(58, 39, 11, .48), rgba(10, 11, 15, .86));
+}
+
+.scg-selected-decks-summary article {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.scg-selected-decks-summary article > i {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(242, 198, 87, .38);
+  border-radius: 50%;
+  color: #f2c657;
+  background: rgba(64, 42, 10, .48);
+}
+
+.scg-selected-decks-summary small,
+.scg-selected-decks-summary strong {
+  display: block;
+}
+
+.scg-selected-decks-summary small {
+  color: #a99b7e;
+  font-size: .62rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.scg-selected-decks-summary strong {
+  overflow: hidden;
+  color: #f8e4af;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scg-selected-decks-summary > i {
+  color: #caa84f;
+}
+
+.scg-spell-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: min(720px, 100%);
+  margin-inline: auto;
+  padding: 14px 16px;
+  border: 1px dashed rgba(215, 184, 106, .4);
+  border-radius: 10px;
+  background: rgba(17, 16, 17, .72);
+}
+
+.scg-spell-empty-state > i {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #d9b65a;
+  background: rgba(82, 55, 13, .62);
+}
+
+.scg-spell-empty-state strong {
+  color: #f1dca7;
+}
+
+.scg-spell-empty-state p {
+  margin: 3px 0 0;
+  color: #b9ad95;
+  font-size: .75rem;
+  line-height: 1.4;
+}
+
+/* Révélation des sortilèges : lecture confortable pendant dix secondes. */
+.scg-spell-reveal-overlay {
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at center, rgba(166, 112, 24, .24), transparent 35%),
+    rgba(2, 3, 6, .91);
+  transition: opacity .25s ease;
+}
+
+.scg-spell-reveal-overlay.is-closing {
+  opacity: 0;
+}
+
+.scg-spell-reveal-aura,
+.scg-spell-reveal-runes {
+  position: absolute;
+  inset: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.scg-spell-reveal-aura {
+  width: min(78vw, 860px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(246, 205, 98, .42);
+  border-radius: 50%;
+  box-shadow:
+    0 0 38px rgba(242, 198, 87, .35),
+    inset 0 0 70px rgba(242, 198, 87, .12);
+  transform: translate(-50%, -50%);
+  animation: scg-spell-aura-turn 12s linear infinite;
+}
+
+.scg-spell-reveal-aura::before,
+.scg-spell-reveal-aura::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(255, 228, 145, .22);
+  border-radius: 50%;
+}
+
+.scg-spell-reveal-aura::before { inset: 8%; }
+.scg-spell-reveal-aura::after { inset: 18%; }
+
+.scg-spell-reveal-runes {
+  width: min(92vw, 1080px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(from 0deg, rgba(255, 214, 104, .26) 0 1deg, transparent 1deg 15deg);
+  mask-image: radial-gradient(circle, transparent 0 40%, #000 44% 46%, transparent 50%);
+  animation: scg-spell-runes-turn 20s linear infinite reverse;
+}
+
+.scg-spell-reveal-card {
+  position: relative;
+  width: min(760px, 92vw);
+  grid-template-columns: minmax(220px, 300px) minmax(280px, 1fr);
+  gap: clamp(18px, 3vw, 34px);
+  padding: clamp(18px, 2.6vw, 30px);
+  border: 2px solid #f2c657;
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(103, 68, 13, .94), rgba(18, 17, 19, .98) 45%, rgba(5, 6, 9, .99));
+  box-shadow:
+    0 38px 110px rgba(0, 0, 0, .86),
+    0 0 80px rgba(242, 198, 87, .48),
+    inset 0 0 48px rgba(255, 220, 126, .08);
+  animation: scg-spell-card-grand-reveal .9s cubic-bezier(.13, .86, .22, 1.12) both;
+}
+
+.scg-spell-reveal-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.8) 44%, transparent 58%);
+  background-size: 250% 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: scg-spell-reveal-shine 2.8s .5s ease-in-out infinite;
+}
+
+.scg-spell-reveal-card > small {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  transform: none;
+  color: #e8c86e;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.scg-spell-reveal-art {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ffdb78;
+  border-radius: 13px;
+  box-shadow: 0 0 30px rgba(242,198,87,.34), 0 18px 38px rgba(0,0,0,.55);
+}
+
+.scg-spell-reveal-card .scg-spell-reveal-art img {
+  display: block;
+  width: 100%;
+  height: min(58vh, 430px);
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.scg-spell-reveal-art > span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 237, 174, .48) 48%, transparent 61%);
+  transform: translateX(-140%);
+  animation: scg-spell-art-glint 3.4s 1s ease-in-out infinite;
+}
+
+.scg-spell-reveal-copy {
+  text-align: center;
+}
+
+.scg-spell-reveal-card .scg-spell-reveal-copy > i {
+  color: #ffd86b;
+  font-size: 2.45rem;
+  filter: drop-shadow(0 0 14px rgba(242,198,87,.85));
+}
+
+.scg-spell-reveal-card h2 {
+  margin: 14px 0 12px;
+  color: #fff0b9;
+  font-size: clamp(1.7rem, 3vw, 2.45rem);
+  text-shadow: 0 0 18px rgba(242,198,87,.4);
+}
+
+.scg-spell-reveal-card p {
+  margin: 0;
+  color: #eee3cd;
+  font-size: clamp(.9rem, 1.5vw, 1.08rem);
+  line-height: 1.65;
+}
+
+.scg-spell-reveal-card em {
+  display: block;
+  margin-top: 22px;
+  color: #bfae89;
+  font-size: .68rem;
+  font-style: normal;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.scg-spell-reveal-overlay.is-opponent .scg-spell-reveal-card {
+  border-color: #d47a9c;
+  box-shadow: 0 38px 110px rgba(0,0,0,.86), 0 0 78px rgba(191,77,122,.46), inset 0 0 48px rgba(191,77,122,.08);
+}
+
+@keyframes scg-spell-aura-turn { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes scg-spell-runes-turn { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes scg-spell-card-grand-reveal {
+  0% { opacity: 0; transform: perspective(1200px) rotateY(78deg) scale(.62); filter: brightness(2); }
+  55% { opacity: 1; transform: perspective(1200px) rotateY(-5deg) scale(1.035); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+@keyframes scg-spell-reveal-shine { 0%, 60% { background-position: 160% 0; opacity: 0; } 72% { opacity: .9; } 100% { background-position: -80% 0; opacity: 0; } }
+@keyframes scg-spell-art-glint { 0%, 56% { transform: translateX(-140%); } 78%, 100% { transform: translateX(140%); } }
+
+@media (max-width: 720px) {
+  .scg-setup-sequence { flex-wrap: wrap; }
+  .scg-selected-decks-summary { align-items: stretch; }
+  .scg-selected-decks-summary > i { align-self: center; }
+  .scg-spell-reveal-card {
+    grid-template-columns: 1fr;
+    width: min(94vw, 460px);
+    max-height: 92vh;
+    overflow: auto;
+  }
+  .scg-spell-reveal-card .scg-spell-reveal-art img { height: auto; max-height: 52vh; }
+  .scg-spell-reveal-card > small { position: static; order: -1; text-align: center; }
+}
+
+/* Booster événementiel mono-carte : révélation centrée et cérémonielle. */
+.scg-booster-opening.is-event-booster .scg-booster-results {
+  position: relative;
+  width: min(760px, 94vw);
+  min-height: min(720px, 88vh);
+  align-content: center;
+  justify-items: center;
+  overflow: visible !important;
+  border: 2px solid rgba(242, 198, 87, .72);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 57%, rgba(255, 217, 104, .14), transparent 32%),
+    linear-gradient(155deg, rgba(72, 48, 10, .96), rgba(10, 10, 13, .99) 48%, rgba(3, 4, 7, .99));
+  box-shadow:
+    0 35px 110px rgba(0,0,0,.82),
+    0 0 80px rgba(242,198,87,.38),
+    inset 0 0 70px rgba(242,198,87,.08);
+}
+
+.scg-booster-opening.is-event-booster .scg-booster-results > header {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+}
+
+.scg-booster-opening.is-event-booster .scg-booster-results > header > span {
+  width: 52px;
+  height: 52px;
+  border-width: 2px;
+  color: #ffdc6d;
+  background: radial-gradient(circle, rgba(255,222,117,.16), rgba(64,42,9,.72));
+  box-shadow: 0 0 24px rgba(242,198,87,.55);
+}
+
+.scg-booster-opening.is-event-booster .scg-booster-results h2 {
+  color: #fff0b6;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  text-shadow: 0 0 22px rgba(242,198,87,.42);
+}
+
+.scg-booster-opening.is-event-booster .scg-booster-progress {
+  color: #f0cf72;
+  letter-spacing: .12em;
+}
+
+.scg-booster-opening.is-event-booster .scg-booster-reveal.scg-booster-reveal--count-1 {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(250px, 330px);
+  width: auto;
+  min-height: 470px;
+  align-items: center;
+  justify-content: center;
+  margin: 4px auto 0;
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-card {
+  width: min(330px, 72vw);
+  padding: 11px;
+  gap: 8px;
+  border-width: 2px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 225, 131, .13), rgba(43, 19, 67, .9) 72%, rgba(16, 8, 22, .98));
+  box-shadow:
+    0 0 0 1px rgba(255,244,190,.24),
+    0 28px 70px rgba(0,0,0,.72),
+    0 0 52px rgba(242,198,87,.48),
+    0 0 95px rgba(154, 73, 222, .28),
+    inset 0 0 34px rgba(255,218,104,.16);
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-card-art {
+  height: min(470px, 56vh);
+  border: 1px solid rgba(255, 222, 119, .72);
+  border-radius: 10px;
+  box-shadow: inset 0 0 22px rgba(255,218,104,.12);
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-card > strong {
+  min-height: auto;
+  color: #fff4cf;
+  font-size: 1.08rem;
+  text-shadow: 0 0 12px rgba(242,198,87,.35);
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-rarity {
+  min-height: 31px;
+  font-size: .82rem;
+  letter-spacing: .18em;
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-acquisition {
+  min-height: 30px;
+  border: 1px solid rgba(242,198,87,.24);
+  border-radius: 999px;
+  background: rgba(255,222,119,.07);
+  color: #d8c89f;
+  font-weight: 800;
+}
+
+.scg-booster-opening.is-event-booster .scg-reveal-acquisition.is-new {
+  color: #ffe99e;
+  background: linear-gradient(90deg, rgba(84,54,9,.72), rgba(142,90,15,.68), rgba(84,54,9,.72));
+  box-shadow: 0 0 18px rgba(242,198,87,.24);
+}
+
+.scg-booster-opening.is-event-booster.is-results .scg-reveal-card.is-revealed {
+  animation: scg-event-card-grand-reveal 1.35s cubic-bezier(.12,.88,.18,1.12) forwards;
+}
+
+.scg-booster-opening.is-event-booster .scg-card-reveal-flare {
+  inset: -42%;
+  background:
+    radial-gradient(circle, rgba(255,249,214,.88) 0 5%, rgba(255,215,89,.62) 12%, rgba(173,92,233,.28) 34%, transparent 62%);
+}
+
+.scg-booster-opening.is-event-booster .scg-card-sparkles {
+  inset: 48%;
+}
+
+.scg-booster-opening.is-event-booster .scg-card-sparkles > i {
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 10px #fff, 0 0 22px #ffd95c, 0 0 34px #9e50df;
+  transform: rotate(calc(var(--sparkle-index) * 30deg)) translateY(-88px) scale(.2);
+}
+
+.scg-event-reveal-emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: min(610px, 82vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(242,198,87,.22);
+  border-radius: 50%;
+  color: rgba(255,221,112,.22);
+  transform: translate(-50%, -43%);
+  animation: scg-event-emblem-turn 22s linear infinite;
+  pointer-events: none;
+}
+
+.scg-event-reveal-emblem::before,
+.scg-event-reveal-emblem::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(242,198,87,.17);
+  border-radius: 50%;
+}
+
+.scg-event-reveal-emblem::before { inset: 9%; }
+.scg-event-reveal-emblem::after { inset: 21%; border-style: dashed; }
+
+.scg-event-reveal-emblem > i {
+  font-size: 5rem;
+  filter: drop-shadow(0 0 24px rgba(242,198,87,.32));
+}
+
+.scg-event-reveal-emblem > span {
+  position: absolute;
+  inset: -8%;
+  background: repeating-conic-gradient(from 0deg, rgba(255,220,112,.22) 0 1deg, transparent 1deg 12deg);
+  mask-image: radial-gradient(circle, transparent 0 44%, #000 47% 49%, transparent 52%);
+}
+
+.scg-booster-opening.is-event-booster.is-golden-impact .scg-booster-results {
+  animation: scg-event-results-impact 1.4s ease-out both;
+}
+
+@keyframes scg-event-card-grand-reveal {
+  0% { visibility: visible; opacity: 0; transform: perspective(1500px) rotateY(180deg) scale(.45); filter: brightness(3); }
+  42% { opacity: 1; transform: perspective(1500px) rotateY(0) scale(1.12); filter: brightness(1.65); }
+  68% { transform: scale(.98); filter: brightness(1.08); }
+  100% { visibility: visible; opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes scg-event-emblem-turn { to { transform: translate(-50%, -43%) rotate(360deg); } }
+@keyframes scg-event-results-impact {
+  0% { box-shadow: 0 35px 110px rgba(0,0,0,.82), 0 0 40px rgba(242,198,87,.2), inset 0 0 40px rgba(242,198,87,.04); }
+  28% { box-shadow: 0 35px 110px rgba(0,0,0,.82), 0 0 130px rgba(255,224,119,.82), inset 0 0 90px rgba(255,224,119,.2); }
+  100% { box-shadow: 0 35px 110px rgba(0,0,0,.82), 0 0 80px rgba(242,198,87,.38), inset 0 0 70px rgba(242,198,87,.08); }
+}
+
+@media (max-height: 760px) {
+  .scg-booster-opening.is-event-booster .scg-booster-results {
+    min-height: 0;
+    gap: 8px;
+    padding: 12px 18px;
+  }
+  .scg-booster-opening.is-event-booster .scg-booster-reveal.scg-booster-reveal--count-1 { min-height: 0; }
+  .scg-booster-opening.is-event-booster .scg-reveal-card-art { height: min(390px, 50vh); }
+}
+
+@media (max-width: 620px) {
+  .scg-booster-opening.is-event-booster .scg-booster-results { width: 96vw; border-radius: 16px; }
+  .scg-booster-opening.is-event-booster .scg-booster-results > header { align-items: flex-start; }
+  .scg-booster-opening.is-event-booster .scg-booster-results > header > span { width: 42px; height: 42px; }
+  .scg-booster-opening.is-event-booster .scg-reveal-card { width: min(290px, 78vw); }
+  .scg-booster-opening.is-event-booster .scg-reveal-card-art { height: min(410px, 52vh); }
+}

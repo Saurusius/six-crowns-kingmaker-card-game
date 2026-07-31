@@ -27,7 +27,7 @@ test("le catalogue complet relie les 165 cartes aux trois résolutions", () => {
 
 test("le manifeste et la carte partagée couvrent le catalogue complet", async () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.equal(manifest.version, "0.10.0");
+  assert.equal(manifest.version, "0.10.1");
   assert.equal(manifest.integratedCardArtCount, 165);
   assert.equal(manifest.integratedCardArt.length, 165);
 

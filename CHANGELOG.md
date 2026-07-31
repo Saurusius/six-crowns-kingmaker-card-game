@@ -1,3 +1,14 @@
+## 0.10.1 — Confort et mise en scène des sortilèges
+
+- Place le choix du sortilège après la sélection des decks et avant le lancer de pièce.
+- Ne propose à l’équipement que les cartes événementielles réellement possédées, sans révéler les cartes manquantes.
+- Maintient la révélation des effets pendant dix secondes et suspend le tour adverse le temps de la lecture.
+- Centre la carte des boosters événementiels mono-carte et ajoute une mise en scène dorée dédiée.
+- Renforce l’apparition des sortilèges en partie avec halo, cercle arcanique, reflets et animation centrale.
+- Remplace « Agrandir les options » par « Afficher les options ».
+- Maintient la bascule Vue compacte / Vue détaillée visible lorsque les autres options sont réduites.
+- Porte la suite automatisée à 138 tests.
+
 ## 0.10.0 — Sortilèges événementiels : Terres Dérobées
 
 - Ajoute une phase secrète de sélection des sortilèges avant le lancer de pièce et avant la révélation des decks.
