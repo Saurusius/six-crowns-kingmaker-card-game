@@ -112,11 +112,11 @@
           <article class="scg-builder-card scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
             <span class="scg-builder-symbol {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div class="scg-builder-card-info">
-              <strong>{{name}}</strong>
-              <small>{{factionLabel}} · <i class="{{typeIcon}}"></i> {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
+              <strong title="{{name}}">{{name}}</strong>
+              <small title="{{factionLabel}} · {{typeLabel}} · {{rarityLabel}} · Force {{strength}}">{{factionLabel}} · <i class="{{typeIcon}}"></i> {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
               <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
               <div class="scg-effect-icons scg-builder-traits">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
-              <p class="scg-builder-card-effect">{{{textHtml}}}</p>
+              <p class="scg-builder-card-effect" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>
             </div>
             <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
               <strong>Possédées : {{ownedCount}}</strong>

@@ -13,11 +13,11 @@
       <article><strong>{{neverPlayedCount}}</strong><span>cartes jamais jouées</span></article>
     </section>
     <div class="scg-analytics-grid">
-      <section><h2>Cartes les plus jouées</h2>{{#each topCards}}<article><span>{{name}}</span><b>{{plays}} jeu(x)</b><small>{{matches}} partie(s) · {{winRate}} % de victoires</small></article>{{/each}}</section>
-      <section><h2>Cartes oubliées</h2>{{#each underplayedCards}}<article><span>{{name}}</span><b>{{plays}} jeu(x)</b><small>{{#if matches}}{{winRate}} % de victoires{{else}}Jamais jouée{{/if}}</small></article>{{/each}}</section>
-      <section><h2>Résultats par deck</h2>{{#each decks}}<article><span>{{name}}</span><b>{{winRate}} %</b><small>{{wins}} / {{matches}} victoire(s)</small></article>{{/each}}</section>
+      <section><h2>Cartes les plus jouées</h2>{{#each topCards}}<article><span title="{{name}}">{{name}}</span><b>{{plays}} jeu(x)</b><small>{{matches}} partie(s) · {{winRate}} % de victoires</small></article>{{/each}}</section>
+      <section><h2>Cartes oubliées</h2>{{#each underplayedCards}}<article><span title="{{name}}">{{name}}</span><b>{{plays}} jeu(x)</b><small>{{#if matches}}{{winRate}} % de victoires{{else}}Jamais jouée{{/if}}</small></article>{{/each}}</section>
+      <section><h2>Résultats par deck</h2>{{#each decks}}<article><span title="{{name}}">{{name}}</span><b>{{winRate}} %</b><small>{{wins}} / {{matches}} victoire(s)</small></article>{{/each}}</section>
       <section><h2>Capacités rencontrées</h2>{{#each traitUsage}}<article><span>{{label}}</span><b>{{plays}}</b><small>apparition(s) en jeu</small></article>{{/each}}</section>
-      <section><h2>Parties récentes</h2>{{#each recentMatches}}<article><span>{{userName}} · {{playerDeckName}}</span><b>{{winnerLabel}}</b><small>{{rounds}} manche(s) · {{dateLabel}}</small></article>{{/each}}</section>
+      <section><h2>Parties récentes</h2>{{#each recentMatches}}<article><span title="{{userName}} · {{playerDeckName}}">{{userName}} · {{playerDeckName}}</span><b>{{winnerLabel}}</b><small>{{rounds}} manche(s) · {{dateLabel}}</small></article>{{/each}}</section>
     </div>
   {{else}}
     <div class="scg-analytics-empty"><i class="fa-solid fa-chart-line"></i><strong>Aucune partie terminée enregistrée</strong><p>Les données apparaîtront après les premières parties jouées avec la v0.8.4.</p></div>

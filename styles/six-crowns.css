@@ -5138,3 +5138,781 @@ body > .scg-global-modal.scg-mulligan-preview-backdrop {
   .scg-comparison-grid { grid-template-columns: 1fr; }
   .scg-comparison-grid > article { grid-template-columns: 90px minmax(0, 1fr); }
 }
+
+
+/* -------------------------------------------------------------------------
+ * v0.8.5 — lisibilité, textes longs et mise en page anti-débordement
+ * ---------------------------------------------------------------------- */
+
+/* Garde-fous généraux : un libellé long doit revenir à la ligne plutôt que
+ * sortir de sa case. Les éléments interactifs conservent une hauteur lisible. */
+.scg-profile-shell *,
+.scg-builder-shell *,
+.scg-analytics-shell *,
+.scg-glossary-dialog *,
+.scg-card-trade-dialog *,
+.scg-shell * {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.scg-profile-shell button,
+.scg-builder-shell button,
+.scg-analytics-shell button,
+.scg-glossary-dialog button,
+.scg-card-trade-dialog button,
+.scg-shell button {
+  max-width: 100%;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.scg-profile-toolbar,
+.scg-builder-management,
+.scg-deck-analysis-toolbar,
+.scg-card-comparison > header,
+.scg-trade-center > header,
+.scg-booster-history > header,
+.scg-analytics-shell > header,
+.scg-glossary-dialog > header,
+.scg-card-trade-dialog > header {
+  flex-wrap: wrap;
+}
+
+.scg-profile-toolbar > div:first-child,
+.scg-card-comparison > header > div:first-child,
+.scg-trade-center > header > div:first-child,
+.scg-booster-history > header > div:first-child,
+.scg-analytics-shell > header > div:first-child,
+.scg-glossary-dialog > header > div:first-child,
+.scg-card-trade-dialog > header > div:first-child {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.scg-profile-toolbar h1,
+.scg-profile-toolbar p,
+.scg-card-comparison h2,
+.scg-card-comparison p,
+.scg-trade-center h2,
+.scg-trade-center p,
+.scg-booster-history h2,
+.scg-booster-history p,
+.scg-analytics-shell h1,
+.scg-analytics-shell p,
+.scg-glossary-dialog h2,
+.scg-glossary-dialog p,
+.scg-card-trade-dialog h2,
+.scg-card-trade-dialog p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Collection détaillée : cartes un peu plus larges, texte de règle réellement
+ * lisible et défilement interne doux pour les effets exceptionnellement longs. */
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-grid {
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  align-items: stretch;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card {
+  min-height: 430px;
+  height: auto;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body {
+  gap: 6px;
+  padding: 10px;
+  overflow: visible;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body > strong {
+  display: block;
+  min-height: 2.35em;
+  color: #fff8df;
+  font-size: .88rem;
+  line-height: 1.2;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body > small,
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body > span {
+  max-width: 100%;
+  color: #c8bea8;
+  font-size: .72rem;
+  line-height: 1.3;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-card-type-line,
+.scg-collection-shell:not(.is-card-view-compact) .scg-card-symbol-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-card-symbol-line > span {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-traits {
+  width: 100%;
+  min-height: 26px;
+  height: auto;
+  max-height: 58px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-card-rules-text {
+  display: block;
+  min-height: 4.15em;
+  max-height: 8.4em;
+  margin: 4px 0 2px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, .075);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, .17);
+  color: #e2dac7;
+  font-size: .75rem;
+  line-height: 1.4;
+  white-space: normal;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  scrollbar-width: thin;
+  scrollbar-color: #75643d rgba(0, 0, 0, .2);
+}
+
+.scg-collection-card-actions {
+  grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
+  margin: 4px 0 2px;
+  gap: 5px;
+}
+
+.scg-collection-card-actions button,
+.scg-collection-card-actions .scg-preview-button,
+.scg-collection-card-actions .scg-trade-card-button {
+  min-height: 34px;
+  padding: 5px 6px;
+  font-size: .69rem;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body footer {
+  grid-template-columns: 1fr;
+  gap: 3px;
+}
+
+.scg-collection-shell:not(.is-card-view-compact) .scg-collection-card-body footer span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+/* L’aperçu plein écran devient une vraie fiche lisible et non une légende
+ * tassée sous l’illustration. */
+.scg-card-preview {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.scg-card-preview > div {
+  width: min(720px, 92vw);
+  max-width: min(720px, 92vw);
+  max-height: calc(100vh - 48px);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 16px;
+  overflow-y: auto;
+  border: 1px solid rgba(216, 183, 93, .48);
+  border-radius: 12px;
+  background: rgba(15, 17, 22, .97);
+}
+
+.scg-card-preview img {
+  max-height: min(58vh, 680px);
+}
+
+.scg-card-preview h2 {
+  max-width: 100%;
+  margin: 0;
+  font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+}
+
+.scg-card-preview p {
+  width: 100%;
+  max-height: 24vh;
+  margin: 0;
+  padding: 10px 12px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, .22);
+  color: #eee7d6;
+  font-size: .92rem;
+  line-height: 1.5;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  scrollbar-width: thin;
+}
+
+/* Deckbuilder : la fiche de chaque carte grandit selon son contenu. Les
+ * métadonnées et compteurs ne sont plus amputés par des ellipses. */
+.scg-builder-card {
+  min-height: 104px;
+  height: auto;
+  grid-template-columns: 52px minmax(220px, 1fr) minmax(128px, 150px) 108px;
+  align-items: start;
+  gap: 10px;
+  overflow: visible;
+  contain: none;
+}
+
+.scg-builder-symbol {
+  align-self: start;
+}
+
+.scg-builder-card-info {
+  align-content: start;
+  overflow: visible;
+}
+
+.scg-builder-card-info > strong {
+  color: #fff8df;
+  font-size: .82rem;
+  line-height: 1.22;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-builder-card-info > small,
+.scg-builder-card-info > span {
+  display: block;
+  color: #c3b9a3;
+  font-size: .69rem;
+  line-height: 1.28;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-builder-card-effect {
+  display: block;
+  min-height: 2.7em;
+  max-height: 5.4em;
+  margin-top: 5px;
+  padding-right: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: rgba(240, 232, 210, .9);
+  font-size: .73rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: unset;
+  scrollbar-width: thin;
+}
+
+.scg-builder-traits {
+  min-height: 22px;
+  height: auto;
+  max-height: 48px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow-y: auto;
+}
+
+.scg-builder-owned {
+  align-content: start;
+  padding-top: 2px;
+  overflow: visible;
+}
+
+.scg-builder-owned strong,
+.scg-builder-owned small {
+  font-size: .69rem;
+  line-height: 1.3;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-builder-stepper {
+  align-self: center;
+  overflow: visible;
+}
+
+.scg-builder-selected {
+  min-height: 66px;
+  height: auto;
+  overflow: visible;
+  contain: none;
+}
+
+.scg-builder-selected > div {
+  overflow: visible;
+}
+
+.scg-builder-selected strong,
+.scg-builder-selected small {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-deck-validation,
+.scg-analysis-card,
+.scg-analysis-card > header {
+  overflow: visible;
+}
+
+.scg-analysis-card > header {
+  flex-wrap: wrap;
+}
+
+.scg-analysis-card > header span {
+  flex: 1 1 180px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+/* Échanges, boosters, glossaire et statistiques : colonnes souples et contenu
+ * intégralement repliable ou défilable, sans texte hors cadre. */
+.scg-trade-center > header > span {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.scg-trade-columns summary,
+.scg-trade-list article > header,
+.scg-trade-list article > footer,
+.scg-booster-history article > header {
+  flex-wrap: wrap;
+}
+
+.scg-trade-columns summary,
+.scg-trade-list p,
+.scg-trade-list small,
+.scg-trade-list strong,
+.scg-trade-status,
+.scg-booster-history article p,
+.scg-booster-history article strong,
+.scg-booster-history article span {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.scg-trade-list article > footer button {
+  min-height: 32px;
+  white-space: normal;
+}
+
+.scg-card-trade-grid label,
+.scg-recycle-grid label {
+  min-width: 0;
+}
+
+.scg-card-trade-grid label > span,
+.scg-recycle-grid label > span {
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.scg-recycle-grid label {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scg-recycle-grid label > span {
+  flex: 1 1 auto;
+}
+
+.scg-glossary-groups article {
+  align-items: start;
+}
+
+.scg-glossary-groups article span,
+.scg-glossary-groups article strong,
+.scg-glossary-groups article small {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.scg-analytics-kpis article,
+.scg-analytics-grid > section,
+.scg-analytics-grid article {
+  overflow: visible;
+}
+
+.scg-analytics-kpis span,
+.scg-analytics-grid article span,
+.scg-analytics-grid article b,
+.scg-analytics-grid article small {
+  max-width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-analytics-grid article b {
+  text-align: right;
+}
+
+.scg-comparison-grid > article {
+  align-items: start;
+}
+
+.scg-comparison-grid h3,
+.scg-comparison-grid small,
+.scg-comparison-grid .scg-card-symbol-line,
+.scg-comparison-grid .scg-card-rules-text {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.scg-comparison-grid .scg-card-rules-text {
+  max-height: 10em;
+  padding-right: 5px;
+  overflow-y: auto;
+  font-size: .76rem;
+  line-height: 1.4;
+  scrollbar-width: thin;
+}
+
+/* Plateau : les boutons et messages reviennent à la ligne. Les noms très longs
+ * restent compacts sur le plateau, mais la fiche flottante affiche le texte entier. */
+.scg-scorebar,
+.scg-score-side,
+.scg-deck-status,
+.scg-turn-card,
+.scg-game-summary,
+.scg-match-log article,
+.scg-hand-card-info,
+.scg-play-actions {
+  min-width: 0;
+}
+
+.scg-deck-status span,
+.scg-turn-card p,
+.scg-game-summary h2,
+.scg-game-summary p,
+.scg-match-log article span,
+.scg-hand-card-info .scg-card-name {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.scg-play-actions {
+  align-items: stretch;
+}
+
+.scg-play-actions button {
+  min-height: 34px;
+  height: auto;
+  padding: 5px 6px;
+  font-size: .59rem;
+  line-height: 1.12;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+.scg-floating-popup.is-card p,
+.scg-floating-popup.is-card strong,
+.scg-floating-popup.is-card span,
+.scg-floating-popup.is-trait strong,
+.scg-floating-popup.is-trait small {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1180px) {
+  .scg-builder-card {
+    grid-template-columns: 48px minmax(190px, 1fr) 122px 102px;
+  }
+}
+
+@media (max-width: 900px) {
+  .scg-collection-shell:not(.is-card-view-compact) .scg-collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .scg-builder-card {
+    grid-template-columns: 46px minmax(0, 1fr) 104px;
+  }
+
+  .scg-builder-owned {
+    grid-column: 2;
+  }
+
+  .scg-builder-stepper {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+  }
+
+  .scg-comparison-grid > article {
+    grid-template-columns: 90px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .scg-profile-actions,
+  .scg-builder-header-actions,
+  .scg-builder-management-actions,
+  .scg-booster-actions,
+  .scg-card-trade-dialog > footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .scg-profile-actions button,
+  .scg-builder-header-actions button,
+  .scg-builder-management-actions button,
+  .scg-booster-actions button,
+  .scg-card-trade-dialog > footer button {
+    width: 100%;
+  }
+
+  .scg-collection-shell:not(.is-card-view-compact) .scg-collection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scg-builder-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .scg-builder-owned,
+  .scg-builder-stepper {
+    grid-column: 2;
+    grid-row: auto;
+  }
+
+  .scg-builder-stepper {
+    justify-content: start;
+  }
+
+  .scg-comparison-grid > article {
+    grid-template-columns: 1fr;
+  }
+
+  .scg-comparison-art {
+    min-height: 220px;
+  }
+}
+
+/* v0.8.5 — correctif résultats de booster sans barres de défilement */
+html.scg-booster-open,
+body.scg-booster-open {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.scg-booster-opening {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden !important;
+  padding: clamp(10px, 2vw, 24px);
+  overscroll-behavior: none;
+}
+
+.scg-booster-opening *,
+.scg-booster-opening *::before,
+.scg-booster-opening *::after {
+  box-sizing: border-box;
+}
+
+.scg-booster-results {
+  width: min(1080px, calc(100vw - clamp(20px, 4vw, 48px)));
+  max-width: 100%;
+  max-height: calc(100vh - clamp(20px, 4vw, 48px));
+  overflow: hidden !important;
+  gap: clamp(10px, 1.8vh, 18px);
+  padding: clamp(12px, 2vw, 26px);
+}
+
+.scg-booster-results > header {
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.scg-booster-results > header > div {
+  min-width: 0;
+}
+
+.scg-booster-results h2,
+.scg-booster-progress {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.scg-booster-reveal {
+  min-width: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 1.25vw, 16px);
+  align-items: start;
+}
+
+.scg-reveal-card {
+  min-width: 0;
+  min-height: 0;
+  gap: 5px;
+  padding: clamp(6px, .8vw, 8px);
+}
+
+.scg-reveal-card-art {
+  width: 100%;
+  height: clamp(138px, 39vh, 288px);
+  aspect-ratio: auto;
+}
+
+.scg-reveal-card > strong {
+  min-height: 2.35em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-reveal-acquisition {
+  max-width: 100%;
+  min-height: 24px;
+  align-items: center;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Cinq cartes restent sur une seule ligne sur les fenêtres de bureau.
+ * Leur illustration se réduit avec la hauteur disponible au lieu de créer un scroll. */
+@media (min-width: 641px) {
+  .scg-booster-reveal {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-height: 680px) {
+  .scg-booster-results {
+    gap: 8px;
+    padding: 10px 18px 12px;
+  }
+
+  .scg-booster-results > header {
+    gap: 9px;
+  }
+
+  .scg-booster-results > header > span {
+    width: 38px;
+    height: 38px;
+  }
+
+  .scg-booster-results h2 {
+    font-size: clamp(1.2rem, 2.6vw, 1.75rem);
+    line-height: 1.05;
+  }
+
+  .scg-booster-results small,
+  .scg-booster-progress {
+    font-size: .68rem;
+    line-height: 1.15;
+  }
+
+  .scg-reveal-card-art {
+    height: clamp(120px, 36vh, 222px);
+  }
+
+  .scg-reveal-card > strong {
+    font-size: .78rem;
+  }
+
+  .scg-reveal-rarity,
+  .scg-reveal-acquisition {
+    font-size: .61rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .scg-booster-opening {
+    padding: 8px;
+  }
+
+  .scg-booster-results {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    padding: 10px;
+  }
+
+  .scg-booster-reveal {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .scg-reveal-card-art {
+    height: clamp(76px, 18vh, 145px);
+  }
+
+  .scg-reveal-card > strong {
+    min-height: 2.2em;
+    font-size: .7rem;
+  }
+
+  .scg-reveal-rarity,
+  .scg-reveal-acquisition {
+    font-size: .56rem;
+    letter-spacing: .04em;
+  }
+}
+
+@media (max-width: 430px) {
+  .scg-booster-reveal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scg-reveal-card-art {
+    height: clamp(58px, 11vh, 92px);
+  }
+
+  .scg-booster-results > header > span {
+    display: none;
+  }
+}

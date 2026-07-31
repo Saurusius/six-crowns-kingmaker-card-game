@@ -77,7 +77,7 @@
           <article class="scg-rarity-{{rarity}}">
             <button type="button" data-action="remove-comparison" data-card-id="{{id}}" aria-label="Retirer {{name}}">×</button>
             <div class="scg-comparison-art">{{#if hasArt}}<img src="{{artMedium}}" alt="Illustration de {{name}}">{{else}}<span>{{factionSymbol}}</span>{{/if}}<b>{{strength}}</b></div>
-            <div><small>{{rarityLabel}} · {{factionLabel}}</small><h3>{{name}}</h3><p class="scg-card-symbol-line"><span><i class="{{typeIcon}}"></i> {{typeLabel}}</span>{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</p><div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div><p class="scg-card-rules-text">{{{textHtml}}}</p></div>
+            <div><small>{{rarityLabel}} · {{factionLabel}}</small><h3>{{name}}</h3><p class="scg-card-symbol-line"><span><i class="{{typeIcon}}"></i> {{typeLabel}}</span>{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</p><div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div><p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p></div>
           </article>
         {{/each}}
         {{#unless comparisonFull}}<article class="is-comparison-placeholder"><i class="fa-solid fa-plus"></i><strong>Choisissez une deuxième carte</strong></article>{{/unless}}
@@ -189,14 +189,14 @@
                   <span class="scg-rarity-dot scg-rarity-{{rarity}}" title="{{rarityLabel}}" aria-label="Rareté : {{rarityLabel}}"></span>
                 </div>
                 <div class="scg-collection-card-body">
-                  <strong>{{name}}</strong>
-                  <small>{{id}} · {{factionLabel}}</small>
+                  <strong title="{{name}}">{{name}}</strong>
+                  <small title="{{id}} · {{factionLabel}}">{{id}} · {{factionLabel}}</small>
                   <span class="scg-card-type-line"><i class="{{typeIcon}}"></i> <b>{{typeLabel}}</b> · Force {{strength}}</span>
                   <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
                   <div class="scg-effect-icons scg-collection-traits">
                     {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                   </div>
-                  {{#if text}}<p class="scg-card-rules-text">{{{textHtml}}}</p>{{/if}}
+                  {{#if text}}<p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>{{/if}}
                   <div class="scg-collection-card-actions">
                     <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
                     <button type="button" class="scg-compare-card-button {{#if compared}}is-active{{/if}}" data-action="compare-card"><i class="fa-solid fa-scale-balanced"></i> {{#if compared}}Comparée{{else}}Comparer{{/if}}</button>
@@ -211,7 +211,7 @@
                   {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
                   <strong>{{name}}</strong>
                   <span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>
-                  {{#if text}}<p class="scg-card-rules-text">{{{textHtml}}}</p>{{/if}}
+                  {{#if text}}<p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>{{/if}}
                 </div>
               {{else}}
                 <div class="scg-hidden-card-back">

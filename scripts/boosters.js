@@ -415,6 +415,8 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   if (typeof document === "undefined" || !Array.isArray(cards) || cards.length === 0) return;
 
   document.querySelector(".scg-booster-opening")?.remove();
+  document.documentElement.classList.remove("scg-booster-open");
+  document.body.classList.remove("scg-booster-open");
 
   const orderedCards = sortCardsByRarity(cards);
   const highestRarity = getHighestRarity(orderedCards) ?? "rare";
@@ -455,6 +457,8 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   `;
 
   document.body.appendChild(overlay);
+  document.documentElement.classList.add("scg-booster-open");
+  document.body.classList.add("scg-booster-open");
   const button = overlay.querySelector("[data-action='continue-booster']");
   const status = overlay.querySelector("[data-reveal-status]");
   const againButton = overlay.querySelector("[data-action='open-another-booster']");
@@ -557,6 +561,8 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   const close = () => {
     clearTimers();
     document.removeEventListener("keydown", onKeyDown);
+    document.documentElement.classList.remove("scg-booster-open");
+    document.body.classList.remove("scg-booster-open");
     overlay.classList.add("is-closing");
     globalThis.setTimeout(() => { overlay.remove(); onClose?.(); }, 260);
   };
@@ -573,6 +579,8 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   againButton?.addEventListener("click", () => {
     clearTimers();
     document.removeEventListener("keydown", onKeyDown);
+    document.documentElement.classList.remove("scg-booster-open");
+    document.body.classList.remove("scg-booster-open");
     overlay.remove();
     void openBooster();
   });

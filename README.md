@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.4
+## Règles du prototype 0.8.5
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -65,6 +65,8 @@ Chaque profil possède également un nombre de **boosters disponibles**. Un comp
 Les cinq cartes d’un booster sont présentées progressivement, de la rareté la plus faible à la plus élevée : **Commun**, **Peu commune**, **Rare**, puis **Unique**. La meilleure rareté tirée dicte la couleur de toute l’animation : bleu brillant pour un booster culminant sur une Rare, violet brillant lorsqu’une Unique est présente. Une carte Unique apparaît toujours en dernier et bénéficie de paillettes, d’un halo renforcé et d’un bandeau de rareté spécialement animé.
 
 La v0.8.4 distingue les premières acquisitions des doublons, conserve un historique des derniers tirages, permet d’ouvrir jusqu’à trois boosters à la suite et propose d’en ouvrir immédiatement un autre lorsque des tickets restent disponibles.
+
+La v0.8.5 améliore la lisibilité de toutes les fenêtres enrichies : les noms et métadonnées reviennent à la ligne, les effets longs disposent de zones défilables et la collection, le deckbuilder, les échanges, le glossaire ainsi que les statistiques s’adaptent mieux aux fenêtres étroites.
 
 ## Constructeur de deck
 

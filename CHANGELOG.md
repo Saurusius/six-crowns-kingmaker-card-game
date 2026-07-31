@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.8.5 — Lisibilité et textes longs
+
+- agrandissement des cartes détaillées de collection et amélioration de la taille des textes ;
+- remplacement des coupes arbitraires par des zones de règles défilables et accessibles au clavier ;
+- retour à la ligne des noms, métadonnées, boutons, compteurs et messages trop longs ;
+- deckbuilder rendu adaptatif : effets, possessions et limites ne sont plus tronqués ;
+- amélioration de la comparaison, du centre d’échanges, du glossaire, des historiques et du tableau d’équilibrage ;
+- refonte de la prévisualisation plein écran afin d’afficher intégralement les effets des cartes ;
+- règles responsives supplémentaires pour les fenêtres étroites et les petits écrans.
+
 ## 0.8.4 — Expérience joueur, échanges et télémétrie
 
 - refonte du constructeur de deck avec validation en direct, compteur 20 cartes, ajout au clic et retrait au clic droit ;
