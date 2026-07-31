@@ -7,17 +7,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 8,
+    "strength": 10,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AL-02",
@@ -25,19 +28,23 @@
     "faction": "aldori",
     "kind": "unit",
     "rows": [
-      "avant-garde"
+      "domaine"
     ],
     "strength": 8,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero",
+      "support"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AL-03",
@@ -48,19 +55,20 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 10,
+    "strength": 9,
     "maxCopies": 2,
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AL-04",
@@ -73,15 +81,18 @@
     ],
     "strength": 7,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AL-05",
@@ -91,17 +102,18 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 5,
+    "strength": 8,
     "maxCopies": 2,
     "abilities": [],
-    "text": "",
+    "text": "Personnage : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AL-06",
@@ -116,14 +128,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-07",
@@ -133,17 +146,18 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 7,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-08",
@@ -158,14 +172,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-09",
@@ -180,14 +195,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-10",
@@ -198,17 +214,18 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 6,
+    "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-11",
@@ -218,17 +235,18 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 1,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/thumb.webp"
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-12",
@@ -238,19 +256,20 @@
     "rows": [
       "domaine"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-13",
@@ -263,14 +282,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-14",
@@ -280,17 +300,18 @@
     "rows": [
       "domaine"
     ],
-    "strength": 3,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-15",
@@ -300,17 +321,18 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 8,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-16",
@@ -323,14 +345,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-17",
@@ -340,57 +363,66 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 9,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SP-03",
     "name": "Manœuvre tactique",
     "faction": "aldori",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement les autres copies de cette carte présentes dans la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "SP-06",
     "name": "Leurre de cour",
     "faction": "aldori",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "escarmouche",
+      "domaine"
+    ],
+    "strength": 5,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Bastion : peut rester entre deux manches avec une force réduite de moitié lorsqu’elle devient jouable.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "AL-18",
@@ -403,14 +435,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe aldori sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-19",
@@ -425,14 +458,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-20",
@@ -442,19 +476,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-21",
@@ -469,14 +504,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-22",
@@ -490,14 +526,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-23",
@@ -512,14 +549,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-24",
@@ -534,14 +572,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-25",
@@ -554,14 +593,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une unité de domaine sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-26",
@@ -576,14 +616,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-27",
@@ -596,14 +637,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe de tir sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-28",
@@ -618,14 +660,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-29",
@@ -639,14 +682,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-30",
@@ -661,14 +705,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-31",
@@ -681,14 +726,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe aldori sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-32",
@@ -701,14 +747,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe mobile sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-33",
@@ -723,14 +770,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-34",
@@ -741,19 +789,20 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-35",
@@ -768,14 +817,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-36",
@@ -791,14 +841,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-37",
@@ -813,14 +864,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AL-38",
@@ -835,13 +887,14 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   }
 ]

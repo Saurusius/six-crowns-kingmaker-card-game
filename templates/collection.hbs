@@ -67,19 +67,12 @@
 
 
   <section class="scg-exchange-tools">
-    <h2><i class="fa-solid fa-arrows-rotate"></i> Échanges et recyclage</h2>
+    <h2><i class="fa-solid fa-recycle"></i> Recyclage des doublons</h2>
+    <p>Sélectionnez exactement 10 exemplaires pour obtenir un ticket. Les échanges entre joueurs se lancent directement depuis la carte concernée.</p>
     <div class="scg-recycle-grid">
       {{#each ownedCards}}<label><span>{{name}} (×{{count}})</span><input type="number" min="0" max="{{count}}" value="0" data-recycle-count data-card-id="{{id}}"></label>{{/each}}
     </div>
-    <button type="button" data-action="recycle-cards"><i class="fa-solid fa-ticket"></i> Échanger exactement 10 cartes contre 1 ticket</button>
-    <div class="scg-trade-grid">
-      <select name="trade-user"><option value="">Joueur destinataire…</option>{{#each tradeUsers}}<option value="{{id}}">{{name}}</option>{{/each}}</select>
-      <select name="trade-offered"><option value="">Carte proposée…</option>{{#each ownedCards}}<option value="{{id}}">{{name}} (×{{count}})</option>{{/each}}</select>
-      <input name="trade-offered-count" type="number" min="1" value="1">
-      <select name="trade-requested"><option value="">Carte demandée…</option>{{#each gmCards}}<option value="{{id}}">{{name}}</option>{{/each}}</select>
-      <input name="trade-requested-count" type="number" min="1" value="1">
-      <button type="button" data-action="propose-trade"><i class="fa-solid fa-handshake"></i> Proposer l’échange</button>
-    </div>
+    <button type="button" data-action="recycle-cards"><i class="fa-solid fa-ticket"></i> Recycler 10 cartes contre 1 ticket</button>
   </section>
 
   {{#if isGM}}
@@ -138,7 +131,8 @@
               data-rarity="{{filterRarity}}"
               data-rows="{{filterRows}}"
               data-ownership="{{ownershipState}}"
-              data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
+              data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}} {{typeLabel}}{{else}}Carte inconnue {{id}}{{/if}}"
+              data-card-id="{{id}}" data-owned-count="{{ownedCount}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
               {{#if discovered}}
                 <div class="scg-collection-card-art {{#if hasArt}}has-art{{/if}}">
                   {{#if hasArt}}
@@ -152,16 +146,16 @@
                 <div class="scg-collection-card-body">
                   <strong>{{name}}</strong>
                   <small>{{id}} · {{factionLabel}}</small>
-                  {{#if playable}}
-                    <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
-                  {{else}}
-                    <span>Carte de {{kind}} — non jouable pour le moment</span>
-                  {{/if}}
+                  <span class="scg-card-type-line"><b>{{typeLabel}}</b> · Force {{strength}}</span>
+                  <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
                   <div class="scg-effect-icons scg-collection-traits">
                     {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                   </div>
                   {{#if text}}<p>{{text}}</p>{{/if}}
-                  <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
+                  <div class="scg-collection-card-actions">
+                    <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
+                    {{#if @root.tradeAvailable}}<button type="button" class="scg-trade-card-button" data-action="trade-card"><i class="fa-solid fa-handshake"></i> Échanger</button>{{/if}}
+                  </div>
                   <footer>
                     <span>Possédée ×{{ownedCount}}</span>
                     <span>Maximum par deck : {{maxCopies}}</span>
@@ -170,7 +164,7 @@
                 <div class="scg-card-popover scg-collection-art-popover">
                   {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
                   <strong>{{name}}</strong>
-                  <span>{{rarityLabel}} · {{factionLabel}}{{#if playable}} · Force {{strength}}{{/if}}</span>
+                  <span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>
                   {{#if text}}<p>{{text}}</p>{{/if}}
                 </div>
               {{else}}
@@ -187,4 +181,29 @@
     {{/each}}
   </div>
   <div class="scg-card-preview" data-card-preview hidden><button type="button" data-action="close-preview" aria-label="Fermer">×</button><div><img src="" alt=""><h2></h2><p></p></div></div>
+
+  <div class="scg-card-trade-modal" data-card-trade-modal hidden>
+    <form class="scg-card-trade-dialog" data-card-trade-form>
+      <header>
+        <div>
+          <small>Proposition d’échange</small>
+          <h2 data-trade-card-name>Carte</h2>
+          <p>Vous proposez une carte précise de votre collection. Le joueur destinataire devra confirmer l’échange.</p>
+        </div>
+        <button type="button" data-action="close-trade" aria-label="Fermer">×</button>
+      </header>
+      <input type="hidden" name="trade-offered-card" value="">
+      <div class="scg-card-trade-grid">
+        <label><span>Joueur destinataire</span><select name="trade-user" required><option value="">Choisir un joueur…</option>{{#each tradeUsers}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
+        <label><span>Exemplaires proposés</span><input name="trade-offered-count" type="number" min="1" value="1" required></label>
+        <label class="is-wide"><span>Carte demandée en retour</span><select name="trade-requested" required><option value="">Choisir une carte…</option>{{#each tradeCards}}<option value="{{id}}">{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
+        <label><span>Exemplaires demandés</span><input name="trade-requested-count" type="number" min="1" value="1" required></label>
+      </div>
+      <p class="scg-card-trade-owned" data-trade-owned-label></p>
+      <footer>
+        <button type="button" data-action="close-trade">Annuler</button>
+        <button type="submit"><i class="fa-solid fa-paper-plane"></i> Envoyer la proposition</button>
+      </footer>
+    </form>
+  </div>
 </section>

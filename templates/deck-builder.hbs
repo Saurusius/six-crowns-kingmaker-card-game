@@ -42,7 +42,7 @@
     </section>
   {{else}}
     <section class="scg-deck-validation is-valid">
-      <strong><i class="fa-solid fa-circle-check"></i> Deck valide : 20 cartes, 3 exemplaires maximum par carte et 2 cartes uniques maximum.</strong>
+      <strong><i class="fa-solid fa-circle-check"></i> Deck valide : 20 cartes · 3 exemplaires par Commune ou Peu commune · 2 par Rare · 1 par Unique.</strong>
     </section>
   {{/if}}
 
@@ -105,7 +105,7 @@
             <span class="scg-builder-symbol {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div class="scg-builder-card-info">
               <strong>{{name}}</strong>
-              <small>{{factionLabel}} · {{rarityLabel}} · Force {{strength}}</small>
+              <small>{{factionLabel}} · {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
               <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
               <div class="scg-effect-icons scg-builder-traits">
                 {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
@@ -141,7 +141,7 @@
             <span class="scg-builder-selected-art {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div>
               <strong>{{name}}</strong>
-              <small>{{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
+              <small>{{typeLabel}} · {{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
               <div class="scg-effect-icons scg-builder-selected-traits">
                 {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </div>

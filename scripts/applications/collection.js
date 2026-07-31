@@ -105,6 +105,10 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       gmCards[0].selected = true;
     }
 
+    const tradeUsers = users
+      .filter((user) => user.id !== game.user.id)
+      .map((user) => ({ id: user.id, name: user.name }));
+
     return {
       userName: game.user.name,
       groups,
@@ -122,7 +126,9 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       completionPercent: total > 0 ? Math.round((discovered / total) * 100) : 0,
       boosterCredits,
       canOpenBooster: game.user.isGM || boosterCredits > 0,
-      tradeUsers: users.filter(user => user.id !== game.user.id).map(user => ({ id:user.id, name:user.name })),
+      tradeUsers,
+      tradeAvailable: tradeUsers.length > 0,
+      tradeCards: gmCards,
       ownedCards: catalog.filter(card => (collection[card.id]?.count ?? 0) > 0).map(card => ({ id:card.id, name:card.name, count:collection[card.id].count })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
@@ -245,14 +251,64 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       catch(error){ ui.notifications.warn(error.message); }
     });
 
-    this.element.querySelector("[data-action='propose-trade']")?.addEventListener("click", async () => {
-      const toUserId=this.element.querySelector("[name='trade-user']")?.value;
-      const offeredId=this.element.querySelector("[name='trade-offered']")?.value;
-      const requestedId=this.element.querySelector("[name='trade-requested']")?.value;
-      const offeredCount=Math.max(1,parseInt(this.element.querySelector("[name='trade-offered-count']")?.value,10)||1);
-      const requestedCount=Math.max(1,parseInt(this.element.querySelector("[name='trade-requested-count']")?.value,10)||1);
-      if(!toUserId||!offeredId||!requestedId) return ui.notifications.warn("Complétez l’offre d’échange.");
-      game.socket.emit(`module.${MODULE_ID}`, { type:"trade-proposal", fromUserId:game.user.id, toUserId, offered:{[offeredId]:offeredCount}, requested:{[requestedId]:requestedCount} });
+    const tradeModal = this.element.querySelector("[data-card-trade-modal]");
+    const tradeForm = this.element.querySelector("[data-card-trade-form]");
+    const closeTradeModal = () => {
+      if (tradeModal) tradeModal.hidden = true;
+      tradeForm?.reset();
+    };
+
+    this.element.querySelectorAll("[data-action='trade-card']").forEach((button) => {
+      button.addEventListener("click", () => {
+        const card = button.closest("[data-collection-card]");
+        if (!tradeModal || !tradeForm || !card) return;
+        const ownedCount = Math.max(1, Number.parseInt(card.dataset.ownedCount ?? "1", 10) || 1);
+        tradeForm.elements.namedItem("trade-offered-card").value = card.dataset.cardId ?? "";
+        const offeredCountInput = tradeForm.elements.namedItem("trade-offered-count");
+        offeredCountInput.value = "1";
+        offeredCountInput.max = String(ownedCount);
+        tradeModal.querySelector("[data-trade-card-name]").textContent = card.dataset.name ?? "Carte";
+        tradeModal.querySelector("[data-trade-owned-label]").textContent = `Vous possédez ${ownedCount} exemplaire${ownedCount > 1 ? "s" : ""} de cette carte.`;
+        tradeModal.hidden = false;
+        tradeForm.elements.namedItem("trade-user")?.focus();
+      });
+    });
+
+    this.element.querySelectorAll("[data-action='close-trade']").forEach((button) => {
+      button.addEventListener("click", closeTradeModal);
+    });
+    tradeModal?.addEventListener("click", (event) => {
+      if (event.target === tradeModal) closeTradeModal();
+    });
+    tradeModal?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeTradeModal();
+    });
+
+    tradeForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const toUserId = tradeForm.elements.namedItem("trade-user")?.value;
+      const offeredId = tradeForm.elements.namedItem("trade-offered-card")?.value;
+      const requestedSelect = tradeForm.elements.namedItem("trade-requested");
+      const requestedId = requestedSelect?.value;
+      const offeredCountInput = tradeForm.elements.namedItem("trade-offered-count");
+      const offeredCount = Math.max(1, Number.parseInt(offeredCountInput?.value ?? "1", 10) || 1);
+      const requestedCount = Math.max(1, Number.parseInt(tradeForm.elements.namedItem("trade-requested-count")?.value ?? "1", 10) || 1);
+      const ownedMaximum = Math.max(1, Number.parseInt(offeredCountInput?.max ?? "1", 10) || 1);
+      if (!toUserId || !offeredId || !requestedId) return ui.notifications.warn("Complétez la proposition d’échange.");
+      if (offeredCount > ownedMaximum) return ui.notifications.warn("Vous ne possédez pas assez d’exemplaires de cette carte.");
+
+      const offeredName = tradeModal?.querySelector("[data-trade-card-name]")?.textContent ?? offeredId;
+      const requestedName = requestedSelect?.selectedOptions?.[0]?.textContent?.split(" — ")?.[0] ?? requestedId;
+      game.socket.emit(`module.${MODULE_ID}`, {
+        type: "trade-proposal",
+        fromUserId: game.user.id,
+        toUserId,
+        offered: { [offeredId]: offeredCount },
+        requested: { [requestedId]: requestedCount },
+        offeredLabel: `${offeredCount} × ${offeredName}`,
+        requestedLabel: `${requestedCount} × ${requestedName}`
+      });
+      closeTradeModal();
       ui.notifications.info("Proposition d’échange envoyée.");
     });
 

@@ -13,14 +13,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-02",
@@ -36,14 +37,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-03",
@@ -58,14 +60,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-04",
@@ -81,14 +84,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-05",
@@ -103,14 +107,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-06",
@@ -120,17 +125,20 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 7,
+    "strength": 8,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "hero"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-07",
@@ -145,14 +153,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-08",
@@ -163,17 +172,18 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 5,
+    "strength": 7,
     "maxCopies": 2,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-09",
@@ -188,14 +198,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-10",
@@ -210,14 +221,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-11",
@@ -230,15 +242,18 @@
     ],
     "strength": 6,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "support"
+    ],
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-12",
@@ -251,15 +266,18 @@
     ],
     "strength": 6,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "resilient"
+    ],
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SC-13",
@@ -272,14 +290,15 @@
     "strength": 7,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-14",
@@ -292,14 +311,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/thumb.webp"
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-15",
@@ -314,14 +334,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-16",
@@ -336,14 +357,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-17",
@@ -358,14 +380,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "NE-01",
@@ -380,14 +403,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "NE-02",
@@ -397,17 +421,20 @@
     "rows": [
       "domaine"
     ],
-    "strength": 5,
+    "strength": 6,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "support"
+    ],
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "NE-03",
@@ -423,14 +450,15 @@
       "hero",
       "support"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros. Donne aussi +1 aux autres unités de sa ligne.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "NE-04",
@@ -440,97 +468,113 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 6,
+    "strength": 8,
     "maxCopies": 2,
-    "abilities": [],
-    "text": "",
+    "abilities": [
+      "hero"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "SP-01",
     "name": "Bannière royale",
     "faction": "six-crowns",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "domaine"
+    ],
+    "strength": 5,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "SP-02",
     "name": "Étendard des Marches",
     "faction": "six-crowns",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "avant-garde"
+    ],
+    "strength": 5,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "SP-05",
     "name": "Diversion diplomatique",
     "faction": "six-crowns",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "escarmouche"
+    ],
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Bastion : peut rester entre deux manches avec une force réduite de moitié lorsqu’elle devient jouable.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "SP-07",
     "name": "Bannière des Frontières",
     "faction": "six-crowns",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "avant-garde",
+      "domaine"
+    ],
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "SC-18",
@@ -543,14 +587,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe régulière sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-19",
@@ -560,19 +605,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-20",
@@ -587,14 +633,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-21",
@@ -608,14 +655,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-22",
@@ -630,14 +678,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-23",
@@ -651,14 +700,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-24",
@@ -673,14 +723,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-25",
@@ -695,14 +746,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-26",
@@ -715,14 +767,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une patrouille régulière sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-27",
@@ -736,14 +789,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-28",
@@ -758,14 +812,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-29",
@@ -775,17 +830,18 @@
     "rows": [
       "domaine"
     ],
-    "strength": 3,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une unité de domaine sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-30",
@@ -800,14 +856,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-31",
@@ -822,14 +879,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SC-32",
@@ -844,13 +902,14 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   }
 ]

@@ -4379,3 +4379,171 @@ body > .scg-global-modal.scg-mulligan-preview-backdrop {
     outline-offset: 2px;
   }
 }
+
+/* v0.8.3 — types de cartes et échanges intégrés */
+.scg-card-type-line {
+  display: block;
+  color: #e6d7aa !important;
+  letter-spacing: .025em;
+}
+
+.scg-card-type-line b {
+  color: #fff2c4;
+  font-weight: 700;
+}
+
+.scg-collection-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+  margin: .35rem .65rem .2rem;
+}
+
+.scg-collection-card-actions .scg-preview-button,
+.scg-collection-card-actions .scg-trade-card-button {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  padding: .42rem .5rem;
+  white-space: nowrap;
+}
+
+.scg-trade-card-button {
+  border-color: #7fb6a2;
+  color: #d9fff1;
+  background: linear-gradient(180deg, rgba(41, 88, 73, .82), rgba(19, 45, 38, .92));
+}
+
+.scg-trade-card-button:hover,
+.scg-trade-card-button:focus-visible {
+  box-shadow: 0 0 0 1px rgba(183, 255, 229, .35), 0 0 18px rgba(95, 210, 168, .28);
+}
+
+.scg-exchange-tools > p {
+  margin: .25rem 0 .7rem;
+  color: #cfc5ad;
+  font-size: .78rem;
+}
+
+.scg-card-trade-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(3, 6, 8, .82);
+  backdrop-filter: blur(5px);
+}
+
+.scg-card-trade-modal[hidden] {
+  display: none;
+}
+
+.scg-card-trade-dialog {
+  width: min(720px, 94vw);
+  max-height: min(760px, 90vh);
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid #b89b58;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(33, 38, 41, .98), rgba(12, 16, 19, .99)),
+    #121619;
+  color: #eee4cc;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .75), inset 0 0 40px rgba(216, 183, 93, .07);
+}
+
+.scg-card-trade-dialog > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid rgba(216, 183, 93, .28);
+}
+
+.scg-card-trade-dialog > header small {
+  color: #bfae82;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.scg-card-trade-dialog > header h2 {
+  margin: .15rem 0 .3rem;
+  color: #fff2c4;
+}
+
+.scg-card-trade-dialog > header p {
+  margin: 0;
+  color: #cfc5ad;
+}
+
+.scg-card-trade-dialog > header button {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font-size: 1.35rem;
+}
+
+.scg-card-trade-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(130px, 1fr);
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+.scg-card-trade-grid label {
+  display: grid;
+  gap: .32rem;
+}
+
+.scg-card-trade-grid label.is-wide {
+  grid-column: 1;
+}
+
+.scg-card-trade-grid label > span {
+  color: #dfd2b2;
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.scg-card-trade-grid select,
+.scg-card-trade-grid input {
+  width: 100%;
+  min-height: 2.25rem;
+}
+
+.scg-card-trade-owned {
+  margin: .8rem 0 0;
+  color: #a9ddc9;
+  font-size: .78rem;
+}
+
+.scg-card-trade-dialog > footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  margin-top: 1rem;
+  padding-top: .8rem;
+  border-top: 1px solid rgba(216, 183, 93, .22);
+}
+
+.scg-trade-confirm-summary {
+  display: grid;
+  gap: .45rem;
+  margin: .8rem 0;
+  padding: .75rem;
+  border: 1px solid rgba(216, 183, 93, .3);
+  background: rgba(16, 21, 24, .75);
+}
+
+.scg-trade-confirm-summary span:first-child b { color: #baffdf; }
+.scg-trade-confirm-summary span:last-child b { color: #ffd5bd; }
+
+@media (max-width: 720px) {
+  .scg-card-trade-grid { grid-template-columns: 1fr; }
+  .scg-card-trade-grid label.is-wide { grid-column: auto; }
+  .scg-collection-card-actions { grid-template-columns: 1fr; }
+}

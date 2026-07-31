@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.2
+## Règles du prototype 0.8.3
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -20,7 +20,7 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 
 ### Traits actifs
 
-- **Héros** : carte prestigieuse à forte valeur.
+- **Héros** : départage les égalités de ligne en faveur du camp qui contrôle le plus de Héros.
 - **Soutien** : +1 aux autres cartes de sa ligne.
 - **Formation** : +2 par autre copie identique sur la ligne.
 - **Renfort** : déploie les copies restantes depuis la pioche.
@@ -28,6 +28,12 @@ Aucune carte supplémentaire n’est piochée entre les manches : la main initia
 - **Mobile** : peut choisir entre plusieurs lignes.
 
 Les traits sont représentés par des pictogrammes SVG sur les cartes. Leur effet complet apparaît au survol de l’icône.
+
+### Types et valeur des cartes
+
+Chaque carte collectionnable possède désormais un type mécanique explicite — **Personnage**, **Unité** ou **Tactique** — ainsi qu’une Force comprise entre 1 et 10 et au moins une ligne jouable. Les anciennes cartes Spéciales incomplètes sont devenues des Tactiques jouables.
+
+L’équilibrage suit une grille commune : la rareté définit la Force de base, tandis que la mobilité et les capacités générant de la valeur réduisent la Force brute. Le détail de cette méthode et la liste des cartes ajustées figurent dans `CARD_BALANCE.md`.
 
 ### Raretés
 
@@ -50,7 +56,7 @@ Chaque booster contient :
 
 Les doublons sont autorisés. Les cartes sont sauvegardées dans les drapeaux du compte Foundry actuellement connecté : chaque joueur possède donc sa collection indépendante. Les cartes des quatre decks de démonstration utilisent des identifiants séparés et ne figurent jamais dans cette collection.
 
-L’écran **Ma collection** affiche les 160 cartes collectionnables du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués. La collection peut être filtrée par faction, rareté, ligne et état de possession, avec une recherche par nom et des compteurs par faction.
+L’écran **Ma collection** affiche les 160 cartes collectionnables du module, regroupées dans les quatre collections de 40 cartes. Une carte non obtenue conserve son emplacement, mais son nom, ses statistiques, son texte et sa rareté restent masqués. La collection peut être filtrée par faction, rareté, ligne et état de possession, avec une recherche par nom et des compteurs par faction. Chaque carte possédée affiche directement un bouton **Échanger** : la carte proposée est préremplie, puis le joueur choisit le destinataire, la quantité et la carte demandée en retour. L’ancien formulaire global d’échange a été supprimé.
 
 Chaque profil possède également un nombre de **boosters disponibles**. Un compte non MJ ne peut ouvrir un booster que si un MJ lui en a offert au moins un ; chaque ouverture consomme un booster. Le MJ peut créditer plusieurs boosters à un joueur depuis les outils de collection, par exemple lors d’une montée de niveau ou comme récompense ponctuelle.
 
@@ -70,7 +76,7 @@ Le constructeur permet :
 - de renommer ou dupliquer un deck enregistré ;
 - d’obtenir un diagnostic détaillé lorsqu’un deck est invalide.
 
-Un deck personnalisé doit contenir exactement 20 cartes. Une même carte est limitée à 3 exemplaires si elle est Commune ou Peu commune, 2 si elle est Rare et 1 si elle est Unique. Il n’existe pas de plafond global de cartes Uniques différentes. Les cartes Spéciales restent visibles dans la collection, mais ne sont pas encore utilisables tant que leurs règles propres ne sont pas implémentées.
+Un deck personnalisé doit contenir exactement 20 cartes. Une même carte est limitée à 3 exemplaires si elle est Commune ou Peu commune, 2 si elle est Rare et 1 si elle est Unique. Il n’existe pas de plafond global de cartes Uniques différentes. Les Tactiques font désormais partie des cartes jouables : elles possèdent une Force, une ou plusieurs lignes autorisées et utilisent les mêmes capacités que les autres cartes.
 
 ## Commandes Foundry
 

@@ -11,7 +11,8 @@ const files = (await readdir(root)).filter((file) => file.endsWith(".json"));
 if (files.length !== expectedCollections.size || files.some((file) => !expectedCollections.has(file))) {
   throw new Error(`Le catalogue doit être réparti dans exactement quatre collections : ${[...expectedCollections.keys()].join(", ")}.`);
 }
-const allowedKinds = new Set(["leader", "unit", "special"]);
+const allowedKinds = new Set(["unit", "special"]);
+const allowedTypes = new Set(["personnage", "unite", "tactique"]);
 const allowedRows = new Set(["avant-garde", "escarmouche", "domaine"]);
 const allowedRarities = new Set(["commun", "peuCommune", "rare", "unique"]);
 const highRarities = new Set(["rare", "unique"]);
@@ -24,6 +25,15 @@ const allowedAbilities = new Set([
   "support",
   "resilient",
 ]);
+const rarityBaseStrength = Object.freeze({ commun: 5, peuCommune: 7, rare: 9, unique: 10 });
+const abilityStrengthModifier = Object.freeze({ hero: 0, support: -2, bond: -2, rally: -2, resilient: -1 });
+
+function expectedStrength(card) {
+  let value = rarityBaseStrength[card.rarity];
+  if (card.rows.length > 1) value -= 1;
+  for (const ability of card.abilities) value += abilityStrengthModifier[ability] ?? 0;
+  return Math.max(1, Math.min(10, value));
+}
 const requiredSixCrownsCharacterNames = new Set([
   "Aethryn",
   "Alistair Veyron",
@@ -51,7 +61,7 @@ for (const file of files) {
 
   for (const [index, card] of cards.entries()) {
     const where = `${file}[${index}]`;
-    for (const key of ["id", "name", "faction", "kind", "rows", "maxCopies", "abilities", "text", "rarity", "isCharacter"]) {
+    for (const key of ["id", "name", "faction", "kind", "type", "rows", "strength", "maxCopies", "abilities", "text", "rarity", "isCharacter"]) {
       if (!(key in card)) throw new Error(`${where}: champ manquant ${key}.`);
     }
     if (ids.has(card.id)) throw new Error(`${where}: identifiant dupliqué ${card.id}.`);
@@ -59,7 +69,8 @@ for (const file of files) {
     if (card.faction !== expectedFaction) {
       throw new Error(`${where}: faction ${card.faction} incohérente avec la collection ${expectedFaction}.`);
     }
-    if (!allowedKinds.has(card.kind)) throw new Error(`${where}: type invalide ${card.kind}.`);
+    if (!allowedKinds.has(card.kind)) throw new Error(`${where}: kind invalide ${card.kind}.`);
+    if (!allowedTypes.has(card.type)) throw new Error(`${where}: type de carte invalide ${card.type}.`);
     if (!allowedRarities.has(card.rarity)) throw new Error(`${where}: rareté invalide ${card.rarity}.`);
     if (typeof card.isCharacter !== "boolean") throw new Error(`${where}: isCharacter doit être un booléen.`);
     if (card.isCharacter && !highRarities.has(card.rarity)) {
@@ -67,8 +78,8 @@ for (const file of files) {
     }
     if (card.isCharacter) characterCount += 1;
     rarityCounts[card.rarity] += 1;
-    if (!Array.isArray(card.rows) || card.rows.some((row) => !allowedRows.has(row))) {
-      throw new Error(`${where}: ligne invalide.`);
+    if (!Array.isArray(card.rows) || card.rows.length === 0 || card.rows.some((row) => !allowedRows.has(row))) {
+      throw new Error(`${where}: chaque carte doit posséder au moins une ligne valide.`);
     }
     if (card.maxCopies !== maxCopiesByRarity[card.rarity]) {
       throw new Error(`${where}: maxCopies doit valoir ${maxCopiesByRarity[card.rarity]} pour la rareté ${card.rarity}.`);
@@ -76,11 +87,19 @@ for (const file of files) {
     if (!Array.isArray(card.abilities) || card.abilities.some((ability) => !allowedAbilities.has(ability))) {
       throw new Error(`${where}: capacité non prise en charge.`);
     }
-    if (card.kind === "unit" && !Number.isFinite(card.strength)) {
-      throw new Error(`${where}: une unité doit avoir une force numérique.`);
+    if (!Number.isInteger(card.strength) || card.strength < 1 || card.strength > 10) {
+      throw new Error(`${where}: la Force doit être un entier compris entre 1 et 10.`);
     }
-    if (card.kind !== "unit" && card.strength !== null) {
-      throw new Error(`${where}: une carte non-unité doit avoir strength = null.`);
+    if (typeof card.text !== "string" || card.text.trim().length === 0) {
+      throw new Error(`${where}: le texte de règle ne peut pas être vide.`);
+    }
+    const expectedType = card.isCharacter ? "personnage" : card.kind === "special" ? "tactique" : "unite";
+    if (card.type !== expectedType) {
+      throw new Error(`${where}: le type ${card.type} devrait être ${expectedType}.`);
+    }
+    const targetStrength = expectedStrength(card);
+    if (Math.abs(card.strength - targetStrength) > 1) {
+      throw new Error(`${where}: Force ${card.strength} hors budget ; cible ${targetStrength} ± 1.`);
     }
     if (file === "six-crowns.json" && requiredSixCrownsCharacterNames.has(card.name)) {
       foundRequiredNames.add(card.name);

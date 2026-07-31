@@ -3,7 +3,7 @@ import { MODULE_ID } from "./constants.js";
 export const TRAIT_DETAILS = Object.freeze({
   hero: Object.freeze({
     label: "Héros",
-    description: "Personnage prestigieux à forte valeur.",
+    description: "Départage une égalité de ligne en faveur du camp qui contrôle le plus de Héros.",
     iconUrl: `modules/${MODULE_ID}/assets/traits/hero.svg`
   }),
   support: Object.freeze({
@@ -18,12 +18,12 @@ export const TRAIT_DETAILS = Object.freeze({
   }),
   rally: Object.freeze({
     label: "Renfort",
-    description: "Déploie automatiquement toutes les autres copies présentes dans la pioche.",
+    description: "Déploie automatiquement sur la même ligne toutes les autres copies présentes dans la pioche.",
     iconUrl: `modules/${MODULE_ID}/assets/traits/rally.svg`
   }),
   resilient: Object.freeze({
     label: "Bastion",
-    description: "Peut rester entre deux manches avec une force réduite de moitié.",
+    description: "La carte Bastion la plus forte peut rester pour la manche suivante avec sa Force réduite de moitié.",
     iconUrl: `modules/${MODULE_ID}/assets/traits/resilient.svg`
   }),
   mobile: Object.freeze({

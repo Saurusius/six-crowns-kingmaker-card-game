@@ -14,7 +14,7 @@ await mkdir(target, { recursive: true });
 
 const entries = [
   "assets", "data", "lang", "scripts", "styles", "templates",
-  "LICENSE", "NOTICE.md", "README.md", "module.json"
+  "LICENSE", "NOTICE.md", "README.md", "CHANGELOG.md", "CARD_BALANCE.md", "module.json"
 ];
 
 for (const entry of entries) {

@@ -1,5 +1,21 @@
 # Journal des versions
 
+## 0.8.3 — Audit global des cartes et échanges intégrés
+
+- audit des 160 cartes collectionnables ;
+- ajout d’un type mécanique explicite à chaque carte : Personnage, Unité ou Tactique ;
+- ajout d’une Force numérique, d’au moins une ligne jouable et d’un texte de règle complet à toutes les cartes ;
+- conversion des 7 anciennes cartes Spéciales incomplètes en Tactiques réellement jouables ;
+- rééquilibrage des Forces selon une grille commune tenant compte de la rareté, de la mobilité et de la puissance des capacités ;
+- correction des Communes anormalement fortes et des Rares anormalement faibles ;
+- amélioration des 7 cartes Uniques, désormais dotées d’au moins une capacité et d’une Force comprise entre 8 et 10 ;
+- harmonisation des textes de Soutien, Formation, Renfort, Bastion et Héros avec leur fonctionnement réel ;
+- ajout du rapport `CARD_BALANCE.md` détaillant les principes et les changements ;
+- suppression de l’ancien formulaire global d’échange ;
+- ajout d’un bouton **Échanger** sur chaque carte possédée dans la collection ;
+- nouvelle fenêtre d’échange préremplie avec la carte choisie et résumé détaillé lors de l’acceptation ;
+- ajout de validations automatiques sur le budget de Force, les types, les lignes et les textes de règle.
+
 ## 0.8.2 — Révélation progressive des boosters
 
 - tri des cinq cartes dans l’ordre croissant de rareté : Commun, Peu commune, Rare, puis Unique ;

@@ -9,15 +9,19 @@
     ],
     "strength": 8,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero",
+      "support"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AA-02",
@@ -25,19 +29,24 @@
     "faction": "stolen-lands-arcana",
     "kind": "unit",
     "rows": [
+      "escarmouche",
       "domaine"
     ],
     "strength": 8,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero",
+      "resilient"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AA-03",
@@ -47,19 +56,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 10,
+    "strength": 8,
     "maxCopies": 3,
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-04",
@@ -69,19 +79,20 @@
     "rows": [
       "domaine"
     ],
-    "strength": 9,
+    "strength": 8,
     "maxCopies": 3,
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-05",
@@ -96,14 +107,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-06",
@@ -118,14 +130,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-07",
@@ -138,14 +151,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-08",
@@ -160,14 +174,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-09",
@@ -177,17 +192,18 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 7,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-10",
@@ -201,14 +217,15 @@
     "strength": 3,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-11",
@@ -221,14 +238,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-12",
@@ -241,14 +259,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-13",
@@ -259,17 +278,18 @@
       "escarmouche",
       "domaine"
     ],
-    "strength": 6,
+    "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-14",
@@ -284,14 +304,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/thumb.webp"
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-15",
@@ -301,17 +322,18 @@
     "rows": [
       "domaine"
     ],
-    "strength": 0,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-16",
@@ -321,19 +343,20 @@
     "rows": [
       "domaine"
     ],
-    "strength": 7,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-17",
@@ -343,17 +366,18 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 8,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-18",
@@ -369,14 +393,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "rare",
     "isCharacter": false,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/thumb.webp"
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "NE-05",
@@ -391,14 +416,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "AA-19",
@@ -413,14 +439,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-20",
@@ -435,14 +462,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-21",
@@ -456,14 +484,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-22",
@@ -478,14 +507,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-23",
@@ -496,19 +526,20 @@
       "escarmouche",
       "domaine"
     ],
-    "strength": 4,
+    "strength": 3,
     "maxCopies": 3,
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-24",
@@ -523,14 +554,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-25",
@@ -541,19 +573,20 @@
       "avant-garde",
       "domaine"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-26",
@@ -567,14 +600,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-27",
@@ -589,14 +623,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-28",
@@ -606,19 +641,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-29",
@@ -633,14 +669,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-30",
@@ -653,14 +690,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une créature féerique sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-31",
@@ -675,14 +713,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-32",
@@ -696,14 +735,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-33",
@@ -718,14 +758,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-34",
@@ -740,14 +781,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-35",
@@ -760,14 +802,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une créature féerique sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-36",
@@ -778,19 +821,20 @@
       "avant-garde",
       "domaine"
     ],
-    "strength": 7,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-37",
@@ -806,14 +850,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-38",
@@ -828,14 +873,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "AA-39",
@@ -848,13 +894,14 @@
     "strength": 7,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une créature massive sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   }
 ]

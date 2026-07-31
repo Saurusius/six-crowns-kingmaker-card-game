@@ -14,6 +14,12 @@ export const RARITY_DETAILS = Object.freeze({
   unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4 })
 });
 
+export const CARD_TYPE_DETAILS = Object.freeze({
+  personnage: Object.freeze({ label: "Personnage", order: 1 }),
+  unite: Object.freeze({ label: "Unité", order: 2 }),
+  tactique: Object.freeze({ label: "Tactique", order: 3 })
+});
+
 export const ROW_DETAILS = Object.freeze({
   "avant-garde": Object.freeze({ label: "Avant-garde", order: 1 }),
   escarmouche: Object.freeze({ label: "Escarmouche", order: 2 }),
@@ -34,7 +40,7 @@ export function getMaxCopiesForCard(card) {
 }
 
 export function isPlayableCard(card) {
-  return card?.kind === "unit"
+  return ["unit", "special"].includes(card?.kind)
     && Number.isFinite(card?.strength)
     && Array.isArray(card?.rows)
     && card.rows.length > 0;
@@ -107,6 +113,7 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       rarityOrder: rarity.order,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
+      typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
       maxCopies: getMaxCopiesForCard(card),
       traitBadges: buildTraitBadges(card),
       traitSummary: describeTraits(card),
@@ -152,6 +159,7 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         canRemove: inDeck > 0,
         factionLabel: faction.label,
         factionSymbol: faction.symbol,
+        typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
         rarityLabel: rarity.label,
         traitBadges: buildTraitBadges(card),
         traitSummary: describeTraits(card),
@@ -176,6 +184,8 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
         factionSymbol: "?",
         rarity: "commun",
         rarityLabel: "Inconnue",
+        type: "unite",
+        typeLabel: "Carte inconnue",
         ownedCount: 0,
         inDeck,
         maxCopies: 0,
@@ -204,6 +214,7 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       invalid: !isPlayableCard(card) || inDeck > allowedCopies,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
+      typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
       rarityLabel: rarity.label,
       traitBadges: buildTraitBadges(card),
       traitSummary: describeTraits(card),
@@ -338,6 +349,9 @@ export function expandCustomDeckCards(deck, catalog = []) {
         key: card.id,
         catalogId: card.id,
         name: card.name,
+        kind: card.kind,
+        type: card.type,
+        text: card.text,
         strength: card.strength,
         rows: [...card.rows],
         abilities: [...(card.abilities ?? [])],

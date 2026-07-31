@@ -5,19 +5,23 @@
     "faction": "iron-khans",
     "kind": "unit",
     "rows": [
+      "avant-garde",
       "escarmouche"
     ],
-    "strength": 8,
+    "strength": 9,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "KF-02",
@@ -27,17 +31,21 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 8,
+    "strength": 9,
     "maxCopies": 1,
-    "abilities": [],
-    "text": "Carte unique. Personnage majeur de sa collection.",
+    "abilities": [
+      "hero",
+      "resilient"
+    ],
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "unique",
     "isCharacter": true,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "KF-03",
@@ -52,14 +60,15 @@
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte.",
     "rarity": "rare",
     "isCharacter": true,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/thumb.webp"
-    }
+    },
+    "type": "personnage"
   },
   {
     "id": "KF-04",
@@ -70,19 +79,20 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 9,
+    "strength": 7,
     "maxCopies": 3,
     "abilities": [
       "hero"
     ],
-    "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
+    "text": "Héros : en cas d’égalité sur cette ligne, le camp qui contrôle le plus de cartes Héros l’emporte. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/full.webp",
       "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/medium.webp",
       "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/thumb.webp"
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-05",
@@ -92,19 +102,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-06",
@@ -118,14 +129,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-07",
@@ -135,19 +147,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "bond"
     ],
-    "text": "Les copies identiques présentes sur la ligne se renforcent.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-08",
@@ -162,14 +175,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Joue les autres copies de cette carte depuis le deck.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-09",
@@ -179,17 +193,18 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 7,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-10",
@@ -202,14 +217,15 @@
     "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-11",
@@ -224,14 +240,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-12",
@@ -244,14 +261,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-13",
@@ -264,14 +282,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-14",
@@ -286,14 +305,15 @@
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-15",
@@ -303,17 +323,18 @@
     "rows": [
       "escarmouche"
     ],
-    "strength": 2,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-16",
@@ -328,14 +349,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres unités de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-17",
@@ -349,14 +371,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-18",
@@ -369,34 +392,39 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "SP-04",
     "name": "Redéploiement éclair",
     "faction": "iron-khans",
     "kind": "special",
-    "rows": [],
-    "strength": null,
+    "rows": [
+      "avant-garde",
+      "escarmouche"
+    ],
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement les autres copies de cette carte présentes dans la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "tactique"
   },
   {
     "id": "KF-19",
@@ -409,14 +437,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe mobile sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-20",
@@ -430,14 +459,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-21",
@@ -447,19 +477,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-22",
@@ -474,14 +505,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-23",
@@ -496,14 +528,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-24",
@@ -518,14 +551,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-25",
@@ -538,14 +572,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe de tir sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-26",
@@ -555,19 +590,20 @@
     "rows": [
       "avant-garde"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-27",
@@ -578,19 +614,20 @@
       "avant-garde",
       "domaine"
     ],
-    "strength": 5,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-28",
@@ -605,14 +642,15 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-29",
@@ -627,14 +665,15 @@
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-30",
@@ -647,14 +686,15 @@
     "strength": 5,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une troupe de tir sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-31",
@@ -669,14 +709,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-32",
@@ -690,14 +731,15 @@
     "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Peut être jouée sur l’une de ses lignes autorisées.",
+    "text": "Mobile : peut être jouée sur les lignes Escarmouche ou Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-33",
@@ -710,14 +752,15 @@
     "strength": 6,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une unité de choc sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-34",
@@ -727,17 +770,18 @@
     "rows": [
       "domaine"
     ],
-    "strength": 3,
+    "strength": 4,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une unité de domaine sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Domaine.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-35",
@@ -748,19 +792,20 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 4,
+    "strength": 3,
     "maxCopies": 3,
     "abilities": [
       "bond"
     ],
-    "text": "Gagne +2 par autre copie identique sur la même ligne.",
+    "text": "Formation : gagne +2 de Force par autre copie identique sur la même ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-36",
@@ -771,19 +816,20 @@
       "avant-garde",
       "escarmouche"
     ],
-    "strength": 7,
+    "strength": 6,
     "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
-    "text": "Peut rester entre deux manches avec une force réduite de moitié.",
+    "text": "Bastion : si elle est votre carte Bastion la plus forte, elle reste pour la manche suivante avec la moitié de sa Force, arrondie au supérieur. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-37",
@@ -798,14 +844,15 @@
     "abilities": [
       "support"
     ],
-    "text": "Donne +1 aux autres cartes de sa ligne.",
+    "text": "Soutien : donne +1 de Force à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-38",
@@ -818,14 +865,15 @@
     "strength": 7,
     "maxCopies": 3,
     "abilities": [],
-    "text": "Une unité de choc sans effet supplémentaire.",
+    "text": "Unité : apporte directement sa Force sur la ligne Avant-garde.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   },
   {
     "id": "KF-39",
@@ -840,13 +888,14 @@
     "abilities": [
       "rally"
     ],
-    "text": "Déploie les autres copies disponibles depuis la pioche.",
+    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
       "full": null,
       "medium": null,
       "thumb": null
-    }
+    },
+    "type": "unite"
   }
 ]

@@ -109,8 +109,14 @@ Hooks.once("ready", () => {
   game.socket.on(`module.${MODULE_ID}`, async data => {
     if (data.type === "trade-proposal" && data.toUserId === game.user.id) {
       const from = game.users.get(data.fromUserId);
-      const accepted = await Dialog.confirm({ title:"Proposition d’échange", content:`<p><strong>${from?.name ?? "Un joueur"}</strong> vous propose un échange de cartes.</p><p>Accepter cette transaction ?</p>` });
-      if (accepted) game.socket.emit(`module.${MODULE_ID}`, { ...data, type:"trade-accepted" });
+      const escapeHtml = foundry.utils.escapeHTML;
+      const offeredLabel = escapeHtml(data.offeredLabel ?? "une ou plusieurs cartes");
+      const requestedLabel = escapeHtml(data.requestedLabel ?? "une ou plusieurs cartes");
+      const accepted = await Dialog.confirm({
+        title: "Proposition d’échange",
+        content: `<p><strong>${escapeHtml(from?.name ?? "Un joueur")}</strong> vous propose :</p><div class="scg-trade-confirm-summary"><span>Vous recevez <b>${offeredLabel}</b></span><span>Vous donnez <b>${requestedLabel}</b></span></div><p>Accepter cette transaction ?</p>`
+      });
+      if (accepted) game.socket.emit(`module.${MODULE_ID}`, { ...data, type: "trade-accepted" });
     }
     if (data.type === "trade-accepted" && game.user.isGM) {
       try { await executeTrade(data); game.socket.emit(`module.${MODULE_ID}`, { type:"trade-complete", users:[data.fromUserId,data.toUserId] }); }
