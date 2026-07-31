@@ -5,8 +5,10 @@
       <p>Les cartes non obtenues restent masquées : leur nom, leur rareté, leur ligne et leurs effets ne sont pas révélés.</p>
     </div>
     <div class="scg-profile-actions">
-      <span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Ouverture MJ illimitée{{else}}{{boosterCredits}} booster(s) à ouvrir{{/if}}</span>
+      <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
       <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+      <button type="button" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Choisir un booster spécial</button>
+      <button type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
       <button type="button" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
       <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
@@ -129,7 +131,7 @@
         <label>
           <span>Joueur ciblé</span>
           <select name="gm-target-user">
-            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}} — {{boosterCredits}} booster(s)</option>{{/each}}
+            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}} — {{boosterCredits}} C · {{specialBoosterCredits}} S · {{eventBoosterCredits}} E</option>{{/each}}
           </select>
         </label>
         <label class="scg-gm-card-select">
@@ -142,13 +144,12 @@
           <span>Exemplaires de la carte</span>
           <input type="number" name="gm-card-count" value="1" min="1" max="100">
         </label>
-        <label>
-          <span>Boosters à offrir</span>
-          <input type="number" name="gm-booster-count" value="1" min="1" max="100">
-        </label>
+        <label><span>Boosters classiques à offrir</span><input type="number" name="gm-booster-count" value="1" min="1" max="100"></label>
+        <label><span>Tickets spéciaux à offrir</span><input type="number" name="gm-special-ticket-count" value="1" min="1" max="100"></label>
+        <label><span>Tickets événementiels à offrir</span><input type="number" name="gm-event-ticket-count" value="1" min="1" max="100"></label>
         <div class="scg-gm-actions">
           <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner la carte</button>
-          <button type="button" data-action="gm-grant-boosters"><i class="fa-solid fa-ticket"></i> Offrir les boosters</button>
+          <button type="button" data-action="gm-grant-boosters"><i class="fa-solid fa-ticket"></i> Offrir les classiques</button><button type="button" data-action="gm-grant-special-tickets"><i class="fa-solid fa-wand-sparkles"></i> Offrir les spéciaux</button><button type="button" data-action="gm-grant-event-tickets"><i class="fa-solid fa-star"></i> Offrir les événementiels</button>
           <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
         </div>
       </div>

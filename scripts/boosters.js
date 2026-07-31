@@ -3,8 +3,19 @@ import { withNormalizedCardArt } from "./art.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
+export const SPECIAL_BOOSTER_CREDITS_FLAG = "specialBoosterCredits";
+export const EVENT_BOOSTER_CREDITS_FLAG = "eventBoosterCredits";
 export const BOOSTER_HISTORY_FLAG = "boosterHistory";
 const BOOSTER_MACRO_NAME = "Ouvrir un booster des Six Couronnes";
+export const SPECIAL_BOOSTERS = Object.freeze({
+  "six-crowns": { id: "six-crowns", label: "Royaume des Six Couronnes", image: `modules/${MODULE_ID}/assets/boosters/royaume-six-couronnes.png`, accent: "royal" },
+  aldori: { id: "aldori", label: "Maison Aldori", image: `modules/${MODULE_ID}/assets/boosters/maison-aldori.png`, accent: "aldori" },
+  "iron-khans": { id: "iron-khans", label: "Khans de Fer", image: `modules/${MODULE_ID}/assets/boosters/khans-de-fer.png`, accent: "khans" },
+  "stolen-lands-arcana": { id: "stolen-lands-arcana", label: "Arcanes des Terres Dérobées", image: `modules/${MODULE_ID}/assets/boosters/arcanes-terres-derobees.png`, accent: "arcana" }
+});
+
+const EVENT_BOOSTERS = new Map();
+
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
   "aldori.json",
@@ -87,6 +98,49 @@ async function setBoosterCredits(targetUser, value) {
   return credits;
 }
 
+async function getTicketCredits(flag, options = {}) {
+  const targetUser = resolveUser(options);
+  return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, flag));
+}
+
+async function setTicketCredits(targetUser, flag, value) {
+  const credits = normalizeBoosterCredits(value);
+  await targetUser.setFlag(MODULE_ID, flag, credits);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id, flag);
+  return credits;
+}
+
+export function getSpecialBoosterCredits(options = {}) {
+  return getTicketCredits(SPECIAL_BOOSTER_CREDITS_FLAG, options);
+}
+
+export function getEventBoosterCredits(options = {}) {
+  return getTicketCredits(EVENT_BOOSTER_CREDITS_FLAG, options);
+}
+
+export async function grantTicketCreditsToUser({ userId, count = 1, type = "special" } = {}) {
+  if (!game.user.isGM) throw new Error("Seul un MJ peut offrir des tickets.");
+  const targetUser = resolveUser({ userId });
+  const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
+  const flag = type === "event" ? EVENT_BOOSTER_CREDITS_FLAG : SPECIAL_BOOSTER_CREDITS_FLAG;
+  const previous = await getTicketCredits(flag, { user: targetUser });
+  const credits = await setTicketCredits(targetUser, flag, previous + quantity);
+  return { user: targetUser, granted: quantity, credits, type };
+}
+
+export function registerEventBooster(definition = {}) {
+  const id = String(definition.id ?? "").trim();
+  if (!id) throw new Error("Un booster événementiel doit posséder un identifiant.");
+  const cardIds = Array.isArray(definition.cardIds) ? definition.cardIds.filter(Boolean) : [];
+  if (cardIds.length < 3) throw new Error("Un booster événementiel doit référencer au moins 3 cartes.");
+  EVENT_BOOSTERS.set(id, { ...definition, id, cardIds, label: definition.label ?? id });
+  return EVENT_BOOSTERS.get(id);
+}
+
+export function getEventBoosters() {
+  return Array.from(EVENT_BOOSTERS.values()).map((entry) => ({ ...entry, cardIds: [...entry.cardIds] }));
+}
+
 export async function loadCardCatalog() {
   catalogPromise ??= Promise.all(CARD_FILES.map((file) => loadJson(
     `modules/${MODULE_ID}/data/cards/${file}`
@@ -127,11 +181,13 @@ export async function getBoosterHistory(options = {}) {
   return Array.isArray(history) ? history : [];
 }
 
-async function addBoosterToHistory(targetUser, cards) {
+async function addBoosterToHistory(targetUser, cards, metadata = {}) {
   const history = await getBoosterHistory({ user: targetUser });
   history.push({
     id: foundry.utils.randomID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
     openedAt: new Date().toISOString(),
+    boosterType: metadata.boosterType ?? "classic",
+    boosterLabel: metadata.boosterLabel ?? "Booster classique",
     cards: cards.map((card) => ({
       id: card.id,
       name: card.name,
@@ -330,6 +386,85 @@ export async function openBooster({ random = Math.random, user = null, userId = 
   return annotatedBooster;
 }
 
+
+function annotateCards(cards, beforeCollection) {
+  const runningCounts = Object.fromEntries(Object.entries(beforeCollection).map(([id, entry]) => [id, entry.count ?? 0]));
+  return cards.map((card) => {
+    const previousCount = runningCounts[card.id] ?? 0;
+    runningCounts[card.id] = previousCount + 1;
+    return { ...card, isNew: previousCount === 0, ownedAfter: previousCount + 1, acquisitionLabel: previousCount === 0 ? "Nouvelle carte" : `Nouvel exemplaire · ×${previousCount + 1}` };
+  });
+}
+
+export async function openSpecialBooster({ faction, random = Math.random, user = null, userId = null, animate = true } = {}) {
+  const definition = SPECIAL_BOOSTERS[faction];
+  if (!definition) throw new Error("Choisissez un booster spécial valide.");
+  const targetUser = resolveUser({ user, userId });
+  if (targetUser.id !== game.user.id && !game.user.isGM) throw new Error("Vous ne pouvez ouvrir que vos propres boosters.");
+  const requiresCredit = !game.user.isGM;
+  const previousCredits = requiresCredit ? await getSpecialBoosterCredits({ user: targetUser }) : null;
+  if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket spécial.");
+  if (requiresCredit) await setTicketCredits(targetUser, SPECIAL_BOOSTER_CREDITS_FLAG, previousCredits - 1);
+  const [catalog, beforeCollection] = await Promise.all([loadCardCatalog(), getCollection({ user: targetUser })]);
+  const pool = catalog.filter((card) => card.faction === faction);
+  if (pool.length === 0) throw new Error(`Aucune carte disponible pour ${definition.label}.`);
+  const cards = [
+    pickCard(pool, drawNormalRarity(random), random),
+    pickCard(pool, drawNormalRarity(random), random),
+    pickCard(pool, drawGuaranteedRarity(random), random)
+  ];
+  const annotated = annotateCards(sortCardsByRarity(shuffle(cards, random)), beforeCollection);
+  try {
+    await addCardsToCollection(annotated, { user: targetUser });
+    await addBoosterToHistory(targetUser, annotated, { boosterType: "special", boosterLabel: definition.label });
+  } catch (error) {
+    if (requiresCredit) await setTicketCredits(targetUser, SPECIAL_BOOSTER_CREDITS_FLAG, previousCredits);
+    throw error;
+  }
+  try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ alias: game.user.name }), content: boosterChatContent(annotated, targetUser, requiresCredit ? previousCredits - 1 : null).replace("Booster des Six Couronnes", definition.label) }); } catch (error) { console.error(`${MODULE_TITLE} | Publication du booster spécial impossible`, error); }
+  if (animate && targetUser.id === game.user.id) animateBooster(annotated, { boosterLabel: definition.label, getRemainingCredits: getSpecialBoosterCredits, reopen: () => openSpecialBooster({ faction }) });
+  ui.notifications.info(`${definition.label} ouvert : 3 cartes thématiques ajoutées.`);
+  return annotated;
+}
+
+export async function openEventBooster({ boosterId, random = Math.random, user = null, userId = null, animate = true } = {}) {
+  const definition = EVENT_BOOSTERS.get(boosterId);
+  if (!definition) throw new Error("Ce booster événementiel n’est pas configuré.");
+  const targetUser = resolveUser({ user, userId });
+  const requiresCredit = !game.user.isGM;
+  const previousCredits = requiresCredit ? await getEventBoosterCredits({ user: targetUser }) : null;
+  if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket événementiel.");
+  if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits - 1);
+  const [catalog, beforeCollection] = await Promise.all([loadCardCatalog(), getCollection({ user: targetUser })]);
+  const pool = catalog.filter((card) => definition.cardIds.includes(card.id));
+  if (pool.length < 3) throw new Error("La réserve de ce booster événementiel est incomplète.");
+  const selected = shuffle(pool, random).slice(0, 3).map((card) => ({ ...card }));
+  const annotated = annotateCards(sortCardsByRarity(selected), beforeCollection);
+  try {
+    await addCardsToCollection(annotated, { user: targetUser });
+    await addBoosterToHistory(targetUser, annotated, { boosterType: "event", boosterLabel: definition.label });
+  } catch (error) {
+    if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits);
+    throw error;
+  }
+  if (animate && targetUser.id === game.user.id) animateBooster(annotated, { boosterLabel: definition.label, getRemainingCredits: getEventBoosterCredits, reopen: () => openEventBooster({ boosterId }) });
+  ui.notifications.info(`${definition.label} ouvert : 3 cartes événementielles ajoutées.`);
+  return annotated;
+}
+
+export function showSpecialBoosterSelector() {
+  if (typeof document === "undefined") return;
+  document.querySelector(".scg-special-booster-picker")?.remove();
+  const overlay = document.createElement("div");
+  overlay.className = "scg-special-booster-picker";
+  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-label="Choisir un booster spécial"><header><div><small>Ticket spécial</small><h2>Choisissez votre booster</h2><p>Chaque paquet contient 3 cartes exclusivement issues de son thème.</p></div><button type="button" data-action="close-special-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${Object.values(SPECIAL_BOOSTERS).map((entry) => `<button type="button" class="scg-special-booster-option is-${entry.accent}" data-faction="${escapeHtml(entry.id)}"><img src="${escapeHtml(entry.image)}" alt="Booster ${escapeHtml(entry.label)}"><span><strong>${escapeHtml(entry.label)}</strong><small>3 cartes thématiques garanties</small></span></button>`).join("")}</div></section>`;
+  const close = () => overlay.remove();
+  overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
+  overlay.querySelector("[data-action='close-special-picker']")?.addEventListener("click", close);
+  overlay.querySelectorAll("[data-faction]").forEach((button) => button.addEventListener("click", async () => { const faction = button.dataset.faction; button.disabled = true; try { close(); await openSpecialBooster({ faction }); } catch (error) { ui.notifications.error(error.message); } }));
+  document.body.appendChild(overlay);
+}
+
 export async function openBoosters({ count = 1, random = Math.random } = {}) {
   const requested = Math.max(1, Math.min(10, Number.parseInt(count, 10) || 1));
   const available = game.user.isGM ? requested : Math.min(requested, await getBoosterCredits());
@@ -411,7 +546,7 @@ function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
   `;
 }
 
-function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, fastPrelude = false } = {}) {
+function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, fastPrelude = false, boosterLabel = "Booster classique", getRemainingCredits = getBoosterCredits, reopen = () => openBooster() } = {}) {
   if (typeof document === "undefined" || !Array.isArray(cards) || cards.length === 0) return;
 
   document.querySelector(".scg-booster-opening")?.remove();
@@ -437,14 +572,14 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     </div>
     <div class="scg-booster-pack" aria-hidden="true">
       <i class="fa-solid fa-box-open"></i>
-      <strong>Ouverture du booster…</strong>
+      <strong>Ouverture de ${escapeHtml(boosterLabel)}…</strong>
       <span class="scg-pack-sigil"><i class="fa-solid fa-crown"></i></span>
     </div>
     <section class="scg-booster-results" aria-live="polite">
       <header>
         <span><i class="fa-solid fa-star"></i></span>
         <div>
-          <small>Booster ${packIndex} / ${totalPacks}</small>
+          <small>${escapeHtml(boosterLabel)} · ${packIndex} / ${totalPacks}</small>
           <h2>Révélation des cartes</h2>
           <p class="scg-booster-progress" data-reveal-status>La magie se rassemble…</p>
         </div>
@@ -521,11 +656,11 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     sequenceFinished = true;
     overlay.classList.add("is-complete");
     const newCount = orderedCards.filter((card) => card.isNew).length;
-    if (status) status.textContent = hasUnique ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)` : `${newCount} nouvelle(s) carte(s) · cinq cartes révélées`;
+    if (status) status.textContent = hasUnique ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)` : `${newCount} nouvelle(s) carte(s) · ${orderedCards.length} cartes révélées`;
     button.textContent = totalPacks > 1 && packIndex < totalPacks ? "Booster suivant" : "Fermer";
     if (totalPacks === 1 && againButton) {
       againButton.hidden = false;
-      Promise.resolve(game.user.isGM ? Number.POSITIVE_INFINITY : getBoosterCredits())
+      Promise.resolve(game.user.isGM ? Number.POSITIVE_INFINITY : getRemainingCredits())
         .then((credits) => {
           const canOpenAnother = game.user.isGM || credits > 0;
           againButton.disabled = !canOpenAnother;
@@ -585,7 +720,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     resultsShown = true;
     overlay.classList.remove("is-pack-charged", "is-pack-burst");
     overlay.classList.add("is-results");
-    if (status) status.textContent = "Révélation 1 / 5…";
+    if (status) status.textContent = `Révélation 1 / ${orderedCards.length}…`;
     schedule(revealNext, 520);
   };
 
@@ -614,7 +749,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     document.documentElement.classList.remove("scg-booster-open");
     document.body.classList.remove("scg-booster-open");
     overlay.remove();
-    void openBooster();
+    void reopen();
   });
   document.addEventListener("keydown", onKeyDown);
 

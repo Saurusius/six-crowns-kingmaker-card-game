@@ -2,12 +2,17 @@ import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import {
   getBoosterCredits,
   getBoosterHistory,
+  getSpecialBoosterCredits,
+  getEventBoosterCredits,
   getCollection,
   grantBoostersToUser,
+  grantTicketCreditsToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
   openBoosters,
+  showSpecialBoosterSelector,
+  getEventBoosters,
   recycleCardsForBooster,
   resetCollectionForUser
 } from "../boosters.js";
@@ -77,10 +82,12 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
   }
 
   async _prepareContext() {
-    const [catalog, collection, boosterCredits, boosterHistory] = await Promise.all([
+    const [catalog, collection, boosterCredits, specialBoosterCredits, eventBoosterCredits, boosterHistory] = await Promise.all([
       loadCardCatalog(),
       getCollection(),
       getBoosterCredits(),
+      getSpecialBoosterCredits(),
+      getEventBoosterCredits(),
       getBoosterHistory()
     ]);
     const tradeOffers = getTradeOffers();
@@ -110,7 +117,9 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     const usersWithCredits = game.user.isGM
       ? await Promise.all(users.map(async (user) => ({
         user,
-        boosterCredits: await getBoosterCredits({ user })
+        boosterCredits: await getBoosterCredits({ user }),
+        specialBoosterCredits: await getSpecialBoosterCredits({ user }),
+        eventBoosterCredits: await getEventBoosterCredits({ user })
       })))
       : [];
     const gmCards = [...catalog]
@@ -174,6 +183,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       copies,
       completionPercent: total > 0 ? Math.round((discovered / total) * 100) : 0,
       boosterCredits,
+      specialBoosterCredits,
+      eventBoosterCredits,
+      canOpenSpecialBooster: game.user.isGM || specialBoosterCredits > 0,
+      canOpenEventBooster: (game.user.isGM || eventBoosterCredits > 0) && getEventBoosters().length > 0,
+      hasConfiguredEventBoosters: getEventBoosters().length > 0,
       canOpenBooster: game.user.isGM || boosterCredits > 0,
       tradeUsers,
       tradeAvailable: tradeUsers.length > 0,
@@ -215,11 +229,13 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       rarityOptions: selectOptions(Object.entries(RARITY_DETAILS), this.rarityFilter),
       rowOptions: selectOptions(Object.entries(ROW_DETAILS), this.rowFilter),
       isGM: game.user.isGM,
-      gmUsers: usersWithCredits.map(({ user, boosterCredits: credits }) => ({
+      gmUsers: usersWithCredits.map(({ user, boosterCredits: credits, specialBoosterCredits: specialCredits, eventBoosterCredits: eventCredits }) => ({
         id: user.id,
         name: user.name,
         activeLabel: user.active ? "connecté" : "hors ligne",
         boosterCredits: credits,
+        specialBoosterCredits: specialCredits,
+        eventBoosterCredits: eventCredits,
         selected: user.id === this.gmTargetUserId
       })),
       gmCards
@@ -296,6 +312,12 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     this.element.querySelector("[data-action='open-three-boosters']")?.addEventListener("click", async () => {
       try { await openBoosters({ count: 3 }); await this.render({ force: true }); }
       catch (error) { ui.notifications.error(error.message); }
+    });
+    this.element.querySelector("[data-action='open-special-booster']")?.addEventListener("click", () => showSpecialBoosterSelector());
+    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", () => {
+      const events = getEventBoosters();
+      if (!events.length) return ui.notifications.warn("Aucun booster événementiel n’est encore configuré.");
+      ui.notifications.info("Les boosters événementiels configurés seront proposés ici.");
     });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
 
@@ -475,6 +497,13 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
         console.error(`${MODULE_TITLE} | Don de boosters impossible`, error);
         ui.notifications.error(error.message);
       }
+    });
+
+    this.element.querySelector("[data-action='gm-grant-special-tickets']")?.addEventListener("click", async () => {
+      try { this._captureGmSelection(); const count = this.element.querySelector("[name='gm-special-ticket-count']")?.value ?? 1; const result = await grantTicketCreditsToUser({ userId: this.gmTargetUserId, count, type: "special" }); ui.notifications.info(`${result.granted} ticket(s) spécial(aux) offert(s) à ${result.user.name}.`); await this.render({ force: true }); } catch (error) { ui.notifications.error(error.message); }
+    });
+    this.element.querySelector("[data-action='gm-grant-event-tickets']")?.addEventListener("click", async () => {
+      try { this._captureGmSelection(); const count = this.element.querySelector("[name='gm-event-ticket-count']")?.value ?? 1; const result = await grantTicketCreditsToUser({ userId: this.gmTargetUserId, count, type: "event" }); ui.notifications.info(`${result.granted} ticket(s) événementiel(s) offert(s) à ${result.user.name}.`); await this.render({ force: true }); } catch (error) { ui.notifications.error(error.message); }
     });
 
     this.element.querySelector("[data-action='gm-reset-collection']")?.addEventListener("click", async (event) => {
