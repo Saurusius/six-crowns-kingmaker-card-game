@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.8.63
+
+- Sort complètement l’analyse du deck du constructeur principal et l’ouvre dans une fenêtre dédiée.
+- Libère toute la hauteur du constructeur pour la mosaïque des cartes disponibles.
+- Déplace le nom du deck, le chargement et toutes les actions d’enregistrement dans le panneau latéral **Deck actuel**.
+- Ajoute un résumé de validation compact et un accès secondaire à l’analyse dans le panneau latéral.
+- Synchronise automatiquement la fenêtre d’analyse avec les modifications du deck en cours.
+
 ## 0.8.62
 
 - Centre précisément la pièce sur la cible dorée après le tirage.

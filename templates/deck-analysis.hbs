@@ -1,0 +1,60 @@
+<section class="scg-deck-analysis-window">
+  <header class="scg-deck-analysis-hero">
+    <div>
+      <span class="scg-deck-analysis-kicker"><i class="fa-solid fa-chart-column"></i> Analyse tactique</span>
+      <h1>{{deckName}}</h1>
+      <p>{{total}} / {{requiredTotal}} cartes · Force moyenne {{statistics.averageStrength}}</p>
+    </div>
+    <div class="scg-deck-analysis-score {{#if valid}}is-valid{{else}}is-invalid{{/if}}">
+      <strong>{{total}}</strong>
+      <span>cartes</span>
+    </div>
+  </header>
+
+  {{#if hasValidationErrors}}
+    <section class="scg-deck-analysis-validation is-invalid">
+      <strong><i class="fa-solid fa-triangle-exclamation"></i> Deck à compléter</strong>
+      <ul>{{#each validationErrors}}<li>{{this}}</li>{{/each}}</ul>
+    </section>
+  {{else}}
+    <section class="scg-deck-analysis-validation is-valid">
+      <strong><i class="fa-solid fa-circle-check"></i> Deck valide et prêt à jouer</strong>
+      <span>La composition respecte toutes les limites de rareté et de quantité.</span>
+    </section>
+  {{/if}}
+
+  <div class="scg-deck-analysis-grid">
+    <article class="scg-analysis-card scg-analysis-card-featured">
+      <header><strong>Courbe de force</strong><span>Force totale : {{statistics.totalStrength}}</span></header>
+      <div class="scg-analysis-bars">
+        {{#each statistics.strengthCurve}}
+          <div class="scg-analysis-row">
+            <span>{{label}}</span>
+            <div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div>
+            <b>{{count}}</b>
+          </div>
+        {{/each}}
+      </div>
+    </article>
+
+    <article class="scg-analysis-card">
+      <header><strong>Répartition des lignes</strong><span>Les cartes mobiles comptent sur chaque ligne autorisée.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.rowDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+
+    <article class="scg-analysis-card">
+      <header><strong>Raretés</strong><span>Contrôle de la concentration des cartes prestigieuses.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.rarityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+
+    <article class="scg-analysis-card">
+      <header><strong>Types</strong><span>Personnages, unités et tactiques.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.typeDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+
+    <article class="scg-analysis-card scg-analysis-card-wide">
+      <header><strong>Capacités</strong><span>Répartition des mécaniques présentes dans le deck.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.abilityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+  </div>
+</section>

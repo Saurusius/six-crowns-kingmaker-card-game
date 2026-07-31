@@ -1,4 +1,4 @@
-<section class="scg-profile-shell scg-builder-shell {{#if analysisCompact}}is-analysis-compact{{/if}}">
+<section class="scg-profile-shell scg-builder-shell">
   <header class="scg-profile-toolbar">
     <div>
       <h1>Constructeur de deck</h1>
@@ -6,86 +6,13 @@
     </div>
     <div class="scg-builder-header-actions">
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      <button type="button" data-action="open-deck-analysis"><i class="fa-solid fa-chart-column"></i> Analyser le deck</button>
       <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
         <strong>{{total}} / {{requiredTotal}}</strong>
         {{#if valid}}<span>Deck valide</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>{{remaining}} restante(s)</span>{{/if}}{{/if}}
       </div>
     </div>
   </header>
-
-  <section class="scg-builder-management">
-    <label class="scg-builder-name">
-      <span>Nom du deck</span>
-      <input type="text" name="deck-name" value="{{draft.name}}" maxlength="60" placeholder="Mon deck des Terres Dérobées">
-    </label>
-    <label>
-      <span>Decks enregistrés</span>
-      <select name="saved-deck">
-        <option value="">— Choisir un deck —</option>
-        {{#each decks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>{{/each}}
-      </select>
-    </label>
-    <div class="scg-builder-management-actions">
-      <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
-      <button type="button" data-action="new-deck"><i class="fa-solid fa-file-circle-plus"></i> Nouveau</button>
-      <button type="button" data-action="save-deck" {{#unless canSave}}disabled{{/unless}}><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-      <button type="button" data-action="rename-deck" {{#unless canRename}}disabled{{/unless}}><i class="fa-solid fa-pen"></i> Renommer</button>
-      <button type="button" data-action="duplicate-deck" {{#unless canDuplicate}}disabled{{/unless}}><i class="fa-solid fa-copy"></i> Dupliquer</button>
-      <button type="button" class="is-danger" data-action="delete-deck" {{#unless canDelete}}disabled{{/unless}} title="Supprimer"><i class="fa-solid fa-trash"></i></button>
-    </div>
-  </section>
-
-  {{#if hasValidationErrors}}
-    <section class="scg-deck-validation is-invalid">
-      <div>
-        <strong><i class="fa-solid fa-triangle-exclamation"></i> Ce deck n’est pas encore valide</strong>
-        <span>Corrigez les points suivants avant de l’enregistrer ou de le jouer :</span>
-      </div>
-      <ul>{{#each validationErrors}}<li>{{this}}</li>{{/each}}</ul>
-    </section>
-  {{else}}
-    <section class="scg-deck-validation is-valid">
-      <strong><i class="fa-solid fa-circle-check"></i> Deck valide : 20 cartes · 3 exemplaires par Commune ou Peu commune · 2 par Rare · 1 par Unique.</strong>
-    </section>
-  {{/if}}
-
-  <div class="scg-deck-analysis-toolbar">
-    <strong><i class="fa-solid fa-chart-simple"></i> Analyse du deck</strong>
-    <button type="button" data-action="toggle-analysis-size" aria-pressed="{{analysisCompact}}">
-      <i class="{{analysisToggleIcon}}"></i> {{analysisToggleLabel}}
-    </button>
-  </div>
-
-  <section class="scg-deck-analysis">
-    <article class="scg-analysis-card">
-      <header><strong>Courbe de force</strong><span>Force moyenne : {{statistics.averageStrength}}</span></header>
-      <div class="scg-analysis-bars">
-        {{#each statistics.strengthCurve}}
-          <div class="scg-analysis-row">
-            <span>{{label}}</span>
-            <div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div>
-            <b>{{count}}</b>
-          </div>
-        {{/each}}
-      </div>
-    </article>
-    <article class="scg-analysis-card">
-      <header><strong>Répartition des lignes</strong><span>Une carte mobile compte sur chaque ligne autorisée.</span></header>
-      <div class="scg-analysis-bars">{{#each statistics.rowDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
-    </article>
-    <article class="scg-analysis-card">
-      <header><strong>Raretés</strong><span>Contrôlez la concentration des cartes prestigieuses.</span></header>
-      <div class="scg-analysis-bars">{{#each statistics.rarityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
-    </article>
-    <article class="scg-analysis-card">
-      <header><strong>Types</strong><span>Personnages, unités et tactiques.</span></header>
-      <div class="scg-analysis-bars">{{#each statistics.typeDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
-    </article>
-    <article class="scg-analysis-card">
-      <header><strong>Capacités</strong><span>Répartition des mécaniques du deck.</span></header>
-      <div class="scg-analysis-bars">{{#each statistics.abilityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
-    </article>
-  </section>
 
   <div class="scg-builder-layout">
     <section class="scg-builder-library">
@@ -152,6 +79,47 @@
 
     <aside class="scg-builder-deck-list">
       <header><h2>Deck actuel</h2><span>{{total}} carte(s)</span></header>
+
+      <section class="scg-builder-side-management" aria-label="Gestion du deck">
+        <label class="scg-builder-name">
+          <span>Nom du deck</span>
+          <input type="text" name="deck-name" value="{{draft.name}}" maxlength="60" placeholder="Mon deck des Terres Dérobées">
+        </label>
+        <label>
+          <span>Decks enregistrés</span>
+          <select name="saved-deck">
+            <option value="">— Choisir un deck —</option>
+            {{#each decks}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>{{/each}}
+          </select>
+        </label>
+        <div class="scg-builder-side-actions">
+          <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
+          <button type="button" data-action="new-deck"><i class="fa-solid fa-file-circle-plus"></i> Nouveau</button>
+          <button type="button" class="is-primary" data-action="save-deck" {{#unless canSave}}disabled{{/unless}}><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+          <button type="button" data-action="rename-deck" {{#unless canRename}}disabled{{/unless}}><i class="fa-solid fa-pen"></i> Renommer</button>
+          <button type="button" data-action="duplicate-deck" {{#unless canDuplicate}}disabled{{/unless}}><i class="fa-solid fa-copy"></i> Dupliquer</button>
+          <button type="button" class="is-danger" data-action="delete-deck" {{#unless canDelete}}disabled{{/unless}}><i class="fa-solid fa-trash"></i> Supprimer</button>
+        </div>
+      </section>
+
+      {{#if hasValidationErrors}}
+        <section class="scg-deck-validation is-invalid scg-builder-side-validation">
+          <strong><i class="fa-solid fa-triangle-exclamation"></i> Deck incomplet</strong>
+          <ul>{{#each validationErrors}}<li>{{this}}</li>{{/each}}</ul>
+        </section>
+      {{else}}
+        <section class="scg-deck-validation is-valid scg-builder-side-validation">
+          <strong><i class="fa-solid fa-circle-check"></i> Deck valide</strong>
+          <span>Prêt à être enregistré et joué.</span>
+        </section>
+      {{/if}}
+
+      <button type="button" class="scg-builder-side-analysis" data-action="open-deck-analysis">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span><strong>Analyse du deck</strong><small>Courbe de force, lignes, raretés et capacités</small></span>
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </button>
+
       <div class="scg-builder-selected-scroll">
         {{#each selectedCards}}
           <article class="scg-builder-selected scg-rarity-{{rarity}}">

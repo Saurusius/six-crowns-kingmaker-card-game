@@ -90,16 +90,17 @@ test("la collection propose comparaison, vue compacte, centre d’échanges et h
   assert.match(template, /trade-requested-credits/);
 });
 
-test("le deckbuilder possède tous les filtres et les interactions rapides", async () => {
-  const [template, application] = await Promise.all([
+test("le deckbuilder possède tous les filtres, les interactions rapides et une analyse dédiée", async () => {
+  const [template, application, analysisTemplate] = await Promise.all([
     readFile(new URL("../templates/deck-builder.hbs", import.meta.url), "utf8"),
-    readFile(new URL("../scripts/applications/deck-builder.js", import.meta.url), "utf8")
+    readFile(new URL("../scripts/applications/deck-builder.js", import.meta.url), "utf8"),
+    readFile(new URL("../templates/deck-analysis.hbs", import.meta.url), "utf8")
   ]);
   for (const name of ["builder-rarity", "builder-type", "builder-row", "builder-trait", "builder-sort"]) assert.match(template, new RegExp(name));
   assert.match(template, /data-action="quick-add-card"/);
   assert.match(application, /contextmenu/);
-  assert.match(template, /Raretés/);
-  assert.match(template, /Capacités/);
+  assert.match(analysisTemplate, /Raretés/);
+  assert.match(analysisTemplate, /Capacités/);
 });
 
 test("les boosters affichent acquisitions, historique, réouverture et ouverture multiple", async () => {

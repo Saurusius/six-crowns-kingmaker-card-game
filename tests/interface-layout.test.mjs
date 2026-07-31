@@ -105,13 +105,14 @@ test("les lignes du deckbuilder réservent une zone stable aux traits et aux com
   assert.match(css, /\.scg-builder-traits \{[\s\S]*?min-height: 24px;/);
 });
 
-test("le constructeur permet de réduire la courbe de force et la répartition des lignes", async () => {
-  const [template, script, css] = await Promise.all([
+test("le constructeur ouvre l’analyse dans une fenêtre séparée", async () => {
+  const [template, script, analysisTemplate] = await Promise.all([
     read("templates/deck-builder.hbs"),
     read("scripts/applications/deck-builder.js"),
-    read("styles/six-crowns.css")
+    read("templates/deck-analysis.hbs")
   ]);
-  assert.match(template, /data-action="toggle-analysis-size"/);
-  assert.match(script, /this\.analysisCompact = !this\.analysisCompact/);
-  assert.match(css, /\.scg-builder-shell\.is-analysis-compact \.scg-analysis-bars \{[\s\S]*?display: none;/);
+  assert.match(template, /data-action="open-deck-analysis"/);
+  assert.match(script, /new SixCrownsDeckAnalysis/);
+  assert.match(analysisTemplate, /statistics\.strengthCurve/);
+  assert.match(analysisTemplate, /statistics\.rowDistribution/);
 });

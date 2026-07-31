@@ -6,7 +6,6 @@ import {
   FACTION_DETAILS,
   RARITY_DETAILS,
   ROW_DETAILS,
-  buildDeckStatistics,
   buildOwnedPlayableCards,
   buildSelectedDeckCards,
   countDeckCards,
@@ -24,6 +23,7 @@ import {
 import { bindFloatingOverlays } from "../ui/floating-overlays.js";
 import { formatCardRulesText, openGlossary } from "../glossary.js";
 import { TRAIT_DETAILS } from "../traits.js";
+import { SixCrownsDeckAnalysis } from "./deck-analysis.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -63,7 +63,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this.rowFilter = "all";
     this.traitFilter = "all";
     this.sortBy = "name";
-    this.analysisCompact = false;
+    this._analysisApp = null;
   }
 
   async _loadRequestedDeck(decks) {
@@ -104,7 +104,6 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       selected: id === this.factionFilter
     }));
     const validation = validateCustomDeck(this.draft, catalog, collection);
-    const statistics = buildDeckStatistics(catalog, this.draft.cards);
 
     return {
       userName: game.user.name,
@@ -147,11 +146,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
         { id: "faction", label: "Collection", selected: this.sortBy === "faction" },
         { id: "owned", label: "Quantité possédée", selected: this.sortBy === "owned" },
         { id: "used", label: "Quantité dans le deck", selected: this.sortBy === "used" }
-      ],
-      statistics,
-      analysisCompact: this.analysisCompact,
-      analysisToggleLabel: this.analysisCompact ? "Afficher l’analyse" : "Réduire l’analyse",
-      analysisToggleIcon: this.analysisCompact ? "fa-solid fa-chart-column" : "fa-solid fa-compress"
+      ]
     };
   }
 
@@ -174,6 +169,11 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this._floatingCleanup = bindFloatingOverlays(this.element, {
       ownerId: `${MODULE_ID}-deck-builder`
     });
+
+    if (this._analysisApp?.rendered) {
+      this._analysisApp.setDraft(this.draft);
+      await this._analysisApp.render({ force: true });
+    }
 
     const applyFilters = () => {
       const query = String(this.element.querySelector("[name='builder-search']")?.value ?? "").trim().toLocaleLowerCase("fr");
@@ -216,10 +216,16 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
 
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
 
-    this.element.querySelector("[data-action='toggle-analysis-size']")?.addEventListener("click", async () => {
-      this._captureName();
-      this.analysisCompact = !this.analysisCompact;
-      await this.render({ force: true });
+    this.element.querySelectorAll("[data-action='open-deck-analysis']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        this._captureName();
+        if (!this._analysisApp || !this._analysisApp.rendered) {
+          this._analysisApp = new SixCrownsDeckAnalysis({ draft: this.draft });
+        } else {
+          this._analysisApp.setDraft(this.draft);
+        }
+        await this._analysisApp.render({ force: true });
+      });
     });
 
     this.element.querySelectorAll("[data-action='quick-add-card']").forEach((card) => {
@@ -333,6 +339,8 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
   async close(options = {}) {
     this._floatingCleanup?.();
     this._floatingCleanup = null;
+    if (this._analysisApp?.rendered) await this._analysisApp.close();
+    this._analysisApp = null;
     return super.close(options);
   }
 }
