@@ -166,7 +166,6 @@
                 <span class="scg-effect-icons">
                   {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                 </span>
-                <small class="scg-card-effect">{{effectText}}</small>
                 <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
               </span>
             </button>
@@ -383,6 +382,10 @@
 
       <aside class="scg-reserve-sidebar">
         <div class="scg-zone-stack scg-zone-stack-opponent">
+          <article class="scg-duelist-profile scg-duelist-profile-opponent">
+            <img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}">
+            <div><small>Adversaire</small><strong>{{opponentProfile.name}}</strong></div>
+          </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
             <strong>Deck adverse</strong>
@@ -405,6 +408,10 @@
         </div>
 
         <div class="scg-zone-stack scg-zone-stack-player">
+          <article class="scg-duelist-profile scg-duelist-profile-player">
+            <img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}">
+            <div><small>Votre personnage</small><strong>{{playerProfile.name}}</strong></div>
+          </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
             <strong>Votre deck</strong>

@@ -3271,3 +3271,118 @@ body > .scg-global-modal.scg-mulligan-preview-backdrop {
 @media (max-height: 820px) {
   .scg-collection-card-art.has-art { min-height: 180px; }
 }
+
+
+/* v0.7.18 — ergonomie du mulligan, portraits et validation du deckbuilder. */
+.scg-mulligan-card .scg-card-body {
+  min-height: 70px;
+  max-height: 70px;
+  display: grid;
+  grid-template-rows: auto minmax(24px, auto) auto;
+  align-content: start;
+  gap: 4px;
+  padding: 8px 9px 7px;
+}
+
+.scg-mulligan-card .scg-card-effect {
+  display: none !important;
+}
+
+.scg-mulligan-card .scg-effect-icons {
+  min-height: 24px;
+  align-items: center;
+  overflow: visible;
+}
+
+.scg-mulligan-card .scg-mulligan-mark {
+  align-self: end;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.scg-duelist-profile {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 7px;
+  align-items: center;
+  padding: 5px 6px;
+  border: 1px solid #665a3e;
+  background: linear-gradient(135deg, rgba(200,169,79,.10), rgba(0,0,0,.22));
+}
+
+.scg-duelist-profile img {
+  width: 44px;
+  height: 54px;
+  display: block;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 1px solid #b89545;
+  border-radius: 3px;
+  background: #201d17;
+}
+
+.scg-duelist-profile > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.scg-duelist-profile small {
+  color: #a99e85;
+  font-size: .56rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.scg-duelist-profile strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: #f0cf6a;
+  font-size: .68rem;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.scg-deck-validation {
+  min-height: 54px;
+  max-height: none !important;
+  overflow: visible !important;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.scg-deck-validation > div {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.scg-deck-validation strong,
+.scg-deck-validation span {
+  display: block;
+  max-width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.scg-deck-validation ul {
+  flex: 1 1 320px;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+.scg-deck-validation li {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+  .scg-duelist-profile { grid-template-columns: 38px minmax(0, 1fr); }
+  .scg-duelist-profile img { width: 38px; height: 46px; }
+}

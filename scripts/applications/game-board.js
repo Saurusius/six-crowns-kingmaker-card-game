@@ -1,6 +1,8 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
 import { getBoosterCredits, openBooster } from "../boosters.js";
+import { normalizeCardArt } from "../art.js";
+import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import {
   PHASES,
@@ -21,6 +23,55 @@ import {
 } from "../rules/state.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+function normalizeName(value = "") {
+  return String(value)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("fr")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function findActorByName(name) {
+  const target = normalizeName(name);
+  if (!target) return null;
+  return game.actors?.find((actor) => normalizeName(actor.name) === target)
+    ?? game.actors?.find((actor) => normalizeName(actor.name).includes(target) || target.includes(normalizeName(actor.name)))
+    ?? null;
+}
+
+function profileFromActor(actor, fallbackName, fallbackImage = null) {
+  return {
+    name: actor?.name ?? fallbackName,
+    image: actor?.img ?? fallbackImage ?? "icons/svg/mystery-man.svg",
+    hasPortrait: Boolean(actor?.img ?? fallbackImage)
+  };
+}
+
+function resolveBoardProfiles(state) {
+  const controlledActor = globalThis.canvas?.tokens?.controlled?.[0]?.actor ?? null;
+  const playerActor = game.user?.character ?? controlledActor;
+  const playerProfile = profileFromActor(
+    playerActor,
+    playerActor?.name ?? game.user?.name ?? "Joueur",
+    game.user?.avatar ?? null
+  );
+
+  const opponentDefinition = getDeckDefinition(state.selectedOpponentDeck);
+  const opponentCharacter = opponentDefinition?.cards?.find((card) => card.isCharacter)
+    ?? opponentDefinition?.cards?.find((card) => card.abilities?.includes("hero"))
+    ?? null;
+  const opponentActor = findActorByName(opponentCharacter?.name);
+  const opponentArt = opponentCharacter ? normalizeCardArt(opponentCharacter).full : null;
+  const opponentProfile = profileFromActor(
+    opponentActor,
+    opponentCharacter?.name ?? opponentDefinition?.name ?? "Adversaire",
+    opponentArt
+  );
+
+  return { playerProfile, opponentProfile };
+}
 
 export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
@@ -67,6 +118,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     ]);
     return {
       ...view,
+      ...resolveBoardProfiles(this.matchState),
       isGM: game.user.isGM,
       boosterCredits,
       canOpenBooster: game.user.isGM || boosterCredits > 0,

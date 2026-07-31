@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.7.18 — Mulligan épuré et portraits de duel
+
+- suppression du texte d’effet sur les cartes de la main de départ ;
+- conservation du visuel, du nom et des pictogrammes avec prévisualisation complète ;
+- ajout du portrait et du nom du personnage joueur au-dessus de son deck ;
+- ajout du portrait et du nom du personnage emblématique du deck adverse ;
+- récupération automatique des portraits depuis les acteurs Foundry portant le même nom ;
+- correction du bandeau de validation du constructeur de deck afin que ses messages ne soient plus tronqués.
+
 ## 0.7.17 — Support complet des illustrations
 
 - ajout du bloc `art.full / art.medium / art.thumb` aux 160 cartes collectionnables ;
