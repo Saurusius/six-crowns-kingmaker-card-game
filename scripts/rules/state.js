@@ -779,7 +779,13 @@ export function createBoardViewModel(state) {
     hasActionLog: (state.log ?? []).length > 0,
     gameSummary: state.phase === PHASES.GAME_OVER ? {
       winnerLabel: state.gameWinner === "player" ? "Victoire" : state.gameWinner === "opponent" ? "Défaite" : "Égalité",
+      eyebrow: state.gameWinner === "player" ? "Les Six Couronnes se souviendront de ce triomphe" : state.gameWinner === "opponent" ? "La couronne vous échappe aujourd’hui" : "Le destin refuse de trancher",
+      subtitle: state.gameWinner === "player" ? "Votre bannière domine le champ de bataille." : state.gameWinner === "opponent" ? "Votre adversaire remporte la confrontation, mais pas la guerre." : "Les deux armées quittent le terrain sans vainqueur.",
+      icon: state.gameWinner === "player" ? "fa-solid fa-crown" : state.gameWinner === "opponent" ? "fa-solid fa-shield-halved" : "fa-solid fa-scale-balanced",
+      screenClass: state.gameWinner === "player" ? "is-victory" : state.gameWinner === "opponent" ? "is-defeat" : "is-draw",
       rounds: state.round,
+      playerRounds: Math.max(0, 2 - (state.opponent?.lives ?? 0)),
+      opponentRounds: Math.max(0, 2 - (state.player?.lives ?? 0)),
       playerCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "player").length,
       opponentCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "opponent").length
     } : null,
@@ -787,7 +793,7 @@ export function createBoardViewModel(state) {
     isDeckSelection: state.phase === PHASES.DECK_SELECTION,
     isCoinToss: state.phase === PHASES.COIN_TOSS,
     isMulligan: state.phase === PHASES.MULLIGAN,
-    showBoard: [PHASES.PLAYING, PHASES.ROUND_OVER, PHASES.GAME_OVER].includes(state.phase),
+    showBoard: [PHASES.PLAYING, PHASES.ROUND_OVER].includes(state.phase),
     phaseLabel: phaseLabel(state.phase),
     turnLabel: state.phase !== PHASES.PLAYING
       ? "—"

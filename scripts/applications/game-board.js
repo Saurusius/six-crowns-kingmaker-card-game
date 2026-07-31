@@ -197,6 +197,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this._mulliganModalCleanup?.();
     this._mulliganModalCleanup = null;
 
+    this.element.querySelectorAll("[data-action='select-deck']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          const side = button.dataset.side;
+          const deckId = button.dataset.deckId;
+          selectDeck(this.matchState, side, deckId);
+          await this._renderState();
+        } catch (error) {
+          ui.notifications.warn(error.message);
+        }
+      });
+    });
+
     this.element.querySelector("[data-action='start-game']")?.addEventListener("click", async () => {
       try {
         const playerDeckId = this.element.querySelector("[name='player-deck']")?.value;
@@ -212,11 +225,6 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
 
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
-    this.element.querySelector("[data-action='open-analytics']")?.addEventListener("click", async () => {
-      const { SixCrownsAnalyticsDashboard } = await import("./analytics-dashboard.js");
-      await new SixCrownsAnalyticsDashboard().render({ force: true });
-    });
-
     this.element.querySelectorAll("[data-action='toggle-rules']").forEach((button) => {
       button.addEventListener("click", async () => {
         toggleRules(this.matchState);

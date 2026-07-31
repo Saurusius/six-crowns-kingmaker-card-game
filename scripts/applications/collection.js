@@ -298,11 +298,6 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       catch (error) { ui.notifications.error(error.message); }
     });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
-    this.element.querySelector("[data-action='open-analytics']")?.addEventListener("click", async () => {
-      const { SixCrownsAnalyticsDashboard } = await import("./analytics-dashboard.js");
-      const dashboard = new SixCrownsAnalyticsDashboard();
-      await dashboard.render({ force: true });
-    });
 
     this.element.querySelector("[data-action='toggle-card-view']")?.addEventListener("click", async () => {
       this.compactCards = !this.compactCards;

@@ -8,7 +8,6 @@
     <div class="scg-toolbar-actions">
       <button type="button" data-action="toggle-rules"><i class="fa-solid fa-scroll"></i> Règlement</button>
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
-      {{#if isGM}}<button type="button" data-action="open-analytics"><i class="fa-solid fa-chart-line"></i> Équilibrage</button>{{/if}}
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
       {{#if canRematch}}
         <button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Revanche</button>
@@ -45,60 +44,53 @@
   {{/if}}
 
   {{#if isDeckSelection}}
-    <section class="scg-setup-panel">
-      <div class="scg-setup-heading">
-        <h2>Choisissez les decks</h2>
-        <p>Les decks prédéfinis sont des decks de démonstration de 20 cartes, indépendants de votre collection personnelle.</p><p><strong>Construction :</strong> un deck contient exactement 20 cartes. Pour une même carte : 3 exemplaires maximum si elle est Commune ou Peu commune, 2 si elle est Rare et 1 si elle est Unique.</p><p>Il n’existe pas de plafond global de cartes Uniques différentes. Les joueurs peuvent échanger leurs cartes et recycler 10 exemplaires contre 1 ticket de booster.</p>
+    <section class="scg-setup-panel scg-deck-preparation">
+      <div class="scg-setup-heading scg-deck-preparation-heading">
+        <div>
+          <small>Préparation de la confrontation</small>
+          <h2>Choisissez vos deux armées</h2>
+          <p>Sélectionnez directement les decks dans les galeries ci-dessous. Les decks de démonstration sont indépendants de votre collection ; vos decks personnalisés restent soumis aux limites de construction.</p>
+        </div>
+        <span class="scg-deck-rule-chip"><i class="fa-solid fa-layer-group"></i> 20 cartes par deck</span>
       </div>
 
-      <div class="scg-deck-select-grid">
-        <label class="scg-deck-select">
-          <span>Votre deck</span>
-          <select name="player-deck">
-            <option value="random" {{#if playerDeckIsRandom}}selected{{/if}}>Deck aléatoire</option>
+      <div class="scg-deck-choice-columns">
+        <section class="scg-deck-choice-panel is-player">
+          <header><span><i class="fa-solid fa-crown"></i></span><div><small>Votre camp</small><h3>Votre deck</h3></div></header>
+          <input type="hidden" name="player-deck" value="{{selectedPlayerDeck}}">
+          <div class="scg-deck-choice-grid">
+            <button type="button" class="scg-deck-choice-card is-random {{#if playerDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="random">
+              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Le destin choisit votre armée.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+            </button>
             {{#each decks}}
-              <option value="{{id}}" {{#if playerSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
+              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if playerSelected}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="{{id}}">
+                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+              </button>
             {{/each}}
-          </select>
-        </label>
+          </div>
+        </section>
 
-        <label class="scg-deck-select">
-          <span>Deck adverse</span>
-          <select name="opponent-deck">
-            <option value="random" {{#if opponentDeckIsRandom}}selected{{/if}}>Deck aléatoire</option>
+        <section class="scg-deck-choice-panel is-opponent">
+          <header><span><i class="fa-solid fa-chess-knight"></i></span><div><small>Camp adverse</small><h3>Deck adverse</h3></div></header>
+          <input type="hidden" name="opponent-deck" value="{{selectedOpponentDeck}}">
+          <div class="scg-deck-choice-grid">
+            <button type="button" class="scg-deck-choice-card is-random {{#if opponentDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="random">
+              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Un adversaire imprévisible.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+            </button>
             {{#each decks}}
-              <option value="{{id}}" {{#if opponentSelected}}selected{{/if}}>{{name}} — {{cardCount}} cartes</option>
+              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if opponentSelected}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="{{id}}">
+                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+              </button>
             {{/each}}
-          </select>
-        </label>
-      </div>
-
-      <div class="scg-deck-gallery">
-        {{#each decks}}
-          <article class="scg-deck-summary {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}}">
-            <span class="scg-deck-symbol">{{symbol}}</span>
-            <div>
-              <strong>{{name}}</strong>
-              <small>{{cardCount}} cartes{{#if demo}} · Démonstration{{/if}}</small>
-              <p>{{description}}</p>
-            </div>
-          </article>
-        {{/each}}
+          </div>
+        </section>
       </div>
 
       <div class="scg-setup-actions">
-        <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}>
-          <i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}
-        </button>
-        <button class="scg-secondary-button" type="button" data-action="open-collection">
-          <i class="fa-solid fa-table-cells-large"></i> Ma collection
-        </button>
-        <button class="scg-secondary-button" type="button" data-action="open-deck-builder">
-          <i class="fa-solid fa-hammer"></i> Mes decks
-        </button>
-        <button class="scg-primary-button" type="button" data-action="start-game">
-          <i class="fa-solid fa-play"></i> Préparer la partie
-        </button>
+        <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Ma collection</button>
+        <button class="scg-secondary-button" type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Mes decks</button>
+        <button class="scg-primary-button" type="button" data-action="start-game"><i class="fa-solid fa-play"></i> Préparer la partie</button>
       </div>
     </section>
   {{/if}}
@@ -222,6 +214,28 @@
     </section>
   {{/if}}
 
+  {{#if gameSummary}}
+    <section class="scg-end-screen {{gameSummary.screenClass}}">
+      <div class="scg-end-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="scg-end-emblem"><i class="{{gameSummary.icon}}"></i></div>
+      <small>{{gameSummary.eyebrow}}</small>
+      <h1>{{gameSummary.winnerLabel}}</h1>
+      <p class="scg-end-subtitle">{{gameSummary.subtitle}}</p>
+      <div class="scg-end-duel">
+        <article><img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}"><span>Votre camp</span><strong>{{player.name}}</strong><b>{{player.lives}} gemme(s)</b></article>
+        <div><span>{{gameSummary.playerRounds}}</span><small>manches gagnées</small><i class="fa-solid fa-crown"></i><span>{{gameSummary.opponentRounds}}</span></div>
+        <article><img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}"><span>Adversaire</span><strong>{{opponent.name}}</strong><b>{{opponent.lives}} gemme(s)</b></article>
+      </div>
+      <div class="scg-end-stats">
+        <article><strong>{{gameSummary.rounds}}</strong><span>manches jouées</span></article>
+        <article><strong>{{gameSummary.playerCardsPlayed}}</strong><span>cartes alliées jouées</span></article>
+        <article><strong>{{gameSummary.opponentCardsPlayed}}</strong><span>cartes adverses jouées</span></article>
+      </div>
+      <p class="scg-end-message">{{message}}</p>
+      <div class="scg-end-actions"><button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Revanche</button><button type="button" data-action="reset"><i class="fa-solid fa-house-flag"></i> Choisir d’autres decks</button></div>
+    </section>
+  {{/if}}
+
   {{#if showBoard}}
     <div class="scg-scorebar">
       <div class="scg-score-side">
@@ -245,10 +259,6 @@
         <span class="scg-muted">{{player.name}}</span>
       </div>
     </div>
-
-    {{#if gameSummary}}
-      <section class="scg-game-summary"><div><small>Partie terminée</small><h2>{{gameSummary.winnerLabel}}</h2><p>{{message}}</p></div><div><article><strong>{{gameSummary.rounds}}</strong><span>manches</span></article><article><strong>{{gameSummary.playerCardsPlayed}}</strong><span>cartes jouées</span></article><article><strong>{{gameSummary.opponentCardsPlayed}}</strong><span>cartes adverses</span></article></div><button type="button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Relancer les mêmes decks</button></section>
-    {{/if}}
 
     {{#if isOpponentTurn}}
       <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> {{opponent.name}} réfléchit…</div>

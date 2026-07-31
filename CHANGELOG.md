@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.8.62
+
+- Centre précisément la pièce sur la cible dorée après le tirage.
+- Renforce la visibilité des icônes de rareté, de ligne et de mulligan dans la main de départ.
+- Remplace le simple bandeau final par des écrans complets et distincts de victoire, défaite et égalité.
+- Retire l’accès au tableau d’équilibrage de l’interface du plateau et des outils MJ.
+- Rend le centre d’échanges, l’historique des boosters et le recyclage des doublons entièrement repliables.
+- Donne à chaque collection une palette, un emblème et des bordures propres.
+- Remplace les menus déroulants de préparation par deux galeries de decks larges et directement sélectionnables.
+
 ## 0.8.61
 
 - Refonte mosaïque du constructeur de deck et de ses filtres.
