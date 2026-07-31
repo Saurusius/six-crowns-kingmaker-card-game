@@ -1,0 +1,80 @@
+[
+  {
+    "path": "assets/interface/backgrounds/deck-selection.webp",
+    "source_size": [
+      1536,
+      1024
+    ],
+    "final_size": [
+      1536,
+      1024
+    ],
+    "bytes": 266824,
+    "sha256": "c9476e6ef05d7ffeb0704667fe686acfab6ce08fa1eab85760c138101a93ab41"
+  },
+  {
+    "path": "assets/interface/backgrounds/table.webp",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "final_size": [
+      1448,
+      1086
+    ],
+    "bytes": 282954,
+    "sha256": "a36528f14153667d5894e343a2ed07416c3f53ef78664f0b368bca55596754a9"
+  },
+  {
+    "path": "assets/interface/placeholders/card-placeholder.webp",
+    "source_size": [
+      1060,
+      1484
+    ],
+    "final_size": [
+      900,
+      1260
+    ],
+    "bytes": 268660,
+    "sha256": "9fbcaf1f4e06f5ea70d8d320b9ad95ef12f5e19aed4ace169b6e5ec723c08f1a"
+  },
+  {
+    "path": "assets/interface/placeholders/collection-empty.webp",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "final_size": [
+      1448,
+      1086
+    ],
+    "bytes": 222858,
+    "sha256": "33f1c2d3bcad300c2b66a05056801055a4cf0bcdcbbbe72ede3df3d2eb613b09"
+  },
+  {
+    "path": "assets/interface/placeholders/deck-empty.webp",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "final_size": [
+      1448,
+      1086
+    ],
+    "bytes": 258324,
+    "sha256": "31b7579a9f26cbac175cbfd301524ab454af01717cb9da853a8b4f1b82989090"
+  },
+  {
+    "path": "assets/interface/placeholders/portrait-placeholder.webp",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "final_size": [
+      1254,
+      1254
+    ],
+    "bytes": 365112,
+    "sha256": "8516d001e4e1432072735eed830554b2abf32d3f455949271dcef623db9d8ca2"
+  }
+]
