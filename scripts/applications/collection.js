@@ -12,10 +12,12 @@ import {
   openBooster,
   openBoosters,
   showSpecialBoosterSelector,
+  openEventBooster,
   getEventBoosters,
   recycleCardsForBooster,
   resetCollectionForUser
 } from "../boosters.js";
+import { EVENT_BOOSTER_ID } from "../event-spells.js";
 import {
   FACTION_DETAILS,
   RARITY_DETAILS,
@@ -143,7 +145,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     const tradeUsers = users
       .filter((user) => user.id !== game.user.id)
       .map((user) => ({ id: user.id, name: user.name }));
-    const ownedByRarity = Object.fromEntries(["commun", "peuCommune", "rare", "unique"].map((rarity) => [rarity,
+    const ownedByRarity = Object.fromEntries(["commun", "peuCommune", "rare", "unique", "doree"].map((rarity) => [rarity,
       catalog
         .filter((card) => card.rarity === rarity)
         .map((card) => ({
@@ -159,7 +161,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       rarityChoices: offer.requestedMode === "rarity" ? (ownedByRarity[offer.requestedRarity] ?? []) : [],
       hasRarityChoices: offer.requestedMode !== "rarity" || (ownedByRarity[offer.requestedRarity] ?? []).length > 0
     }));
-    const rarityRank = { commun: 0, peuCommune: 1, rare: 2, unique: 3 };
+    const rarityRank = { commun: 0, peuCommune: 1, rare: 2, unique: 3, doree: 4 };
     const boosterHistoryView = boosterHistory.slice(-8).reverse().map((entry) => ({
       ...entry,
       dateLabel: new Date(entry.openedAt).toLocaleString("fr-FR"),
@@ -201,7 +203,9 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       availableTradeCredits: Math.max(0, boosterCredits - reservations.reservedCredits),
       boosterHistory: boosterHistoryView,
       hasBoosterHistory: boosterHistoryView.length > 0,
-      ownedCards: catalog.filter(card => (collection[card.id]?.count ?? 0) > 0).map(card => ({ id:card.id, name:card.name, count:collection[card.id].count })),
+      ownedCards: catalog
+        .filter((card) => card.deckEligible !== false && card.kind !== "event-spell" && (collection[card.id]?.count ?? 0) > 0)
+        .map((card) => ({ id: card.id, name: card.name, count: collection[card.id].count })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
@@ -314,10 +318,16 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       catch (error) { ui.notifications.error(error.message); }
     });
     this.element.querySelector("[data-action='open-special-booster']")?.addEventListener("click", () => showSpecialBoosterSelector());
-    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", () => {
-      const events = getEventBoosters();
-      if (!events.length) return ui.notifications.warn("Aucun booster événementiel n’est encore configuré.");
-      ui.notifications.info("Les boosters événementiels configurés seront proposés ici.");
+    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", async () => {
+      try {
+        const events = getEventBoosters();
+        if (!events.some((entry) => entry.id === EVENT_BOOSTER_ID)) throw new Error("Le booster Terres Dérobées n’est pas configuré.");
+        await openEventBooster({ boosterId: EVENT_BOOSTER_ID });
+        await this.render({ force: true });
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Booster événementiel impossible`, error);
+        ui.notifications.error(error.message);
+      }
     });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
 

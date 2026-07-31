@@ -6,13 +6,13 @@
     </div>
     <div class="scg-profile-actions">
       <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
-      <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
-      <button type="button" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Choisir un booster spécial</button>
-      <button type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
-      <button type="button" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
-      <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
-      <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
-      <button type="button" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
+      <button type="button" class="scg-option-control" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+      <button type="button" class="scg-option-control" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Choisir un booster spécial</button>
+      <button type="button" class="scg-option-control" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
+      <button type="button" class="scg-option-control" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
+      <button type="button" class="scg-option-control" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
+      <button type="button" class="scg-option-control" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      <button type="button" class="scg-option-control" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
       <button type="button" data-action="toggle-options-size" aria-pressed="{{compactOptions}}"><i class="{{optionsToggleIcon}}"></i> {{optionsToggleLabel}}</button>
     </div>
   </header>
@@ -128,28 +128,32 @@
         </div>
       </header>
       <div class="scg-gm-tools-grid">
-        <label>
+        <label class="scg-gm-target-select">
           <span>Joueur ciblé</span>
           <select name="gm-target-user">
             {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}} — {{boosterCredits}} C · {{specialBoosterCredits}} S · {{eventBoosterCredits}} E</option>{{/each}}
           </select>
         </label>
-        <label class="scg-gm-card-select">
-          <span>Carte à donner</span>
-          <select name="gm-card">
-            {{#each gmCards}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}
-          </select>
-        </label>
-        <label>
-          <span>Exemplaires de la carte</span>
-          <input type="number" name="gm-card-count" value="1" min="1" max="100">
-        </label>
-        <label><span>Boosters classiques à offrir</span><input type="number" name="gm-booster-count" value="1" min="1" max="100"></label>
-        <label><span>Tickets spéciaux à offrir</span><input type="number" name="gm-special-ticket-count" value="1" min="1" max="100"></label>
-        <label><span>Tickets événementiels à offrir</span><input type="number" name="gm-event-ticket-count" value="1" min="1" max="100"></label>
-        <div class="scg-gm-actions">
-          <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner la carte</button>
-          <button type="button" data-action="gm-grant-boosters"><i class="fa-solid fa-ticket"></i> Offrir les classiques</button><button type="button" data-action="gm-grant-special-tickets"><i class="fa-solid fa-wand-sparkles"></i> Offrir les spéciaux</button><button type="button" data-action="gm-grant-event-tickets"><i class="fa-solid fa-star"></i> Offrir les événementiels</button>
+
+        <section class="scg-gm-ticket-panel" aria-label="Offrir des tickets">
+          <header><div><h3><i class="fa-solid fa-ticket"></i> Offrir des tickets</h3><p>Choisissez une quantité, puis attribuez immédiatement le type de ticket voulu.</p></div></header>
+          <div class="scg-gm-ticket-grid">
+            <label class="is-classic"><span><i class="fa-solid fa-box-open"></i> Classiques</span><div><input type="number" name="gm-booster-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-boosters">Offrir</button></div></label>
+            <label class="is-special"><span><i class="fa-solid fa-wand-sparkles"></i> Spéciaux</span><div><input type="number" name="gm-special-ticket-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-special-tickets">Offrir</button></div></label>
+            <label class="is-event"><span><i class="fa-solid fa-star"></i> Événementiels</span><div><input type="number" name="gm-event-ticket-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-event-tickets">Offrir</button></div></label>
+          </div>
+        </section>
+
+        <section class="scg-gm-card-panel" aria-label="Donner une carte">
+          <header><h3><i class="fa-solid fa-gift"></i> Donner une carte</h3></header>
+          <div>
+            <label class="scg-gm-card-select"><span>Carte</span><select name="gm-card">{{#each gmCards}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
+            <label class="scg-gm-card-count"><span>Exemplaires</span><input type="number" name="gm-card-count" value="1" min="1" max="100"></label>
+            <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner</button>
+          </div>
+        </section>
+
+        <div class="scg-gm-danger-zone">
           <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
         </div>
       </div>
@@ -158,9 +162,13 @@
 
   <div class="scg-collection-scroll">
     {{#each groups}}
-      <section class="scg-collection-group scg-collection-theme-{{id}}" data-collection-group="{{id}}">
+      <section class="scg-collection-group scg-collection-theme-{{id}} {{#if isEventGroup}}is-event-group{{/if}}" data-collection-group="{{id}}">
         <header class="scg-collection-group-header">
-          <div><span class="scg-collection-symbol">{{symbol}}</span><h2>{{label}}</h2></div>
+          <div>
+            {{#if groupIcon}}<img class="scg-collection-group-icon" src="{{groupIcon}}" alt="">{{else}}<span class="scg-collection-symbol">{{symbol}}</span>{{/if}}
+            <h2>{{label}}</h2>
+            {{#if isEventGroup}}<span class="scg-event-set-chip"><i class="fa-solid fa-wand-sparkles"></i> Suite événementielle</span>{{/if}}
+          </div>
           <div class="scg-collection-progress">
             <strong>{{discovered}} / {{total}}</strong>
             <span>{{completionPercent}} % · {{copies}} exemplaire(s)</span>
@@ -169,7 +177,7 @@
 
         <div class="scg-collection-grid">
           {{#each cards}}
-            <article class="scg-collection-card {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
+            <article class="scg-collection-card {{#if isEventSpell}}scg-event-spell-card{{/if}} {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
               data-collection-card data-scg-card-popup
               data-rarity="{{filterRarity}}"
               data-rows="{{filterRows}}"
@@ -185,35 +193,41 @@
                   {{/if}}
                   {{#if playable}}<strong class="scg-collection-strength">{{strength}}</strong>{{/if}}
                   <span class="scg-rarity-dot scg-rarity-{{rarity}}" title="{{rarityLabel}}" aria-label="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+                  {{#if isEventSpell}}<span class="scg-event-card-watermark"><i class="fa-solid fa-wand-sparkles"></i></span>{{/if}}
                 </div>
                 <div class="scg-collection-card-body">
                   <strong title="{{name}}">{{name}}</strong>
                   <small title="{{id}} · {{factionLabel}}">{{id}} · {{factionLabel}}</small>
-                  <span class="scg-card-type-line"><i class="{{typeIcon}}"></i> <b>{{typeLabel}}</b> · Force {{strength}}</span>
-                  <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
-                  <div class="scg-effect-icons scg-collection-traits">
-                    {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
-                  </div>
+                  {{#if isEventSpell}}
+                    <span class="scg-card-type-line"><i class="{{typeIcon}}"></i> <b>{{typeLabel}}</b> · Carte dorée</span>
+                    <span class="scg-event-activation"><i class="fa-solid fa-hourglass-half"></i> {{activationLabel}}</span>
+                  {{else}}
+                    <span class="scg-card-type-line"><i class="{{typeIcon}}"></i> <b>{{typeLabel}}</b> · Force {{strength}}</span>
+                    <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
+                    <div class="scg-effect-icons scg-collection-traits">
+                      {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                    </div>
+                  {{/if}}
                   {{#if text}}<p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>{{/if}}
                   <div class="scg-collection-card-actions">
                     <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
-                    <button type="button" class="scg-compare-card-button {{#if compared}}is-active{{/if}}" data-action="compare-card"><i class="fa-solid fa-scale-balanced"></i> {{#if compared}}Comparée{{else}}Comparer{{/if}}</button>
+                    {{#unless isEventSpell}}<button type="button" class="scg-compare-card-button {{#if compared}}is-active{{/if}}" data-action="compare-card"><i class="fa-solid fa-scale-balanced"></i> {{#if compared}}Comparée{{else}}Comparer{{/if}}</button>{{/unless}}
                     {{#if @root.tradeAvailable}}{{#if tradeAvailableCount}}<button type="button" class="scg-trade-card-button" data-action="trade-card"><i class="fa-solid fa-handshake"></i> Échanger</button>{{else}}<button type="button" class="scg-trade-card-button" disabled title="Tous les exemplaires sont réservés"><i class="fa-solid fa-lock"></i> Réservée</button>{{/if}}{{/if}}
                   </div>
                   <footer>
                     <span>Possédée ×{{ownedCount}}{{#if reservedForTrade}} · {{reservedForTrade}} réservée(s){{/if}}</span>
-                    <span>Maximum par deck : {{maxCopies}}</span>
+                    {{#if isEventSpell}}<span><i class="fa-solid fa-bolt"></i> Une utilisation par partie</span>{{else}}<span>Maximum par deck : {{maxCopies}}</span>{{/if}}
                   </footer>
                 </div>
                 <div class="scg-card-popover scg-collection-art-popover">
                   {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
                   <strong>{{name}}</strong>
-                  <span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>
+                  {{#if isEventSpell}}<span>{{rarityLabel}} · {{typeLabel}} · {{setLabel}}</span>{{else}}<span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>{{/if}}
                   {{#if text}}<p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>{{/if}}
                 </div>
               {{else}}
-                <div class="scg-hidden-card-back">
-                  <span class="scg-hidden-question">?</span>
+                <div class="scg-hidden-card-back {{#if isEventSpell}}is-event-card-back{{/if}}">
+                  {{#if eventCardBack}}<img src="{{eventCardBack}}" alt="Dos de carte événementielle">{{else}}<span class="scg-hidden-question">?</span>{{/if}}
                   <strong>Carte inconnue</strong>
                   <small>{{id}}</small>
                 </div>
@@ -243,7 +257,7 @@
         <label><span>Contrepartie demandée</span><select name="trade-request-mode"><option value="card">Une carte précise</option><option value="rarity">N’importe quelle carte d’une rareté</option><option value="credits">Des tickets de booster</option></select></label>
         <label class="is-wide" data-trade-mode="card"><span>Carte demandée en retour</span><select name="trade-requested"><option value="">Choisir une carte…</option>{{#each tradeCards}}<option value="{{id}}">{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
         <label data-trade-mode="card"><span>Exemplaires demandés</span><input name="trade-requested-count" type="number" min="1" value="1"></label>
-        <label data-trade-mode="rarity" hidden><span>Rareté demandée</span><select name="trade-requested-rarity"><option value="commun">Commune</option><option value="peuCommune">Peu commune</option><option value="rare" selected>Rare</option><option value="unique">Unique</option></select></label>
+        <label data-trade-mode="rarity" hidden><span>Rareté demandée</span><select name="trade-requested-rarity"><option value="commun">Commune</option><option value="peuCommune">Peu commune</option><option value="rare" selected>Rare</option><option value="unique">Unique</option><option value="doree">Dorée</option></select></label>
         <label data-trade-mode="credits" hidden><span>Tickets demandés</span><input name="trade-requested-credits" type="number" min="1" max="100" value="1"></label>
       </div>
       <p class="scg-card-trade-owned" data-trade-owned-label></p>

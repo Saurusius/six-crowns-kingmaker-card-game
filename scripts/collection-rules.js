@@ -1,23 +1,28 @@
 import { buildTraitBadges, describeTraits } from "./traits.js";
 import { normalizeCardArt } from "./art.js";
+import { EVENT_CARD_BACK, EVENT_SET_ICON } from "./event-spells.js";
 export const FACTION_DETAILS = Object.freeze({
   "six-crowns": Object.freeze({ label: "Royaume des Six Couronnes", symbol: "♛", order: 1 }),
   aldori: Object.freeze({ label: "Maison Aldori", symbol: "⚔", order: 2 }),
   "iron-khans": Object.freeze({ label: "Khans de Fer", symbol: "♞", order: 3 }),
-  "stolen-lands-arcana": Object.freeze({ label: "Arcanes des Terres Dérobées", symbol: "✦", order: 4 })
+  "stolen-lands-arcana": Object.freeze({ label: "Arcanes des Terres Dérobées", symbol: "✦", order: 4 }),
+  "event-stolen-lands": Object.freeze({ label: "Sortilèges — Terres Dérobées", symbol: "★", order: 5, event: true, icon: EVENT_SET_ICON })
 });
 
 export const RARITY_DETAILS = Object.freeze({
   commun: Object.freeze({ label: "Commun", colorName: "blanc", order: 1, icon: "fa-regular fa-circle" }),
   peuCommune: Object.freeze({ label: "Peu commune", colorName: "orange", order: 2, icon: "fa-solid fa-star" }),
   rare: Object.freeze({ label: "Rare", colorName: "bleu", order: 3, icon: "fa-solid fa-gem" }),
-  unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4, icon: "fa-solid fa-crown" })
+  unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4, icon: "fa-solid fa-crown" }),
+  doree: Object.freeze({ label: "Dorée", colorName: "or", order: 5, icon: "fa-solid fa-sparkles" })
 });
 
 export const CARD_TYPE_DETAILS = Object.freeze({
   personnage: Object.freeze({ label: "Personnage", order: 1, icon: "fa-solid fa-user" }),
   unite: Object.freeze({ label: "Unité", order: 2, icon: "fa-solid fa-shield-halved" }),
-  tactique: Object.freeze({ label: "Tactique", order: 3, icon: "fa-solid fa-chess-knight" })
+  tactique: Object.freeze({ label: "Tactique", order: 3, icon: "fa-solid fa-chess-knight" }),
+  sortilege: Object.freeze({ label: "Sortilège événementiel", order: 4, icon: "fa-solid fa-wand-sparkles" }),
+  invocation: Object.freeze({ label: "Invocation", order: 5, icon: "fa-solid fa-paw" })
 });
 
 export const ROW_DETAILS = Object.freeze({
@@ -36,6 +41,7 @@ export const MAX_COPIES_BY_RARITY = Object.freeze({
 export const MAX_COPIES_PER_CARD = Math.max(...Object.values(MAX_COPIES_BY_RARITY));
 
 export function getMaxCopiesForCard(card) {
+  if (card?.deckEligible === false || card?.kind === "event-spell") return 0;
   return MAX_COPIES_BY_RARITY[card?.rarity] ?? 1;
 }
 
@@ -52,6 +58,7 @@ export function getCardAddDisabledReason(card, { ownedCount = 0, inDeck = 0, dec
 }
 
 export function isPlayableCard(card) {
+  if (card?.deckEligible === false || card?.collectible === false) return false;
   return ["unit", "special"].includes(card?.kind)
     && Number.isFinite(card?.strength)
     && Array.isArray(card?.rows)
@@ -97,6 +104,9 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
         label: faction.label,
         symbol: faction.symbol,
         order: faction.order,
+        isEventGroup: Boolean(faction.event),
+        groupIcon: faction.icon ?? null,
+        cardBack: faction.event ? EVENT_CARD_BACK : null,
         total: 0,
         discovered: 0,
         copies: 0,
@@ -120,6 +130,10 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       filterRarity: discovered ? card.rarity : "hidden",
       filterRows: discovered && Array.isArray(card.rows) && card.rows.length > 0 ? card.rows.join(" ") : "hidden",
       playable: isPlayableCard(card),
+      isEventSpell: card.kind === "event-spell",
+      activationLabel: card.activation ?? "Une fois par partie",
+      setLabel: card.setLabel ?? null,
+      eventCardBack: card.kind === "event-spell" ? EVENT_CARD_BACK : null,
       displayName: discovered ? card.name : "Carte inconnue",
       rarityLabel: rarity.label,
       rarityIcon: rarity.icon ?? "fa-regular fa-circle",

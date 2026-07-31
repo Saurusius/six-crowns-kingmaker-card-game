@@ -80,8 +80,13 @@ test("les 160 cartes du catalogue portent une valeur maxCopies cohérente", asyn
   const groups = await Promise.all(files.map(async (file) => JSON.parse(
     await readFile(new URL(file, cardsRoot), "utf8")
   )));
-  const invalid = groups.flat().filter((card) => card.maxCopies !== MAX_COPIES_BY_RARITY[card.rarity]);
+  const cards = groups.flat();
+  const standardCards = cards.filter((card) => card.kind !== "event-spell");
+  const eventCards = cards.filter((card) => card.kind === "event-spell");
+  const invalid = standardCards.filter((card) => card.maxCopies !== MAX_COPIES_BY_RARITY[card.rarity]);
   assert.deepEqual(invalid.map((card) => card.id), []);
+  assert.equal(standardCards.length, 160);
+  assert.ok(eventCards.every((card) => card.maxCopies === 0 && getMaxCopiesForCard(card) === 0));
 });
 
 test("la fenêtre de collection défile globalement jusqu’aux groupes de cartes", async () => {

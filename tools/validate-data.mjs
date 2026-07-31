@@ -14,9 +14,11 @@ const expectedArtDimensions = Object.freeze({
   medium: [450, 630],
   thumb: [225, 315]
 });
+const EVENT_FILE = "event-stolen-lands.json";
 const files = (await readdir(root)).filter((file) => file.endsWith(".json"));
-if (files.length !== expectedCollections.size || files.some((file) => !expectedCollections.has(file))) {
-  throw new Error(`Le catalogue doit être réparti dans exactement quatre collections : ${[...expectedCollections.keys()].join(", ")}.`);
+const expectedFiles = new Set([...expectedCollections.keys(), EVENT_FILE]);
+if (files.length !== expectedFiles.size || files.some((file) => !expectedFiles.has(file))) {
+  throw new Error(`Le catalogue doit contenir les quatre collections classiques et la suite événementielle : ${[...expectedFiles].join(", ")}.`);
 }
 const allowedKinds = new Set(["unit", "special"]);
 const allowedTypes = new Set(["personnage", "unite", "tactique"]);
@@ -127,14 +129,18 @@ const requiredSixCrownsCharacterNames = new Set([
 const foundRequiredNames = new Set();
 const ids = new Set();
 let count = 0;
+let standardCount = 0;
+let eventCount = 0;
 let characterCount = 0;
 let illustrationCount = 0;
 
 for (const file of files) {
   const cards = JSON.parse(await readFile(new URL(file, root), "utf8"));
   if (!Array.isArray(cards)) throw new Error(`${file}: la racine doit être un tableau.`);
-  if (cards.length !== 40) throw new Error(`${file}: chaque collection doit contenir exactement 40 cartes, trouvé : ${cards.length}.`);
-  const expectedFaction = expectedCollections.get(file);
+  const isEventFile = file === EVENT_FILE;
+  const expectedLength = isEventFile ? 5 : 40;
+  if (cards.length !== expectedLength) throw new Error(`${file}: ${expectedLength} cartes attendues, trouvé : ${cards.length}.`);
+  const expectedFaction = isEventFile ? "event-stolen-lands" : expectedCollections.get(file);
 
   for (const [index, card] of cards.entries()) {
     const where = `${file}[${index}]`;
@@ -146,6 +152,29 @@ for (const file of files) {
     if (card.faction !== expectedFaction) {
       throw new Error(`${where}: faction ${card.faction} incohérente avec la collection ${expectedFaction}.`);
     }
+    if (typeof card.text !== "string" || card.text.trim().length === 0) {
+      throw new Error(`${where}: le texte de règle ne peut pas être vide.`);
+    }
+    await validateCardArt(card, where);
+    illustrationCount += 1;
+
+    if (isEventFile) {
+      if (card.kind !== "event-spell") throw new Error(`${where}: kind événementiel invalide ${card.kind}.`);
+      if (card.type !== "sortilege") throw new Error(`${where}: type événementiel invalide ${card.type}.`);
+      if (card.rarity !== "doree") throw new Error(`${where}: un sortilège événementiel doit être Doré.`);
+      if (card.strength !== null) throw new Error(`${where}: un sortilège ne possède pas de Force.`);
+      if (!Array.isArray(card.rows) || card.rows.length !== 0) throw new Error(`${where}: un sortilège ne possède pas de ligne.`);
+      if (card.maxCopies !== 0 || card.deckEligible !== false) throw new Error(`${where}: un sortilège ne peut pas être ajouté à un deck.`);
+      if (card.collectible !== true || card.eventBoosterOnly !== true) throw new Error(`${where}: le sortilège doit être collectionnable uniquement via un booster événementiel.`);
+      if (!Array.isArray(card.abilities) || card.abilities.length !== 0) throw new Error(`${where}: les effets événementiels sont gérés par effectId, pas par abilities.`);
+      if (typeof card.activation !== "string" || !card.activation.trim()) throw new Error(`${where}: fenêtre d’activation manquante.`);
+      if (typeof card.effectId !== "string" || !card.effectId.trim()) throw new Error(`${where}: effectId manquant.`);
+      if (card.setId !== "stolen-lands" || card.setLabel !== "Terres Dérobées") throw new Error(`${where}: suite événementielle incohérente.`);
+      eventCount += 1;
+      count += 1;
+      continue;
+    }
+
     if (!allowedKinds.has(card.kind)) throw new Error(`${where}: kind invalide ${card.kind}.`);
     if (!allowedTypes.has(card.type)) throw new Error(`${where}: type de carte invalide ${card.type}.`);
     if (!allowedRarities.has(card.rarity)) throw new Error(`${where}: rareté invalide ${card.rarity}.`);
@@ -167,9 +196,6 @@ for (const file of files) {
     if (!Number.isInteger(card.strength) || card.strength < 1 || card.strength > 10) {
       throw new Error(`${where}: la Force doit être un entier compris entre 1 et 10.`);
     }
-    if (typeof card.text !== "string" || card.text.trim().length === 0) {
-      throw new Error(`${where}: le texte de règle ne peut pas être vide.`);
-    }
     const expectedType = card.isCharacter ? "personnage" : card.kind === "special" ? "tactique" : "unite";
     if (card.type !== expectedType) {
       throw new Error(`${where}: le type ${card.type} devrait être ${expectedType}.`);
@@ -178,17 +204,18 @@ for (const file of files) {
     if (Math.abs(card.strength - targetStrength) > 1) {
       throw new Error(`${where}: Force ${card.strength} hors budget ; cible ${targetStrength} ± 1.`);
     }
-    await validateCardArt(card, where);
-    illustrationCount += 1;
     if (file === "six-crowns.json" && requiredSixCrownsCharacterNames.has(card.name)) {
       foundRequiredNames.add(card.name);
       if (!card.isCharacter) throw new Error(`${where}: ${card.name} doit être marqué comme personnage.`);
     }
+    standardCount += 1;
     count += 1;
   }
 }
 
-if (count !== 160) throw new Error(`Le catalogue doit contenir 160 cartes uniques, trouvé : ${count}.`);
+if (standardCount !== 160) throw new Error(`Le catalogue classique doit contenir 160 cartes uniques, trouvé : ${standardCount}.`);
+if (eventCount !== 5) throw new Error(`La suite Terres Dérobées doit contenir 5 sortilèges, trouvé : ${eventCount}.`);
+if (count !== 165) throw new Error(`Le catalogue complet doit contenir 165 cartes, trouvé : ${count}.`);
 if (illustrationCount !== count) throw new Error(`Chaque carte doit être illustrée : ${illustrationCount}/${count}.`);
 const missingNames = [...requiredSixCrownsCharacterNames].filter((name) => !foundRequiredNames.has(name));
 if (missingNames.length > 0) {
@@ -196,7 +223,7 @@ if (missingNames.length > 0) {
 }
 
 console.log(
-  `Catalogue valide : ${count} cartes illustrées en trois résolutions, réparties en 4 collections de 40, ${characterCount} personnages nommés — `
+  `Catalogue valide : ${count} cartes illustrées en trois résolutions — 160 cartes classiques réparties en 4 collections de 40 et 5 sortilèges dorés Terres Dérobées, ${characterCount} personnages nommés — `
   + `${rarityCounts.commun} Communes, ${rarityCounts.peuCommune} Peu communes, `
-  + `${rarityCounts.rare} Rares et ${rarityCounts.unique} Uniques.`
+  + `${rarityCounts.rare} Rares, ${rarityCounts.unique} Uniques et ${eventCount} Dorées.`
 );

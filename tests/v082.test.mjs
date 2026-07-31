@@ -20,18 +20,20 @@ test("les cartes sont triées par rareté croissante sans perdre l’ordre des �
     card("X1", "unique"),
     card("U1", "peuCommune"),
     card("C2", "commun"),
-    card("R2", "rare")
+    card("R2", "rare"),
+    card("G1", "doree")
   ];
 
-  assert.deepEqual(RARITY_ORDER, { commun: 0, peuCommune: 1, rare: 2, unique: 3 });
+  assert.deepEqual(RARITY_ORDER, { commun: 0, peuCommune: 1, rare: 2, unique: 3, doree: 4 });
   assert.deepEqual(sortCardsByRarity(cards).map((entry) => entry.id), [
-    "C1", "C2", "U1", "R1", "R2", "X1"
+    "C1", "C2", "U1", "R1", "R2", "X1", "G1"
   ]);
 });
 
 test("la couleur de l’animation dépend de la rareté la plus élevée", () => {
   assert.equal(getHighestRarity([card("C", "commun"), card("R", "rare")]), "rare");
   assert.equal(getHighestRarity([card("R", "rare"), card("X", "unique")]), "unique");
+  assert.equal(getHighestRarity([card("X", "unique"), card("G", "doree")]), "doree");
   assert.equal(getHighestRarity([]), null);
 });
 

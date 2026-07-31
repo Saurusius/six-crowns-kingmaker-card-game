@@ -11,11 +11,11 @@ function readJson(relative) {
   return JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 }
 
-test("la v0.8.64 relie les 160 cartes aux trois résolutions", () => {
-  const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana"]
+test("le catalogue complet relie les 165 cartes aux trois résolutions", () => {
+  const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana", "event-stolen-lands"]
     .flatMap((file) => readJson(`data/cards/${file}.json`));
 
-  assert.equal(cards.length, 160);
+  assert.equal(cards.length, 165);
   for (const card of cards) {
     for (const variant of ["full", "medium", "thumb"]) {
       assert.equal(typeof card.art?.[variant], "string", `${card.id} — art.${variant}`);
@@ -27,12 +27,12 @@ test("la v0.8.64 relie les 160 cartes aux trois résolutions", () => {
 
 test("le manifeste et la carte partagée couvrent le catalogue complet", async () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.equal(manifest.version, "0.8.64");
-  assert.equal(manifest.integratedCardArtCount, 160);
-  assert.equal(manifest.integratedCardArt.length, 160);
+  assert.equal(manifest.version, "0.10.0");
+  assert.equal(manifest.integratedCardArtCount, 165);
+  assert.equal(manifest.integratedCardArt.length, 165);
 
   const { CARD_ART_BY_NAME } = await import(pathToFileURL(path.join(root, "scripts/card-art-map.js")));
-  const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana"]
+  const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana", "event-stolen-lands"]
     .flatMap((file) => readJson(`data/cards/${file}.json`));
   for (const card of cards) assert.deepEqual(CARD_ART_BY_NAME[card.name], card.art, card.name);
 });

@@ -11,9 +11,9 @@ function readJson(relative) {
   return JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 }
 
-test("le catalogue illustré contient 160 cartes avec trois résolutions", () => {
+test("le catalogue illustré contient 165 cartes avec trois résolutions", () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.equal(manifest.integratedCardArtCount, 160);
+  assert.equal(manifest.integratedCardArtCount, 165);
   assert.equal(manifest.integratedCardArt.length, manifest.integratedCardArtCount);
   assert.deepEqual(manifest.unmatchedFiles, []);
   for (const card of manifest.integratedCardArt) {

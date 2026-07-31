@@ -13,7 +13,7 @@ function readJson(relative) {
 
 test("la v0.8.6 constitue le socle de l’intégration des illustrations", () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.match(manifest.version, /^0\.8\.6\d*$/);
+  assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
   assert.ok(manifest.integratedCardArtCount >= 114);
 
   const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana"]

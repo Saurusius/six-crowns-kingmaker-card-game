@@ -1,6 +1,6 @@
 # Illustrations des cartes
 
-Depuis la v0.8.64, les **160 cartes** sont intégralement illustrées. Les chemins utilisés par Foundry sont définis dans les fichiers JSON de `data/cards/` et proviennent du manifeste unique `documentation/manifest-cards.json`.
+Depuis la v0.10.0, les **165 cartes collectionnables** sont intégralement illustrées : 160 cartes classiques et 5 sortilèges dorés de la suite Terres Dérobées. Les chemins utilisés par Foundry sont définis dans les fichiers JSON de `data/cards/` et proviennent du manifeste unique `documentation/manifest-cards.json`.
 
 Chaque carte possède trois variantes WebP au ratio vertical 5:7 :
 
@@ -18,6 +18,8 @@ assets/cards/
   aldori/<slug>/...
   iron-khans/<slug>/...
   stolen-lands-arcana/<slug>/...
+  event-stolen-lands/<slug>/...
+  event-stolen-lands/ours-des-terres-derobees/...  # invocation non collectionnable
 ```
 
 Exemple de données :

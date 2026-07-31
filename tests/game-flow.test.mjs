@@ -9,6 +9,8 @@ import {
   continueAfterCoinToss,
   createPrototypeState,
   evaluateBoard,
+  lockEventSpellSelection,
+  selectEventSpell,
   passSide,
   playCard,
   resolveCoinToss,
@@ -35,10 +37,15 @@ test("tous les decks prédéfinis contiennent exactement vingt cartes", () => {
   }
 });
 
-test("la partie commence par le choix des decks", () => {
+test("la partie commence par le choix secret du sortilège", () => {
   const state = createPrototypeState();
-  assert.equal(state.phase, PHASES.DECK_SELECTION);
+  assert.equal(state.phase, PHASES.SPELL_SELECTION);
   assert.equal(state.player, null);
+  selectEventSpell(state, "EV-TD-01");
+  lockEventSpellSelection(state, fixedRandom);
+  assert.equal(state.phase, PHASES.DECK_SELECTION);
+  assert.equal(state.spells.player.id, "EV-TD-01");
+  assert.equal(state.spells.opponent.revealed, false);
 });
 
 test("l’option Deck aléatoire choisit un deck prédéfini valide", () => {

@@ -43,6 +43,44 @@
     </section>
   {{/if}}
 
+  {{#if isSpellSelection}}
+    <section class="scg-setup-panel scg-spell-selection-panel">
+      <div class="scg-setup-heading scg-spell-selection-heading">
+        <div>
+          <small>Avant les decks et le lancer de pièce</small>
+          <h2>Choisissez votre sortilège</h2>
+          <p>Votre choix sera verrouillé avant de connaître le deck adverse. Une seule activation sera possible pendant toute la partie.</p>
+        </div>
+        <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> Terres Dérobées · 5 cartes dorées</span>
+      </div>
+
+      <div class="scg-spell-choice-grid">
+        <button type="button" class="scg-spell-choice-card is-no-spell {{#if noSpellSelected}}is-selected{{/if}}" data-action="select-no-spell">
+          <span class="scg-spell-choice-art"><i class="fa-solid fa-ban"></i></span>
+          <span><small>Option libre</small><strong>Sans sortilège</strong><p>Entrez dans la partie sans pouvoir événementiel.</p></span>
+          <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
+        </button>
+        {{#each eventSpellChoices}}
+          <button type="button" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}} {{#unless available}}is-locked{{/unless}}" data-action="select-event-spell" data-spell-id="{{id}}" {{#unless available}}disabled{{/unless}}>
+            <span class="scg-spell-choice-art"><img src="{{artMedium}}" alt="Illustration de {{name}}"></span>
+            <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p>{{text}}</p></span>
+            <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
+          </button>
+        {{/each}}
+      </div>
+
+      <div class="scg-spell-selection-note">
+        <i class="fa-solid fa-user-secret"></i>
+        <span><strong>Choix secret</strong> Le sortilège adverse sera lui aussi verrouillé maintenant, puis restera face cachée jusqu’à son activation.</span>
+      </div>
+      <div class="scg-setup-actions">
+        <button class="scg-secondary-button" type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{eventBoosterButtonLabel}}</button>
+        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Voir la collection</button>
+        <button class="scg-primary-button" type="button" data-action="lock-event-spell"><i class="fa-solid fa-lock"></i> Verrouiller et choisir les decks</button>
+      </div>
+    </section>
+  {{/if}}
+
   {{#if isDeckSelection}}
     <section class="scg-setup-panel scg-deck-preparation">
       <div class="scg-setup-heading scg-deck-preparation-heading">
@@ -52,6 +90,18 @@
           <p>Sélectionnez directement les decks dans les galeries ci-dessous. Les decks de démonstration sont indépendants de votre collection ; vos decks personnalisés restent soumis aux limites de construction.</p>
         </div>
         <span class="scg-deck-rule-chip"><i class="fa-solid fa-layer-group"></i> 20 cartes par deck</span>
+      </div>
+
+      <div class="scg-locked-spells-summary">
+        <article class="is-player">
+          {{#if playerSpell.equipped}}<img src="{{playerSpell.artThumb}}" alt="">{{else}}<span><i class="fa-solid fa-ban"></i></span>{{/if}}
+          <div><small>Votre choix verrouillé</small><strong>{{selectedSpellLockedLabel}}</strong><em>Une utilisation maximum</em></div>
+        </article>
+        <i class="fa-solid fa-lock"></i>
+        <article class="is-opponent">
+          <img src="{{opponentSpell.artThumb}}" alt="Dos du sortilège adverse">
+          <div><small>Choix adverse</small><strong>Sortilège secret</strong><em>Révélé à l’activation</em></div>
+        </article>
       </div>
 
       <div class="scg-deck-choice-columns">
@@ -329,7 +379,7 @@
               </div>
               <div class="scg-card-line">
                 {{#each cards}}
-                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}}">
+                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}} {{#if isSpellExcluded}}is-spell-excluded{{/if}} {{#if isSummoned}}is-summoned-card{{/if}}">
                     <div class="scg-card-art">
                       {{#if hasImage}}
                         <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
@@ -339,6 +389,9 @@
                       <span class="scg-strength">{{effectiveStrength}}</span>
                       <span class="scg-rarity-dot {{rarityClass}}" title="{{rarityLabel}}"></span>
                       {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      {{#if hasTemporaryPower}}<span class="scg-spell-power-modifier">{{temporaryPowerLabel}}</span>{{/if}}
+                      {{#if isSpellExcluded}}<span class="scg-spell-excluded-badge" title="Dévorée par un sortilège"><i class="fa-solid fa-dragon"></i></span>{{/if}}
+                      {{#if isSummoned}}<span class="scg-summoned-badge" title="Invocation temporaire"><i class="fa-solid fa-paw"></i></span>{{/if}}
                       <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
                     </div>
                     <div class="scg-card-caption">
@@ -370,7 +423,7 @@
               </div>
               <div class="scg-card-line">
                 {{#each cards}}
-                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}}">
+                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}} {{#if isSpellExcluded}}is-spell-excluded{{/if}} {{#if isSummoned}}is-summoned-card{{/if}}">
                     <div class="scg-card-art">
                       {{#if hasImage}}
                         <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
@@ -380,6 +433,9 @@
                       <span class="scg-strength">{{effectiveStrength}}</span>
                       <span class="scg-rarity-dot {{rarityClass}}" title="{{rarityLabel}}"></span>
                       {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      {{#if hasTemporaryPower}}<span class="scg-spell-power-modifier">{{temporaryPowerLabel}}</span>{{/if}}
+                      {{#if isSpellExcluded}}<span class="scg-spell-excluded-badge" title="Dévorée par un sortilège"><i class="fa-solid fa-dragon"></i></span>{{/if}}
+                      {{#if isSummoned}}<span class="scg-summoned-badge" title="Invocation temporaire"><i class="fa-solid fa-paw"></i></span>{{/if}}
                       <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
                     </div>
                     <div class="scg-card-caption">
@@ -404,6 +460,10 @@
           <article class="scg-duelist-profile scg-duelist-profile-opponent">
             <img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}">
             <div><small>Adversaire</small><strong>{{opponentProfile.name}}</strong></div>
+          </article>
+          <article class="scg-equipped-spell is-opponent {{#if opponentSpell.used}}is-used{{/if}} {{#if opponentSpell.hidden}}is-hidden{{/if}}">
+            <img src="{{opponentSpell.artThumb}}" alt="{{opponentSpell.name}}">
+            <div><small>Sortilège adverse</small><strong>{{opponentSpell.name}}</strong><span>{{#if opponentSpell.used}}UTILISÉ{{else}}{{#if opponentSpell.hidden}}SECRET{{else}}PRÊT{{/if}}{{/if}}</span></div>
           </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
@@ -432,6 +492,11 @@
           <article class="scg-duelist-profile scg-duelist-profile-player">
             <img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}">
             <div><small>Votre personnage</small><strong>{{playerProfile.name}}</strong></div>
+          </article>
+          <article class="scg-equipped-spell is-player {{#if playerSpell.used}}is-used{{/if}}">
+            {{#if playerSpell.equipped}}<img src="{{playerSpell.artThumb}}" alt="{{playerSpell.name}}">{{else}}<span class="scg-equipped-spell-empty"><i class="fa-solid fa-ban"></i></span>{{/if}}
+            <div><small>Votre sortilège</small><strong>{{playerSpell.name}}</strong><span>{{#if playerSpell.used}}UTILISÉ{{else}}{{#if playerSpell.equipped}}PRÊT{{else}}AUCUN{{/if}}{{/if}}</span></div>
+            {{#if playerSpell.equipped}}<button type="button" data-action="activate-event-spell" {{#unless playerSpell.canActivate}}disabled title="{{playerSpell.reason}}"{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Activer</button>{{/if}}
           </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>

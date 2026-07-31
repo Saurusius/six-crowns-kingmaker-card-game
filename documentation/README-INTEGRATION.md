@@ -4,8 +4,10 @@ Cette archive est conçue pour être extraite **à la racine du dépôt du modul
 
 ## Contenu
 
-- `assets/cards/` : 160 dossiers de cartes, chacun avec `full.webp`, `medium.webp` et `thumb.webp`.
+- `assets/cards/` : 165 dossiers de cartes collectionnables, plus le dossier technique de l’Ours invoqué, chacun avec `full.webp`, `medium.webp` et `thumb.webp`.
 - `assets/interface/` : arrière-plans et placeholders d’interface.
+- `assets/events/stolen-lands/` : icône et dos des sortilèges événementiels.
+- `assets/boosters/terres-derobees-evenementiel.webp` : booster doré mono-carte.
 - `documentation/` : audit v5, mapping actualisé et manifestes de contrôle.
 
 ## Tailles garanties

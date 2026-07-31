@@ -1,5 +1,6 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { withNormalizedCardArt } from "./art.js";
+import { EVENT_BOOSTER_ID, EVENT_BOOSTER_IMAGE, EVENT_CARD_BACK, EVENT_SET_LABEL, EVENT_SPELL_IDS } from "./event-spells.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
@@ -14,27 +15,39 @@ export const SPECIAL_BOOSTERS = Object.freeze({
   "stolen-lands-arcana": { id: "stolen-lands-arcana", label: "Arcanes des Terres Dérobées", image: `modules/${MODULE_ID}/assets/boosters/arcanes-terres-derobees.png`, accent: "arcana" }
 });
 
-const EVENT_BOOSTERS = new Map();
+const EVENT_BOOSTERS = new Map([[EVENT_BOOSTER_ID, {
+  id: EVENT_BOOSTER_ID,
+  label: EVENT_SET_LABEL,
+  description: "Booster événementiel mono-carte de la suite Terres Dérobées.",
+  image: EVENT_BOOSTER_IMAGE,
+  cardBack: EVENT_CARD_BACK,
+  accent: "event-gold",
+  cardIds: [...EVENT_SPELL_IDS],
+  drawCount: 1
+}]]);
 
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
   "aldori.json",
   "iron-khans.json",
-  "stolen-lands-arcana.json"
+  "stolen-lands-arcana.json",
+  "event-stolen-lands.json"
 ]);
 
 const RARITY_LABELS = Object.freeze({
   commun: "Commun",
   peuCommune: "Peu commune",
   rare: "Rare",
-  unique: "Unique"
+  unique: "Unique",
+  doree: "Dorée"
 });
 
 export const RARITY_ORDER = Object.freeze({
   commun: 0,
   peuCommune: 1,
   rare: 2,
-  unique: 3
+  unique: 3,
+  doree: 4
 });
 
 export function sortCardsByRarity(cards = []) {
@@ -131,9 +144,9 @@ export async function grantTicketCreditsToUser({ userId, count = 1, type = "spec
 export function registerEventBooster(definition = {}) {
   const id = String(definition.id ?? "").trim();
   if (!id) throw new Error("Un booster événementiel doit posséder un identifiant.");
-  const cardIds = Array.isArray(definition.cardIds) ? definition.cardIds.filter(Boolean) : [];
-  if (cardIds.length < 3) throw new Error("Un booster événementiel doit référencer au moins 3 cartes.");
-  EVENT_BOOSTERS.set(id, { ...definition, id, cardIds, label: definition.label ?? id });
+  const cardIds = Array.isArray(definition.cardIds) ? [...new Set(definition.cardIds.filter(Boolean))] : [];
+  if (cardIds.length < 1) throw new Error("Un booster événementiel doit référencer au moins une carte.");
+  EVENT_BOOSTERS.set(id, { ...definition, id, cardIds, drawCount: 1, label: definition.label ?? id });
   return EVENT_BOOSTERS.get(id);
 }
 
@@ -437,9 +450,9 @@ export async function openEventBooster({ boosterId, random = Math.random, user =
   if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits - 1);
   const [catalog, beforeCollection] = await Promise.all([loadCardCatalog(), getCollection({ user: targetUser })]);
   const pool = catalog.filter((card) => definition.cardIds.includes(card.id));
-  if (pool.length < 3) throw new Error("La réserve de ce booster événementiel est incomplète.");
-  const selected = shuffle(pool, random).slice(0, 3).map((card) => ({ ...card }));
-  const annotated = annotateCards(sortCardsByRarity(selected), beforeCollection);
+  if (pool.length < 1) throw new Error("La réserve de ce booster événementiel est incomplète.");
+  const selected = [{ ...pool[Math.floor(random() * pool.length)] }];
+  const annotated = annotateCards(selected, beforeCollection);
   try {
     await addCardsToCollection(annotated, { user: targetUser });
     await addBoosterToHistory(targetUser, annotated, { boosterType: "event", boosterLabel: definition.label });
@@ -447,8 +460,25 @@ export async function openEventBooster({ boosterId, random = Math.random, user =
     if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits);
     throw error;
   }
-  if (animate && targetUser.id === game.user.id) animateBooster(annotated, { boosterLabel: definition.label, getRemainingCredits: getEventBoosterCredits, reopen: () => openEventBooster({ boosterId }) });
-  ui.notifications.info(`${definition.label} ouvert : 3 cartes événementielles ajoutées.`);
+  try {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
+      content: boosterChatContent(annotated, targetUser, requiresCredit ? previousCredits - 1 : null)
+        .replace("Booster des Six Couronnes", `Booster événementiel — ${definition.label}`)
+        .replace("Les cartes ont été ajoutées", "La carte dorée a été ajoutée")
+    });
+  } catch (error) {
+    console.error(`${MODULE_TITLE} | Publication du booster événementiel impossible`, error);
+  }
+  if (animate && targetUser.id === game.user.id) animateBooster(annotated, {
+    boosterLabel: `Événement — ${definition.label}`,
+    getRemainingCredits: getEventBoosterCredits,
+    reopen: () => openEventBooster({ boosterId }),
+    packImage: definition.image,
+    cardBack: definition.cardBack,
+    eventMode: true
+  });
+  ui.notifications.info(`${definition.label} ouvert : 1 carte événementielle dorée ajoutée.`);
   return annotated;
 }
 
@@ -485,6 +515,10 @@ export async function recycleCardsForBooster(cardIds = []) {
   const collection = await getCollection({ user: targetUser });
   const requested = {};
   for (const id of ids) requested[id] = (requested[id] ?? 0) + 1;
+  const eventSpellIds = new Set(EVENT_SPELL_IDS);
+  if (Object.keys(requested).some((id) => eventSpellIds.has(id))) {
+    throw new Error("Les cartes événementielles dorées ne peuvent pas être recyclées.");
+  }
   for (const [id, count] of Object.entries(requested)) {
     if ((collection[id]?.count ?? 0) < count) throw new Error(`Vous ne possédez pas assez d’exemplaires de ${collection[id]?.name ?? id}.`);
   }
@@ -526,7 +560,7 @@ export async function executeTrade({ fromUserId, toUserId, offered = {}, request
   return true;
 }
 
-function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
+function boosterRevealCardMarkup(card, index, { featured = false, cardBack = null } = {}) {
   const art = card.artMedium ?? card.artFull ?? "";
   const artMarkup = art
     ? `<img src="${escapeHtml(art)}" alt="Illustration de ${escapeHtml(card.name)}">`
@@ -538,6 +572,7 @@ function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
     <article class="scg-reveal-card scg-rarity-${escapeHtml(card.rarity)}${featured ? " is-featured" : ""}" data-reveal-index="${index}" aria-hidden="true">
       <span class="scg-card-reveal-flare" aria-hidden="true"></span>
       ${sparkles}
+      ${cardBack ? `<div class="scg-reveal-card-back"><img src="${escapeHtml(cardBack)}" alt="Dos de carte événementielle"></div>` : ""}
       <div class="scg-reveal-card-art">${artMarkup}</div>
       <span class="scg-reveal-rarity"><i class="fa-solid ${featured ? "fa-crown" : "fa-star"}" aria-hidden="true"></i>${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
       <strong>${escapeHtml(card.name)}</strong>
@@ -546,7 +581,7 @@ function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
   `;
 }
 
-function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, fastPrelude = false, boosterLabel = "Booster classique", getRemainingCredits = getBoosterCredits, reopen = () => openBooster() } = {}) {
+function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, fastPrelude = false, boosterLabel = "Booster classique", getRemainingCredits = getBoosterCredits, reopen = () => openBooster(), packImage = null, cardBack = null, eventMode = false } = {}) {
   if (typeof document === "undefined" || !Array.isArray(cards) || cards.length === 0) return;
 
   document.querySelector(".scg-booster-opening")?.remove();
@@ -556,13 +591,14 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   const orderedCards = sortCardsByRarity(cards);
   const highestRarity = getHighestRarity(orderedCards) ?? "rare";
   const hasUnique = highestRarity === "unique";
-  const themeRarity = hasUnique ? "unique" : highestRarity === "rare" ? "rare" : "neutral";
+  const hasGolden = eventMode || highestRarity === "doree";
+  const themeRarity = hasGolden ? "golden" : hasUnique ? "unique" : highestRarity === "rare" ? "rare" : "neutral";
   const overlay = document.createElement("div");
-  overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}`;
+  overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}${hasGolden ? " has-golden" : ""}`;
   overlay.dataset.highestRarity = highestRarity;
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", hasUnique ? "Ouverture d’un booster avec carte Unique" : "Ouverture d’un booster");
+  overlay.setAttribute("aria-label", hasGolden ? "Ouverture d’un booster événementiel doré" : hasUnique ? "Ouverture d’un booster avec carte Unique" : "Ouverture d’un booster");
 
   overlay.innerHTML = `
     <div class="scg-booster-energy" aria-hidden="true">
@@ -570,8 +606,8 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
       <span class="scg-booster-energy-ring"></span>
       <span class="scg-booster-energy-rays"></span>
     </div>
-    <div class="scg-booster-pack" aria-hidden="true">
-      <i class="fa-solid fa-box-open"></i>
+    <div class="scg-booster-pack${packImage ? " has-pack-image" : ""}" aria-hidden="true">
+      ${packImage ? `<img class="scg-booster-pack-image" src="${escapeHtml(packImage)}" alt="">` : `<i class="fa-solid fa-box-open"></i>`}
       <strong>Ouverture de ${escapeHtml(boosterLabel)}…</strong>
       <span class="scg-pack-sigil"><i class="fa-solid fa-crown"></i></span>
     </div>
@@ -585,7 +621,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
         </div>
       </header>
       <div class="scg-booster-reveal scg-booster-reveal--count-${orderedCards.length}">
-        ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
+        ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: ["unique", "doree"].includes(card.rarity), cardBack })).join("")}
       </div>
     </section>
     <div class="scg-booster-actions">
@@ -649,6 +685,10 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
       overlay.classList.add("is-unique-impact");
       schedule(() => overlay.classList.remove("is-unique-impact"), 1800);
     }
+    if (card.rarity === "doree") {
+      overlay.classList.add("is-golden-impact");
+      schedule(() => overlay.classList.remove("is-golden-impact"), 1900);
+    }
   };
 
   const finishSequence = () => {
@@ -656,7 +696,11 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     sequenceFinished = true;
     overlay.classList.add("is-complete");
     const newCount = orderedCards.filter((card) => card.isNew).length;
-    if (status) status.textContent = hasUnique ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)` : `${newCount} nouvelle(s) carte(s) · ${orderedCards.length} cartes révélées`;
+    if (status) status.textContent = hasGolden
+      ? `Carte événementielle dorée obtenue · ${newCount ? "Nouvelle carte" : "Nouvel exemplaire"}`
+      : hasUnique
+        ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)`
+        : `${newCount} nouvelle(s) carte(s) · ${orderedCards.length} cartes révélées`;
     button.textContent = totalPacks > 1 && packIndex < totalPacks ? "Booster suivant" : "Fermer";
     if (totalPacks === 1 && againButton) {
       againButton.hidden = false;
@@ -696,11 +740,13 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     revealCard(revealIndex);
     revealIndex += 1;
 
-    const delay = card.rarity === "unique"
-      ? 1750
-      : card.rarity === "rare"
-        ? 1050
-        : 720;
+    const delay = card.rarity === "doree"
+      ? 1850
+      : card.rarity === "unique"
+        ? 1750
+        : card.rarity === "rare"
+          ? 1050
+          : 720;
     schedule(revealNext, delay);
   };
 

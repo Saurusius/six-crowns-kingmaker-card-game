@@ -1,4 +1,22 @@
+## 0.10.0 — Sortilèges événementiels : Terres Dérobées
+
+- Ajoute une phase secrète de sélection des sortilèges avant le lancer de pièce et avant la révélation des decks.
+- Limite chaque joueur à un sortilège équipé et à une activation par partie.
+- Intègre les cinq cartes dorées « Terres Dérobées » : Et là, un ours !, Une bonne bière, Sauvetage de sac, Chancla de titane et Hydre vorace.
+- Ajoute l’Ours des Terres Dérobées comme invocation technique de 4 Puissance, non collectionnable et retirée à la fin de la manche.
+- Ajoute un booster événementiel contenant exactement une carte de la suite, avec ticket, animation, paquet et dos de carte dédiés.
+- Ajoute la catégorie événementielle à la collection, le ciblage interactif sur le plateau, l’état Utilisé et la révélation du sortilège adverse.
+- Étend le moteur de score aux bonus temporaires, exclusions de score et invocations.
+- Empêche le recyclage des cartes événementielles dorées.
+- Porte le catalogue à 165 cartes collectionnables et met à jour les manifestes d’illustrations.
+- Ajoute les tests du nouveau système et conserve la validation complète du module.
+
 # Changelog
+
+## 0.9.1
+- Refonte ergonomique des outils MJ pour l’attribution des tickets classiques, spéciaux et événementiels.
+- Le bouton « Réduire les options » masque désormais l’ensemble des panneaux et commandes secondaires.
+- Suppression des éclats lumineux diagonaux sur les boosters spéciaux.
 
 ## 0.9.0
 - Intégration des boosters spéciaux définitifs en PNG transparent pour la sélection Foundry.

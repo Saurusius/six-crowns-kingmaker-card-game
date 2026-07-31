@@ -2,6 +2,8 @@
 
 **Version : v5 — 31 juillet 2026**
 
+> **Extension v0.10.0 :** cet audit v5 décrit le socle historique des 160 cartes classiques. La suite événementielle **Terres Dérobées** ajoute 5 cartes collectionnables dorées et une invocation technique, toutes livrées dans les trois résolutions conformes. Le catalogue actif compte donc 165 cartes collectionnables.
+
 ## Résultat final
 
 | Contrôle | Résultat |

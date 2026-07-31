@@ -3,11 +3,21 @@ import { buildTraitBadges, describeTraits } from "../traits.js";
 import { calculateSideScores, hasAbility } from "./scoring.js";
 import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
 import { normalizeCardArt } from "../art.js";
+import {
+  EVENT_CARD_BACK,
+  EVENT_SPELL_IDS,
+  activateEventSpellEffect,
+  buildEventSpellActivationOptions,
+  chooseOpponentEventSpellPayload,
+  getEventSpellDefinition,
+  listEventSpellDefinitions
+} from "../event-spells.js";
 
 const RANDOM_DECK_ID = "random";
 
 export const SIDES = Object.freeze(["player", "opponent"]);
 export const PHASES = Object.freeze({
+  SPELL_SELECTION: "spell-selection",
   DECK_SELECTION: "deck-selection",
   COIN_TOSS: "coin-toss",
   MULLIGAN: "mulligan",
@@ -26,14 +36,16 @@ const RARITY_LABELS = Object.freeze({
   commun: "Commun",
   peuCommune: "Peu commune",
   rare: "Rare",
-  unique: "Unique"
+  unique: "Unique",
+  doree: "Dorée"
 });
 
 const RARITY_ICONS = Object.freeze({
   commun: "fa-regular fa-circle",
   peuCommune: "fa-solid fa-star",
   rare: "fa-solid fa-gem",
-  unique: "fa-solid fa-crown"
+  unique: "fa-solid fa-crown",
+  doree: "fa-solid fa-wand-sparkles"
 });
 
 
@@ -47,7 +59,8 @@ const FACTION_VISUALS = Object.freeze({
   "six-crowns": { symbol: "♛", label: "Six Couronnes" },
   aldori: { symbol: "⚔", label: "Maison Aldori" },
   "iron-khans": { symbol: "♞", label: "Khans de Fer" },
-  arcana: { symbol: "✦", label: "Arcanes" }
+  arcana: { symbol: "✦", label: "Arcanes" },
+  "event-stolen-lands": { symbol: "✧", label: "Sortilèges — Terres Dérobées" }
 });
 
 
@@ -91,6 +104,16 @@ const RULEBOOK = Object.freeze([
     ]
   },
   {
+    title: "Sortilèges événementiels",
+    items: [
+      "Chaque joueur choisit secrètement un seul sortilège avant le choix des decks et avant le lancer de pièce.",
+      "Le sortilège équipé ne fait pas partie du deck et ne peut être activé qu’une seule fois pendant la partie.",
+      "L’activation se fait pendant votre tour, avant de jouer une carte ou de passer, selon les cibles indiquées.",
+      "Un sortilège peut invoquer une carte, modifier une ligne, agir sur la défausse ou changer le calcul du score.",
+      "Le sortilège adverse reste face cachée jusqu’à son activation."
+    ]
+  },
+  {
     title: "Victoire",
     items: [
       "Quand les deux joueurs ont passé, on compare d’abord le contrôle des 3 lignes.",
@@ -109,6 +132,7 @@ const RULEBOOK = Object.freeze([
       "Les doublons sont autorisés et chaque carte ouverte est sauvegardée dans la collection de l’utilisateur.",
       "Les decks prédéfinis sont réservés aux tests : leurs cartes ne font pas partie des collections personnelles.",
       "Un joueur non MJ doit disposer d’un booster offert par un MJ ; l’ouverture consomme 1 booster disponible.",
+      "Un booster événementiel contient exactement une seule carte dorée de la suite concernée.",
       "La collection, les boosters disponibles et les decks personnalisés sont propres au profil Foundry connecté."
     ]
   }
@@ -173,9 +197,13 @@ export function createPrototypeState() {
   return {
     matchId: null,
     round: 0,
-    phase: PHASES.DECK_SELECTION,
+    phase: PHASES.SPELL_SELECTION,
     selectedPlayerDeck: "six-crowns",
     selectedOpponentDeck: "aldori",
+    spells: {
+      player: { id: null, used: false, revealed: true },
+      opponent: { id: null, used: false, revealed: false }
+    },
     currentTurn: null,
     roundStarter: null,
     roundResult: null,
@@ -189,7 +217,7 @@ export function createPrototypeState() {
       face: null,
       winner: null
     },
-    message: "Choisissez les deux decks prédéfinis — ou un Deck aléatoire — puis lancez la partie.",
+    message: "Choisissez secrètement un sortilège événementiel avant de découvrir les decks de la partie.",
     log: [],
     playedCards: [],
     analyticsRecorded: false,
@@ -269,6 +297,63 @@ export function toggleRules(state, forceValue = null) {
   return state;
 }
 
+export function ensureSpellState(state) {
+  state.spells ??= {};
+  state.spells.player = { id: null, used: false, revealed: true, ...(state.spells.player ?? {}) };
+  state.spells.opponent = { id: null, used: false, revealed: false, ...(state.spells.opponent ?? {}) };
+  return state.spells;
+}
+
+export function selectEventSpell(state, spellId = null) {
+  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège est déjà verrouillé.");
+  if (spellId && !getEventSpellDefinition(spellId)) throw new Error("Ce sortilège événementiel n’existe pas.");
+  ensureSpellState(state);
+  state.spells.player = { id: spellId || null, used: false, revealed: true };
+  state.message = spellId
+    ? `${getEventSpellDefinition(spellId).name} est sélectionné. Verrouillez votre choix pour continuer.`
+    : "Vous jouerez sans sortilège. Verrouillez votre choix pour continuer.";
+  return state;
+}
+
+export function lockEventSpellSelection(state, random = Math.random) {
+  if (state.phase !== PHASES.SPELL_SELECTION) throw new Error("Le choix du sortilège est déjà verrouillé.");
+  ensureSpellState(state);
+  const opponentId = EVENT_SPELL_IDS[Math.floor(random() * EVENT_SPELL_IDS.length)] ?? null;
+  state.spells.player.used = false;
+  state.spells.player.revealed = true;
+  state.spells.opponent = { id: opponentId, used: false, revealed: false };
+  state.phase = PHASES.DECK_SELECTION;
+  state.message = "Les sortilèges sont verrouillés. Choisissez maintenant les decks de la confrontation.";
+  return state;
+}
+
+export function getEventSpellActivationOptions(state, side = "player") {
+  ensureSpellState(state);
+  return buildEventSpellActivationOptions(state, side);
+}
+
+export function activateEventSpell(state, side = "player", payload = {}) {
+  assertSide(side);
+  ensureSpellState(state);
+  const result = activateEventSpellEffect(state, side, payload);
+  state.message = side === "player" ? result.message : `${state.opponent?.name ?? "L’adversaire"} révèle ${result.spell.name}. ${result.message}`;
+  recordLog(state, "event-spell", state.message, {
+    side,
+    spellId: result.spell.id,
+    spellName: result.spell.name,
+    affectedIds: result.affectedIds ?? []
+  });
+  return result;
+}
+
+export function maybeUseOpponentEventSpell(state, random = Math.random) {
+  ensureSpellState(state);
+  if (state.phase !== PHASES.PLAYING || state.currentTurn !== "opponent") return null;
+  const payload = chooseOpponentEventSpellPayload(state, random);
+  if (!payload) return null;
+  return activateEventSpell(state, "opponent", payload);
+}
+
 function resolveDeckSelection(deckId, random = Math.random) {
   if (deckId !== RANDOM_DECK_ID) return deckId;
   const deckIds = listDecks().map((deck) => deck.id);
@@ -285,11 +370,24 @@ export function selectDeck(state, side, deckId) {
 }
 
 export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.random } = {}) {
+  if (state.phase === PHASES.SPELL_SELECTION) lockEventSpellSelection(state, random);
   if (state.phase !== PHASES.DECK_SELECTION) throw new Error("La partie a déjà commencé.");
   const playerSelection = playerDeckId ?? state.selectedPlayerDeck;
   const opponentSelection = opponentDeckId ?? state.selectedOpponentDeck;
   const playerId = resolveDeckSelection(playerSelection, random);
   const opponentId = resolveDeckSelection(opponentSelection, random);
+
+  ensureSpellState(state);
+  state.spells.player = { ...state.spells.player, used: false, revealed: true };
+  if (!getEventSpellDefinition(state.spells.opponent.id)) {
+    state.spells.opponent = {
+      id: EVENT_SPELL_IDS[Math.floor(random() * EVENT_SPELL_IDS.length)] ?? null,
+      used: false,
+      revealed: false
+    };
+  } else {
+    state.spells.opponent = { ...state.spells.opponent, used: false, revealed: false };
+  }
 
   state.matchId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   state.selectedPlayerDeck = playerId;
@@ -585,20 +683,31 @@ export function takeOpponentTurn(state) {
   return playCard(state, "opponent", move.card.id, move.row);
 }
 
+function cleanTemporarySpellState(card) {
+  if (!card) return card;
+  const cleaned = { ...card };
+  delete cleaned.temporaryPower;
+  delete cleaned.spellExcluded;
+  delete cleaned.spellExcludedBy;
+  return cleaned;
+}
+
 function moveRowsToDiscardWithResilience(side) {
   const resilientCards = ROWS.flatMap((row) => side.rows[row]
-    .filter((card) => hasAbility(card, "resilient"))
+    .filter((card) => !card.summoned && hasAbility(card, "resilient"))
     .map((card) => ({ card, row })));
-  const survivor = resilientCards.sort((a, b) => b.card.strength - a.card.strength)[0] ?? null;
+  const survivor = resilientCards.sort((a, b) => Number(b.card.strength ?? 0) - Number(a.card.strength ?? 0))[0] ?? null;
   const nextRows = emptyRows();
 
   for (const row of ROWS) {
-    for (const card of side.rows[row]) {
-      if (survivor?.card.id === card.id) {
+    for (const rawCard of side.rows[row]) {
+      if (rawCard.summoned) continue;
+      const card = cleanTemporarySpellState(rawCard);
+      if (survivor?.card.id === rawCard.id) {
         nextRows[row].push({
           ...card,
-          strength: Math.ceil(card.strength / 2),
-          abilities: card.abilities.filter((ability) => ability !== "resilient")
+          strength: Math.ceil(Number(card.strength ?? 0) / 2),
+          abilities: (card.abilities ?? []).filter((ability) => ability !== "resilient")
         });
       } else side.discard.push(card);
     }
@@ -639,7 +748,8 @@ export function createRematchState(state, random = Math.random) {
   const next = createPrototypeState();
   next.selectedPlayerDeck = state.selectedPlayerDeck;
   next.selectedOpponentDeck = state.selectedOpponentDeck;
-  startMatch(next, { playerDeckId: next.selectedPlayerDeck, opponentDeckId: next.selectedOpponentDeck, random });
+  next.spells.player.id = state.spells?.player?.id ?? null;
+  next.message = "Choisissez ou confirmez votre sortilège pour la revanche.";
   return next;
 }
 
@@ -652,6 +762,10 @@ export function buildMatchAnalyticsRecord(state, { userId = "unknown", userName 
     playerDeckName: state.player?.name ?? getDeckDefinition(state.selectedPlayerDeck)?.name ?? state.selectedPlayerDeck,
     opponentDeckId: state.selectedOpponentDeck,
     opponentDeckName: state.opponent?.name ?? getDeckDefinition(state.selectedOpponentDeck)?.name ?? state.selectedOpponentDeck,
+    playerSpellId: state.spells?.player?.id ?? null,
+    playerSpellUsed: Boolean(state.spells?.player?.used),
+    opponentSpellId: state.spells?.opponent?.id ?? null,
+    opponentSpellUsed: Boolean(state.spells?.opponent?.used),
     winner: state.gameWinner ?? "tie",
     rounds: state.round,
     playedCards: (state.playedCards ?? []).filter((entry) => entry.side === "player").map((entry) => ({ id: entry.id, name: entry.name })),
@@ -671,7 +785,7 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
   const badges = traitBadges(card);
   const art = normalizeCardArt(card);
   const faction = FACTION_VISUALS[card.factionId] ?? { symbol: "◆", label: "Neutre" };
-  const rowChoices = card.rows.map((row) => ({ id: row, label: ROW_LABELS[row], icon: ROW_ICONS[row] }));
+  const rowChoices = (card.rows ?? []).map((row) => ({ id: row, label: ROW_LABELS[row], icon: ROW_ICONS[row] }));
   return {
     ...card,
     effectiveStrength,
@@ -692,7 +806,12 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
     rowSummary: rowChoices.map((row) => row.label).join(" · "),
     primaryRowIcon: rowChoices[0]?.icon ?? ROW_ICONS["avant-garde"],
     traitBadges: badges,
-    effectText: describeTraits(card),
+    effectText: card.text || describeTraits(card),
+    temporaryPower: Number(card.temporaryPower ?? 0),
+    hasTemporaryPower: Number(card.temporaryPower ?? 0) !== 0,
+    temporaryPowerLabel: Number(card.temporaryPower ?? 0) > 0 ? `+${Number(card.temporaryPower ?? 0)}` : `${Number(card.temporaryPower ?? 0)}`,
+    isSpellExcluded: Boolean(card.spellExcluded),
+    isSummoned: Boolean(card.summoned),
     mulliganSelected: mulliganSelection.includes(card.id)
   };
 }
@@ -707,6 +826,7 @@ function gemMarkers(lives) {
 
 function phaseLabel(phase) {
   return {
+    [PHASES.SPELL_SELECTION]: "Choix du sortilège",
     [PHASES.DECK_SELECTION]: "Choix des decks",
     [PHASES.COIN_TOSS]: "Tirage au sort",
     [PHASES.MULLIGAN]: "Mulligan",
@@ -723,7 +843,31 @@ function rowStatusFor(side, rowControl) {
   return { label: "Perdue", className: "is-lost" };
 }
 
+function prepareSpellView(state, side) {
+  ensureSpellState(state);
+  const slot = state.spells[side];
+  const definition = getEventSpellDefinition(slot.id);
+  const hidden = side === "opponent" && !slot.revealed && !slot.used;
+  const options = definition ? buildEventSpellActivationOptions(state, side) : { canActivate: false, reason: "Aucun sortilège équipé." };
+  return {
+    id: definition?.id ?? null,
+    name: hidden ? "Sortilège secret" : definition?.name ?? "Aucun sortilège",
+    text: hidden ? "Le sortilège adverse sera révélé lors de son activation." : definition?.text ?? "Aucun sortilège n’a été équipé.",
+    activation: hidden ? "Choix verrouillé" : definition?.activation ?? "",
+    artFull: hidden ? EVENT_CARD_BACK : definition?.art?.full ?? EVENT_CARD_BACK,
+    artThumb: hidden ? EVENT_CARD_BACK : definition?.art?.thumb ?? EVENT_CARD_BACK,
+    icon: hidden ? "fa-solid fa-lock" : definition?.icon ?? "fa-solid fa-ban",
+    used: Boolean(slot.used),
+    revealed: !hidden,
+    hidden,
+    equipped: Boolean(definition),
+    canActivate: side === "player" && Boolean(options.canActivate),
+    reason: options.reason ?? ""
+  };
+}
+
 export function createBoardViewModel(state) {
+  ensureSpellState(state);
   const evaluation = evaluateBoard(state);
   const canPlayerAct = state.phase === PHASES.PLAYING
     && state.currentTurn === "player"
@@ -733,6 +877,8 @@ export function createBoardViewModel(state) {
   const preparedOpponentRows = state.opponent ? prepareRows(state.opponent.rows) : null;
   const playerStatuses = Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("player", evaluation.rowControl[row])]));
   const opponentStatuses = Object.fromEntries(ROWS.map((row) => [row, rowStatusFor("opponent", evaluation.rowControl[row])]));
+  const playerSpell = prepareSpellView(state, "player");
+  const opponentSpell = prepareSpellView(state, "opponent");
   const makeRowList = (preparedRows, statuses, scores, order) => order.map((row) => ({
     id: row,
     label: ROW_LABELS[row],
@@ -744,6 +890,9 @@ export function createBoardViewModel(state) {
 
   return {
     ...state,
+    playerSpell,
+    opponentSpell,
+    eventSpellDefinitions: listEventSpellDefinitions(),
     decks: decks.map((deck) => ({
       ...deck,
       playerSelected: deck.id === state.selectedPlayerDeck,
@@ -790,6 +939,7 @@ export function createBoardViewModel(state) {
       opponentCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "opponent").length
     } : null,
     isOpponentTurn: state.phase === PHASES.PLAYING && state.currentTurn === "opponent",
+    isSpellSelection: state.phase === PHASES.SPELL_SELECTION,
     isDeckSelection: state.phase === PHASES.DECK_SELECTION,
     isCoinToss: state.phase === PHASES.COIN_TOSS,
     isMulligan: state.phase === PHASES.MULLIGAN,
@@ -799,7 +949,7 @@ export function createBoardViewModel(state) {
       ? "—"
       : state.currentTurn === "player"
         ? "À vous"
-        : state.opponent.name,
+        : state.opponent?.name ?? "Adversaire",
     coinClass: state.coin.flipping
       ? "is-flipping"
       : state.coin.resolved

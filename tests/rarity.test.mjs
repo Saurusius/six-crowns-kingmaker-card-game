@@ -45,7 +45,7 @@ test("les quatre collections contiennent exactement quarante cartes", async () =
     "stolen-lands-arcana.json"
   ];
   const files = (await readdir(dataRoot)).filter((file) => file.endsWith(".json")).sort();
-  assert.deepEqual(files, [...expectedFiles].sort());
+  assert.deepEqual(files, [...expectedFiles, "event-stolen-lands.json"].sort());
   let total = 0;
   for (const file of expectedFiles) {
     const cards = JSON.parse(await readFile(new URL(file, dataRoot), "utf8"));
@@ -53,6 +53,9 @@ test("les quatre collections contiennent exactement quarante cartes", async () =
     total += cards.length;
   }
   assert.equal(total, 160);
+  const eventCards = JSON.parse(await readFile(new URL("event-stolen-lands.json", dataRoot), "utf8"));
+  assert.equal(eventCards.length, 5);
+  assert.ok(eventCards.every((card) => card.kind === "event-spell" && card.rarity === "doree"));
 });
 
 

@@ -14,12 +14,14 @@ function cardKey(card) {
  * - Lien : une carte Lien gagne +2 par autre copie identique sur la ligne.
  */
 export function calculateCardStrength(card, rowCards = []) {
-  const baseStrength = Math.max(0, Number(card?.strength ?? 0));
-  const supportBonus = rowCards.filter(
+  if (card?.spellExcluded) return 0;
+  const activeCards = rowCards.filter((other) => !other?.spellExcluded);
+  const baseStrength = Math.max(0, Number(card?.strength ?? 0) + Number(card?.temporaryPower ?? 0));
+  const supportBonus = activeCards.filter(
     (other) => other?.id !== card?.id && hasAbility(other, "support")
   ).length;
 
-  const identicalCopies = rowCards.filter(
+  const identicalCopies = activeCards.filter(
     (other) => cardKey(other) === cardKey(card)
   ).length;
   const bondBonus = hasAbility(card, "bond")
@@ -32,17 +34,20 @@ export function calculateCardStrength(card, rowCards = []) {
 export function calculateRowDetails(cards = []) {
   const cardDetails = cards.map((card) => {
     const effectiveStrength = calculateCardStrength(card, cards);
+    const printedStrength = Math.max(0, Number(card?.strength ?? 0));
     return {
       ...card,
       effectiveStrength,
-      isModified: effectiveStrength !== Math.max(0, Number(card?.strength ?? 0))
+      isModified: effectiveStrength !== printedStrength,
+      isSpellExcluded: Boolean(card?.spellExcluded),
+      temporaryPower: Number(card?.temporaryPower ?? 0)
     };
   });
 
   return {
     cards: cardDetails,
     total: cardDetails.reduce((sum, card) => sum + card.effectiveStrength, 0),
-    heroCount: cards.filter((card) => hasAbility(card, "hero")).length
+    heroCount: cards.filter((card) => !card?.spellExcluded && hasAbility(card, "hero")).length
   };
 }
 

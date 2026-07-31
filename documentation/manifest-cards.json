@@ -1,1325 +1,5 @@
 [
   {
-    "id": "NE-01",
-    "name": "Maegar Varn",
-    "faction": "six-crowns",
-    "slug": "maegar-varn",
-    "source": "portraits/six-crowns/maegar-varn.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/maegar-varn/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 87762,
-        "sha256": "dcd31758c33e69b15a49bcc482e748fc12a0f4e42795862c852f6b7b687903aa"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/maegar-varn/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 23968,
-        "sha256": "8d756c9bd1b51d4a3b3d7e89cbbe3409c88bf5ac1a7d51a2a7cb3b65deff5367"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/maegar-varn/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 6192,
-        "sha256": "5c5311ef2ea637675562269c3444e32530bea56ebe70272503958cb60360a388"
-      }
-    }
-  },
-  {
-    "id": "NE-02",
-    "name": "Bokken, alchimiste des Marches",
-    "faction": "six-crowns",
-    "slug": "bokken-alchimiste-des-marches",
-    "source": "portraits/six-crowns/bokken-alchimiste-des-marches.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 153564,
-        "sha256": "9426b362a16525e32d39378f8872d4ea38f6e319b8eba6276d6cb8cec82efe95"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 38712,
-        "sha256": "e20a4053c683a1f6a10fba8d9d21c8a01fa8de1e8589d92ad88a01a46bdcd80a"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 9648,
-        "sha256": "1da7722a722b94886c8b8d5a1887e9520d5fd0e710066a9f8f2565dbccedea7a"
-      }
-    }
-  },
-  {
-    "id": "NE-03",
-    "name": "Linzi, chroniqueuse du royaume",
-    "faction": "six-crowns",
-    "slug": "linzi-chroniqueuse-du-royaume",
-    "source": "portraits/six-crowns/linzi-chroniqueuse-du-royaume.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 216858,
-        "sha256": "039b8ff94218d1626fb8587da43fa3a83612af2b296c80ca94d45d29c1186b5a"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 64260,
-        "sha256": "8473054af815bb302a8a751ffc3a0e50a4f31dd1a3d9e51eb596b4ff8853c7dd"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 17430,
-        "sha256": "bf1fd6604a7fe58d6e306952d57343ff8b569622d07ccd45651338576926ee8c"
-      }
-    }
-  },
-  {
-    "id": "NE-04",
-    "name": "Jubilost Narthropple",
-    "faction": "six-crowns",
-    "slug": "jubilost-narthropple",
-    "source": "portraits/six-crowns/jubilost-narthropple.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/jubilost-narthropple/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 319200,
-        "sha256": "2d671d272cbe7caf3c3c17a22051c452001769dc0f9879487bb576b767ca59f8"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/jubilost-narthropple/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 85474,
-        "sha256": "f9891e9c4f587842d035e1bf5f531fa5b88dec4933c1295cf4a914732a05e356"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/jubilost-narthropple/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 21840,
-        "sha256": "431418afa489029b3b62d2e3c8a97e999351418034e944fcbfb9bcd835585d35"
-      }
-    }
-  },
-  {
-    "id": "SC-01",
-    "name": "Odéon de Saulébène",
-    "faction": "six-crowns",
-    "slug": "odeon-de-saulebene",
-    "source": "portraits/six-crowns/odeon-de-saulebene.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/odeon-de-saulebene/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 222998,
-        "sha256": "2458c156320b97b60a3d36ae05abbc3f77f746768a147ff703156e3959ed6dbe"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/odeon-de-saulebene/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 65260,
-        "sha256": "4fb28e4184f384825b6fb82b1514d2cf873dfaf715a43213ad7e4ae697c6f1b5"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/odeon-de-saulebene/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 17622,
-        "sha256": "0730b50be3d05c7bb07b43e07dc4337b978b7d512d6627cf68c34d8b7d503d0d"
-      }
-    }
-  },
-  {
-    "id": "SC-02",
-    "name": "Aethryn",
-    "faction": "six-crowns",
-    "slug": "aethryn",
-    "source": "portraits/six-crowns/aethryn.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/aethryn/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 284420,
-        "sha256": "cb90bd0bd8ae3884a67be7d3180f2357b42f1819114abb34a152697fcfe214ef"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/aethryn/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 82552,
-        "sha256": "3097d67089e229bc51eaef791f020b88c43dcdcc17944dce56baa0993af840a6"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/aethryn/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 22146,
-        "sha256": "2176b6c017b65954de4bade62d52ff64f57a1b3e8023aaebd70d1c122e30bad0"
-      }
-    }
-  },
-  {
-    "id": "SC-03",
-    "name": "Alistair Veyron",
-    "faction": "six-crowns",
-    "slug": "alistair-veyron",
-    "source": "portraits/six-crowns/alistair-veyron.webp",
-    "source_width": 1060,
-    "source_height": 1484,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/alistair-veyron/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 283994,
-        "sha256": "d80a28a704e43274fd84d9b71667f21c830bedd1312afaa22ba143c7da01dde5"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/alistair-veyron/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 86062,
-        "sha256": "de34aaa3877ceeca3f843dad4414100c704b24b06d8f550c5311a1fac03ed0b8"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/alistair-veyron/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 22152,
-        "sha256": "a900631ed3fbce13bfec7e53958868b8eaf628842e33411a5733cd7bfd54a0a1"
-      }
-    }
-  },
-  {
-    "id": "SC-04",
-    "name": "Dame Blanche de Surtova",
-    "faction": "six-crowns",
-    "slug": "dame-blanche-de-surtova",
-    "source": "portraits/six-crowns/dame-blanche-de-surtova.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 192174,
-        "sha256": "87dfa62f3862d74ab481de89d2791c1f87565616fe3d7c1a58406e752aaea430"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 53700,
-        "sha256": "ab4f7c5ea2e937f399244e59ba4ab3a2efd033fad70773cc0718f6069fb05970"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 14566,
-        "sha256": "86953b49d7e5a78198845582ac2a8cf446c4addb5c0b68cf9f5c65eef49ead74"
-      }
-    }
-  },
-  {
-    "id": "SC-05",
-    "name": "Daowen",
-    "faction": "six-crowns",
-    "slug": "daowen",
-    "source": "portraits/six-crowns/daowen.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/daowen/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 158580,
-        "sha256": "cabbe66ea9b30a657523d7ed5a36af6ffff93394f5d8b0f4b25eae7ee0168486"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/daowen/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 47666,
-        "sha256": "12ed6d11e9adbe5aa54ad61b076deee4f88b3eb2e83e5988f39621c34f529bc0"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/daowen/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 13538,
-        "sha256": "485507ab78523ea7a95bcd7b67439d76071c861330e820442d31a16c0730cd20"
-      }
-    }
-  },
-  {
-    "id": "SC-06",
-    "name": "Elias Thornwell",
-    "faction": "six-crowns",
-    "slug": "elias-thornwell",
-    "source": "portraits/six-crowns/elias-thornwell.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/elias-thornwell/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 81700,
-        "sha256": "ce839572f412370a2af637157966e72db9f94d37928d6100f138bd941a24be16"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/elias-thornwell/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 22014,
-        "sha256": "f90e62c35e3bc4aea3a7d05982f4a6d4840fd595b00b72696289dbb23566b53e"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/elias-thornwell/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 5934,
-        "sha256": "3c60a9282d87f1e0775d84155233d68131ffe025bb1ca6fded154dae008d75e6"
-      }
-    }
-  },
-  {
-    "id": "SC-07",
-    "name": "Harald Lodovka Menak",
-    "faction": "six-crowns",
-    "slug": "harald-lodovka-menak",
-    "source": "portraits/six-crowns/harald-lodovka-menak.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/harald-lodovka-menak/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 164428,
-        "sha256": "f9749884181b34fae77f03effdcc81a95715488ae81db58b8ceb73de2850ea0d"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/harald-lodovka-menak/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 48472,
-        "sha256": "32f2c19f188d253dcd2148067127b7ae896766777bfd00546bbaac789d83487a"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/harald-lodovka-menak/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 13122,
-        "sha256": "b420a4839a4492577e08ade12d697bb976885404a3d580544914e36aa9acdc45"
-      }
-    }
-  },
-  {
-    "id": "SC-08",
-    "name": "Lucy",
-    "faction": "six-crowns",
-    "slug": "lucy",
-    "source": "portraits/six-crowns/lucy.png",
-    "source_width": 1023,
-    "source_height": 1537,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/lucy/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 344920,
-        "sha256": "63d2b7fb6c0dd8920007fe1b70228d17639b9bcb9adba4b821d0aa5b05e2ca0b"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/lucy/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 81038,
-        "sha256": "6a8f4312fb3f02a840e4d3cf809455504b902c20a43615b2d433558b13b4fa08"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/lucy/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 18428,
-        "sha256": "78057e8f2d0197e99efd1682ca5a98d9dc9d831f1fc4045e033f26868d913b49"
-      }
-    }
-  },
-  {
-    "id": "SC-09",
-    "name": "Lysa",
-    "faction": "six-crowns",
-    "slug": "lysa",
-    "source": "portraits/six-crowns/lysa.webp",
-    "source_width": 941,
-    "source_height": 1672,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/lysa/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 123834,
-        "sha256": "5d65f79f3e49f05ac147437f04e173fc33958f2a06820f639921903c642565e6"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/lysa/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 35962,
-        "sha256": "6bc7924025248304be745c95203a84741a168ed827a1d3be12164338995c783b"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/lysa/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 9146,
-        "sha256": "638218207335fbd7ac672f377f679d0a746b60ee1fbfefb5adf43b21161c584e"
-      }
-    }
-  },
-  {
-    "id": "SC-10",
-    "name": "Mama Oluda",
-    "faction": "six-crowns",
-    "slug": "mama-oluda",
-    "source": "portraits/six-crowns/mama-oluda.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/mama-oluda/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 226036,
-        "sha256": "6a01b5e63e2a977b7c30b8a829acacfc8b359827e0d7b158ab0ed10aa4849887"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/mama-oluda/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 67796,
-        "sha256": "ea59b763740a4a771e90774ae7772ad7f8a0a84513e6b09871c254635dfe153b"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/mama-oluda/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 18328,
-        "sha256": "1e2ac4c3d2765b869e3c32a58ca7f058fea0af55221420c1c2433b1bf7e9da69"
-      }
-    }
-  },
-  {
-    "id": "SC-11",
-    "name": "Sery",
-    "faction": "six-crowns",
-    "slug": "sery",
-    "source": "portraits/six-crowns/sery.webp",
-    "source_width": 1060,
-    "source_height": 1484,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/sery/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 149138,
-        "sha256": "dd724e3a440e156b57a1cdd404bf964ceb69afc6ecdc58225658db1e12597319"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/sery/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 41256,
-        "sha256": "9174a145aa0d5af816d9cb7a1990c75060647e078320cf69b41bb0f78f5e80de"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/sery/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 10818,
-        "sha256": "426484d39e1b5fe459553945104781f038ee7c4512ad39f522aabb71518d7498"
-      }
-    }
-  },
-  {
-    "id": "SC-12",
-    "name": "Thea",
-    "faction": "six-crowns",
-    "slug": "thea",
-    "source": "portraits/six-crowns/thea.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/thea/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 173906,
-        "sha256": "74fae6ee36391fc227478d9b2e88fa5b8ffa414612b3e503761e7c542aa8ad0f"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/thea/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 46962,
-        "sha256": "ba4d7dccb18d2ce8615f02ebe6ebb06cf89100b29f67386e361da3e7e9c39d3a"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/thea/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 11528,
-        "sha256": "46c7221853e02aaeb778b98279bc318062052ec60ce25ba70c51160a63df4ad2"
-      }
-    }
-  },
-  {
-    "id": "SC-13",
-    "name": "Chevaliers des Six Couronnes",
-    "faction": "six-crowns",
-    "slug": "chevaliers-des-six-couronnes",
-    "source": "portraits/six-crowns/chevaliers-des-six-couronnes.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 299252,
-        "sha256": "d079e3ad2728577f8afb8910e68c9447b9d2c6a8cadfc86087d0d9177401cba5"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 78366,
-        "sha256": "2a0f8fcbc55949335a0a0cc014854513cc0653955cdf9790b2cf662d7ca46a18"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 19104,
-        "sha256": "5f72d1248dff33496c898ed23140fa446993cf28b28dc41d436a47c570fe5381"
-      }
-    }
-  },
-  {
-    "id": "SC-14",
-    "name": "Garde du palais",
-    "faction": "six-crowns",
-    "slug": "garde-du-palais",
-    "source": "portraits/six-crowns/garde-du-palais.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/garde-du-palais/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 230474,
-        "sha256": "8cc2200fb0a37afaa2ba1177131be91eff71cc6d6cf7b2bbea370e148ab88e5a"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/garde-du-palais/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 64188,
-        "sha256": "5efac076974a4e34ccfa4db839e6514cd6d7603014feda6b5bddd7ccc5e7f25f"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/garde-du-palais/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 17312,
-        "sha256": "d68ab79e53f66191389ea8110e1391ab3a93159763b11fc792b39c2cd38ec10f"
-      }
-    }
-  },
-  {
-    "id": "SC-15",
-    "name": "Éclaireurs de la Sellen",
-    "faction": "six-crowns",
-    "slug": "eclaireurs-de-la-sellen",
-    "source": "portraits/six-crowns/eclaireurs-de-la-sellen.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 226176,
-        "sha256": "af7c117cdc72204cb633bf697b88a92feb64420a764aeaae8d470c511e834ac8"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 62020,
-        "sha256": "775edfd586249d1871020581b55274c16a4faf88237b11a8e438500882839893"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 15356,
-        "sha256": "e151dc8ec10eab239bb259b20da309821addcfded15ffda264823b780e3eeede"
-      }
-    }
-  },
-  {
-    "id": "SC-16",
-    "name": "Milice du Moulin",
-    "faction": "six-crowns",
-    "slug": "milice-du-moulin",
-    "source": "portraits/six-crowns/milice-du-moulin.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/milice-du-moulin/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 256334,
-        "sha256": "f23d8d13d46e7cecf5203fa13873126f2a4b78b6f2f338ff22cd44eb2b49696f"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/milice-du-moulin/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 68972,
-        "sha256": "beb158ee40ca35a6114902ebe9b4cc1a5b347f4d70f7d66af14d33863613b96f"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/milice-du-moulin/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 17476,
-        "sha256": "63d275f1079a5f1b2bd18ddb5b1b4d303950902ffafa6be67dc7b8cefc6d66ee"
-      }
-    }
-  },
-  {
-    "id": "SC-17",
-    "name": "Forteresse frontalière",
-    "faction": "six-crowns",
-    "slug": "forteresse-frontaliere",
-    "source": "portraits/six-crowns/forteresse-frontaliere.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/forteresse-frontaliere/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 353484,
-        "sha256": "f569876e75b7b248f92398bcbd1dd81e69b260a67ac98498fabf3be64068cd82"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/forteresse-frontaliere/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 85232,
-        "sha256": "fcf5c1c55a904c7b5fb58148e2705eafb65faf4f361ec8d511e17a3e147e86de"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/forteresse-frontaliere/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 20896,
-        "sha256": "2305003d5f57d231d0b93e22091452795c67d8ff020f7b5912b02188424cc964"
-      }
-    }
-  },
-  {
-    "id": "SC-18",
-    "name": "Arbalétriers de la Couronne",
-    "faction": "six-crowns",
-    "slug": "arbaletriers-de-la-couronne",
-    "source": "portraits/six-crowns/arbaletriers-de-la-couronne.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 206098,
-        "sha256": "c1f48b983afb28c7d592c0d3873cc289035df9f37113085e7ee2c4e76a558e84"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 57408,
-        "sha256": "b58a216fada16530ed8fcd9bbec42359a31f6297c51b8fb54a5e5d270b194232"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 15366,
-        "sha256": "bbc50590873feaced911859ddd20431f2397a9d3ebe13aa99ae9f329c011fb71"
-      }
-    }
-  },
-  {
-    "id": "SC-19",
-    "name": "Gardiens des Béliers Noirs",
-    "faction": "six-crowns",
-    "slug": "gardiens-des-beliers-noirs",
-    "source": "portraits/six-crowns/gardiens-des-beliers-noirs.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 168674,
-        "sha256": "34ca95ad33b7a6d664a6af68a7c22e84ccefdf509bbccdf50164032e829e1f2d"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 47850,
-        "sha256": "2473d3b902d241377e27839465169ab2780a0f998fb5aa197795cc178f4546ce"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 12400,
-        "sha256": "be1c2d123f5574e66567c7831166e8f31ddf7894702b944444ca891fa10dc72e"
-      }
-    }
-  },
-  {
-    "id": "SC-20",
-    "name": "Meuniers de Brumelande",
-    "faction": "six-crowns",
-    "slug": "meuniers-de-brumelande",
-    "source": "portraits/six-crowns/meuniers-de-brumelande.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/meuniers-de-brumelande/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 228004,
-        "sha256": "af61902b78e76e96989481d920f349e2c3b77cd53d9a19df19581c52f30376b7"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/meuniers-de-brumelande/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 59886,
-        "sha256": "52f3074b2a56bf4d8f77b3949ff396797bb98ef2a370f3174b46feaca2aef841"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/meuniers-de-brumelande/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 15738,
-        "sha256": "0ad19c71b77ac70b6786022d9c42c0ea693b558628dcf0883e2c4217816a49fb"
-      }
-    }
-  },
-  {
-    "id": "SC-21",
-    "name": "Chasseurs d’Erastil",
-    "faction": "six-crowns",
-    "slug": "chasseurs-d-erastil",
-    "source": "portraits/six-crowns/chasseurs-d-erastil.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/chasseurs-d-erastil/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 208668,
-        "sha256": "ec446a9f2b6a60e7bdc4d42bd4ca95423a87709696479e721f6ee2b7286f3ade"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/chasseurs-d-erastil/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 60292,
-        "sha256": "6de66208e70d2a23c90da68e2c9dd8b7fa0c1bd69c82205d86b29d6c418f4b72"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/chasseurs-d-erastil/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 16036,
-        "sha256": "f8e0b8cce3b2c2a9c6352075a5060355a0b3afe83c5fc4c71b3b27a3a70695a5"
-      }
-    }
-  },
-  {
-    "id": "SC-22",
-    "name": "Passeurs de la Sellen",
-    "faction": "six-crowns",
-    "slug": "passeurs-de-la-sellen",
-    "source": "portraits/six-crowns/passeurs-de-la-sellen.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 295902,
-        "sha256": "40ddcae2f7618457ce34ecdc71b979b6da8bd312ed9f3176ca69efb5fbfaf61c"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 77362,
-        "sha256": "9d2f90260e45f561accaa7a6ec150251be8427ae7d2eba669e14cd2d5396da13"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 18970,
-        "sha256": "1361518686b28226052ec89135c305efd82053e746b9ed839b8b2f85b1bccb8e"
-      }
-    }
-  },
-  {
-    "id": "SC-23",
-    "name": "Sapeurs des Six Couronnes",
-    "faction": "six-crowns",
-    "slug": "sapeurs-des-six-couronnes",
-    "source": "portraits/six-crowns/sapeurs-des-six-couronnes.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 254882,
-        "sha256": "98a485a5c816b6c4c9e1b9d7a055567f961ba0658b61239c65302b67bc799931"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 70386,
-        "sha256": "9cc849dc2c668238c56c70b400c79766c748726289b3a23dc19efad8e7057160"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 18402,
-        "sha256": "059ed9e10c294b372d74c1225e76cf0fbfb047a0dbccd885e40c0bc7e78b1f84"
-      }
-    }
-  },
-  {
-    "id": "SC-24",
-    "name": "Émissaires de la Cour",
-    "faction": "six-crowns",
-    "slug": "emissaires-de-la-cour",
-    "source": "portraits/six-crowns/emissaires-de-la-cour.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/emissaires-de-la-cour/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 192266,
-        "sha256": "68ae4851fbd384b8ea154e5708aab30d9969c674eb7f06c942cd264f5b94d96c"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/emissaires-de-la-cour/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 58328,
-        "sha256": "d4ce51974558a43055b5094c745055336f3588a3dc49d9749fce3d2e0b8374d2"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/emissaires-de-la-cour/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 16142,
-        "sha256": "73de1ef4b2afb6abac33c4f6f25937c3c035e2e6e8e1231875b464bb58a54c88"
-      }
-    }
-  },
-  {
-    "id": "SC-25",
-    "name": "Gardes de l’Avant-poste",
-    "faction": "six-crowns",
-    "slug": "gardes-de-l-avant-poste",
-    "source": "portraits/six-crowns/gardes-de-l-avant-poste.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 162228,
-        "sha256": "24df99e1b9398d335b239b30e657bb927c468acb2469db00ca0d2e9958ab2151"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 45078,
-        "sha256": "26ce935135d9da789d3d85498cc30d9559c5f7f91ae0ced591d174ea6f8f401e"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 12088,
-        "sha256": "02c0b34c34e60a0fa8cceb7f5431717bf5d127d857df6aa9c33bff359c1c43c3"
-      }
-    }
-  },
-  {
-    "id": "SC-26",
-    "name": "Patrouille des Routes royales",
-    "faction": "six-crowns",
-    "slug": "patrouille-des-routes-royales",
-    "source": "portraits/six-crowns/patrouille-des-routes-royales.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 304128,
-        "sha256": "d448628d20a961b8d0d71a1a479511c5ec3ebb5a91c6b5b3420a813a1e8bc861"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 80844,
-        "sha256": "297ab733b69b2de0bab50012642df93fbe499fa28ff31df4806dc7caf8106351"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 20524,
-        "sha256": "727afa15e007d08d1ea7560453cbd8ecf74a0d11c431a53473da4e8ef8037923"
-      }
-    }
-  },
-  {
-    "id": "SC-27",
-    "name": "Veilleurs des Hautes Marches",
-    "faction": "six-crowns",
-    "slug": "veilleurs-des-hautes-marches",
-    "source": "portraits/six-crowns/veilleurs-des-hautes-marches.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 173958,
-        "sha256": "08766c62770e87b85eb971417fb37fa0aa347bf125d284397b96a397bf94b6b9"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 49452,
-        "sha256": "f71e0bb80a65d6c9425840c40a035ef236058c149030a42ae9d1ac1dda172f5e"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 13118,
-        "sha256": "7cd29333f4b32f1c49cb4f55c268c02222d598abc54d4fb5adb2f6d88f134ae6"
-      }
-    }
-  },
-  {
-    "id": "SC-28",
-    "name": "Alchimistes de la Couronne",
-    "faction": "six-crowns",
-    "slug": "alchimistes-de-la-couronne",
-    "source": "portraits/six-crowns/alchimistes-de-la-couronne.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 291638,
-        "sha256": "c4746fe37ddb5ad09037c8c8b2b62a97ff5c30c12671d162eb889d4d1be0c801"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 84844,
-        "sha256": "b0cf9fd6d108c47edbed1582a164cccec6879f73378a442da6fa490ce04c28f7"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 21748,
-        "sha256": "00d0f8dca5ddd2fae7629d582fbbacf7b5548dd17257c5a1bdd1e385ad404c47"
-      }
-    }
-  },
-  {
-    "id": "SC-29",
-    "name": "Archivistes du Palais",
-    "faction": "six-crowns",
-    "slug": "archivistes-du-palais",
-    "source": "portraits/six-crowns/archivistes-du-palais.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/archivistes-du-palais/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 245200,
-        "sha256": "18e5157f974f074565af5f960760d0a9999a8d64a4e3fa747f1b849bf8e0d490"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/archivistes-du-palais/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 65888,
-        "sha256": "02d8643d226785d679152372e6f6303de623f795a2a3bd09465f0a9384692494"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/archivistes-du-palais/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 17538,
-        "sha256": "2cf16793a21bb8e3b3d0ea63ea57e2dd01466604dbe283f09146d6dd036346ef"
-      }
-    }
-  },
-  {
-    "id": "SC-30",
-    "name": "Patrouilleurs du Fleuve",
-    "faction": "six-crowns",
-    "slug": "patrouilleurs-du-fleuve",
-    "source": "portraits/six-crowns/patrouilleurs-du-fleuve.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 231054,
-        "sha256": "d624d819f52b5e4fa5227ed91d15f66f0874283d6a8ae86a2b876332ec2352ae"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 64240,
-        "sha256": "5937f142303a8810874ca0553aa1bbc08266f0384333ab321a26a0b49edee4a2"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 16418,
-        "sha256": "9cc040efa5b48cd323667fb36b3da46ebf022dda5b2d3571b1bd63033ac0eeab"
-      }
-    }
-  },
-  {
-    "id": "SC-31",
-    "name": "Ingénieurs des Frontières",
-    "faction": "six-crowns",
-    "slug": "ingenieurs-des-frontieres",
-    "source": "portraits/six-crowns/ingenieurs-des-frontieres.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 276418,
-        "sha256": "b7d7ed94e21b9e1e57246aac1030dee9e371464952dc3cb0dfdbfd7f0e6d8c66"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 78134,
-        "sha256": "2ac903a857fd3880814c5bf708f5d15ef5fbdc3ec2fdae0bc9def689ce02f498"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 20286,
-        "sha256": "8505dfa30b9f1aed4080acb6fe030f338360b4dbb880b2f078ffb779555660c7"
-      }
-    }
-  },
-  {
-    "id": "SC-32",
-    "name": "Conseil des Six Couronnes",
-    "faction": "six-crowns",
-    "slug": "conseil-des-six-couronnes",
-    "source": "portraits/six-crowns/conseil-des-six-couronnes.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 228002,
-        "sha256": "5bcb1814de5da0122951e77abcece449db60e7d62d08b016c6d18d997eafb9ed"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 58298,
-        "sha256": "e0f392f55fac0e68df0cef072ad9928366873de5fdbe7c444dd7c74e01898df6"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 13854,
-        "sha256": "5e26266f4cabfdbc38c150a01acad37873940b0c7f44acbd7ddd6c9df3950857"
-      }
-    }
-  },
-  {
-    "id": "SP-01",
-    "name": "Bannière royale",
-    "faction": "six-crowns",
-    "slug": "banniere-royale",
-    "source": "portraits/six-crowns/banniere-royale.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/banniere-royale/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 249280,
-        "sha256": "717cea3621554239123f811e2eca2eb67e62d8cda27f6fd7fc4c7dc50a9fdee2"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/banniere-royale/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 70598,
-        "sha256": "6cdd7ead10cbe80a61dd2674129610f5db99522e688a76fd979d934b1e019ecc"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/banniere-royale/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 19290,
-        "sha256": "5f91f51f4ef89064dd5c200fb592504badd2d207a369d89213786ddd9de1d8b6"
-      }
-    }
-  },
-  {
-    "id": "SP-02",
-    "name": "Étendard des Marches",
-    "faction": "six-crowns",
-    "slug": "etendard-des-marches",
-    "source": "portraits/six-crowns/etendard-des-marches.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/etendard-des-marches/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 160120,
-        "sha256": "6d3ce16aeb64483014d4ec62d1becb4563ff1b0bdce525927ca0cc2044fbfbe3"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/etendard-des-marches/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 43946,
-        "sha256": "1366bdc4ed107a01b51d9a02a9ad393d5956e93a357a5ce63ed0f8b36972eb9d"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/etendard-des-marches/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 11734,
-        "sha256": "17433d779f346f2f635ed2dfe246a24245126d60b86df4c086d9cea06c8f649f"
-      }
-    }
-  },
-  {
-    "id": "SP-05",
-    "name": "Diversion diplomatique",
-    "faction": "six-crowns",
-    "slug": "diversion-diplomatique",
-    "source": "portraits/six-crowns/diversion-diplomatique.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/diversion-diplomatique/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 98500,
-        "sha256": "5e1b9d082c751d6a257069c01e4a089fb06682b42a6ad2f6c056f9d8f48c3be6"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/diversion-diplomatique/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 24490,
-        "sha256": "0127d164ff093966c047c27dc17dc8bdb4c134bb82afe67b8d3df10de8d23a05"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/diversion-diplomatique/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 6044,
-        "sha256": "8a90a2e3286716bcf71959e001de9630f0ed858e8ef454b50a8709268e9e2ebc"
-      }
-    }
-  },
-  {
-    "id": "SP-07",
-    "name": "Bannière des Frontières",
-    "faction": "six-crowns",
-    "slug": "banniere-des-frontieres",
-    "source": "portraits/six-crowns/banniere-des-frontieres.webp",
-    "source_width": 1024,
-    "source_height": 1536,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/six-crowns/banniere-des-frontieres/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 178828,
-        "sha256": "f9d7ec571599ae4eb21d0cfa80294ecb5324f77f5727b1af92bd826c65049224"
-      },
-      "medium.webp": {
-        "path": "assets/cards/six-crowns/banniere-des-frontieres/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 48642,
-        "sha256": "6847da183075a5d531885fc192181df618ef1e75c5242b2c8e40938973ec71d8"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/six-crowns/banniere-des-frontieres/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 12612,
-        "sha256": "e1b9aaec7b5bea2998e79664980b911b440404a18cebeb6d2170d07b3f411a89"
-      }
-    }
-  },
-  {
     "id": "AL-01",
     "name": "Jamandi Aldori, Première Épée",
     "faction": "aldori",
@@ -1877,6 +557,72 @@
         "height": 315,
         "bytes": 13070,
         "sha256": "a21a7b2302f64ec6ff349b8f09bf6da0e662341ae7ff6533c3814ffb80debceb"
+      }
+    }
+  },
+  {
+    "id": "SP-03",
+    "name": "Manœuvre tactique",
+    "faction": "aldori",
+    "slug": "man-uvre-tactique",
+    "source": "portraits/aldori/man-uvre-tactique.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/aldori/man-uvre-tactique/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 139944,
+        "sha256": "b3bc2f2c19606365be975723f5bd03d35b872f32b0e2d9463ad9b813fdda9819"
+      },
+      "medium.webp": {
+        "path": "assets/cards/aldori/man-uvre-tactique/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 42940,
+        "sha256": "046489c544b99a427b64baf2892ac85f8dd02b2eed283315374dd9b78f22ed63"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/aldori/man-uvre-tactique/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 12052,
+        "sha256": "90aa8a40878cc33bac1a1835805e287717dc0714416f8723257a9a3c1cb7ceb7"
+      }
+    }
+  },
+  {
+    "id": "SP-06",
+    "name": "Leurre de cour",
+    "faction": "aldori",
+    "slug": "leurre-de-cour",
+    "source": "portraits/aldori/leurre-de-cour.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/aldori/leurre-de-cour/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 152668,
+        "sha256": "231fc8d2083030c290e22942059e022abe9397273b240748d7785eb6f51c924f"
+      },
+      "medium.webp": {
+        "path": "assets/cards/aldori/leurre-de-cour/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 43424,
+        "sha256": "bd5e4d1a01f1acf0c20380163dd769a706e94e190168f89939ee60ffe875d28f"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/aldori/leurre-de-cour/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 11024,
+        "sha256": "2d7e236fcf921476eadee6a1b99b3cd73a1285d75aa45462e545aa570fbdb14e"
       }
     }
   },
@@ -2574,68 +1320,167 @@
     }
   },
   {
-    "id": "SP-03",
-    "name": "Manœuvre tactique",
-    "faction": "aldori",
-    "slug": "man-uvre-tactique",
-    "source": "portraits/aldori/man-uvre-tactique.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
+    "id": "EV-TD-01",
+    "name": "Et là, un ours !",
+    "faction": "event-stolen-lands",
+    "slug": "et-la-un-ours",
+    "source": "horreur_dans_la_forêt_en_mouvement.png",
+    "source_width": 1024,
+    "source_height": 1536,
+    "normalized": true,
     "variants": {
       "full.webp": {
-        "path": "assets/cards/aldori/man-uvre-tactique/full.webp",
+        "path": "assets/cards/event-stolen-lands/et-la-un-ours/full.webp",
         "width": 900,
         "height": 1260,
-        "bytes": 139944,
-        "sha256": "b3bc2f2c19606365be975723f5bd03d35b872f32b0e2d9463ad9b813fdda9819"
+        "bytes": 132418,
+        "sha256": "3afa0cf0185d81e5cdc10720a0390220d98f34ce0aa51e72c4f0e3ccff5e903d"
       },
       "medium.webp": {
-        "path": "assets/cards/aldori/man-uvre-tactique/medium.webp",
+        "path": "assets/cards/event-stolen-lands/et-la-un-ours/medium.webp",
         "width": 450,
         "height": 630,
-        "bytes": 42940,
-        "sha256": "046489c544b99a427b64baf2892ac85f8dd02b2eed283315374dd9b78f22ed63"
+        "bytes": 44634,
+        "sha256": "04a19bcf9c4deb9cc346ed3ed8a4c295e9a5d24e20e145fc10de10dce0bd99a6"
       },
       "thumb.webp": {
-        "path": "assets/cards/aldori/man-uvre-tactique/thumb.webp",
+        "path": "assets/cards/event-stolen-lands/et-la-un-ours/thumb.webp",
         "width": 225,
         "height": 315,
-        "bytes": 12052,
-        "sha256": "90aa8a40878cc33bac1a1835805e287717dc0714416f8723257a9a3c1cb7ceb7"
+        "bytes": 13706,
+        "sha256": "49787ab7441e831cc94d0e2d9df98ab0f4ee8d81f2f650ae45ee38cf7b87e36b"
       }
     }
   },
   {
-    "id": "SP-06",
-    "name": "Leurre de cour",
-    "faction": "aldori",
-    "slug": "leurre-de-cour",
-    "source": "portraits/aldori/leurre-de-cour.webp",
-    "source_width": 900,
-    "source_height": 1260,
-    "normalized": false,
+    "id": "EV-TD-02",
+    "name": "Une bonne bière",
+    "faction": "event-stolen-lands",
+    "slug": "une-bonne-biere",
+    "source": "une-bonne-biere.png",
+    "source_width": 1024,
+    "source_height": 1536,
+    "normalized": true,
     "variants": {
       "full.webp": {
-        "path": "assets/cards/aldori/leurre-de-cour/full.webp",
+        "path": "assets/cards/event-stolen-lands/une-bonne-biere/full.webp",
         "width": 900,
         "height": 1260,
-        "bytes": 152668,
-        "sha256": "231fc8d2083030c290e22942059e022abe9397273b240748d7785eb6f51c924f"
+        "bytes": 205346,
+        "sha256": "f504de04fff377dfa68eb9553741bf6afb8a13084be89d85cd36a43642dc5825"
       },
       "medium.webp": {
-        "path": "assets/cards/aldori/leurre-de-cour/medium.webp",
+        "path": "assets/cards/event-stolen-lands/une-bonne-biere/medium.webp",
         "width": 450,
         "height": 630,
-        "bytes": 43424,
-        "sha256": "bd5e4d1a01f1acf0c20380163dd769a706e94e190168f89939ee60ffe875d28f"
+        "bytes": 70486,
+        "sha256": "1bc7cc9debe93404e6d6bc96119b77fdeb06a7f68635ee67115a8c254c20b451"
       },
       "thumb.webp": {
-        "path": "assets/cards/aldori/leurre-de-cour/thumb.webp",
+        "path": "assets/cards/event-stolen-lands/une-bonne-biere/thumb.webp",
         "width": 225,
         "height": 315,
-        "bytes": 11024,
-        "sha256": "2d7e236fcf921476eadee6a1b99b3cd73a1285d75aa45462e545aa570fbdb14e"
+        "bytes": 20954,
+        "sha256": "4976876bf52adc2951a61412bb90efa8efb12b6b42f7125ec8e50cf77c759f32"
+      }
+    }
+  },
+  {
+    "id": "EV-TD-03",
+    "name": "Sauvetage de sac",
+    "faction": "event-stolen-lands",
+    "slug": "sauvetage-de-sac",
+    "source": "sauvetage-de-sac.png",
+    "source_width": 1024,
+    "source_height": 1536,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/event-stolen-lands/sauvetage-de-sac/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 176866,
+        "sha256": "0174c3d0222daf44f5235cdfa31a443640573b8dd2ba331e94393a3c0a7492b4"
+      },
+      "medium.webp": {
+        "path": "assets/cards/event-stolen-lands/sauvetage-de-sac/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 66358,
+        "sha256": "1ef81d62adf8cfe8468bfda90f999b0e4412fefc1c487337eef3dccf9079da35"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/event-stolen-lands/sauvetage-de-sac/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 20202,
+        "sha256": "9a105a48b2c7e83a2374df8315eaf066dd7708038f1839ff2f92d719fd914243"
+      }
+    }
+  },
+  {
+    "id": "EV-TD-04",
+    "name": "Chancla de titane",
+    "faction": "event-stolen-lands",
+    "slug": "chancla-de-titane",
+    "source": "chancla-de-titane.png",
+    "source_width": 1122,
+    "source_height": 1402,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/event-stolen-lands/chancla-de-titane/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 176352,
+        "sha256": "f2f063a2ebb0ee4e922c635cd4ea5b5afadd870988d3638de8c81b6c56d22fdf"
+      },
+      "medium.webp": {
+        "path": "assets/cards/event-stolen-lands/chancla-de-titane/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 61710,
+        "sha256": "b98fc75c7b3294184690c5a1f62654a944c47f5b3e2da146646c53de501dc581"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/event-stolen-lands/chancla-de-titane/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 19586,
+        "sha256": "d04de2212da20b1598627e296a9c65d8a3b6395d6d7058c8d96d0c356a2e2ba8"
+      }
+    }
+  },
+  {
+    "id": "EV-TD-05",
+    "name": "Hydre vorace",
+    "faction": "event-stolen-lands",
+    "slug": "hydre-vorace",
+    "source": "hydre-vorace.png",
+    "source_width": 1086,
+    "source_height": 1448,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/event-stolen-lands/hydre-vorace/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 291718,
+        "sha256": "0fdf09b33533cf20899d66ca07e84c202c64903fc6508ce087e54f5ac6b8674f"
+      },
+      "medium.webp": {
+        "path": "assets/cards/event-stolen-lands/hydre-vorace/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 88482,
+        "sha256": "3cafec95dd4c46f498c8006c13fb90decd2592374f2b2d19845479b0261c9192"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/event-stolen-lands/hydre-vorace/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 23704,
+        "sha256": "2843ab70ae36588838dd0ff8555b29e0d6001f5e72e8d712d2081208c7dfaf32"
       }
     }
   },
@@ -3230,6 +2075,39 @@
         "height": 315,
         "bytes": 9078,
         "sha256": "63a60bb0c831beb12e950cc4a17216d7c61013b33a913150d46e4bfeed4a4a58"
+      }
+    }
+  },
+  {
+    "id": "SP-04",
+    "name": "Redéploiement éclair",
+    "faction": "iron-khans",
+    "slug": "redeploiement-eclair",
+    "source": "portraits/iron-khans/redeploiement-eclair.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/iron-khans/redeploiement-eclair/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 163924,
+        "sha256": "b563a88b460d47eeb4e18b0fcdc3900c5e28392053d9677ec096f09a77a1c542"
+      },
+      "medium.webp": {
+        "path": "assets/cards/iron-khans/redeploiement-eclair/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 46500,
+        "sha256": "4e4f3f560ab503f75b1f217a691a583f13f0220399a5419864f49da8731c15bb"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/iron-khans/redeploiement-eclair/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 12846,
+        "sha256": "045b2b81309536efb6828ba2921c49e4fe765090b86ee3121f84c59b55fa8164"
       }
     }
   },
@@ -3927,35 +2805,1322 @@
     }
   },
   {
-    "id": "SP-04",
-    "name": "Redéploiement éclair",
-    "faction": "iron-khans",
-    "slug": "redeploiement-eclair",
-    "source": "portraits/iron-khans/redeploiement-eclair.webp",
+    "id": "SC-01",
+    "name": "Odéon de Saulébène",
+    "faction": "six-crowns",
+    "slug": "odeon-de-saulebene",
+    "source": "portraits/six-crowns/odeon-de-saulebene.webp",
     "source_width": 900,
     "source_height": 1260,
     "normalized": false,
     "variants": {
       "full.webp": {
-        "path": "assets/cards/iron-khans/redeploiement-eclair/full.webp",
+        "path": "assets/cards/six-crowns/odeon-de-saulebene/full.webp",
         "width": 900,
         "height": 1260,
-        "bytes": 163924,
-        "sha256": "b563a88b460d47eeb4e18b0fcdc3900c5e28392053d9677ec096f09a77a1c542"
+        "bytes": 222998,
+        "sha256": "2458c156320b97b60a3d36ae05abbc3f77f746768a147ff703156e3959ed6dbe"
       },
       "medium.webp": {
-        "path": "assets/cards/iron-khans/redeploiement-eclair/medium.webp",
+        "path": "assets/cards/six-crowns/odeon-de-saulebene/medium.webp",
         "width": 450,
         "height": 630,
-        "bytes": 46500,
-        "sha256": "4e4f3f560ab503f75b1f217a691a583f13f0220399a5419864f49da8731c15bb"
+        "bytes": 65260,
+        "sha256": "4fb28e4184f384825b6fb82b1514d2cf873dfaf715a43213ad7e4ae697c6f1b5"
       },
       "thumb.webp": {
-        "path": "assets/cards/iron-khans/redeploiement-eclair/thumb.webp",
+        "path": "assets/cards/six-crowns/odeon-de-saulebene/thumb.webp",
         "width": 225,
         "height": 315,
-        "bytes": 12846,
-        "sha256": "045b2b81309536efb6828ba2921c49e4fe765090b86ee3121f84c59b55fa8164"
+        "bytes": 17622,
+        "sha256": "0730b50be3d05c7bb07b43e07dc4337b978b7d512d6627cf68c34d8b7d503d0d"
+      }
+    }
+  },
+  {
+    "id": "SC-02",
+    "name": "Aethryn",
+    "faction": "six-crowns",
+    "slug": "aethryn",
+    "source": "portraits/six-crowns/aethryn.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/aethryn/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 284420,
+        "sha256": "cb90bd0bd8ae3884a67be7d3180f2357b42f1819114abb34a152697fcfe214ef"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/aethryn/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 82552,
+        "sha256": "3097d67089e229bc51eaef791f020b88c43dcdcc17944dce56baa0993af840a6"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/aethryn/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 22146,
+        "sha256": "2176b6c017b65954de4bade62d52ff64f57a1b3e8023aaebd70d1c122e30bad0"
+      }
+    }
+  },
+  {
+    "id": "SC-03",
+    "name": "Alistair Veyron",
+    "faction": "six-crowns",
+    "slug": "alistair-veyron",
+    "source": "portraits/six-crowns/alistair-veyron.webp",
+    "source_width": 1060,
+    "source_height": 1484,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/alistair-veyron/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 283994,
+        "sha256": "d80a28a704e43274fd84d9b71667f21c830bedd1312afaa22ba143c7da01dde5"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/alistair-veyron/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 86062,
+        "sha256": "de34aaa3877ceeca3f843dad4414100c704b24b06d8f550c5311a1fac03ed0b8"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/alistair-veyron/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 22152,
+        "sha256": "a900631ed3fbce13bfec7e53958868b8eaf628842e33411a5733cd7bfd54a0a1"
+      }
+    }
+  },
+  {
+    "id": "SC-04",
+    "name": "Dame Blanche de Surtova",
+    "faction": "six-crowns",
+    "slug": "dame-blanche-de-surtova",
+    "source": "portraits/six-crowns/dame-blanche-de-surtova.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 192174,
+        "sha256": "87dfa62f3862d74ab481de89d2791c1f87565616fe3d7c1a58406e752aaea430"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 53700,
+        "sha256": "ab4f7c5ea2e937f399244e59ba4ab3a2efd033fad70773cc0718f6069fb05970"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/dame-blanche-de-surtova/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 14566,
+        "sha256": "86953b49d7e5a78198845582ac2a8cf446c4addb5c0b68cf9f5c65eef49ead74"
+      }
+    }
+  },
+  {
+    "id": "SC-05",
+    "name": "Daowen",
+    "faction": "six-crowns",
+    "slug": "daowen",
+    "source": "portraits/six-crowns/daowen.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/daowen/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 158580,
+        "sha256": "cabbe66ea9b30a657523d7ed5a36af6ffff93394f5d8b0f4b25eae7ee0168486"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/daowen/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 47666,
+        "sha256": "12ed6d11e9adbe5aa54ad61b076deee4f88b3eb2e83e5988f39621c34f529bc0"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/daowen/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 13538,
+        "sha256": "485507ab78523ea7a95bcd7b67439d76071c861330e820442d31a16c0730cd20"
+      }
+    }
+  },
+  {
+    "id": "SC-06",
+    "name": "Elias Thornwell",
+    "faction": "six-crowns",
+    "slug": "elias-thornwell",
+    "source": "portraits/six-crowns/elias-thornwell.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/elias-thornwell/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 81700,
+        "sha256": "ce839572f412370a2af637157966e72db9f94d37928d6100f138bd941a24be16"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/elias-thornwell/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 22014,
+        "sha256": "f90e62c35e3bc4aea3a7d05982f4a6d4840fd595b00b72696289dbb23566b53e"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/elias-thornwell/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 5934,
+        "sha256": "3c60a9282d87f1e0775d84155233d68131ffe025bb1ca6fded154dae008d75e6"
+      }
+    }
+  },
+  {
+    "id": "SC-07",
+    "name": "Harald Lodovka Menak",
+    "faction": "six-crowns",
+    "slug": "harald-lodovka-menak",
+    "source": "portraits/six-crowns/harald-lodovka-menak.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/harald-lodovka-menak/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 164428,
+        "sha256": "f9749884181b34fae77f03effdcc81a95715488ae81db58b8ceb73de2850ea0d"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/harald-lodovka-menak/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 48472,
+        "sha256": "32f2c19f188d253dcd2148067127b7ae896766777bfd00546bbaac789d83487a"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/harald-lodovka-menak/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 13122,
+        "sha256": "b420a4839a4492577e08ade12d697bb976885404a3d580544914e36aa9acdc45"
+      }
+    }
+  },
+  {
+    "id": "SC-08",
+    "name": "Lucy",
+    "faction": "six-crowns",
+    "slug": "lucy",
+    "source": "portraits/six-crowns/lucy.png",
+    "source_width": 1023,
+    "source_height": 1537,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/lucy/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 344920,
+        "sha256": "63d2b7fb6c0dd8920007fe1b70228d17639b9bcb9adba4b821d0aa5b05e2ca0b"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/lucy/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 81038,
+        "sha256": "6a8f4312fb3f02a840e4d3cf809455504b902c20a43615b2d433558b13b4fa08"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/lucy/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 18428,
+        "sha256": "78057e8f2d0197e99efd1682ca5a98d9dc9d831f1fc4045e033f26868d913b49"
+      }
+    }
+  },
+  {
+    "id": "SC-09",
+    "name": "Lysa",
+    "faction": "six-crowns",
+    "slug": "lysa",
+    "source": "portraits/six-crowns/lysa.webp",
+    "source_width": 941,
+    "source_height": 1672,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/lysa/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 123834,
+        "sha256": "5d65f79f3e49f05ac147437f04e173fc33958f2a06820f639921903c642565e6"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/lysa/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 35962,
+        "sha256": "6bc7924025248304be745c95203a84741a168ed827a1d3be12164338995c783b"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/lysa/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 9146,
+        "sha256": "638218207335fbd7ac672f377f679d0a746b60ee1fbfefb5adf43b21161c584e"
+      }
+    }
+  },
+  {
+    "id": "SC-10",
+    "name": "Mama Oluda",
+    "faction": "six-crowns",
+    "slug": "mama-oluda",
+    "source": "portraits/six-crowns/mama-oluda.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/mama-oluda/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 226036,
+        "sha256": "6a01b5e63e2a977b7c30b8a829acacfc8b359827e0d7b158ab0ed10aa4849887"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/mama-oluda/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 67796,
+        "sha256": "ea59b763740a4a771e90774ae7772ad7f8a0a84513e6b09871c254635dfe153b"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/mama-oluda/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 18328,
+        "sha256": "1e2ac4c3d2765b869e3c32a58ca7f058fea0af55221420c1c2433b1bf7e9da69"
+      }
+    }
+  },
+  {
+    "id": "SC-11",
+    "name": "Sery",
+    "faction": "six-crowns",
+    "slug": "sery",
+    "source": "portraits/six-crowns/sery.webp",
+    "source_width": 1060,
+    "source_height": 1484,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/sery/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 149138,
+        "sha256": "dd724e3a440e156b57a1cdd404bf964ceb69afc6ecdc58225658db1e12597319"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/sery/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 41256,
+        "sha256": "9174a145aa0d5af816d9cb7a1990c75060647e078320cf69b41bb0f78f5e80de"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/sery/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 10818,
+        "sha256": "426484d39e1b5fe459553945104781f038ee7c4512ad39f522aabb71518d7498"
+      }
+    }
+  },
+  {
+    "id": "SC-12",
+    "name": "Thea",
+    "faction": "six-crowns",
+    "slug": "thea",
+    "source": "portraits/six-crowns/thea.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/thea/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 173906,
+        "sha256": "74fae6ee36391fc227478d9b2e88fa5b8ffa414612b3e503761e7c542aa8ad0f"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/thea/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 46962,
+        "sha256": "ba4d7dccb18d2ce8615f02ebe6ebb06cf89100b29f67386e361da3e7e9c39d3a"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/thea/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 11528,
+        "sha256": "46c7221853e02aaeb778b98279bc318062052ec60ce25ba70c51160a63df4ad2"
+      }
+    }
+  },
+  {
+    "id": "SC-13",
+    "name": "Chevaliers des Six Couronnes",
+    "faction": "six-crowns",
+    "slug": "chevaliers-des-six-couronnes",
+    "source": "portraits/six-crowns/chevaliers-des-six-couronnes.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 299252,
+        "sha256": "d079e3ad2728577f8afb8910e68c9447b9d2c6a8cadfc86087d0d9177401cba5"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 78366,
+        "sha256": "2a0f8fcbc55949335a0a0cc014854513cc0653955cdf9790b2cf662d7ca46a18"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/chevaliers-des-six-couronnes/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 19104,
+        "sha256": "5f72d1248dff33496c898ed23140fa446993cf28b28dc41d436a47c570fe5381"
+      }
+    }
+  },
+  {
+    "id": "SC-14",
+    "name": "Garde du palais",
+    "faction": "six-crowns",
+    "slug": "garde-du-palais",
+    "source": "portraits/six-crowns/garde-du-palais.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/garde-du-palais/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 230474,
+        "sha256": "8cc2200fb0a37afaa2ba1177131be91eff71cc6d6cf7b2bbea370e148ab88e5a"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/garde-du-palais/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 64188,
+        "sha256": "5efac076974a4e34ccfa4db839e6514cd6d7603014feda6b5bddd7ccc5e7f25f"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/garde-du-palais/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 17312,
+        "sha256": "d68ab79e53f66191389ea8110e1391ab3a93159763b11fc792b39c2cd38ec10f"
+      }
+    }
+  },
+  {
+    "id": "SC-15",
+    "name": "Éclaireurs de la Sellen",
+    "faction": "six-crowns",
+    "slug": "eclaireurs-de-la-sellen",
+    "source": "portraits/six-crowns/eclaireurs-de-la-sellen.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 226176,
+        "sha256": "af7c117cdc72204cb633bf697b88a92feb64420a764aeaae8d470c511e834ac8"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 62020,
+        "sha256": "775edfd586249d1871020581b55274c16a4faf88237b11a8e438500882839893"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/eclaireurs-de-la-sellen/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 15356,
+        "sha256": "e151dc8ec10eab239bb259b20da309821addcfded15ffda264823b780e3eeede"
+      }
+    }
+  },
+  {
+    "id": "SC-16",
+    "name": "Milice du Moulin",
+    "faction": "six-crowns",
+    "slug": "milice-du-moulin",
+    "source": "portraits/six-crowns/milice-du-moulin.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/milice-du-moulin/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 256334,
+        "sha256": "f23d8d13d46e7cecf5203fa13873126f2a4b78b6f2f338ff22cd44eb2b49696f"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/milice-du-moulin/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 68972,
+        "sha256": "beb158ee40ca35a6114902ebe9b4cc1a5b347f4d70f7d66af14d33863613b96f"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/milice-du-moulin/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 17476,
+        "sha256": "63d275f1079a5f1b2bd18ddb5b1b4d303950902ffafa6be67dc7b8cefc6d66ee"
+      }
+    }
+  },
+  {
+    "id": "SC-17",
+    "name": "Forteresse frontalière",
+    "faction": "six-crowns",
+    "slug": "forteresse-frontaliere",
+    "source": "portraits/six-crowns/forteresse-frontaliere.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/forteresse-frontaliere/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 353484,
+        "sha256": "f569876e75b7b248f92398bcbd1dd81e69b260a67ac98498fabf3be64068cd82"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/forteresse-frontaliere/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 85232,
+        "sha256": "fcf5c1c55a904c7b5fb58148e2705eafb65faf4f361ec8d511e17a3e147e86de"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/forteresse-frontaliere/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 20896,
+        "sha256": "2305003d5f57d231d0b93e22091452795c67d8ff020f7b5912b02188424cc964"
+      }
+    }
+  },
+  {
+    "id": "NE-01",
+    "name": "Maegar Varn",
+    "faction": "six-crowns",
+    "slug": "maegar-varn",
+    "source": "portraits/six-crowns/maegar-varn.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/maegar-varn/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 87762,
+        "sha256": "dcd31758c33e69b15a49bcc482e748fc12a0f4e42795862c852f6b7b687903aa"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/maegar-varn/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 23968,
+        "sha256": "8d756c9bd1b51d4a3b3d7e89cbbe3409c88bf5ac1a7d51a2a7cb3b65deff5367"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/maegar-varn/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 6192,
+        "sha256": "5c5311ef2ea637675562269c3444e32530bea56ebe70272503958cb60360a388"
+      }
+    }
+  },
+  {
+    "id": "NE-02",
+    "name": "Bokken, alchimiste des Marches",
+    "faction": "six-crowns",
+    "slug": "bokken-alchimiste-des-marches",
+    "source": "portraits/six-crowns/bokken-alchimiste-des-marches.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 153564,
+        "sha256": "9426b362a16525e32d39378f8872d4ea38f6e319b8eba6276d6cb8cec82efe95"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 38712,
+        "sha256": "e20a4053c683a1f6a10fba8d9d21c8a01fa8de1e8589d92ad88a01a46bdcd80a"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/bokken-alchimiste-des-marches/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 9648,
+        "sha256": "1da7722a722b94886c8b8d5a1887e9520d5fd0e710066a9f8f2565dbccedea7a"
+      }
+    }
+  },
+  {
+    "id": "NE-03",
+    "name": "Linzi, chroniqueuse du royaume",
+    "faction": "six-crowns",
+    "slug": "linzi-chroniqueuse-du-royaume",
+    "source": "portraits/six-crowns/linzi-chroniqueuse-du-royaume.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 216858,
+        "sha256": "039b8ff94218d1626fb8587da43fa3a83612af2b296c80ca94d45d29c1186b5a"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 64260,
+        "sha256": "8473054af815bb302a8a751ffc3a0e50a4f31dd1a3d9e51eb596b4ff8853c7dd"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 17430,
+        "sha256": "bf1fd6604a7fe58d6e306952d57343ff8b569622d07ccd45651338576926ee8c"
+      }
+    }
+  },
+  {
+    "id": "NE-04",
+    "name": "Jubilost Narthropple",
+    "faction": "six-crowns",
+    "slug": "jubilost-narthropple",
+    "source": "portraits/six-crowns/jubilost-narthropple.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/jubilost-narthropple/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 319200,
+        "sha256": "2d671d272cbe7caf3c3c17a22051c452001769dc0f9879487bb576b767ca59f8"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/jubilost-narthropple/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 85474,
+        "sha256": "f9891e9c4f587842d035e1bf5f531fa5b88dec4933c1295cf4a914732a05e356"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/jubilost-narthropple/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 21840,
+        "sha256": "431418afa489029b3b62d2e3c8a97e999351418034e944fcbfb9bcd835585d35"
+      }
+    }
+  },
+  {
+    "id": "SP-01",
+    "name": "Bannière royale",
+    "faction": "six-crowns",
+    "slug": "banniere-royale",
+    "source": "portraits/six-crowns/banniere-royale.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/banniere-royale/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 249280,
+        "sha256": "717cea3621554239123f811e2eca2eb67e62d8cda27f6fd7fc4c7dc50a9fdee2"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/banniere-royale/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 70598,
+        "sha256": "6cdd7ead10cbe80a61dd2674129610f5db99522e688a76fd979d934b1e019ecc"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/banniere-royale/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 19290,
+        "sha256": "5f91f51f4ef89064dd5c200fb592504badd2d207a369d89213786ddd9de1d8b6"
+      }
+    }
+  },
+  {
+    "id": "SP-02",
+    "name": "Étendard des Marches",
+    "faction": "six-crowns",
+    "slug": "etendard-des-marches",
+    "source": "portraits/six-crowns/etendard-des-marches.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/etendard-des-marches/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 160120,
+        "sha256": "6d3ce16aeb64483014d4ec62d1becb4563ff1b0bdce525927ca0cc2044fbfbe3"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/etendard-des-marches/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 43946,
+        "sha256": "1366bdc4ed107a01b51d9a02a9ad393d5956e93a357a5ce63ed0f8b36972eb9d"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/etendard-des-marches/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 11734,
+        "sha256": "17433d779f346f2f635ed2dfe246a24245126d60b86df4c086d9cea06c8f649f"
+      }
+    }
+  },
+  {
+    "id": "SP-05",
+    "name": "Diversion diplomatique",
+    "faction": "six-crowns",
+    "slug": "diversion-diplomatique",
+    "source": "portraits/six-crowns/diversion-diplomatique.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/diversion-diplomatique/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 98500,
+        "sha256": "5e1b9d082c751d6a257069c01e4a089fb06682b42a6ad2f6c056f9d8f48c3be6"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/diversion-diplomatique/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 24490,
+        "sha256": "0127d164ff093966c047c27dc17dc8bdb4c134bb82afe67b8d3df10de8d23a05"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/diversion-diplomatique/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 6044,
+        "sha256": "8a90a2e3286716bcf71959e001de9630f0ed858e8ef454b50a8709268e9e2ebc"
+      }
+    }
+  },
+  {
+    "id": "SP-07",
+    "name": "Bannière des Frontières",
+    "faction": "six-crowns",
+    "slug": "banniere-des-frontieres",
+    "source": "portraits/six-crowns/banniere-des-frontieres.webp",
+    "source_width": 1024,
+    "source_height": 1536,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/banniere-des-frontieres/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 178828,
+        "sha256": "f9d7ec571599ae4eb21d0cfa80294ecb5324f77f5727b1af92bd826c65049224"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/banniere-des-frontieres/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 48642,
+        "sha256": "6847da183075a5d531885fc192181df618ef1e75c5242b2c8e40938973ec71d8"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/banniere-des-frontieres/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 12612,
+        "sha256": "e1b9aaec7b5bea2998e79664980b911b440404a18cebeb6d2170d07b3f411a89"
+      }
+    }
+  },
+  {
+    "id": "SC-18",
+    "name": "Arbalétriers de la Couronne",
+    "faction": "six-crowns",
+    "slug": "arbaletriers-de-la-couronne",
+    "source": "portraits/six-crowns/arbaletriers-de-la-couronne.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 206098,
+        "sha256": "c1f48b983afb28c7d592c0d3873cc289035df9f37113085e7ee2c4e76a558e84"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 57408,
+        "sha256": "b58a216fada16530ed8fcd9bbec42359a31f6297c51b8fb54a5e5d270b194232"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/arbaletriers-de-la-couronne/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 15366,
+        "sha256": "bbc50590873feaced911859ddd20431f2397a9d3ebe13aa99ae9f329c011fb71"
+      }
+    }
+  },
+  {
+    "id": "SC-19",
+    "name": "Gardiens des Béliers Noirs",
+    "faction": "six-crowns",
+    "slug": "gardiens-des-beliers-noirs",
+    "source": "portraits/six-crowns/gardiens-des-beliers-noirs.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 168674,
+        "sha256": "34ca95ad33b7a6d664a6af68a7c22e84ccefdf509bbccdf50164032e829e1f2d"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 47850,
+        "sha256": "2473d3b902d241377e27839465169ab2780a0f998fb5aa197795cc178f4546ce"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/gardiens-des-beliers-noirs/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 12400,
+        "sha256": "be1c2d123f5574e66567c7831166e8f31ddf7894702b944444ca891fa10dc72e"
+      }
+    }
+  },
+  {
+    "id": "SC-20",
+    "name": "Meuniers de Brumelande",
+    "faction": "six-crowns",
+    "slug": "meuniers-de-brumelande",
+    "source": "portraits/six-crowns/meuniers-de-brumelande.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/meuniers-de-brumelande/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 228004,
+        "sha256": "af61902b78e76e96989481d920f349e2c3b77cd53d9a19df19581c52f30376b7"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/meuniers-de-brumelande/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 59886,
+        "sha256": "52f3074b2a56bf4d8f77b3949ff396797bb98ef2a370f3174b46feaca2aef841"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/meuniers-de-brumelande/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 15738,
+        "sha256": "0ad19c71b77ac70b6786022d9c42c0ea693b558628dcf0883e2c4217816a49fb"
+      }
+    }
+  },
+  {
+    "id": "SC-21",
+    "name": "Chasseurs d’Erastil",
+    "faction": "six-crowns",
+    "slug": "chasseurs-d-erastil",
+    "source": "portraits/six-crowns/chasseurs-d-erastil.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/chasseurs-d-erastil/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 208668,
+        "sha256": "ec446a9f2b6a60e7bdc4d42bd4ca95423a87709696479e721f6ee2b7286f3ade"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/chasseurs-d-erastil/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 60292,
+        "sha256": "6de66208e70d2a23c90da68e2c9dd8b7fa0c1bd69c82205d86b29d6c418f4b72"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/chasseurs-d-erastil/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 16036,
+        "sha256": "f8e0b8cce3b2c2a9c6352075a5060355a0b3afe83c5fc4c71b3b27a3a70695a5"
+      }
+    }
+  },
+  {
+    "id": "SC-22",
+    "name": "Passeurs de la Sellen",
+    "faction": "six-crowns",
+    "slug": "passeurs-de-la-sellen",
+    "source": "portraits/six-crowns/passeurs-de-la-sellen.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 295902,
+        "sha256": "40ddcae2f7618457ce34ecdc71b979b6da8bd312ed9f3176ca69efb5fbfaf61c"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 77362,
+        "sha256": "9d2f90260e45f561accaa7a6ec150251be8427ae7d2eba669e14cd2d5396da13"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/passeurs-de-la-sellen/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 18970,
+        "sha256": "1361518686b28226052ec89135c305efd82053e746b9ed839b8b2f85b1bccb8e"
+      }
+    }
+  },
+  {
+    "id": "SC-23",
+    "name": "Sapeurs des Six Couronnes",
+    "faction": "six-crowns",
+    "slug": "sapeurs-des-six-couronnes",
+    "source": "portraits/six-crowns/sapeurs-des-six-couronnes.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 254882,
+        "sha256": "98a485a5c816b6c4c9e1b9d7a055567f961ba0658b61239c65302b67bc799931"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 70386,
+        "sha256": "9cc849dc2c668238c56c70b400c79766c748726289b3a23dc19efad8e7057160"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/sapeurs-des-six-couronnes/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 18402,
+        "sha256": "059ed9e10c294b372d74c1225e76cf0fbfb047a0dbccd885e40c0bc7e78b1f84"
+      }
+    }
+  },
+  {
+    "id": "SC-24",
+    "name": "Émissaires de la Cour",
+    "faction": "six-crowns",
+    "slug": "emissaires-de-la-cour",
+    "source": "portraits/six-crowns/emissaires-de-la-cour.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/emissaires-de-la-cour/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 192266,
+        "sha256": "68ae4851fbd384b8ea154e5708aab30d9969c674eb7f06c942cd264f5b94d96c"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/emissaires-de-la-cour/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 58328,
+        "sha256": "d4ce51974558a43055b5094c745055336f3588a3dc49d9749fce3d2e0b8374d2"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/emissaires-de-la-cour/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 16142,
+        "sha256": "73de1ef4b2afb6abac33c4f6f25937c3c035e2e6e8e1231875b464bb58a54c88"
+      }
+    }
+  },
+  {
+    "id": "SC-25",
+    "name": "Gardes de l’Avant-poste",
+    "faction": "six-crowns",
+    "slug": "gardes-de-l-avant-poste",
+    "source": "portraits/six-crowns/gardes-de-l-avant-poste.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 162228,
+        "sha256": "24df99e1b9398d335b239b30e657bb927c468acb2469db00ca0d2e9958ab2151"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 45078,
+        "sha256": "26ce935135d9da789d3d85498cc30d9559c5f7f91ae0ced591d174ea6f8f401e"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/gardes-de-l-avant-poste/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 12088,
+        "sha256": "02c0b34c34e60a0fa8cceb7f5431717bf5d127d857df6aa9c33bff359c1c43c3"
+      }
+    }
+  },
+  {
+    "id": "SC-26",
+    "name": "Patrouille des Routes royales",
+    "faction": "six-crowns",
+    "slug": "patrouille-des-routes-royales",
+    "source": "portraits/six-crowns/patrouille-des-routes-royales.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 304128,
+        "sha256": "d448628d20a961b8d0d71a1a479511c5ec3ebb5a91c6b5b3420a813a1e8bc861"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 80844,
+        "sha256": "297ab733b69b2de0bab50012642df93fbe499fa28ff31df4806dc7caf8106351"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/patrouille-des-routes-royales/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 20524,
+        "sha256": "727afa15e007d08d1ea7560453cbd8ecf74a0d11c431a53473da4e8ef8037923"
+      }
+    }
+  },
+  {
+    "id": "SC-27",
+    "name": "Veilleurs des Hautes Marches",
+    "faction": "six-crowns",
+    "slug": "veilleurs-des-hautes-marches",
+    "source": "portraits/six-crowns/veilleurs-des-hautes-marches.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 173958,
+        "sha256": "08766c62770e87b85eb971417fb37fa0aa347bf125d284397b96a397bf94b6b9"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 49452,
+        "sha256": "f71e0bb80a65d6c9425840c40a035ef236058c149030a42ae9d1ac1dda172f5e"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/veilleurs-des-hautes-marches/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 13118,
+        "sha256": "7cd29333f4b32f1c49cb4f55c268c02222d598abc54d4fb5adb2f6d88f134ae6"
+      }
+    }
+  },
+  {
+    "id": "SC-28",
+    "name": "Alchimistes de la Couronne",
+    "faction": "six-crowns",
+    "slug": "alchimistes-de-la-couronne",
+    "source": "portraits/six-crowns/alchimistes-de-la-couronne.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 291638,
+        "sha256": "c4746fe37ddb5ad09037c8c8b2b62a97ff5c30c12671d162eb889d4d1be0c801"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 84844,
+        "sha256": "b0cf9fd6d108c47edbed1582a164cccec6879f73378a442da6fa490ce04c28f7"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/alchimistes-de-la-couronne/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 21748,
+        "sha256": "00d0f8dca5ddd2fae7629d582fbbacf7b5548dd17257c5a1bdd1e385ad404c47"
+      }
+    }
+  },
+  {
+    "id": "SC-29",
+    "name": "Archivistes du Palais",
+    "faction": "six-crowns",
+    "slug": "archivistes-du-palais",
+    "source": "portraits/six-crowns/archivistes-du-palais.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/archivistes-du-palais/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 245200,
+        "sha256": "18e5157f974f074565af5f960760d0a9999a8d64a4e3fa747f1b849bf8e0d490"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/archivistes-du-palais/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 65888,
+        "sha256": "02d8643d226785d679152372e6f6303de623f795a2a3bd09465f0a9384692494"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/archivistes-du-palais/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 17538,
+        "sha256": "2cf16793a21bb8e3b3d0ea63ea57e2dd01466604dbe283f09146d6dd036346ef"
+      }
+    }
+  },
+  {
+    "id": "SC-30",
+    "name": "Patrouilleurs du Fleuve",
+    "faction": "six-crowns",
+    "slug": "patrouilleurs-du-fleuve",
+    "source": "portraits/six-crowns/patrouilleurs-du-fleuve.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 231054,
+        "sha256": "d624d819f52b5e4fa5227ed91d15f66f0874283d6a8ae86a2b876332ec2352ae"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 64240,
+        "sha256": "5937f142303a8810874ca0553aa1bbc08266f0384333ab321a26a0b49edee4a2"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/patrouilleurs-du-fleuve/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 16418,
+        "sha256": "9cc040efa5b48cd323667fb36b3da46ebf022dda5b2d3571b1bd63033ac0eeab"
+      }
+    }
+  },
+  {
+    "id": "SC-31",
+    "name": "Ingénieurs des Frontières",
+    "faction": "six-crowns",
+    "slug": "ingenieurs-des-frontieres",
+    "source": "portraits/six-crowns/ingenieurs-des-frontieres.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 276418,
+        "sha256": "b7d7ed94e21b9e1e57246aac1030dee9e371464952dc3cb0dfdbfd7f0e6d8c66"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 78134,
+        "sha256": "2ac903a857fd3880814c5bf708f5d15ef5fbdc3ec2fdae0bc9def689ce02f498"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/ingenieurs-des-frontieres/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 20286,
+        "sha256": "8505dfa30b9f1aed4080acb6fe030f338360b4dbb880b2f078ffb779555660c7"
+      }
+    }
+  },
+  {
+    "id": "SC-32",
+    "name": "Conseil des Six Couronnes",
+    "faction": "six-crowns",
+    "slug": "conseil-des-six-couronnes",
+    "source": "portraits/six-crowns/conseil-des-six-couronnes.webp",
+    "source_width": 900,
+    "source_height": 1260,
+    "normalized": false,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 228002,
+        "sha256": "5bcb1814de5da0122951e77abcece449db60e7d62d08b016c6d18d997eafb9ed"
+      },
+      "medium.webp": {
+        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 58298,
+        "sha256": "e0f392f55fac0e68df0cef072ad9928366873de5fdbe7c444dd7c74e01898df6"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/six-crowns/conseil-des-six-couronnes/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 13854,
+        "sha256": "5e26266f4cabfdbc38c150a01acad37873940b0c7f44acbd7ddd6c9df3950857"
       }
     }
   },
@@ -4550,6 +4715,39 @@
         "height": 315,
         "bytes": 21190,
         "sha256": "c0989c9daf2f3da81c82d8f9eefce6c8ff94b15e28d35c5b3f5e9a17905faaa0"
+      }
+    }
+  },
+  {
+    "id": "NE-05",
+    "name": "Vordakai",
+    "faction": "stolen-lands-arcana",
+    "slug": "vordakai",
+    "source": "portraits/stolen-lands-arcana/vordakai.webp",
+    "source_width": 1060,
+    "source_height": 1484,
+    "normalized": true,
+    "variants": {
+      "full.webp": {
+        "path": "assets/cards/stolen-lands-arcana/vordakai/full.webp",
+        "width": 900,
+        "height": 1260,
+        "bytes": 117132,
+        "sha256": "06068a53bcc4cdc69e180a0ba06d97a08767d347c2e334a85a8eba98fe0d51b2"
+      },
+      "medium.webp": {
+        "path": "assets/cards/stolen-lands-arcana/vordakai/medium.webp",
+        "width": 450,
+        "height": 630,
+        "bytes": 32154,
+        "sha256": "ab2bcf941bb6678c4796e89061dd23c1ab1f783d986301caefe3a954291d0582"
+      },
+      "thumb.webp": {
+        "path": "assets/cards/stolen-lands-arcana/vordakai/thumb.webp",
+        "width": 225,
+        "height": 315,
+        "bytes": 8214,
+        "sha256": "7512fcc55ef56f565b652d3d92f9c7faf7bef9c0675d61459a748d357879918c"
       }
     }
   },
@@ -5243,39 +5441,6 @@
         "height": 315,
         "bytes": 11772,
         "sha256": "5c685fbb302c71727510484dc7bf5963f509d60eab1f13c25898ebbfb9614baf"
-      }
-    }
-  },
-  {
-    "id": "NE-05",
-    "name": "Vordakai",
-    "faction": "stolen-lands-arcana",
-    "slug": "vordakai",
-    "source": "portraits/stolen-lands-arcana/vordakai.webp",
-    "source_width": 1060,
-    "source_height": 1484,
-    "normalized": true,
-    "variants": {
-      "full.webp": {
-        "path": "assets/cards/stolen-lands-arcana/vordakai/full.webp",
-        "width": 900,
-        "height": 1260,
-        "bytes": 117132,
-        "sha256": "06068a53bcc4cdc69e180a0ba06d97a08767d347c2e334a85a8eba98fe0d51b2"
-      },
-      "medium.webp": {
-        "path": "assets/cards/stolen-lands-arcana/vordakai/medium.webp",
-        "width": 450,
-        "height": 630,
-        "bytes": 32154,
-        "sha256": "ab2bcf941bb6678c4796e89061dd23c1ab1f783d986301caefe3a954291d0582"
-      },
-      "thumb.webp": {
-        "path": "assets/cards/stolen-lands-arcana/vordakai/thumb.webp",
-        "width": 225,
-        "height": 315,
-        "bytes": 8214,
-        "sha256": "7512fcc55ef56f565b652d3d92f9c7faf7bef9c0675d61459a748d357879918c"
       }
     }
   }

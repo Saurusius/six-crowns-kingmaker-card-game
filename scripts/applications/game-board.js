@@ -1,24 +1,31 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
-import { getBoosterCredits, openBooster } from "../boosters.js";
+import { getBoosterCredits, getCollection, getEventBoosterCredits, openBooster, openEventBooster } from "../boosters.js";
 import { normalizeCardArt } from "../art.js";
 import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import { openGlossary } from "../glossary.js";
 import { requestAnalyticsRecord } from "../analytics.js";
+import { EVENT_BOOSTER_ID, getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
 import {
   PHASES,
   beginCoinToss,
   confirmMulligan,
   continueAfterCoinToss,
   buildMatchAnalyticsRecord,
+  activateEventSpell,
   createBoardViewModel,
   createPrototypeState,
   createRematchState,
+  ensureSpellState,
+  getEventSpellActivationOptions,
+  lockEventSpellSelection,
+  maybeUseOpponentEventSpell,
   passSide,
   playCard,
   resolveCoinToss,
   selectDeck,
+  selectEventSpell,
   startMatch,
   startNextRound,
   takeOpponentTurn,
@@ -104,12 +111,17 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.opponentTimer = null;
     this.coinTimer = null;
     this._decksHook = Hooks.on(`${MODULE_ID}.decksUpdated`, async () => {
-      if (this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
+      if ([PHASES.SPELL_SELECTION, PHASES.DECK_SELECTION].includes(this.matchState.phase) && this.rendered) {
         await this._renderState();
       }
     });
     this._boosterHook = Hooks.on(`${MODULE_ID}.boosterCreditsUpdated`, async (_credits, userId) => {
-      if (userId === game.user.id && this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
+      if (userId === game.user.id && [PHASES.SPELL_SELECTION, PHASES.DECK_SELECTION].includes(this.matchState.phase) && this.rendered) {
+        await this._renderState();
+      }
+    });
+    this._eventCollectionHook = Hooks.on(`${MODULE_ID}.collectionUpdated`, async (_collection, userId) => {
+      if ((!userId || userId === game.user.id) && this.matchState.phase === PHASES.SPELL_SELECTION && this.rendered) {
         await this._renderState();
       }
     });
@@ -125,15 +137,39 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
     await syncCustomDeckRegistry();
-    const [view, boosterCredits] = await Promise.all([
+    ensureSpellState(this.matchState);
+    const [view, boosterCredits, eventBoosterCredits, collection] = await Promise.all([
       Promise.resolve(createBoardViewModel(this.matchState)),
-      getBoosterCredits()
+      getBoosterCredits(),
+      getEventBoosterCredits(),
+      getCollection()
     ]);
+    const eventSpellChoices = listEventSpellDefinitions().map((spell) => {
+      const ownedCount = Math.max(0, Number(collection?.[spell.id]?.count ?? 0));
+      const available = game.user.isGM || ownedCount > 0;
+      return {
+        ...spell,
+        ownedCount,
+        available,
+        selected: this.matchState.spells?.player?.id === spell.id,
+        artFull: spell.art.full,
+        artMedium: spell.art.medium,
+        availabilityLabel: available ? (game.user.isGM && ownedCount === 0 ? "Accès MJ" : `Possédée ×${ownedCount}`) : "Non possédée"
+      };
+    });
     return {
       ...view,
       ...resolveBoardProfiles(this.matchState),
       isGM: game.user.isGM,
       boosterCredits,
+      eventBoosterCredits,
+      eventSpellChoices,
+      noSpellSelected: !this.matchState.spells?.player?.id,
+      selectedSpellLockedLabel: view.playerSpell?.equipped ? view.playerSpell.name : "Sans sortilège",
+      canOpenEventBooster: game.user.isGM || eventBoosterCredits > 0,
+      eventBoosterButtonLabel: game.user.isGM
+        ? "Ouvrir un booster Terres Dérobées (MJ)"
+        : `Ouvrir un booster Terres Dérobées (${eventBoosterCredits})`,
       canOpenBooster: game.user.isGM || boosterCredits > 0,
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
@@ -142,7 +178,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   async _persistMatchState() {
-    if (this.matchState.phase === PHASES.DECK_SELECTION) {
+    if ([PHASES.SPELL_SELECTION, PHASES.DECK_SELECTION].includes(this.matchState.phase)) {
       await game.user.unsetFlag(MODULE_ID, "activeMatchState");
       return;
     }
@@ -169,6 +205,90 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
   }
 
+  _removeSpellOverlays() {
+    document.querySelectorAll(`[data-scg-spell-overlay-owner="${this.id}"]`).forEach((element) => element.remove());
+  }
+
+  async _requestSpellPayload(options) {
+    if (!options?.canActivate) throw new Error(options?.reason || "Ce sortilège ne peut pas être activé.");
+    if (options.mode === "hydra-victim" && !options.requiresSelection) {
+      return { cardId: options.targets?.[0]?.id ?? null };
+    }
+
+    const escape = (value) => foundry.utils.escapeHTML(String(value ?? ""));
+    const targetMarkup = (target, inputType, inputName, checked = false) => `
+      <label class="scg-spell-target-card">
+        <input type="${inputType}" name="${inputName}" value="${escape(target.id)}" ${checked ? "checked" : ""}>
+        ${target.artThumb ? `<img src="${escape(target.artThumb)}" alt="">` : `<span class="scg-spell-target-icon"><i class="fa-solid fa-chess-pawn"></i></span>`}
+        <span><strong>${escape(target.name)}</strong><small>${escape(target.rowLabel ?? "")} · Puissance ${escape(target.strength ?? 0)}</small></span>
+      </label>`;
+
+    let content = "";
+    if (options.mode === "row") {
+      content = (options.targets ?? []).map((target, index) => `
+        <label class="scg-spell-target-row">
+          <input type="radio" name="spell-row" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}>
+          <span><i class="fa-solid fa-shield-halved"></i><strong>${escape(target.name)}</strong><small>Score actuel : ${escape(target.strength ?? 0)}</small></span>
+        </label>`).join("");
+    } else if (options.mode === "multi-own-card") {
+      content = (options.targets ?? []).map((target) => targetMarkup(target, "checkbox", "spell-card")).join("");
+    } else {
+      content = (options.targets ?? []).map((target, index) => targetMarkup(target, "radio", "spell-card", index === 0)).join("");
+    }
+
+    return new Promise((resolve) => {
+      this._removeSpellOverlays();
+      const overlay = document.createElement("div");
+      overlay.className = "scg-spell-target-overlay";
+      overlay.dataset.scgSpellOverlayOwner = this.id;
+      overlay.innerHTML = `
+        <form class="scg-spell-target-dialog">
+          <header><div><small>Sortilège événementiel</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header>
+          <div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""}">${content}</div>
+          ${options.mode === "multi-own-card" ? `<p class="scg-spell-target-help">Choisissez entre 1 et ${escape(options.maxTargets ?? 3)} cartes.</p>` : ""}
+          <footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer>
+        </form>`;
+      document.body.append(overlay);
+      const finish = (value) => { overlay.remove(); resolve(value); };
+      overlay.addEventListener("click", (event) => { if (event.target === overlay) finish(null); });
+      overlay.querySelectorAll("[data-spell-cancel]").forEach((button) => button.addEventListener("click", () => finish(null)));
+      overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") finish(null); });
+      if (options.mode === "multi-own-card") {
+        overlay.querySelectorAll('input[name="spell-card"]').forEach((input) => input.addEventListener("change", () => {
+          const checked = [...overlay.querySelectorAll('input[name="spell-card"]:checked')];
+          if (checked.length > Number(options.maxTargets ?? 3)) input.checked = false;
+        }));
+      }
+      overlay.querySelector("form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (options.mode === "row") {
+          const row = overlay.querySelector('input[name="spell-row"]:checked')?.value;
+          return row ? finish({ row }) : ui.notifications.warn("Choisissez une ligne.");
+        }
+        if (options.mode === "multi-own-card") {
+          const cardIds = [...overlay.querySelectorAll('input[name="spell-card"]:checked')].map((input) => input.value);
+          return cardIds.length > 0 ? finish({ cardIds }) : ui.notifications.warn("Choisissez au moins une carte.");
+        }
+        const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+        return cardId ? finish({ cardId }) : ui.notifications.warn("Choisissez une carte.");
+      });
+      overlay.querySelector("input")?.focus();
+    });
+  }
+
+  _showSpellReveal(result, side = "player") {
+    if (!result?.spell) return;
+    const escape = (value) => foundry.utils.escapeHTML(String(value ?? ""));
+    const overlay = document.createElement("div");
+    overlay.className = `scg-spell-reveal-overlay is-${side}`;
+    overlay.dataset.scgSpellOverlayOwner = this.id;
+    overlay.innerHTML = `<article class="scg-spell-reveal-card"><small>${side === "player" ? "Votre sortilège" : "Sortilège adverse révélé"}</small><img src="${escape(result.spell.art.full)}" alt=""><div><i class="${escape(result.spell.icon)}"></i><h2>${escape(result.spell.name)}</h2><p>${escape(result.message)}</p></div></article>`;
+    document.body.append(overlay);
+    const close = () => overlay.remove();
+    overlay.addEventListener("click", close);
+    globalThis.setTimeout(close, side === "opponent" ? 2200 : 1750);
+  }
+
   _scheduleOpponentTurn() {
     if (this.opponentTimer !== null) globalThis.clearTimeout(this.opponentTimer);
     this.opponentTimer = null;
@@ -178,8 +298,16 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.opponentTimer = globalThis.setTimeout(async () => {
       this.opponentTimer = null;
       try {
-        takeOpponentTurn(this.matchState);
-        await this._renderState();
+        const spellResult = maybeUseOpponentEventSpell(this.matchState);
+        if (spellResult) {
+          await this._renderState();
+          this._showSpellReveal(spellResult, "opponent");
+          await new Promise((resolve) => globalThis.setTimeout(resolve, 950));
+        }
+        if (this.matchState.phase === PHASES.PLAYING && this.matchState.currentTurn === "opponent") {
+          takeOpponentTurn(this.matchState);
+          await this._renderState();
+        }
       } catch (error) {
         console.error(`${MODULE_TITLE} | Tour adverse impossible`, error);
         ui.notifications.error(error.message);
@@ -196,6 +324,51 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     });
     this._mulliganModalCleanup?.();
     this._mulliganModalCleanup = null;
+
+    this.element.querySelectorAll("[data-action='select-event-spell']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          if (button.disabled) return;
+          selectEventSpell(this.matchState, button.dataset.spellId || null);
+          await this._renderState();
+        } catch (error) {
+          ui.notifications.warn(error.message);
+        }
+      });
+    });
+
+    this.element.querySelector("[data-action='select-no-spell']")?.addEventListener("click", async () => {
+      try {
+        selectEventSpell(this.matchState, null);
+        await this._renderState();
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='lock-event-spell']")?.addEventListener("click", async () => {
+      try {
+        const selectedId = this.matchState.spells?.player?.id;
+        if (selectedId) {
+          const choice = context.eventSpellChoices?.find((entry) => entry.id === selectedId);
+          if (!choice?.available) throw new Error("Vous devez posséder ce sortilège pour l’équiper.");
+        }
+        lockEventSpellSelection(this.matchState);
+        await this._renderState();
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
+    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", async () => {
+      try {
+        await openEventBooster({ boosterId: EVENT_BOOSTER_ID });
+        await this._renderState();
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Booster événementiel impossible`, error);
+        ui.notifications.error(error.message);
+      }
+    });
 
     this.element.querySelectorAll("[data-action='select-deck']").forEach((button) => {
       button.addEventListener("click", async () => {
@@ -358,6 +531,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
 
+    this.element.querySelector("[data-action='activate-event-spell']")?.addEventListener("click", async () => {
+      try {
+        const options = getEventSpellActivationOptions(this.matchState, "player");
+        const payload = await this._requestSpellPayload(options);
+        if (!payload) return;
+        const result = activateEventSpell(this.matchState, "player", payload);
+        await this._renderState();
+        this._showSpellReveal(result, "player");
+      } catch (error) {
+        ui.notifications.warn(error.message);
+      }
+    });
+
     this.element.querySelectorAll("[data-action='play-card']").forEach((button) => {
       button.addEventListener("click", async () => {
         try {
@@ -408,8 +594,10 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this._floatingCleanup = null;
     this._mulliganModalCleanup?.();
     this._mulliganModalCleanup = null;
+    this._removeSpellOverlays();
     if (this._decksHook !== null) Hooks.off(`${MODULE_ID}.decksUpdated`, this._decksHook);
     if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
+    if (this._eventCollectionHook !== null) Hooks.off(`${MODULE_ID}.collectionUpdated`, this._eventCollectionHook);
     return super.close(options);
   }
 }

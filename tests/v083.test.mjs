@@ -7,7 +7,7 @@ import { isPlayableCard } from "../scripts/collection-rules.js";
 const cardsRoot = new URL("../data/cards/", import.meta.url);
 
 async function loadCards() {
-  const files = (await readdir(cardsRoot)).filter((file) => file.endsWith(".json"));
+  const files = (await readdir(cardsRoot)).filter((file) => file.endsWith(".json") && file !== "event-stolen-lands.json");
   const groups = await Promise.all(files.map(async (file) => JSON.parse(await readFile(new URL(file, cardsRoot), "utf8"))));
   return groups.flat();
 }
