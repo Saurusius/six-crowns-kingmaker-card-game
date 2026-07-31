@@ -3,6 +3,7 @@ import { withNormalizedCardArt } from "./art.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
+export const BOOSTER_HISTORY_FLAG = "boosterHistory";
 const BOOSTER_MACRO_NAME = "Ouvrir un booster des Six Couronnes";
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
@@ -120,6 +121,30 @@ function shuffle(items, random = Math.random) {
   return result;
 }
 
+export async function getBoosterHistory(options = {}) {
+  const targetUser = resolveUser(options);
+  const history = foundry.utils.deepClone(targetUser.getFlag(MODULE_ID, BOOSTER_HISTORY_FLAG) ?? []);
+  return Array.isArray(history) ? history : [];
+}
+
+async function addBoosterToHistory(targetUser, cards) {
+  const history = await getBoosterHistory({ user: targetUser });
+  history.push({
+    id: foundry.utils.randomID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    openedAt: new Date().toISOString(),
+    cards: cards.map((card) => ({
+      id: card.id,
+      name: card.name,
+      rarity: card.rarity,
+      isNew: Boolean(card.isNew),
+      ownedAfter: Number(card.ownedAfter ?? 0)
+    }))
+  });
+  await targetUser.setFlag(MODULE_ID, BOOSTER_HISTORY_FLAG, history.slice(-25));
+  Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, history, targetUser.id);
+  return history;
+}
+
 export async function getBoosterCredits(options = {}) {
   const targetUser = resolveUser(options);
   return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, BOOSTER_CREDITS_FLAG));
@@ -217,6 +242,7 @@ function boosterChatContent(cards, targetUser, remainingCredits = null) {
       <span class="scg-booster-name">${escapeHtml(card.name)}</span>
       <span class="scg-booster-faction">${escapeHtml(card.faction)}</span>
       <span class="scg-booster-rarity">${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
+      <small class="scg-booster-acquisition${card.isNew ? " is-new" : ""}">${escapeHtml(card.acquisitionLabel ?? `Possédée ×${card.ownedAfter ?? 1}`)}</small>
     </article>
   `).join("");
 
@@ -238,7 +264,7 @@ function boosterChatContent(cards, targetUser, remainingCredits = null) {
   `;
 }
 
-export async function openBooster({ random = Math.random, user = null, userId = null } = {}) {
+export async function openBooster({ random = Math.random, user = null, userId = null, animate = true, notify = true } = {}) {
   const targetUser = resolveUser({ user, userId });
   const requiresCredit = !game.user.isGM;
   let previousCredits = null;
@@ -255,16 +281,31 @@ export async function openBooster({ random = Math.random, user = null, userId = 
     remainingCredits = await setBoosterCredits(targetUser, previousCredits - 1);
   }
 
-  const catalog = await loadCardCatalog();
+  const [catalog, beforeCollection] = await Promise.all([
+    loadCardCatalog(),
+    getCollection({ user: targetUser })
+  ]);
   const cards = [];
   for (let index = 0; index < 4; index += 1) {
     cards.push(pickCard(catalog, drawNormalRarity(random), random));
   }
   cards.push(pickCard(catalog, drawGuaranteedRarity(random), random));
   const booster = sortCardsByRarity(shuffle(cards, random));
+  const runningCounts = Object.fromEntries(Object.entries(beforeCollection).map(([id, entry]) => [id, entry.count ?? 0]));
+  const annotatedBooster = booster.map((card) => {
+    const previousCount = runningCounts[card.id] ?? 0;
+    runningCounts[card.id] = previousCount + 1;
+    return {
+      ...card,
+      isNew: previousCount === 0,
+      ownedAfter: previousCount + 1,
+      acquisitionLabel: previousCount === 0 ? "Nouvelle carte" : `Nouvel exemplaire · ×${previousCount + 1}`
+    };
+  });
 
   try {
-    await addCardsToCollection(booster, { user: targetUser });
+    await addCardsToCollection(annotatedBooster, { user: targetUser });
+    await addBoosterToHistory(targetUser, annotatedBooster);
   } catch (error) {
     if (requiresCredit && previousCredits !== null) {
       await setBoosterCredits(targetUser, previousCredits);
@@ -275,16 +316,31 @@ export async function openBooster({ random = Math.random, user = null, userId = 
   try {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-      content: boosterChatContent(booster, targetUser, remainingCredits)
+      content: boosterChatContent(annotatedBooster, targetUser, remainingCredits)
     });
   } catch (error) {
     console.error(`${MODULE_TITLE} | Publication du booster dans le chat impossible`, error);
   }
 
-  if (targetUser.id === game.user.id) animateBooster(booster);
-  const suffix = targetUser.id === game.user.id ? "votre collection" : `la collection de ${targetUser.name}`;
-  ui.notifications.info(`Booster ouvert : 5 cartes ajoutées à ${suffix}.`);
-  return booster;
+  if (targetUser.id === game.user.id && animate) animateBooster(annotatedBooster);
+  if (notify) {
+    const suffix = targetUser.id === game.user.id ? "votre collection" : `la collection de ${targetUser.name}`;
+    ui.notifications.info(`Booster ouvert : 5 cartes ajoutées à ${suffix}.`);
+  }
+  return annotatedBooster;
+}
+
+export async function openBoosters({ count = 1, random = Math.random } = {}) {
+  const requested = Math.max(1, Math.min(10, Number.parseInt(count, 10) || 1));
+  const available = game.user.isGM ? requested : Math.min(requested, await getBoosterCredits());
+  if (available <= 0) throw new Error("Vous n’avez aucun booster à ouvrir.");
+  const boosters = [];
+  for (let index = 0; index < available; index += 1) {
+    boosters.push(await openBooster({ random, animate: false, notify: false }));
+  }
+  animateBoosterQueue(boosters);
+  ui.notifications.info(`${available} booster${available > 1 ? "s" : ""} ouvert${available > 1 ? "s" : ""}.`);
+  return boosters;
 }
 
 export async function recycleCardsForBooster(cardIds = []) {
@@ -307,7 +363,7 @@ export async function recycleCardsForBooster(cardIds = []) {
   return { credits };
 }
 
-export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {} } = {}) {
+export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {}, offeredCredits = 0, requestedCredits = 0 } = {}) {
   if (!game.user.isGM) throw new Error("Un MJ actif doit valider l’échange.");
   const fromUser = game.users.get(fromUserId);
   const toUser = game.users.get(toUserId);
@@ -316,12 +372,20 @@ export async function executeTrade({ fromUserId, toUserId, offered = {}, request
   const toCollection = await getCollection({ user: toUser });
   const normalize = value => Object.fromEntries(Object.entries(value ?? {}).map(([id,c])=>[id,Math.max(0,parseInt(c,10)||0)]).filter(([,c])=>c>0));
   const give = normalize(offered), take = normalize(requested);
+  const giveCredits = Math.max(0, Number.parseInt(offeredCredits ?? 0, 10) || 0);
+  const takeCredits = Math.max(0, Number.parseInt(requestedCredits ?? 0, 10) || 0);
   for (const [id,count] of Object.entries(give)) if ((fromCollection[id]?.count ?? 0) < count) throw new Error(`${fromUser.name} ne possède plus assez de ${id}.`);
   for (const [id,count] of Object.entries(take)) if ((toCollection[id]?.count ?? 0) < count) throw new Error(`${toUser.name} ne possède plus assez de ${id}.`);
+  const fromCredits = await getBoosterCredits({ user: fromUser });
+  const toCredits = await getBoosterCredits({ user: toUser });
+  if (fromCredits < giveCredits) throw new Error(`${fromUser.name} ne possède plus assez de tickets.`);
+  if (toCredits < takeCredits) throw new Error(`${toUser.name} ne possède plus assez de tickets.`);
   const move=(source,target,items)=>{ for(const [id,count] of Object.entries(items)){ const entry=source[id]; source[id].count-=count; target[id]={...(target[id]??entry),count:(target[id]?.count??0)+count}; if(source[id].count<=0) delete source[id]; }};
   move(fromCollection,toCollection,give); move(toCollection,fromCollection,take);
   await fromUser.setFlag(MODULE_ID,COLLECTION_FLAG,fromCollection);
   await toUser.setFlag(MODULE_ID,COLLECTION_FLAG,toCollection);
+  await setBoosterCredits(fromUser, fromCredits - giveCredits + takeCredits);
+  await setBoosterCredits(toUser, toCredits - takeCredits + giveCredits);
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, fromCollection, fromUser.id);
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, toCollection, toUser.id);
   return true;
@@ -342,11 +406,12 @@ function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
       <div class="scg-reveal-card-art">${artMarkup}</div>
       <span class="scg-reveal-rarity"><i class="fa-solid ${featured ? "fa-crown" : "fa-star"}" aria-hidden="true"></i>${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
       <strong>${escapeHtml(card.name)}</strong>
+      <small class="scg-reveal-acquisition ${card.isNew ? "is-new" : ""}">${escapeHtml(card.acquisitionLabel ?? `Possédée ×${card.ownedAfter ?? 1}`)}</small>
     </article>
   `;
 }
 
-function animateBooster(cards) {
+function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, fastPrelude = false } = {}) {
   if (typeof document === "undefined" || !Array.isArray(cards) || cards.length === 0) return;
 
   document.querySelector(".scg-booster-opening")?.remove();
@@ -377,7 +442,7 @@ function animateBooster(cards) {
       <header>
         <span><i class="fa-solid fa-star"></i></span>
         <div>
-          <small>Booster des Six Couronnes</small>
+          <small>Booster ${packIndex} / ${totalPacks}</small>
           <h2>Révélation des cartes</h2>
           <p class="scg-booster-progress" data-reveal-status>La magie se rassemble…</p>
         </div>
@@ -386,12 +451,13 @@ function animateBooster(cards) {
         ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
       </div>
     </section>
-    <button type="button" class="scg-booster-continue" data-action="continue-booster">Tout révéler</button>
+    <div class="scg-booster-actions"><button type="button" class="scg-booster-again" data-action="open-another-booster" hidden><i class="fa-solid fa-box-open"></i> Ouvrir un autre</button><button type="button" class="scg-booster-continue" data-action="continue-booster">Tout révéler</button></div>
   `;
 
   document.body.appendChild(overlay);
   const button = overlay.querySelector("[data-action='continue-booster']");
   const status = overlay.querySelector("[data-reveal-status]");
+  const againButton = overlay.querySelector("[data-action='open-another-booster']");
   const cardElements = Array.from(overlay.querySelectorAll(".scg-reveal-card"));
   const timers = new Set();
   let revealIndex = 0;
@@ -442,8 +508,12 @@ function animateBooster(cards) {
     if (sequenceFinished) return;
     sequenceFinished = true;
     overlay.classList.add("is-complete");
-    if (status) status.textContent = hasUnique ? "Une carte Unique rejoint votre collection !" : "Les cinq cartes sont révélées.";
-    button.textContent = "Fermer";
+    const newCount = orderedCards.filter((card) => card.isNew).length;
+    if (status) status.textContent = hasUnique ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)` : `${newCount} nouvelle(s) carte(s) · cinq cartes révélées`;
+    button.textContent = totalPacks > 1 && packIndex < totalPacks ? "Booster suivant" : "Fermer";
+    if (totalPacks === 1) {
+      Promise.resolve(game.user.isGM ? 1 : getBoosterCredits()).then((credits) => { if (againButton && credits > 0) againButton.hidden = false; });
+    }
   };
 
   const revealNext = () => {
@@ -488,7 +558,7 @@ function animateBooster(cards) {
     clearTimers();
     document.removeEventListener("keydown", onKeyDown);
     overlay.classList.add("is-closing");
-    globalThis.setTimeout(() => overlay.remove(), 260);
+    globalThis.setTimeout(() => { overlay.remove(); onClose?.(); }, 260);
   };
 
   const onKeyDown = (event) => {
@@ -500,6 +570,12 @@ function animateBooster(cards) {
     if (!sequenceFinished) revealAll();
     else close();
   });
+  againButton?.addEventListener("click", () => {
+    clearTimers();
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.remove();
+    void openBooster();
+  });
   document.addEventListener("keydown", onKeyDown);
 
   const activate = () => overlay.classList.add("is-active");
@@ -507,7 +583,9 @@ function animateBooster(cards) {
   else activate();
 
   const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-  if (reducedMotion) {
+  if (fastPrelude) {
+    schedule(showResults, 120);
+  } else if (reducedMotion) {
     schedule(showResults, 80);
     schedule(revealAll, 160);
   } else {
@@ -517,6 +595,22 @@ function animateBooster(cards) {
   }
 
   button.focus({ preventScroll: true });
+}
+
+function animateBoosterQueue(boosters = []) {
+  const queue = [...boosters];
+  const totalPacks = queue.length;
+  const reveal = (index) => {
+    const cards = queue[index];
+    if (!cards) return;
+    animateBooster(cards, {
+      packIndex: index + 1,
+      totalPacks,
+      fastPrelude: index > 0,
+      onClose: () => reveal(index + 1)
+    });
+  };
+  reveal(0);
 }
 
 export async function createBoosterMacro() {

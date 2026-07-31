@@ -6,15 +6,17 @@
       {{#if showBoard}}<span class="scg-turn">Tour : {{turnLabel}}</span>{{/if}}
     </div>
     <div class="scg-toolbar-actions">
-      <button type="button" data-action="toggle-rules"><i class="fa-solid fa-book-open"></i> Règlement</button>
+      <button type="button" data-action="toggle-rules"><i class="fa-solid fa-scroll"></i> Règlement</button>
+      <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      {{#if isGM}}<button type="button" data-action="open-analytics"><i class="fa-solid fa-chart-line"></i> Équilibrage</button>{{/if}}
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
-      {{#if canStartNextRound}}
+      {{#if canRematch}}
+        <button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Revanche</button>
+      {{else}}{{#if canStartNextRound}}
         <button type="button" data-action="next-round"><i class="fa-solid fa-forward"></i> Manche suivante</button>
       {{else}}
-        {{#if showBoard}}
-          <button type="button" data-action="pass" {{#unless canPlayerAct}}disabled{{/unless}}><i class="fa-solid fa-flag"></i> Passer</button>
-        {{/if}}
-      {{/if}}
+        {{#if showBoard}}<button type="button" data-action="pass" {{#unless canPlayerAct}}disabled{{/unless}}><i class="fa-solid fa-flag"></i> Passer</button>{{/if}}
+      {{/if}}{{/if}}
     </div>
   </header>
 
@@ -241,6 +243,10 @@
       </div>
     </div>
 
+    {{#if gameSummary}}
+      <section class="scg-game-summary"><div><small>Partie terminée</small><h2>{{gameSummary.winnerLabel}}</h2><p>{{message}}</p></div><div><article><strong>{{gameSummary.rounds}}</strong><span>manches</span></article><article><strong>{{gameSummary.playerCardsPlayed}}</strong><span>cartes jouées</span></article><article><strong>{{gameSummary.opponentCardsPlayed}}</strong><span>cartes adverses</span></article></div><button type="button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Relancer les mêmes decks</button></section>
+    {{/if}}
+
     {{#if isOpponentTurn}}
       <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> {{opponent.name}} réfléchit…</div>
     {{/if}}
@@ -406,6 +412,8 @@
             <span><i class="fa-solid fa-sword"></i> {{player.controlledLines}} ligne(s) alliées</span>
           </div>
         </div>
+
+        {{#if hasActionLog}}<details class="scg-match-log"><summary><i class="fa-solid fa-list"></i> Journal de partie <b>{{actionLog.length}}</b></summary><div>{{#each actionLog}}<article class="is-{{type}}"><small>Manche {{round}}</small><span>{{message}}</span></article>{{/each}}</div></details>{{/if}}
 
         <div class="scg-zone-stack scg-zone-stack-player">
           <article class="scg-duelist-profile scg-duelist-profile-player">

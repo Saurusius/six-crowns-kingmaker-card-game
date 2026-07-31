@@ -15,15 +15,15 @@ export const RARITY_DETAILS = Object.freeze({
 });
 
 export const CARD_TYPE_DETAILS = Object.freeze({
-  personnage: Object.freeze({ label: "Personnage", order: 1 }),
-  unite: Object.freeze({ label: "Unité", order: 2 }),
-  tactique: Object.freeze({ label: "Tactique", order: 3 })
+  personnage: Object.freeze({ label: "Personnage", order: 1, icon: "fa-solid fa-user" }),
+  unite: Object.freeze({ label: "Unité", order: 2, icon: "fa-solid fa-shield-halved" }),
+  tactique: Object.freeze({ label: "Tactique", order: 3, icon: "fa-solid fa-chess-knight" })
 });
 
 export const ROW_DETAILS = Object.freeze({
-  "avant-garde": Object.freeze({ label: "Avant-garde", order: 1 }),
-  escarmouche: Object.freeze({ label: "Escarmouche", order: 2 }),
-  domaine: Object.freeze({ label: "Domaine", order: 3 })
+  "avant-garde": Object.freeze({ label: "Avant-garde", order: 1, icon: "fa-solid fa-sword" }),
+  escarmouche: Object.freeze({ label: "Escarmouche", order: 2, icon: "fa-solid fa-crosshairs" }),
+  domaine: Object.freeze({ label: "Domaine", order: 3, icon: "fa-solid fa-landmark" })
 });
 
 export const CUSTOM_DECK_SIZE = 20;
@@ -37,6 +37,18 @@ export const MAX_COPIES_PER_CARD = Math.max(...Object.values(MAX_COPIES_BY_RARIT
 
 export function getMaxCopiesForCard(card) {
   return MAX_COPIES_BY_RARITY[card?.rarity] ?? 1;
+}
+
+export function getCardAddDisabledReason(card, { ownedCount = 0, inDeck = 0, deckTotal = 0 } = {}) {
+  const maxCopies = getMaxCopiesForCard(card);
+  if (deckTotal >= CUSTOM_DECK_SIZE) return `Deck complet : ${CUSTOM_DECK_SIZE} cartes maximum.`;
+  if (ownedCount <= 0) return "Carte non possédée.";
+  if (inDeck >= ownedCount) return `Tous vos exemplaires (${ownedCount}) sont déjà utilisés.`;
+  if (inDeck >= maxCopies) {
+    const rarity = RARITY_DETAILS[card?.rarity]?.label ?? card?.rarity ?? "cette rareté";
+    return `Limite atteinte : ${maxCopies} exemplaire(s) pour une carte ${rarity.toLocaleLowerCase("fr")}.`;
+  }
+  return "";
 }
 
 export function isPlayableCard(card) {
@@ -114,6 +126,8 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
       typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
+      typeIcon: CARD_TYPE_DETAILS[card.type]?.icon ?? "fa-solid fa-clone",
+      rowBadges: (card.rows ?? []).map((row) => ({ id: row, label: ROW_DETAILS[row]?.label ?? row, icon: ROW_DETAILS[row]?.icon ?? "fa-solid fa-minus" })),
       maxCopies: getMaxCopiesForCard(card),
       traitBadges: buildTraitBadges(card),
       traitSummary: describeTraits(card),
@@ -136,6 +150,7 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
 export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards = {}) {
   const normalizedCollection = normalizeCollection(collection);
   const normalizedDeck = normalizeDeckCards(deckCards);
+  const deckTotal = countDeckCards(normalizedDeck);
 
   return catalog
     .filter(isPlayableCard)
@@ -146,6 +161,7 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
       const inDeck = normalizedDeck[card.id] ?? 0;
       const allowedCopies = Math.min(ownedCount, maxCopies);
       const availableCount = Math.max(0, allowedCopies - inDeck);
+      const addDisabledReason = getCardAddDisabledReason(card, { ownedCount, inDeck, deckTotal });
       const faction = FACTION_DETAILS[card.faction] ?? { label: card.faction, symbol: "?" };
       const rarity = RARITY_DETAILS[card.rarity] ?? { label: card.rarity };
       return {
@@ -155,11 +171,14 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         maxCopies,
         allowedCopies,
         availableCount,
-        canAdd: inDeck < allowedCopies,
+        canAdd: !addDisabledReason,
+        addDisabledReason,
         canRemove: inDeck > 0,
         factionLabel: faction.label,
         factionSymbol: faction.symbol,
         typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
+        typeIcon: CARD_TYPE_DETAILS[card.type]?.icon ?? "fa-solid fa-clone",
+        rowBadges: (card.rows ?? []).map((row) => ({ id: row, label: ROW_DETAILS[row]?.label ?? row, icon: ROW_DETAILS[row]?.icon ?? "fa-solid fa-minus" })),
         rarityLabel: rarity.label,
         traitBadges: buildTraitBadges(card),
         traitSummary: describeTraits(card),
@@ -186,6 +205,8 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
         rarityLabel: "Inconnue",
         type: "unite",
         typeLabel: "Carte inconnue",
+        typeIcon: "fa-solid fa-question",
+        rowBadges: [],
         ownedCount: 0,
         inDeck,
         maxCopies: 0,
@@ -200,6 +221,7 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
     const ownedCount = normalizedCollection[cardId]?.count ?? 0;
     const maxCopies = getMaxCopiesForCard(card);
     const allowedCopies = Math.min(ownedCount, maxCopies);
+    const addDisabledReason = getCardAddDisabledReason(card, { ownedCount, inDeck, deckTotal: countDeckCards(normalizedDeck) });
     const faction = FACTION_DETAILS[card.faction] ?? { label: card.faction, symbol: "?" };
     const rarity = RARITY_DETAILS[card.rarity] ?? { label: card.rarity };
     return {
@@ -209,12 +231,15 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       maxCopies,
       allowedCopies,
       availableCount: Math.max(0, allowedCopies - inDeck),
-      canAdd: inDeck < allowedCopies,
+      canAdd: !addDisabledReason,
+      addDisabledReason,
       canRemove: true,
       invalid: !isPlayableCard(card) || inDeck > allowedCopies,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
       typeLabel: CARD_TYPE_DETAILS[card.type]?.label ?? card.type ?? "Carte",
+      typeIcon: CARD_TYPE_DETAILS[card.type]?.icon ?? "fa-solid fa-clone",
+      rowBadges: (card.rows ?? []).map((row) => ({ id: row, label: ROW_DETAILS[row]?.label ?? row, icon: ROW_DETAILS[row]?.icon ?? "fa-solid fa-minus" })),
       rarityLabel: rarity.label,
       traitBadges: buildTraitBadges(card),
       traitSummary: describeTraits(card),
@@ -239,6 +264,12 @@ export function sortOwnedPlayableCards(cards = [], sortBy = "name") {
     }
     if (sortBy === "faction") {
       return byFaction(a, b) || byName(a, b);
+    }
+    if (sortBy === "owned") {
+      return Number(b.ownedCount ?? 0) - Number(a.ownedCount ?? 0) || byName(a, b);
+    }
+    if (sortBy === "used") {
+      return Number(b.inDeck ?? 0) - Number(a.inDeck ?? 0) || byName(a, b);
     }
     return byName(a, b);
   });
@@ -281,18 +312,40 @@ export function buildDeckStatistics(catalog = [], deckCards = {}) {
   }));
   const maxRowCount = Math.max(1, ...rowDistribution.map((row) => row.count));
 
+  const rarityDistribution = Object.entries(RARITY_DETAILS).map(([id, details]) => ({
+    id,
+    label: details.label,
+    count: expanded.filter((card) => card.rarity === id).length
+  }));
+  const maxRarityCount = Math.max(1, ...rarityDistribution.map((entry) => entry.count));
+  const typeDistribution = Object.entries(CARD_TYPE_DETAILS).map(([id, details]) => ({
+    id,
+    label: details.label,
+    count: expanded.filter((card) => card.type === id).length
+  }));
+  const maxTypeCount = Math.max(1, ...typeDistribution.map((entry) => entry.count));
+  const abilityIds = ["hero", "support", "bond", "rally", "resilient", "mobile", "troop"];
+  const abilityLabels = { hero: "Héros", support: "Soutien", bond: "Formation", rally: "Renfort", resilient: "Bastion", mobile: "Mobile", troop: "Sans capacité" };
+  const abilityDistribution = abilityIds.map((id) => ({
+    id,
+    label: abilityLabels[id],
+    count: expanded.filter((card) => {
+      if (id === "mobile") return card.rows.length > 1;
+      if (id === "troop") return (card.abilities ?? []).length === 0 && card.rows.length === 1;
+      return (card.abilities ?? []).includes(id);
+    }).length
+  }));
+  const maxAbilityCount = Math.max(1, ...abilityDistribution.map((entry) => entry.count));
+
   return {
     total,
     totalStrength,
     averageStrength,
-    strengthCurve: strengthBuckets.map((bucket) => ({
-      ...bucket,
-      percent: percentage(bucket.count, maxStrengthBucket)
-    })),
-    rowDistribution: rowDistribution.map((row) => ({
-      ...row,
-      percent: percentage(row.count, maxRowCount)
-    }))
+    strengthCurve: strengthBuckets.map((bucket) => ({ ...bucket, percent: percentage(bucket.count, maxStrengthBucket) })),
+    rowDistribution: rowDistribution.map((row) => ({ ...row, percent: percentage(row.count, maxRowCount) })),
+    rarityDistribution: rarityDistribution.map((entry) => ({ ...entry, percent: percentage(entry.count, maxRarityCount) })),
+    typeDistribution: typeDistribution.map((entry) => ({ ...entry, percent: percentage(entry.count, maxTypeCount) })),
+    abilityDistribution: abilityDistribution.map((entry) => ({ ...entry, percent: percentage(entry.count, maxAbilityCount) }))
   };
 }
 

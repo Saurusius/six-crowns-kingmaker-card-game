@@ -1,5 +1,27 @@
 # Journal des versions
 
+## 0.8.4 — Expérience joueur, échanges et télémétrie
+
+- refonte du constructeur de deck avec validation en direct, compteur 20 cartes, ajout au clic et retrait au clic droit ;
+- filtres par rareté, type, ligne et capacité, avec tris par nom, Force, rareté, faction, quantité possédée et quantité utilisée ;
+- affichage immédiat de la raison empêchant l’ajout d’une carte ;
+- nouvelles analyses de deck : Force moyenne, lignes, raretés, types et capacités ;
+- ajout de pictogrammes explicites pour les types de cartes et les lignes ;
+- ajout d’un glossaire interactif des capacités, types, lignes et raretés, accessible depuis les principales fenêtres ;
+- ajout d’une vue compacte des collections et d’une comparaison côte à côte de deux cartes ;
+- remplacement de l’échange ponctuel par un centre persistant : offres reçues, envoyées, refusées, annulées, terminées ou échouées ;
+- réservation automatique des cartes et tickets engagés dans une offre ;
+- possibilité de demander une carte précise, n’importe quelle carte d’une rareté donnée ou des tickets de booster ;
+- notifications différenciées pour l’expéditeur et le destinataire ;
+- historique des derniers boosters avec mention Nouvelle carte / Nouvel exemplaire ;
+- ouverture en série de trois boosters, bouton Ouvrir un autre et séquence accélérée après le premier paquet ;
+- sauvegarde automatique et restauration d’une partie interrompue ;
+- journal des cartes jouées, passages et résultats de manches ;
+- résumé de fin de partie et bouton Revanche ;
+- tableau MJ d’équilibrage avec usages et taux de victoire des cartes et decks, cartes jamais jouées, Force moyenne et fréquence des capacités ;
+- export des données d’équilibrage en JSON et CSV ;
+- ajout de 12 tests dédiés à la v0.8.4, pour un total de 97 tests automatisés.
+
 ## 0.8.3 — Audit global des cartes et échanges intégrés
 
 - audit des 160 cartes collectionnables ;

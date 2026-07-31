@@ -1,10 +1,12 @@
 import {
   getBoosterCredits,
+  getBoosterHistory,
   getCollection,
   grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  openBoosters,
   executeTrade,
   recycleCardsForBooster,
   resetCollectionForUser
@@ -36,12 +38,14 @@ export async function openBoard() {
 export {
   duplicateCustomDeck,
   getBoosterCredits,
+  getBoosterHistory,
   getCollection,
   getCustomDecks,
   grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  openBoosters,
   executeTrade,
   recycleCardsForBooster,
   openCollection,

@@ -2,7 +2,10 @@ import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { getCollection, loadCardCatalog } from "../boosters.js";
 import {
   CUSTOM_DECK_SIZE,
+  CARD_TYPE_DETAILS,
   FACTION_DETAILS,
+  RARITY_DETAILS,
+  ROW_DETAILS,
   buildDeckStatistics,
   buildOwnedPlayableCards,
   buildSelectedDeckCards,
@@ -19,6 +22,8 @@ import {
   saveCustomDeck
 } from "../profile.js";
 import { bindFloatingOverlays } from "../ui/floating-overlays.js";
+import { formatCardRulesText, openGlossary } from "../glossary.js";
+import { TRAIT_DETAILS } from "../traits.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -53,6 +58,10 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this.draft = emptyDraft();
     this.search = "";
     this.factionFilter = "all";
+    this.rarityFilter = "all";
+    this.typeFilter = "all";
+    this.rowFilter = "all";
+    this.traitFilter = "all";
     this.sortBy = "name";
     this.analysisCompact = false;
   }
@@ -73,12 +82,20 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     await this._loadRequestedDeck(decks);
 
     const cards = sortOwnedPlayableCards(
-      buildOwnedPlayableCards(catalog, collection, this.draft.cards),
+      buildOwnedPlayableCards(catalog, collection, this.draft.cards).map((card) => ({
+        ...card,
+        textHtml: formatCardRulesText(card.text),
+        filterTraits: card.traitBadges.map((badge) => badge.id).join(" ")
+      })),
       this.sortBy
     );
     const total = countDeckCards(this.draft.cards);
     const selectedCards = sortOwnedPlayableCards(
-      buildSelectedDeckCards(catalog, collection, this.draft.cards),
+      buildSelectedDeckCards(catalog, collection, this.draft.cards).map((card) => ({
+        ...card,
+        textHtml: formatCardRulesText(card.text),
+        filterTraits: card.traitBadges?.map((badge) => badge.id).join(" ") ?? ""
+      })),
       "name"
     );
     const factionOptions = Object.entries(FACTION_DETAILS).map(([id, details]) => ({
@@ -112,14 +129,24 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       canRename: Boolean(this.draft.id),
       canDuplicate: Boolean(this.draft.id),
       factionOptions,
+      rarityOptions: Object.entries(RARITY_DETAILS).map(([id, details]) => ({ id, label: details.label, selected: id === this.rarityFilter })),
+      typeOptions: Object.entries(CARD_TYPE_DETAILS).map(([id, details]) => ({ id, label: details.label, selected: id === this.typeFilter })),
+      rowOptions: Object.entries(ROW_DETAILS).map(([id, details]) => ({ id, label: details.label, selected: id === this.rowFilter })),
+      traitOptions: Object.entries(TRAIT_DETAILS).map(([id, details]) => ({ id, label: details.label, selected: id === this.traitFilter })),
       search: this.search,
       factionFilter: this.factionFilter,
+      rarityFilter: this.rarityFilter,
+      typeFilter: this.typeFilter,
+      rowFilter: this.rowFilter,
+      traitFilter: this.traitFilter,
       sortBy: this.sortBy,
       sortOptions: [
         { id: "name", label: "Nom", selected: this.sortBy === "name" },
         { id: "strength", label: "Force décroissante", selected: this.sortBy === "strength" },
         { id: "rarity", label: "Rareté décroissante", selected: this.sortBy === "rarity" },
-        { id: "faction", label: "Collection", selected: this.sortBy === "faction" }
+        { id: "faction", label: "Collection", selected: this.sortBy === "faction" },
+        { id: "owned", label: "Quantité possédée", selected: this.sortBy === "owned" },
+        { id: "used", label: "Quantité dans le deck", selected: this.sortBy === "used" }
       ],
       statistics,
       analysisCompact: this.analysisCompact,
@@ -151,17 +178,33 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     const applyFilters = () => {
       const query = String(this.element.querySelector("[name='builder-search']")?.value ?? "").trim().toLocaleLowerCase("fr");
       const faction = this.element.querySelector("[name='builder-faction']")?.value ?? "all";
+      const rarity = this.element.querySelector("[name='builder-rarity']")?.value ?? "all";
+      const type = this.element.querySelector("[name='builder-type']")?.value ?? "all";
+      const row = this.element.querySelector("[name='builder-row']")?.value ?? "all";
+      const trait = this.element.querySelector("[name='builder-trait']")?.value ?? "all";
       this.search = query;
       this.factionFilter = faction;
+      this.rarityFilter = rarity;
+      this.typeFilter = type;
+      this.rowFilter = row;
+      this.traitFilter = trait;
       this.element.querySelectorAll("[data-builder-card]").forEach((card) => {
+        const rows = String(card.dataset.rows ?? "").split(/\s+/).filter(Boolean);
+        const traits = String(card.dataset.traits ?? "").split(/\s+/).filter(Boolean);
         const matchesFaction = faction === "all" || card.dataset.faction === faction;
+        const matchesRarity = rarity === "all" || card.dataset.rarity === rarity;
+        const matchesType = type === "all" || card.dataset.type === type;
+        const matchesRow = row === "all" || rows.includes(row);
+        const matchesTrait = trait === "all" || traits.includes(trait);
         const matchesQuery = !query || String(card.dataset.search ?? "").toLocaleLowerCase("fr").includes(query);
-        card.hidden = !(matchesFaction && matchesQuery);
+        card.hidden = !(matchesFaction && matchesRarity && matchesType && matchesRow && matchesTrait && matchesQuery);
       });
     };
 
     this.element.querySelector("[name='builder-search']")?.addEventListener("input", applyFilters);
-    this.element.querySelector("[name='builder-faction']")?.addEventListener("change", applyFilters);
+    for (const selector of ["[name='builder-faction']", "[name='builder-rarity']", "[name='builder-type']", "[name='builder-row']", "[name='builder-trait']"]) {
+      this.element.querySelector(selector)?.addEventListener("change", applyFilters);
+    }
     this.element.querySelector("[name='builder-sort']")?.addEventListener("change", async (event) => {
       this._captureName();
       this.sortBy = event.currentTarget.value;
@@ -171,10 +214,32 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       this.draft.name = event.currentTarget.value;
     });
 
+    this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
+
     this.element.querySelector("[data-action='toggle-analysis-size']")?.addEventListener("click", async () => {
       this._captureName();
       this.analysisCompact = !this.analysisCompact;
       await this.render({ force: true });
+    });
+
+    this.element.querySelectorAll("[data-action='quick-add-card']").forEach((card) => {
+      card.addEventListener("click", async (event) => {
+        if (event.target.closest("button, [data-scg-trait-icon]")) return;
+        const addButton = card.querySelector("[data-action='add-card']");
+        if (addButton?.disabled) {
+          if (addButton?.title) ui.notifications.warn(addButton.title);
+          return;
+        }
+        this._changeCard(card.dataset.cardId, 1);
+        await this.render({ force: true });
+      });
+      card.addEventListener("contextmenu", async (event) => {
+        if (event.target.closest("button, [data-scg-trait-icon]")) return;
+        event.preventDefault();
+        if ((this.draft.cards[card.dataset.cardId] ?? 0) <= 0) return;
+        this._changeCard(card.dataset.cardId, -1);
+        await this.render({ force: true });
+      });
     });
 
     this.element.querySelectorAll("[data-action='add-card']").forEach((button) => {

@@ -4,9 +4,12 @@
       <h1>Constructeur de deck</h1>
       <p>Collection de {{userName}} · Mélange libre des factions · Exactement {{requiredTotal}} cartes.</p>
     </div>
-    <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
-      <strong>{{total}} / {{requiredTotal}}</strong>
-      {{#if valid}}<span>Deck valide</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>Deck incomplet</span>{{/if}}{{/if}}
+    <div class="scg-builder-header-actions">
+      <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
+        <strong>{{total}} / {{requiredTotal}}</strong>
+        {{#if valid}}<span>Deck valide</span>{{else}}{{#if overLimit}}<span>Trop de cartes</span>{{else}}<span>{{remaining}} restante(s)</span>{{/if}}{{/if}}
+      </div>
     </div>
   </header>
 
@@ -68,15 +71,19 @@
     </article>
     <article class="scg-analysis-card">
       <header><strong>Répartition des lignes</strong><span>Une carte mobile compte sur chaque ligne autorisée.</span></header>
-      <div class="scg-analysis-bars">
-        {{#each statistics.rowDistribution}}
-          <div class="scg-analysis-row">
-            <span>{{label}}</span>
-            <div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div>
-            <b>{{count}}</b>
-          </div>
-        {{/each}}
-      </div>
+      <div class="scg-analysis-bars">{{#each statistics.rowDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+    <article class="scg-analysis-card">
+      <header><strong>Raretés</strong><span>Contrôlez la concentration des cartes prestigieuses.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.rarityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+    <article class="scg-analysis-card">
+      <header><strong>Types</strong><span>Personnages, unités et tactiques.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.typeDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
+    </article>
+    <article class="scg-analysis-card">
+      <header><strong>Capacités</strong><span>Répartition des mécaniques du deck.</span></header>
+      <div class="scg-analysis-bars">{{#each statistics.abilityDistribution}}<div class="scg-analysis-row"><span>{{label}}</span><div class="scg-analysis-track"><i style="--scg-bar-width: {{percent}}%;"></i></div><b>{{count}}</b></div>{{/each}}</div>
     </article>
   </section>
 
@@ -89,10 +96,11 @@
         </div>
         <div class="scg-profile-filters scg-builder-filters">
           <input type="search" name="builder-search" value="{{search}}" placeholder="Rechercher par nom…">
-          <select name="builder-faction">
-            <option value="all">Toutes les collections</option>
-            {{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
-          </select>
+          <select name="builder-faction"><option value="all">Toutes les collections</option>{{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+          <select name="builder-rarity"><option value="all">Toutes les raretés</option>{{#each rarityOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+          <select name="builder-type"><option value="all">Tous les types</option>{{#each typeOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+          <select name="builder-row"><option value="all">Toutes les lignes</option>{{#each rowOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+          <select name="builder-trait"><option value="all">Toutes les capacités</option>{{#each traitOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
           <select name="builder-sort" aria-label="Trier les cartes">
             {{#each sortOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>Tri : {{label}}</option>{{/each}}
           </select>
@@ -101,15 +109,14 @@
 
       <div class="scg-builder-card-list">
         {{#each cards}}
-          <article class="scg-builder-card scg-rarity-{{rarity}}" data-builder-card data-faction="{{faction}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}}">
+          <article class="scg-builder-card scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
             <span class="scg-builder-symbol {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div class="scg-builder-card-info">
               <strong>{{name}}</strong>
-              <small>{{factionLabel}} · {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
-              <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
-              <div class="scg-effect-icons scg-builder-traits">
-                {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
-              </div>
+              <small>{{factionLabel}} · <i class="{{typeIcon}}"></i> {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
+              <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
+              <div class="scg-effect-icons scg-builder-traits">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
+              <p class="scg-builder-card-effect">{{{textHtml}}}</p>
             </div>
             <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
               <strong>Possédées : {{ownedCount}}</strong>
@@ -120,7 +127,7 @@
             <div class="scg-builder-stepper" aria-label="Quantité dans le deck">
               <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}}>−</button>
               <strong>{{inDeck}}</strong>
-              <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>
+              <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled title="{{addDisabledReason}}"{{/unless}}>+</button>
             </div>
           </article>
         {{else}}
@@ -141,14 +148,14 @@
             <span class="scg-builder-selected-art {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div>
               <strong>{{name}}</strong>
-              <small>{{typeLabel}} · {{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
+              <small><i class="{{typeIcon}}"></i> {{typeLabel}} · {{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
               <div class="scg-effect-icons scg-builder-selected-traits">
                 {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </div>
             </div>
             <button type="button" data-action="remove-card" data-card-id="{{id}}">−</button>
             <b>×{{inDeck}}</b>
-            <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled{{/unless}}>+</button>
+            <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled title="{{addDisabledReason}}"{{/unless}}>+</button>
           </article>
         {{else}}
           <p class="scg-builder-empty-deck">Ajoutez des cartes depuis votre collection.</p>

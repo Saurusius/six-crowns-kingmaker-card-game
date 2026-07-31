@@ -1,4 +1,4 @@
-<section class="scg-profile-shell scg-collection-shell {{#if compactOptions}}is-options-compact{{/if}}">
+<section class="scg-profile-shell scg-collection-shell {{#if compactOptions}}is-options-compact{{/if}} {{#if compactCards}}is-card-view-compact{{/if}}">
   <header class="scg-profile-toolbar">
     <div>
       <h1>Collection de {{userName}}</h1>
@@ -7,7 +7,10 @@
     <div class="scg-profile-actions">
       <span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Ouverture MJ illimitée{{else}}{{boosterCredits}} booster(s) à ouvrir{{/if}}</span>
       <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+      <button type="button" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
       <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
+      <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      <button type="button" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
       <button type="button" data-action="toggle-options-size" aria-pressed="{{compactOptions}}"><i class="{{optionsToggleIcon}}"></i> {{optionsToggleLabel}}</button>
     </div>
   </header>
@@ -66,6 +69,47 @@
   </section>
 
 
+  {{#if hasComparison}}
+    <section class="scg-card-comparison">
+      <header><div><h2><i class="fa-solid fa-scale-balanced"></i> Comparaison de cartes</h2><p>Sélectionnez jusqu’à deux cartes depuis leur fiche pour comparer leurs rôles.</p></div><div><span>{{comparisonCount}} / 2</span><button type="button" data-action="clear-comparison"><i class="fa-solid fa-xmark"></i> Effacer</button></div></header>
+      <div class="scg-comparison-grid">
+        {{#each comparisonCards}}
+          <article class="scg-rarity-{{rarity}}">
+            <button type="button" data-action="remove-comparison" data-card-id="{{id}}" aria-label="Retirer {{name}}">×</button>
+            <div class="scg-comparison-art">{{#if hasArt}}<img src="{{artMedium}}" alt="Illustration de {{name}}">{{else}}<span>{{factionSymbol}}</span>{{/if}}<b>{{strength}}</b></div>
+            <div><small>{{rarityLabel}} · {{factionLabel}}</small><h3>{{name}}</h3><p class="scg-card-symbol-line"><span><i class="{{typeIcon}}"></i> {{typeLabel}}</span>{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</p><div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div><p class="scg-card-rules-text">{{{textHtml}}}</p></div>
+          </article>
+        {{/each}}
+        {{#unless comparisonFull}}<article class="is-comparison-placeholder"><i class="fa-solid fa-plus"></i><strong>Choisissez une deuxième carte</strong></article>{{/unless}}
+      </div>
+    </section>
+  {{/if}}
+
+  <section class="scg-trade-center">
+    <header><div><h2><i class="fa-solid fa-handshake"></i> Centre d’échanges</h2><p>Les cartes engagées dans une offre sont réservées jusqu’à son acceptation, son refus ou son annulation.</p></div><span>{{tradeCenter.incoming.length}} reçue(s) · {{tradeCenter.outgoing.length}} envoyée(s)</span></header>
+    <div class="scg-trade-columns">
+      <details {{#if hasIncomingTrades}}open{{/if}}><summary>Offres reçues <b>{{tradeCenter.incoming.length}}</b></summary><div class="scg-trade-list">
+        {{#each tradeCenter.incoming}}
+          <article data-trade-offer data-offer-id="{{id}}"><header><strong>{{fromName}}</strong><small>{{dateLabel}}</small></header><p>Vous recevez <b>{{offeredLabel}}</b></p><p>Vous donnez <b>{{requestedLabel}}</b></p>
+            {{#if requestedIsRarity}}<label><span>Carte {{requestedRarityLabel}} à céder</span><select name="trade-rarity-card">{{#each rarityChoices}}<option value="{{id}}">{{name}} · ×{{count}}</option>{{else}}<option value="">Aucune carte disponible</option>{{/each}}</select></label>{{/if}}
+            <footer><button type="button" class="is-danger" data-action="trade-reject" data-offer-id="{{id}}"><i class="fa-solid fa-xmark"></i> Refuser</button><button type="button" data-action="trade-accept" data-offer-id="{{id}}" {{#unless hasRarityChoices}}disabled{{/unless}}><i class="fa-solid fa-check"></i> Accepter</button></footer>
+          </article>
+        {{else}}<p class="scg-trade-empty">Aucune offre reçue.</p>{{/each}}
+      </div></details>
+      <details {{#if hasOutgoingTrades}}open{{/if}}><summary>Offres envoyées <b>{{tradeCenter.outgoing.length}}</b></summary><div class="scg-trade-list">
+        {{#each tradeCenter.outgoing}}<article data-trade-offer><header><strong>À {{toName}}</strong><small>{{dateLabel}}</small></header><p>Vous proposez <b>{{offeredLabel}}</b></p><p>Vous demandez <b>{{requestedLabel}}</b></p><footer><button type="button" class="is-danger" data-action="trade-cancel" data-offer-id="{{id}}"><i class="fa-solid fa-ban"></i> Annuler</button></footer></article>{{else}}<p class="scg-trade-empty">Aucune offre envoyée.</p>{{/each}}
+      </div></details>
+      <details><summary>Historique <b>{{tradeCenter.history.length}}</b></summary><div class="scg-trade-list scg-trade-history-list">
+        {{#each tradeCenter.history}}<article><header><strong>{{fromName}} → {{toName}}</strong><small>{{dateLabel}}</small></header><p>{{offeredLabel}} contre {{requestedLabel}}</p><span class="scg-trade-status is-{{status}}">{{statusLabel}}</span>{{#if note}}<small>{{note}}</small>{{/if}}</article>{{else}}<p class="scg-trade-empty">Aucun échange archivé.</p>{{/each}}
+      </div></details>
+    </div>
+  </section>
+
+  {{#if hasBoosterHistory}}
+    <section class="scg-booster-history"><header><div><h2><i class="fa-solid fa-clock-rotate-left"></i> Derniers boosters</h2><p>Retrouvez les tirages récents et le nombre de nouvelles cartes obtenues.</p></div></header><div>{{#each boosterHistory}}<article class="scg-rarity-{{highestRarity}}"><header><strong>{{dateLabel}}</strong><span>{{newCount}} nouvelle(s)</span></header><p>{{#each cards}}{{name}}{{#unless @last}} · {{/unless}}{{/each}}</p></article>{{/each}}</div></section>
+  {{/if}}
+
+
   <section class="scg-exchange-tools">
     <h2><i class="fa-solid fa-recycle"></i> Recyclage des doublons</h2>
     <p>Sélectionnez exactement 10 exemplaires pour obtenir un ticket. Les échanges entre joueurs se lancent directement depuis la carte concernée.</p>
@@ -107,6 +151,7 @@
         <div class="scg-gm-actions">
           <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner la carte</button>
           <button type="button" data-action="gm-grant-boosters"><i class="fa-solid fa-ticket"></i> Offrir les boosters</button>
+          <button type="button" data-action="open-analytics"><i class="fa-solid fa-chart-line"></i> Équilibrage</button>
           <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
         </div>
       </div>
@@ -132,7 +177,7 @@
               data-rows="{{filterRows}}"
               data-ownership="{{ownershipState}}"
               data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}} {{typeLabel}}{{else}}Carte inconnue {{id}}{{/if}}"
-              data-card-id="{{id}}" data-owned-count="{{ownedCount}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
+              data-card-id="{{id}}" data-owned-count="{{ownedCount}}" data-trade-available-count="{{tradeAvailableCount}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
               {{#if discovered}}
                 <div class="scg-collection-card-art {{#if hasArt}}has-art{{/if}}">
                   {{#if hasArt}}
@@ -146,18 +191,19 @@
                 <div class="scg-collection-card-body">
                   <strong>{{name}}</strong>
                   <small>{{id}} · {{factionLabel}}</small>
-                  <span class="scg-card-type-line"><b>{{typeLabel}}</b> · Force {{strength}}</span>
-                  <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+                  <span class="scg-card-type-line"><i class="{{typeIcon}}"></i> <b>{{typeLabel}}</b> · Force {{strength}}</span>
+                  <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
                   <div class="scg-effect-icons scg-collection-traits">
                     {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                   </div>
-                  {{#if text}}<p>{{text}}</p>{{/if}}
+                  {{#if text}}<p class="scg-card-rules-text">{{{textHtml}}}</p>{{/if}}
                   <div class="scg-collection-card-actions">
                     <button type="button" class="scg-preview-button" data-action="preview-card"><i class="fa-solid fa-expand"></i> Agrandir</button>
-                    {{#if @root.tradeAvailable}}<button type="button" class="scg-trade-card-button" data-action="trade-card"><i class="fa-solid fa-handshake"></i> Échanger</button>{{/if}}
+                    <button type="button" class="scg-compare-card-button {{#if compared}}is-active{{/if}}" data-action="compare-card"><i class="fa-solid fa-scale-balanced"></i> {{#if compared}}Comparée{{else}}Comparer{{/if}}</button>
+                    {{#if @root.tradeAvailable}}{{#if tradeAvailableCount}}<button type="button" class="scg-trade-card-button" data-action="trade-card"><i class="fa-solid fa-handshake"></i> Échanger</button>{{else}}<button type="button" class="scg-trade-card-button" disabled title="Tous les exemplaires sont réservés"><i class="fa-solid fa-lock"></i> Réservée</button>{{/if}}{{/if}}
                   </div>
                   <footer>
-                    <span>Possédée ×{{ownedCount}}</span>
+                    <span>Possédée ×{{ownedCount}}{{#if reservedForTrade}} · {{reservedForTrade}} réservée(s){{/if}}</span>
                     <span>Maximum par deck : {{maxCopies}}</span>
                   </footer>
                 </div>
@@ -165,7 +211,7 @@
                   {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
                   <strong>{{name}}</strong>
                   <span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>
-                  {{#if text}}<p>{{text}}</p>{{/if}}
+                  {{#if text}}<p class="scg-card-rules-text">{{{textHtml}}}</p>{{/if}}
                 </div>
               {{else}}
                 <div class="scg-hidden-card-back">
@@ -180,7 +226,7 @@
       </section>
     {{/each}}
   </div>
-  <div class="scg-card-preview" data-card-preview hidden><button type="button" data-action="close-preview" aria-label="Fermer">×</button><div><img src="" alt=""><h2></h2><p></p></div></div>
+  <div class="scg-card-preview" data-card-preview hidden><button type="button" data-action="close-preview" aria-label="Fermer">×</button><div><img src="" alt=""><h2></h2><p></p><button type="button" data-action="preview-trade"><i class="fa-solid fa-handshake"></i> Proposer cette carte</button></div></div>
 
   <div class="scg-card-trade-modal" data-card-trade-modal hidden>
     <form class="scg-card-trade-dialog" data-card-trade-form>
@@ -196,8 +242,11 @@
       <div class="scg-card-trade-grid">
         <label><span>Joueur destinataire</span><select name="trade-user" required><option value="">Choisir un joueur…</option>{{#each tradeUsers}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
         <label><span>Exemplaires proposés</span><input name="trade-offered-count" type="number" min="1" value="1" required></label>
-        <label class="is-wide"><span>Carte demandée en retour</span><select name="trade-requested" required><option value="">Choisir une carte…</option>{{#each tradeCards}}<option value="{{id}}">{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
-        <label><span>Exemplaires demandés</span><input name="trade-requested-count" type="number" min="1" value="1" required></label>
+        <label><span>Contrepartie demandée</span><select name="trade-request-mode"><option value="card">Une carte précise</option><option value="rarity">N’importe quelle carte d’une rareté</option><option value="credits">Des tickets de booster</option></select></label>
+        <label class="is-wide" data-trade-mode="card"><span>Carte demandée en retour</span><select name="trade-requested"><option value="">Choisir une carte…</option>{{#each tradeCards}}<option value="{{id}}">{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
+        <label data-trade-mode="card"><span>Exemplaires demandés</span><input name="trade-requested-count" type="number" min="1" value="1"></label>
+        <label data-trade-mode="rarity" hidden><span>Rareté demandée</span><select name="trade-requested-rarity"><option value="commun">Commune</option><option value="peuCommune">Peu commune</option><option value="rare" selected>Rare</option><option value="unique">Unique</option></select></label>
+        <label data-trade-mode="credits" hidden><span>Tickets demandés</span><input name="trade-requested-credits" type="number" min="1" max="100" value="1"></label>
       </div>
       <p class="scg-card-trade-owned" data-trade-owned-label></p>
       <footer>

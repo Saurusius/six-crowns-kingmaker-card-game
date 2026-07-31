@@ -4,6 +4,7 @@ import { createProfileMacros } from "./profile.js";
 import {
   duplicateCustomDeck,
   getBoosterCredits,
+  getBoosterHistory,
   getCollection,
   getCustomDecks,
   grantBoostersToUser,
@@ -11,6 +12,7 @@ import {
   loadCardCatalog,
   openBoard,
   openBooster,
+  openBoosters,
   executeTrade,
   openCollection,
   openDeckBuilder,
@@ -18,14 +20,18 @@ import {
   resetCollectionForUser,
   syncCustomDeckRegistry
 } from "./api.js";
+import { handleTradeSocket, registerTradeSettings } from "./trades.js";
+import { handleAnalyticsSocket, registerAnalyticsSetting } from "./analytics.js";
 
 const api = Object.freeze({
   openBoard,
   openBooster,
+  openBoosters,
   executeTrade,
   openCollection,
   openDeckBuilder,
   getBoosterCredits,
+  getBoosterHistory,
   getCollection,
   getCustomDecks,
   loadCardCatalog,
@@ -63,6 +69,8 @@ async function safelyOpenBoard() {
 
 Hooks.once("init", () => {
   console.log(`${MODULE_TITLE} | Initialisation`);
+  registerTradeSettings();
+  registerAnalyticsSetting();
   exposeApi();
 });
 
@@ -106,22 +114,19 @@ Hooks.on("chatMessage", (_chatLog, message) => {
 });
 
 Hooks.once("ready", () => {
-  game.socket.on(`module.${MODULE_ID}`, async data => {
-    if (data.type === "trade-proposal" && data.toUserId === game.user.id) {
-      const from = game.users.get(data.fromUserId);
-      const escapeHtml = foundry.utils.escapeHTML;
-      const offeredLabel = escapeHtml(data.offeredLabel ?? "une ou plusieurs cartes");
-      const requestedLabel = escapeHtml(data.requestedLabel ?? "une ou plusieurs cartes");
-      const accepted = await Dialog.confirm({
-        title: "Proposition d’échange",
-        content: `<p><strong>${escapeHtml(from?.name ?? "Un joueur")}</strong> vous propose :</p><div class="scg-trade-confirm-summary"><span>Vous recevez <b>${offeredLabel}</b></span><span>Vous donnez <b>${requestedLabel}</b></span></div><p>Accepter cette transaction ?</p>`
-      });
-      if (accepted) game.socket.emit(`module.${MODULE_ID}`, { ...data, type: "trade-accepted" });
+  game.socket.on(`module.${MODULE_ID}`, async (data) => {
+    if (await handleTradeSocket(data)) return;
+    if (await handleAnalyticsSocket(data)) return;
+    if (data.type === "trade-sync" && data.users?.includes(game.user.id)) {
+      const pendingLabel = data.toUserId === game.user.id
+        ? "Nouvelle offre d’échange reçue."
+        : "Offre d’échange envoyée.";
+      const labels = { pending: pendingLabel, completed: "Échange terminé.", rejected: "Offre refusée.", cancelled: "Offre annulée.", failed: `Échange impossible${data.note ? ` : ${data.note}` : "."}` };
+      const notification = data.status === "failed" ? ui.notifications.error : ui.notifications.info;
+      notification.call(ui.notifications, labels[data.status] ?? "Le centre d’échanges a été mis à jour.");
+      Hooks.callAll(`${MODULE_ID}.tradesUpdated`, data);
     }
-    if (data.type === "trade-accepted" && game.user.isGM) {
-      try { await executeTrade(data); game.socket.emit(`module.${MODULE_ID}`, { type:"trade-complete", users:[data.fromUserId,data.toUserId] }); }
-      catch(error){ ui.notifications.error(error.message); }
-    }
-    if (data.type === "trade-complete" && data.users.includes(game.user.id)) ui.notifications.info("Échange de cartes terminé.");
+    if (data.type === "trade-error" && data.userId === game.user.id) ui.notifications.error(data.message);
+    if (data.type === "analytics-sync" && game.user.isGM) Hooks.callAll(`${MODULE_ID}.analyticsUpdated`);
   });
 });

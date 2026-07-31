@@ -4,13 +4,17 @@ import { getBoosterCredits, openBooster } from "../boosters.js";
 import { normalizeCardArt } from "../art.js";
 import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
+import { openGlossary } from "../glossary.js";
+import { requestAnalyticsRecord } from "../analytics.js";
 import {
   PHASES,
   beginCoinToss,
   confirmMulligan,
   continueAfterCoinToss,
+  buildMatchAnalyticsRecord,
   createBoardViewModel,
   createPrototypeState,
+  createRematchState,
   passSide,
   playCard,
   resolveCoinToss,
@@ -96,21 +100,30 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor(options = {}) {
     super(options);
     this.matchState = createPrototypeState();
+    this._restoreAttempted = false;
     this.opponentTimer = null;
     this.coinTimer = null;
     this._decksHook = Hooks.on(`${MODULE_ID}.decksUpdated`, async () => {
       if (this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
-        await this.render({ force: true });
+        await this._renderState();
       }
     });
     this._boosterHook = Hooks.on(`${MODULE_ID}.boosterCreditsUpdated`, async (_credits, userId) => {
       if (userId === game.user.id && this.matchState.phase === PHASES.DECK_SELECTION && this.rendered) {
-        await this.render({ force: true });
+        await this._renderState();
       }
     });
   }
 
   async _prepareContext() {
+    if (!this._restoreAttempted) {
+      this._restoreAttempted = true;
+      const stored = foundry.utils.deepClone(game.user.getFlag(MODULE_ID, "activeMatchState") ?? null);
+      if (stored && Object.values(PHASES).includes(stored.phase) && stored.phase !== PHASES.DECK_SELECTION) {
+        this.matchState = stored;
+        ui.notifications.info("Partie interrompue restaurée.");
+      }
+    }
     await syncCustomDeckRegistry();
     const [view, boosterCredits] = await Promise.all([
       Promise.resolve(createBoardViewModel(this.matchState)),
@@ -126,6 +139,23 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits})`
     };
+  }
+
+  async _persistMatchState() {
+    if (this.matchState.phase === PHASES.DECK_SELECTION) {
+      await game.user.unsetFlag(MODULE_ID, "activeMatchState");
+      return;
+    }
+    if (this.matchState.phase === PHASES.GAME_OVER && !this.matchState.analyticsRecorded) {
+      this.matchState.analyticsRecorded = true;
+      requestAnalyticsRecord(buildMatchAnalyticsRecord(this.matchState, { userId: game.user.id, userName: game.user.name }));
+    }
+    await game.user.setFlag(MODULE_ID, "activeMatchState", foundry.utils.deepClone(this.matchState));
+  }
+
+  async _renderState() {
+    await this._persistMatchState();
+    await this.render({ force: true });
   }
 
   _clearTimers() {
@@ -149,7 +179,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       this.opponentTimer = null;
       try {
         takeOpponentTurn(this.matchState);
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         console.error(`${MODULE_TITLE} | Tour adverse impossible`, error);
         ui.notifications.error(error.message);
@@ -174,24 +204,30 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         selectDeck(this.matchState, "player", playerDeckId);
         selectDeck(this.matchState, "opponent", opponentDeckId);
         startMatch(this.matchState, { playerDeckId, opponentDeckId });
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
       }
     });
 
 
+    this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
+    this.element.querySelector("[data-action='open-analytics']")?.addEventListener("click", async () => {
+      const { SixCrownsAnalyticsDashboard } = await import("./analytics-dashboard.js");
+      await new SixCrownsAnalyticsDashboard().render({ force: true });
+    });
+
     this.element.querySelectorAll("[data-action='toggle-rules']").forEach((button) => {
       button.addEventListener("click", async () => {
         toggleRules(this.matchState);
-        await this.render({ force: true });
+        await this._renderState();
       });
     });
 
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
       try {
         await openBooster();
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         console.error(`${MODULE_TITLE} | Ouverture du booster impossible`, error);
         ui.notifications.error(error.message);
@@ -200,7 +236,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const refreshDecks = async () => {
       await syncCustomDeckRegistry();
-      if (this.matchState.phase === PHASES.DECK_SELECTION) await this.render({ force: true });
+      if (this.matchState.phase === PHASES.DECK_SELECTION) await this._renderState();
     };
 
     this.element.querySelector("[data-action='open-collection']")?.addEventListener("click", async () => {
@@ -215,12 +251,12 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       button.addEventListener("click", async () => {
         try {
           beginCoinToss(this.matchState, button.dataset.choice);
-          await this.render({ force: true });
+          await this._renderState();
           this.coinTimer = globalThis.setTimeout(async () => {
             this.coinTimer = null;
             try {
               resolveCoinToss(this.matchState);
-              await this.render({ force: true });
+              await this._renderState();
             } catch (error) {
               console.error(`${MODULE_TITLE} | Tirage au sort impossible`, error);
               ui.notifications.error(error.message);
@@ -235,7 +271,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelector("[data-action='continue-after-coin']")?.addEventListener("click", async () => {
       try {
         continueAfterCoinToss(this.matchState);
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
       }
@@ -298,7 +334,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       button.addEventListener("click", async () => {
         try {
           toggleMulliganCard(this.matchState, button.dataset.cardId);
-          await this.render({ force: true });
+          await this._renderState();
         } catch (error) {
           ui.notifications.warn(error.message);
         }
@@ -308,7 +344,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelector("[data-action='confirm-mulligan']")?.addEventListener("click", async () => {
       try {
         confirmMulligan(this.matchState);
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
       }
@@ -318,7 +354,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       button.addEventListener("click", async () => {
         try {
           playCard(this.matchState, "player", button.dataset.cardId, button.dataset.row);
-          await this.render({ force: true });
+          await this._renderState();
         } catch (error) {
           ui.notifications.warn(error.message);
         }
@@ -328,7 +364,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelector("[data-action='pass']")?.addEventListener("click", async () => {
       try {
         passSide(this.matchState, "player");
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
       }
@@ -337,16 +373,22 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this.element.querySelector("[data-action='next-round']")?.addEventListener("click", async () => {
       try {
         startNextRound(this.matchState);
-        await this.render({ force: true });
+        await this._renderState();
       } catch (error) {
         ui.notifications.warn(error.message);
       }
     });
 
+    this.element.querySelector("[data-action='rematch']")?.addEventListener("click", async () => {
+      this._clearTimers();
+      this.matchState = createRematchState(this.matchState);
+      await this._renderState();
+    });
+
     this.element.querySelector("[data-action='reset']")?.addEventListener("click", async () => {
       this._clearTimers();
       this.matchState = createPrototypeState();
-      await this.render({ force: true });
+      await this._renderState();
     });
 
     this._scheduleOpponentTurn();

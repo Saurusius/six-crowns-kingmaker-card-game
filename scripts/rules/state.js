@@ -118,6 +118,19 @@ function emptyRows() {
   return Object.fromEntries(ROWS.map((row) => [row, []]));
 }
 
+function recordLog(state, type, message, details = {}) {
+  state.log ??= [];
+  state.log.push({
+    id: `${Date.now()}-${state.log.length}`,
+    round: state.round,
+    type,
+    message,
+    details,
+    createdAt: new Date().toISOString()
+  });
+  state.log = state.log.slice(-80);
+}
+
 export function shuffleCards(cards, random = Math.random) {
   const result = [...cards];
   for (let index = result.length - 1; index > 0; index -= 1) {
@@ -158,6 +171,7 @@ function createSide(deckId, random) {
 
 export function createPrototypeState() {
   return {
+    matchId: null,
     round: 0,
     phase: PHASES.DECK_SELECTION,
     selectedPlayerDeck: "six-crowns",
@@ -176,6 +190,9 @@ export function createPrototypeState() {
       winner: null
     },
     message: "Choisissez les deux decks prédéfinis — ou un Deck aléatoire — puis lancez la partie.",
+    log: [],
+    playedCards: [],
+    analyticsRecorded: false,
     player: null,
     opponent: null
   };
@@ -274,6 +291,7 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   const playerId = resolveDeckSelection(playerSelection, random);
   const opponentId = resolveDeckSelection(opponentSelection, random);
 
+  state.matchId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   state.selectedPlayerDeck = playerId;
   state.selectedOpponentDeck = opponentId;
   state.player = createSide(playerId, random);
@@ -286,8 +304,12 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   state.gameWinner = null;
   state.mulliganSelection = [];
   state.rulesOpen = false;
+  state.log = [];
+  state.playedCards = [];
+  state.analyticsRecorded = false;
   state.coin = { flipping: false, resolved: false, choice: null, face: null, winner: null };
   state.message = "Les decks sont prêts. Lancez la pièce pour désigner le premier joueur.";
+  recordLog(state, "match-start", `${state.player.name} affronte ${state.opponent.name}.`);
   return state;
 }
 
@@ -317,6 +339,7 @@ export function resolveCoinToss(state, random = Math.random) {
   state.message = playerStarts
     ? `${result === "shield" ? "Bouclier" : "Épée"} ! Bon choix : vous commencerez la première manche.`
     : `${result === "shield" ? "Bouclier" : "Épée"} ! Mauvais choix : ${state.opponent.name} commencera la première manche.`;
+  recordLog(state, "coin", state.message);
   return state;
 }
 
@@ -380,6 +403,7 @@ export function confirmMulligan(state) {
   state.message = replaced.length > 0
     ? `${replaced.length} carte(s) remplacée(s). ${state[state.currentTurn].name} commence.`
     : `Vous conservez votre main. ${state[state.currentTurn].name} commence.`;
+  recordLog(state, "mulligan", state.message, { replaced: replaced.length });
   return state;
 }
 
@@ -408,6 +432,7 @@ function finishRound(state) {
     playerControlledLines: controlledLines.player,
     opponentControlledLines: controlledLines.opponent
   };
+  recordLog(state, "round-end", `Manche ${state.round} : ${scores.player.total} à ${scores.opponent.total}, ${controlledLines.player} ligne(s) à ${controlledLines.opponent}.`, state.roundResult);
   state.currentTurn = null;
 
   const gameWinner = resolveGameWinner(state);
@@ -419,6 +444,7 @@ function finishRound(state) {
       : gameWinner === "player"
         ? `Victoire finale, ${scores.player.total} à ${scores.opponent.total} !`
         : `Défaite finale, ${scores.opponent.total} à ${scores.player.total}.`;
+    recordLog(state, "game-end", state.message, { winner: gameWinner });
     return state;
   }
 
@@ -486,6 +512,10 @@ export function playCard(state, side, cardId, row) {
   state.message = side === "player"
     ? `${card.name} rejoint la ligne ${ROW_LABELS[row]}.${rallyText}`
     : `${state.opponent.name} joue ${card.name} sur ${ROW_LABELS[row]}.${rallyText}`;
+  state.playedCards ??= [];
+  state.playedCards.push({ id: card.catalogId ?? card.key ?? card.id, name: card.name, side, row, round: state.round });
+  for (const reinforcement of reinforcements) state.playedCards.push({ id: reinforcement.catalogId ?? reinforcement.key ?? reinforcement.id, name: reinforcement.name, side, row, round: state.round, reinforcement: true });
+  recordLog(state, "card", state.message, { side, row, cardId: card.catalogId ?? card.key ?? card.id, cardName: card.name });
   return advanceAfterAction(state, side);
 }
 
@@ -495,6 +525,7 @@ export function passSide(state, side) {
   state.message = side === "player"
     ? "Vous passez pour cette manche. L’adversaire peut encore jouer avant de passer."
     : `${state.opponent.name} passe. Vous pouvez encore jouer avant de passer.`;
+  recordLog(state, "pass", state.message, { side });
   return advanceAfterAction(state, side);
 }
 
@@ -596,11 +627,36 @@ export function startNextRound(state) {
   state.currentTurn = starter;
   state.roundResult = null;
   state.message = `${state[starter].name} commence la manche ${state.round}. Aucune carte supplémentaire n’est piochée.`;
+  recordLog(state, "round-start", state.message, { starter });
 
   markEmptyHandsAsPassed(state);
   if (state.player.passed && state.opponent.passed) return finishRound(state);
   if (state[state.currentTurn].passed) state.currentTurn = otherSide(state.currentTurn);
   return state;
+}
+
+export function createRematchState(state, random = Math.random) {
+  const next = createPrototypeState();
+  next.selectedPlayerDeck = state.selectedPlayerDeck;
+  next.selectedOpponentDeck = state.selectedOpponentDeck;
+  startMatch(next, { playerDeckId: next.selectedPlayerDeck, opponentDeckId: next.selectedOpponentDeck, random });
+  return next;
+}
+
+export function buildMatchAnalyticsRecord(state, { userId = "unknown", userName = "Joueur" } = {}) {
+  return {
+    id: state.matchId ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    userId,
+    userName,
+    playerDeckId: state.selectedPlayerDeck,
+    playerDeckName: state.player?.name ?? getDeckDefinition(state.selectedPlayerDeck)?.name ?? state.selectedPlayerDeck,
+    opponentDeckId: state.selectedOpponentDeck,
+    opponentDeckName: state.opponent?.name ?? getDeckDefinition(state.selectedOpponentDeck)?.name ?? state.selectedOpponentDeck,
+    winner: state.gameWinner ?? "tie",
+    rounds: state.round,
+    playedCards: (state.playedCards ?? []).filter((entry) => entry.side === "player").map((entry) => ({ id: entry.id, name: entry.name })),
+    completedAt: new Date().toISOString()
+  };
 }
 
 function traitBadges(card) {
@@ -718,6 +774,15 @@ export function createBoardViewModel(state) {
     opponentScore: evaluation.scores.opponent,
     canPlayerAct,
     canStartNextRound: state.phase === PHASES.ROUND_OVER,
+    canRematch: state.phase === PHASES.GAME_OVER,
+    actionLog: [...(state.log ?? [])].reverse().slice(0, 30),
+    hasActionLog: (state.log ?? []).length > 0,
+    gameSummary: state.phase === PHASES.GAME_OVER ? {
+      winnerLabel: state.gameWinner === "player" ? "Victoire" : state.gameWinner === "opponent" ? "Défaite" : "Égalité",
+      rounds: state.round,
+      playerCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "player").length,
+      opponentCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "opponent").length
+    } : null,
     isOpponentTurn: state.phase === PHASES.PLAYING && state.currentTurn === "opponent",
     isDeckSelection: state.phase === PHASES.DECK_SELECTION,
     isCoinToss: state.phase === PHASES.COIN_TOSS,

@@ -1,11 +1,13 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import {
   getBoosterCredits,
+  getBoosterHistory,
   getCollection,
   grantBoostersToUser,
   grantCardToUser,
   loadCardCatalog,
   openBooster,
+  openBoosters,
   recycleCardsForBooster,
   resetCollectionForUser
 } from "../boosters.js";
@@ -16,6 +18,8 @@ import {
   buildCollectionGroups
 } from "../collection-rules.js";
 import { openDeckBuilder } from "../profile.js";
+import { formatCardRulesText, openGlossary } from "../glossary.js";
+import { buildTradeReservations, decorateTradeOffers, getTradeHistory, getTradeOffers, requestTradeAction, requestTradeCreate } from "../trades.js";
 import { bindFloatingOverlays } from "../ui/floating-overlays.js";
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -57,25 +61,47 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     this.rowFilter = "all";
     this.ownershipFilter = "all";
     this.compactOptions = false;
+    this.compactCards = false;
+    this.comparisonIds = [];
     this.gmTargetUserId = game.user.id;
     this.gmCardId = "";
     this._collectionHook = Hooks.on(`${MODULE_ID}.collectionUpdated`, (_collection, userId) => {
       if (this.rendered && (!userId || userId === game.user.id)) void this.render({ force: true });
     });
     this._boosterHook = Hooks.on(`${MODULE_ID}.boosterCreditsUpdated`, (_credits, userId) => {
-      if (this.rendered && (!userId || userId === game.user.id || game.user.isGM)) {
-        void this.render({ force: true });
-      }
+      if (this.rendered && (!userId || userId === game.user.id || game.user.isGM)) void this.render({ force: true });
+    });
+    this._tradeHook = Hooks.on(`${MODULE_ID}.tradesUpdated`, () => {
+      if (this.rendered) void this.render({ force: true });
     });
   }
 
   async _prepareContext() {
-    const [catalog, collection, boosterCredits] = await Promise.all([
+    const [catalog, collection, boosterCredits, boosterHistory] = await Promise.all([
       loadCardCatalog(),
       getCollection(),
-      getBoosterCredits()
+      getBoosterCredits(),
+      getBoosterHistory()
     ]);
-    const groups = buildCollectionGroups(catalog, collection);
+    const tradeOffers = getTradeOffers();
+    const tradeHistory = getTradeHistory();
+    const reservations = buildTradeReservations(tradeOffers, game.user.id);
+    const groups = buildCollectionGroups(catalog, collection).map((group) => ({
+      ...group,
+      cards: group.cards.map((card) => ({
+        ...card,
+        textHtml: formatCardRulesText(card.text),
+        reservedForTrade: reservations.reservedCards[card.id] ?? 0,
+        tradeAvailableCount: Math.max(0, card.ownedCount - (reservations.reservedCards[card.id] ?? 0)),
+        compared: this.comparisonIds.includes(card.id)
+      }))
+    }));
+    const collectionCards = groups.flatMap((group) => group.cards);
+    this.comparisonIds = this.comparisonIds.filter((id) => collectionCards.some((card) => card.id === id && card.discovered)).slice(0, 2);
+    const comparisonCards = this.comparisonIds
+      .map((id) => collectionCards.find((card) => card.id === id))
+      .filter(Boolean)
+      .map((card) => ({ ...card, textHtml: formatCardRulesText(card.text) }));
     const total = groups.reduce((sum, group) => sum + group.total, 0);
     const discovered = groups.reduce((sum, group) => sum + group.discovered, 0);
     const copies = groups.reduce((sum, group) => sum + group.copies, 0);
@@ -108,6 +134,29 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     const tradeUsers = users
       .filter((user) => user.id !== game.user.id)
       .map((user) => ({ id: user.id, name: user.name }));
+    const ownedByRarity = Object.fromEntries(["commun", "peuCommune", "rare", "unique"].map((rarity) => [rarity,
+      catalog
+        .filter((card) => card.rarity === rarity)
+        .map((card) => ({
+          id: card.id,
+          name: card.name,
+          count: Math.max(0, (collection[card.id]?.count ?? 0) - (reservations.reservedCards[card.id] ?? 0))
+        }))
+        .filter((card) => card.count > 0)
+    ]));
+    const tradeCenter = decorateTradeOffers(tradeOffers, tradeHistory, catalog, users, game.user.id);
+    tradeCenter.incoming = tradeCenter.incoming.map((offer) => ({
+      ...offer,
+      rarityChoices: offer.requestedMode === "rarity" ? (ownedByRarity[offer.requestedRarity] ?? []) : [],
+      hasRarityChoices: offer.requestedMode !== "rarity" || (ownedByRarity[offer.requestedRarity] ?? []).length > 0
+    }));
+    const rarityRank = { commun: 0, peuCommune: 1, rare: 2, unique: 3 };
+    const boosterHistoryView = boosterHistory.slice(-8).reverse().map((entry) => ({
+      ...entry,
+      dateLabel: new Date(entry.openedAt).toLocaleString("fr-FR"),
+      highestRarity: entry.cards.reduce((highest, card) => (rarityRank[card.rarity] ?? -1) > (rarityRank[highest] ?? -1) ? card.rarity : highest, "commun"),
+      newCount: entry.cards.filter((card) => card.isNew).length
+    }));
 
     return {
       userName: game.user.name,
@@ -129,11 +178,27 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       tradeUsers,
       tradeAvailable: tradeUsers.length > 0,
       tradeCards: gmCards,
+      tradeCenter,
+      hasIncomingTrades: tradeCenter.incoming.length > 0,
+      hasOutgoingTrades: tradeCenter.outgoing.length > 0,
+      hasTradeHistory: tradeCenter.history.length > 0,
+      ownedByRarity,
+      reservedCredits: reservations.reservedCredits,
+      availableTradeCredits: Math.max(0, boosterCredits - reservations.reservedCredits),
+      boosterHistory: boosterHistoryView,
+      hasBoosterHistory: boosterHistoryView.length > 0,
       ownedCards: catalog.filter(card => (collection[card.id]?.count ?? 0) > 0).map(card => ({ id:card.id, name:card.name, count:collection[card.id].count })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
       compactOptions: this.compactOptions,
+      compactCards: this.compactCards,
+      cardViewToggleLabel: this.compactCards ? "Vue détaillée" : "Vue compacte",
+      cardViewToggleIcon: this.compactCards ? "fa-solid fa-table-cells-large" : "fa-solid fa-list",
+      comparisonCards,
+      comparisonCount: comparisonCards.length,
+      hasComparison: comparisonCards.length > 0,
+      comparisonFull: comparisonCards.length >= 2,
       optionsToggleLabel: this.compactOptions ? "Agrandir les options" : "Réduire les options",
       optionsToggleIcon: this.compactOptions ? "fa-solid fa-expand" : "fa-solid fa-compress",
       search: this.search,
@@ -225,13 +290,42 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     });
 
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
-      try {
-        await openBooster();
-        await this.render({ force: true });
-      } catch (error) {
-        console.error(`${MODULE_TITLE} | Booster impossible`, error);
-        ui.notifications.error(error.message);
+      try { await openBooster(); await this.render({ force: true }); }
+      catch (error) { console.error(`${MODULE_TITLE} | Booster impossible`, error); ui.notifications.error(error.message); }
+    });
+    this.element.querySelector("[data-action='open-three-boosters']")?.addEventListener("click", async () => {
+      try { await openBoosters({ count: 3 }); await this.render({ force: true }); }
+      catch (error) { ui.notifications.error(error.message); }
+    });
+    this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
+    this.element.querySelector("[data-action='open-analytics']")?.addEventListener("click", async () => {
+      const { SixCrownsAnalyticsDashboard } = await import("./analytics-dashboard.js");
+      const dashboard = new SixCrownsAnalyticsDashboard();
+      await dashboard.render({ force: true });
+    });
+
+    this.element.querySelector("[data-action='toggle-card-view']")?.addEventListener("click", async () => {
+      this.compactCards = !this.compactCards;
+      await this.render({ force: true });
+    });
+    this.element.querySelectorAll("[data-action='compare-card']").forEach((button) => button.addEventListener("click", async () => {
+      const cardId = button.closest("[data-collection-card]")?.dataset.cardId;
+      if (!cardId) return;
+      if (this.comparisonIds.includes(cardId)) this.comparisonIds = this.comparisonIds.filter((id) => id !== cardId);
+      else if (this.comparisonIds.length < 2) this.comparisonIds.push(cardId);
+      else {
+        this.comparisonIds = [this.comparisonIds[1], cardId];
+        ui.notifications.info("La carte la plus ancienne de la comparaison a été remplacée.");
       }
+      await this.render({ force: true });
+    }));
+    this.element.querySelectorAll("[data-action='remove-comparison']").forEach((button) => button.addEventListener("click", async () => {
+      this.comparisonIds = this.comparisonIds.filter((id) => id !== button.dataset.cardId);
+      await this.render({ force: true });
+    }));
+    this.element.querySelector("[data-action='clear-comparison']")?.addEventListener("click", async () => {
+      this.comparisonIds = [];
+      await this.render({ force: true });
     });
 
     this.element.querySelectorAll("[data-action='preview-card']").forEach((button) => button.addEventListener("click", () => {
@@ -239,10 +333,17 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       const modal = this.element.querySelector("[data-card-preview]");
       modal.querySelector("img").src = card.dataset.art || "";
       modal.querySelector("h2").textContent = card.dataset.name || "Carte";
-      modal.querySelector("p").textContent = card.dataset.text || "";
+      modal.querySelector("p").innerHTML = card.querySelector(".scg-card-rules-text")?.innerHTML ?? card.dataset.text ?? "";
+      modal.dataset.cardId = card.dataset.cardId ?? "";
       modal.hidden = false;
     }));
     this.element.querySelectorAll("[data-action='close-preview']").forEach((button)=>button.addEventListener("click",()=>{ this.element.querySelector("[data-card-preview]").hidden=true; }));
+    this.element.querySelector("[data-action='preview-trade']")?.addEventListener("click", () => {
+      const preview = this.element.querySelector("[data-card-preview]");
+      const cardId = preview?.dataset.cardId;
+      preview.hidden = true;
+      this.element.querySelector(`[data-collection-card][data-card-id="${CSS.escape(cardId)}"] [data-action='trade-card']`)?.click();
+    });
 
     this.element.querySelector("[data-action='recycle-cards']")?.addEventListener("click", async () => {
       const selected=[];
@@ -262,7 +363,8 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       button.addEventListener("click", () => {
         const card = button.closest("[data-collection-card]");
         if (!tradeModal || !tradeForm || !card) return;
-        const ownedCount = Math.max(1, Number.parseInt(card.dataset.ownedCount ?? "1", 10) || 1);
+        const ownedCount = Math.max(0, Number.parseInt(card.dataset.tradeAvailableCount ?? card.dataset.ownedCount ?? "0", 10) || 0);
+        if (ownedCount <= 0) return ui.notifications.warn("Tous les exemplaires disponibles sont déjà engagés dans une offre.");
         tradeForm.elements.namedItem("trade-offered-card").value = card.dataset.cardId ?? "";
         const offeredCountInput = tradeForm.elements.namedItem("trade-offered-count");
         offeredCountInput.value = "1";
@@ -288,29 +390,54 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       event.preventDefault();
       const toUserId = tradeForm.elements.namedItem("trade-user")?.value;
       const offeredId = tradeForm.elements.namedItem("trade-offered-card")?.value;
-      const requestedSelect = tradeForm.elements.namedItem("trade-requested");
-      const requestedId = requestedSelect?.value;
       const offeredCountInput = tradeForm.elements.namedItem("trade-offered-count");
       const offeredCount = Math.max(1, Number.parseInt(offeredCountInput?.value ?? "1", 10) || 1);
+      const ownedMaximum = Math.max(0, Number.parseInt(offeredCountInput?.max ?? "0", 10) || 0);
+      const requestedMode = tradeForm.elements.namedItem("trade-request-mode")?.value ?? "card";
+      const requestedSelect = tradeForm.elements.namedItem("trade-requested");
+      const requestedId = requestedSelect?.value;
       const requestedCount = Math.max(1, Number.parseInt(tradeForm.elements.namedItem("trade-requested-count")?.value ?? "1", 10) || 1);
-      const ownedMaximum = Math.max(1, Number.parseInt(offeredCountInput?.max ?? "1", 10) || 1);
-      if (!toUserId || !offeredId || !requestedId) return ui.notifications.warn("Complétez la proposition d’échange.");
-      if (offeredCount > ownedMaximum) return ui.notifications.warn("Vous ne possédez pas assez d’exemplaires de cette carte.");
-
+      const requestedRarity = tradeForm.elements.namedItem("trade-requested-rarity")?.value;
+      const requestedCredits = Math.max(1, Number.parseInt(tradeForm.elements.namedItem("trade-requested-credits")?.value ?? "1", 10) || 1);
+      if (!toUserId || !offeredId) return ui.notifications.warn("Complétez la proposition d’échange.");
+      if (offeredCount > ownedMaximum) return ui.notifications.warn("Vous ne possédez pas assez d’exemplaires disponibles.");
+      if (requestedMode === "card" && !requestedId) return ui.notifications.warn("Choisissez une carte demandée.");
       const offeredName = tradeModal?.querySelector("[data-trade-card-name]")?.textContent ?? offeredId;
-      const requestedName = requestedSelect?.selectedOptions?.[0]?.textContent?.split(" — ")?.[0] ?? requestedId;
-      game.socket.emit(`module.${MODULE_ID}`, {
-        type: "trade-proposal",
-        fromUserId: game.user.id,
+      const requestedName = requestedMode === "card"
+        ? requestedSelect?.selectedOptions?.[0]?.textContent?.split(" — ")?.[0] ?? requestedId
+        : requestedMode === "rarity"
+          ? `n’importe quelle carte ${requestedRarity}`
+          : `${requestedCredits} ticket(s) de booster`;
+      const sent = requestTradeCreate({
         toUserId,
         offered: { [offeredId]: offeredCount },
-        requested: { [requestedId]: requestedCount },
+        requested: requestedMode === "card" ? { [requestedId]: requestedCount } : {},
+        requestedMode,
+        requestedRarity,
+        requestedCredits: requestedMode === "credits" ? requestedCredits : 0,
         offeredLabel: `${offeredCount} × ${offeredName}`,
-        requestedLabel: `${requestedCount} × ${requestedName}`
+        requestedLabel: requestedMode === "card" ? `${requestedCount} × ${requestedName}` : requestedName
       });
+      if (!sent) return;
       closeTradeModal();
-      ui.notifications.info("Proposition d’échange envoyée.");
+      ui.notifications.info("Proposition envoyée au centre d’échanges.");
     });
+
+    const updateTradeMode = () => {
+      const mode = tradeForm?.elements.namedItem("trade-request-mode")?.value ?? "card";
+      tradeForm?.querySelectorAll("[data-trade-mode]").forEach((element) => { element.hidden = element.dataset.tradeMode !== mode; });
+    };
+    tradeForm?.elements.namedItem("trade-request-mode")?.addEventListener("change", updateTradeMode);
+    updateTradeMode();
+
+    this.element.querySelectorAll("[data-action='trade-accept']").forEach((button) => button.addEventListener("click", () => {
+      const offer = button.closest("[data-trade-offer]");
+      const selectedCardId = offer?.querySelector("[name='trade-rarity-card']")?.value ?? null;
+      requestTradeAction("accept", button.dataset.offerId, { selectedCardId });
+    }));
+    this.element.querySelectorAll("[data-action='trade-reject']").forEach((button) => button.addEventListener("click", () => requestTradeAction("reject", button.dataset.offerId)));
+    this.element.querySelectorAll("[data-action='trade-cancel']").forEach((button) => button.addEventListener("click", () => requestTradeAction("cancel", button.dataset.offerId)));
+
 
     this.element.querySelector("[data-action='open-deck-builder']")?.addEventListener("click", async () => {
       await openDeckBuilder({ onDecksChanged: this.onDecksChanged });
@@ -399,6 +526,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     this._floatingCleanup = null;
     if (this._collectionHook !== null) Hooks.off(`${MODULE_ID}.collectionUpdated`, this._collectionHook);
     if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);
+    if (this._tradeHook !== null) Hooks.off(`${MODULE_ID}.tradesUpdated`, this._tradeHook);
     return super.close(options);
   }
 }
