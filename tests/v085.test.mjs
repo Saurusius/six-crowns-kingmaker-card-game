@@ -37,7 +37,7 @@ test("le manifeste et le package annoncent la même version", async () => {
   const moduleData = JSON.parse(await read("../module.json"));
   const packageData = JSON.parse(await read("../package.json"));
   assert.equal(moduleData.version, packageData.version);
-  assert.match(moduleData.version, /^0\.8\.\d+$/);
+  assert.match(moduleData.version, /^\d+\.\d+\.\d+$/);
 });
 
 test("v0.8.5 supprime les barres de défilement de la révélation des boosters", async () => {

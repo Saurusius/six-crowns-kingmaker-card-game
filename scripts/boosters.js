@@ -457,7 +457,7 @@ export function showSpecialBoosterSelector() {
   document.querySelector(".scg-special-booster-picker")?.remove();
   const overlay = document.createElement("div");
   overlay.className = "scg-special-booster-picker";
-  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-label="Choisir un booster spécial"><header><div><small>Ticket spécial</small><h2>Choisissez votre booster</h2><p>Chaque paquet contient 3 cartes exclusivement issues de son thème.</p></div><button type="button" data-action="close-special-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${Object.values(SPECIAL_BOOSTERS).map((entry) => `<button type="button" class="scg-special-booster-option is-${entry.accent}" data-faction="${escapeHtml(entry.id)}"><img src="${escapeHtml(entry.image)}" alt="Booster ${escapeHtml(entry.label)}"><span><strong>${escapeHtml(entry.label)}</strong><small>3 cartes thématiques garanties</small></span></button>`).join("")}</div></section>`;
+  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-label="Choisir un booster spécial"><header><div><small>Ticket spécial</small><h2>Choisissez votre booster</h2><p>Chaque paquet contient 3 cartes exclusivement issues de son thème.</p></div><button type="button" data-action="close-special-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${Object.values(SPECIAL_BOOSTERS).map((entry) => `<button type="button" class="scg-special-booster-option is-${entry.accent}" data-faction="${escapeHtml(entry.id)}"><span class="scg-special-booster-art" aria-hidden="true"><img src="${escapeHtml(entry.image)}" alt="Booster ${escapeHtml(entry.label)}"></span><span class="scg-special-booster-meta"><strong>${escapeHtml(entry.label)}</strong><small>3 cartes thématiques garanties</small></span></button>`).join("")}</div></section>`;
   const close = () => overlay.remove();
   overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
   overlay.querySelector("[data-action='close-special-picker']")?.addEventListener("click", close);
@@ -584,7 +584,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
           <p class="scg-booster-progress" data-reveal-status>La magie se rassemble…</p>
         </div>
       </header>
-      <div class="scg-booster-reveal">
+      <div class="scg-booster-reveal scg-booster-reveal--count-${orderedCards.length}">
         ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
       </div>
     </section>

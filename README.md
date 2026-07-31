@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.65
+## Règles du prototype 0.9.0
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -46,7 +46,7 @@ Le catalogue comprend désormais **160 cartes**, réparties en **quatre collecti
 
 Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les personnages nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
-## Nouveautés de la v0.8.65
+## Nouveautés de la v0.9.0
 
 - suppression du second accès redondant à l’analyse du deck : le bouton reste uniquement dans l’en-tête, en haut à droite ;
 - conservation de la position de défilement de la mosaïque et du panneau latéral lors de l’ajout ou du retrait d’une carte ;

@@ -33,5 +33,5 @@ test("la branche 0.8.6 reste synchronisée dans les manifestes", () => {
   const moduleVersion = readJson("module.json").version;
   const packageVersion = readJson("package.json").version;
   assert.equal(moduleVersion, packageVersion);
-  assert.match(moduleVersion, /^0\.8\.6\d*$/);
+  assert.match(moduleVersion, /^\d+\.\d+\.\d+$/);
 });

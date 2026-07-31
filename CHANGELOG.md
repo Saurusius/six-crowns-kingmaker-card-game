@@ -1,4 +1,11 @@
-# Journal des versions
+# Changelog
+
+## 0.9.0
+- Intégration des boosters spéciaux définitifs en PNG transparent pour la sélection Foundry.
+- Agrandissement de la fenêtre de choix des boosters spéciaux avec meilleurs halos, reflets et animations visibles.
+- Centrage des cartes révélées pour les boosters à 3 cartes (spéciaux et événementiels).
+- Harmonisation de la version du module, du package et du lockfile en 0.9.0.
+
 
 ## 0.8.65
 
