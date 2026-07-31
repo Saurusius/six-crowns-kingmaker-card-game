@@ -62,6 +62,15 @@ const RULEBOOK = Object.freeze([
     ]
   },
   {
+    title: "Construction du deck",
+    items: [
+      "Un deck personnalisé contient exactement 20 cartes.",
+      "Une même carte Commune ou Peu commune peut apparaître au maximum 3 fois.",
+      "Une même carte Rare peut apparaître au maximum 2 fois.",
+      "Une même carte Unique peut apparaître au maximum 1 fois ; plusieurs cartes Uniques différentes sont autorisées."
+    ]
+  },
+  {
     title: "Lignes de bataille",
     items: [
       "Avant-garde : mêlée, unités de choc et défenseurs.",

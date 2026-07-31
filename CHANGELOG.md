@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.8.1 — Collection défilable et révélation Unique
+
+- la fenêtre complète de collection possède désormais son propre défilement vertical ;
+- les collections restent accessibles même lorsque les outils d’échange et les outils MJ occupent beaucoup de place ;
+- limites de deck alignées sur la rareté : 3 Communes, 3 Peu communes, 2 Rares et 1 Unique pour une même carte ;
+- suppression de l’ancien plafond global de 2 cartes Uniques différentes ;
+- harmonisation du champ `maxCopies` des 160 cartes avec ces nouvelles règles ;
+- nouvelle révélation cinématique des cartes Uniques avec traînée violette, flash, carte mise en avant et présentation finale du booster ;
+- ajout d’un mode de mouvement réduit et d’un bouton permettant de passer l’animation.
+
 ## 0.8.0 — Collections, échanges et boosters animés
 
 - rareté affichée par une icône seule dans les collections ;

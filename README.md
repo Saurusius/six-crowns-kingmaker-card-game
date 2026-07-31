@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.7.10
+## Règles du prototype 0.8.1
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -54,6 +54,8 @@ L’écran **Ma collection** affiche les 160 cartes collectionnables du module, 
 
 Chaque profil possède également un nombre de **boosters disponibles**. Un compte non MJ ne peut ouvrir un booster que si un MJ lui en a offert au moins un ; chaque ouverture consomme un booster. Le MJ peut créditer plusieurs boosters à un joueur depuis les outils de collection, par exemple lors d’une montée de niveau ou comme récompense ponctuelle.
 
+Lorsqu’une carte **Unique** est tirée, l’ouverture déclenche une révélation cinématique dédiée : traînée violette, éclat royal, carte isolée au centre de l’écran puis présentation du booster complet.
+
 ## Constructeur de deck
 
 Le constructeur permet :
@@ -68,7 +70,7 @@ Le constructeur permet :
 - de renommer ou dupliquer un deck enregistré ;
 - d’obtenir un diagnostic détaillé lorsqu’un deck est invalide.
 
-Un deck personnalisé doit contenir exactement 20 cartes. Les cartes de type Chef ou Spéciale restent visibles dans la collection, mais ne sont pas encore utilisables tant que leurs règles propres ne sont pas implémentées.
+Un deck personnalisé doit contenir exactement 20 cartes. Une même carte est limitée à 3 exemplaires si elle est Commune ou Peu commune, 2 si elle est Rare et 1 si elle est Unique. Il n’existe pas de plafond global de cartes Uniques différentes. Les cartes Spéciales restent visibles dans la collection, mais ne sont pas encore utilisables tant que leurs règles propres ne sont pas implémentées.
 
 ## Commandes Foundry
 

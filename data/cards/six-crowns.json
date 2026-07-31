@@ -32,7 +32,7 @@
       "domaine"
     ],
     "strength": 7,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "support"
     ],
@@ -54,7 +54,7 @@
       "avant-garde"
     ],
     "strength": 8,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "resilient"
     ],
@@ -77,7 +77,7 @@
       "domaine"
     ],
     "strength": 8,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "hero"
     ],
@@ -99,7 +99,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "support"
     ],
@@ -121,7 +121,7 @@
       "escarmouche"
     ],
     "strength": 7,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -141,7 +141,7 @@
       "avant-garde"
     ],
     "strength": 8,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "resilient"
     ],
@@ -164,7 +164,7 @@
       "escarmouche"
     ],
     "strength": 5,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -184,7 +184,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "support"
     ],
@@ -206,7 +206,7 @@
       "domaine"
     ],
     "strength": 7,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "resilient"
     ],
@@ -229,7 +229,7 @@
       "escarmouche"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -250,7 +250,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -270,7 +270,7 @@
       "avant-garde"
     ],
     "strength": 7,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "peuCommune",
@@ -290,7 +290,7 @@
       "avant-garde"
     ],
     "strength": 5,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -354,7 +354,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -376,7 +376,7 @@
       "domaine"
     ],
     "strength": 8,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "hero"
     ],
@@ -398,7 +398,7 @@
       "domaine"
     ],
     "strength": 5,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -418,7 +418,7 @@
       "escarmouche"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "hero",
       "support"
@@ -441,7 +441,7 @@
       "escarmouche"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [],
     "text": "",
     "rarity": "rare",
@@ -459,7 +459,7 @@
     "kind": "special",
     "rows": [],
     "strength": null,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -479,7 +479,7 @@
     "kind": "special",
     "rows": [],
     "strength": null,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -499,7 +499,7 @@
     "kind": "special",
     "rows": [],
     "strength": null,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -519,7 +519,7 @@
     "kind": "special",
     "rows": [],
     "strength": null,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -606,7 +606,7 @@
       "domaine"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
@@ -649,7 +649,7 @@
       "domaine"
     ],
     "strength": 5,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
@@ -734,7 +734,7 @@
       "escarmouche"
     ],
     "strength": 5,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
@@ -754,7 +754,7 @@
       "domaine"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -818,7 +818,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -840,7 +840,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],

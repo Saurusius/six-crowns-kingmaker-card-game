@@ -48,7 +48,7 @@
       "avant-garde"
     ],
     "strength": 10,
-    "maxCopies": 1,
+    "maxCopies": 2,
     "abilities": [
       "hero"
     ],
@@ -71,7 +71,7 @@
       "escarmouche"
     ],
     "strength": 9,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "hero"
     ],
@@ -180,7 +180,7 @@
       "avant-garde"
     ],
     "strength": 7,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -200,7 +200,7 @@
       "escarmouche"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -220,7 +220,7 @@
       "avant-garde"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -242,7 +242,7 @@
       "domaine"
     ],
     "strength": 5,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -262,7 +262,7 @@
       "domaine"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -282,7 +282,7 @@
       "domaine"
     ],
     "strength": 5,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -304,7 +304,7 @@
       "escarmouche"
     ],
     "strength": 2,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -324,7 +324,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -347,7 +347,7 @@
       "escarmouche"
     ],
     "strength": 5,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -367,7 +367,7 @@
       "escarmouche"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "",
     "rarity": "commun",
@@ -385,7 +385,7 @@
     "kind": "special",
     "rows": [],
     "strength": null,
-    "maxCopies": 1,
+    "maxCopies": 3,
     "abilities": [
       "rally"
     ],
@@ -579,7 +579,7 @@
       "domaine"
     ],
     "strength": 5,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -688,7 +688,7 @@
       "domaine"
     ],
     "strength": 4,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
@@ -708,7 +708,7 @@
       "avant-garde"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Une unité de choc sans effet supplémentaire.",
     "rarity": "commun",
@@ -772,7 +772,7 @@
       "escarmouche"
     ],
     "strength": 7,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "resilient"
     ],
@@ -794,7 +794,7 @@
       "domaine"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "support"
     ],
@@ -816,7 +816,7 @@
       "avant-garde"
     ],
     "strength": 7,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [],
     "text": "Une unité de choc sans effet supplémentaire.",
     "rarity": "peuCommune",
@@ -836,7 +836,7 @@
       "escarmouche"
     ],
     "strength": 6,
-    "maxCopies": 2,
+    "maxCopies": 3,
     "abilities": [
       "rally"
     ],

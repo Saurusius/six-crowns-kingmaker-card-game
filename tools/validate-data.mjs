@@ -15,6 +15,7 @@ const allowedKinds = new Set(["leader", "unit", "special"]);
 const allowedRows = new Set(["avant-garde", "escarmouche", "domaine"]);
 const allowedRarities = new Set(["commun", "peuCommune", "rare", "unique"]);
 const highRarities = new Set(["rare", "unique"]);
+const maxCopiesByRarity = Object.freeze({ commun: 3, peuCommune: 3, rare: 2, unique: 1 });
 const rarityCounts = { commun: 0, peuCommune: 0, rare: 0, unique: 0 };
 const allowedAbilities = new Set([
   "hero",
@@ -69,8 +70,8 @@ for (const file of files) {
     if (!Array.isArray(card.rows) || card.rows.some((row) => !allowedRows.has(row))) {
       throw new Error(`${where}: ligne invalide.`);
     }
-    if (!Number.isInteger(card.maxCopies) || card.maxCopies < 1 || card.maxCopies > 3) {
-      throw new Error(`${where}: maxCopies doit être compris entre 1 et 3.`);
+    if (card.maxCopies !== maxCopiesByRarity[card.rarity]) {
+      throw new Error(`${where}: maxCopies doit valoir ${maxCopiesByRarity[card.rarity]} pour la rareté ${card.rarity}.`);
     }
     if (!Array.isArray(card.abilities) || card.abilities.some((ability) => !allowedAbilities.has(ability))) {
       throw new Error(`${where}: capacité non prise en charge.`);

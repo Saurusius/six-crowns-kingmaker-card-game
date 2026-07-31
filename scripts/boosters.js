@@ -300,16 +300,120 @@ export async function executeTrade({ fromUserId, toUserId, offered = {}, request
   return true;
 }
 
+function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
+  const art = card.artMedium ?? card.artFull ?? "";
+  const artMarkup = art
+    ? `<img src="${escapeHtml(art)}" alt="Illustration de ${escapeHtml(card.name)}">`
+    : `<span class="scg-reveal-card-placeholder" aria-hidden="true"><i class="fa-solid fa-crown"></i></span>`;
+  return `
+    <article class="scg-reveal-card scg-rarity-${escapeHtml(card.rarity)}${featured ? " is-featured" : ""}" style="--reveal-index:${index}">
+      <div class="scg-reveal-card-art">${artMarkup}</div>
+      <span class="scg-reveal-rarity">${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
+      <strong>${escapeHtml(card.name)}</strong>
+    </article>
+  `;
+}
+
 function animateBooster(cards) {
-  if (typeof document === "undefined") return;
-  const unique = cards.some(card => card.rarity === "unique");
+  if (typeof document === "undefined" || !Array.isArray(cards) || cards.length === 0) return;
+
+  document.querySelector(".scg-booster-opening")?.remove();
+
+  const uniqueIndex = cards.findIndex((card) => card.rarity === "unique");
+  const uniqueCard = uniqueIndex >= 0 ? cards[uniqueIndex] : null;
   const overlay = document.createElement("div");
-  overlay.className = `scg-booster-opening${unique ? " has-unique" : ""}`;
-  overlay.innerHTML = `<div class="scg-booster-pack"><i class="fa-solid fa-box-open"></i><strong>Ouverture du booster…</strong></div><div class="scg-booster-reveal">${cards.map((card,index)=>`<article class="scg-reveal-card scg-rarity-${card.rarity}" style="--delay:${index}"><img src="${card.artMedium ?? card.artFull ?? ''}" alt=""><strong>${escapeHtml(card.name)}</strong></article>`).join('')}</div>${unique ? '<div class="scg-unique-flash">CARTE UNIQUE !</div>' : ''}<button type="button">Continuer</button>`;
+  overlay.className = `scg-booster-opening${uniqueCard ? " has-unique" : ""}`;
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", uniqueCard ? "Révélation d’une carte Unique" : "Ouverture d’un booster");
+
+  const uniqueStage = uniqueCard ? `
+    <div class="scg-unique-cinematic" aria-hidden="true">
+      <span class="scg-unique-star"></span>
+      <span class="scg-unique-trail"></span>
+      <span class="scg-unique-burst"></span>
+      <span class="scg-unique-crown"><i class="fa-solid fa-crown"></i></span>
+    </div>
+    <section class="scg-unique-stage" aria-live="polite">
+      <p>Une lumière royale traverse les Six Couronnes…</p>
+      ${boosterRevealCardMarkup(uniqueCard, uniqueIndex, { featured: true })}
+      <div class="scg-unique-title"><span>Carte</span><strong>Unique</strong></div>
+    </section>
+  ` : "";
+
+  overlay.innerHTML = `
+    <div class="scg-booster-pack" aria-hidden="true">
+      <i class="fa-solid fa-box-open"></i>
+      <strong>Ouverture du booster…</strong>
+      <span class="scg-pack-sigil"><i class="fa-solid fa-crown"></i></span>
+    </div>
+    ${uniqueStage}
+    <section class="scg-booster-results" aria-live="polite">
+      <header>
+        <span><i class="fa-solid fa-star"></i></span>
+        <div><small>Booster des Six Couronnes</small><h2>Vos cinq cartes</h2></div>
+      </header>
+      <div class="scg-booster-reveal">
+        ${cards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
+      </div>
+    </section>
+    <button type="button" class="scg-booster-continue" data-action="continue-booster">Passer l’animation</button>
+  `;
+
   document.body.appendChild(overlay);
-  const close=()=>overlay.remove(); overlay.querySelector('button').addEventListener('click',close);
-  setTimeout(()=>overlay.classList.add('is-revealed'),150);
-  setTimeout(close, unique ? 9000 : 7000);
+  const button = overlay.querySelector("[data-action='continue-booster']");
+  const timers = [];
+  let resultsShown = false;
+
+  const schedule = (callback, delay) => {
+    const timer = globalThis.setTimeout(callback, delay);
+    timers.push(timer);
+  };
+
+  const showResults = () => {
+    if (resultsShown) return;
+    resultsShown = true;
+    timers.forEach((timer) => globalThis.clearTimeout(timer));
+    timers.length = 0;
+    overlay.classList.remove("is-pack-charged", "is-unique-flight", "is-unique-reveal");
+    overlay.classList.add("is-results");
+    button.textContent = "Fermer";
+  };
+
+  const close = () => {
+    timers.forEach((timer) => globalThis.clearTimeout(timer));
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.classList.add("is-closing");
+    globalThis.setTimeout(() => overlay.remove(), 260);
+  };
+
+  const onKeyDown = (event) => {
+    if (event.key === "Escape") close();
+  };
+
+  button.addEventListener("click", () => {
+    if (!resultsShown) showResults();
+    else close();
+  });
+  document.addEventListener("keydown", onKeyDown);
+
+  const activate = () => overlay.classList.add("is-active");
+  if (typeof globalThis.requestAnimationFrame === "function") globalThis.requestAnimationFrame(activate);
+  else activate();
+
+  const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+  if (reducedMotion) {
+    schedule(showResults, 120);
+  } else if (uniqueCard) {
+    schedule(() => overlay.classList.add("is-pack-charged"), 650);
+    schedule(() => overlay.classList.add("is-unique-flight"), 1450);
+    schedule(() => overlay.classList.add("is-unique-reveal"), 2950);
+    schedule(showResults, 6200);
+  } else {
+    schedule(showResults, 1050);
+  }
+
+  button.focus({ preventScroll: true });
 }
 
 export async function createBoosterMacro() {
