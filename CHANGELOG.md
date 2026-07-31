@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.8.2 — Révélation progressive des boosters
+
+- tri des cinq cartes dans l’ordre croissant de rareté : Commun, Peu commune, Rare, puis Unique ;
+- apparition automatique des cartes une par une au lieu d’un affichage simultané ;
+- animation globale bleu brillant lorsque la meilleure carte est Rare ;
+- animation globale violet brillant lorsqu’une carte Unique est présente ;
+- la couleur du booster est toujours dictée par la rareté la plus élevée tirée ;
+- révélation finale renforcée des cartes Uniques avec paillettes, flash violet, halo et bandeau de rareté animé ;
+- conservation d’un bouton permettant de révéler immédiatement toutes les cartes et du mode de mouvement réduit.
+
 ## 0.8.1 — Collection défilable et révélation Unique
 
 - la fenêtre complète de collection possède désormais son propre défilement vertical ;

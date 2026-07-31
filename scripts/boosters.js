@@ -18,6 +18,33 @@ const RARITY_LABELS = Object.freeze({
   unique: "Unique"
 });
 
+export const RARITY_ORDER = Object.freeze({
+  commun: 0,
+  peuCommune: 1,
+  rare: 2,
+  unique: 3
+});
+
+export function sortCardsByRarity(cards = []) {
+  return cards
+    .map((card, originalIndex) => ({ card, originalIndex }))
+    .sort((left, right) => {
+      const leftRank = RARITY_ORDER[left.card?.rarity] ?? Number.MAX_SAFE_INTEGER;
+      const rightRank = RARITY_ORDER[right.card?.rarity] ?? Number.MAX_SAFE_INTEGER;
+      return leftRank - rightRank || left.originalIndex - right.originalIndex;
+    })
+    .map(({ card }) => card);
+}
+
+export function getHighestRarity(cards = []) {
+  return cards.reduce((highest, card) => {
+    const rarity = card?.rarity;
+    if (!(rarity in RARITY_ORDER)) return highest;
+    if (!highest || RARITY_ORDER[rarity] > RARITY_ORDER[highest]) return rarity;
+    return highest;
+  }, null);
+}
+
 let catalogPromise = null;
 
 function escapeHtml(value) {
@@ -234,7 +261,7 @@ export async function openBooster({ random = Math.random, user = null, userId = 
     cards.push(pickCard(catalog, drawNormalRarity(random), random));
   }
   cards.push(pickCard(catalog, drawGuaranteedRarity(random), random));
-  const booster = shuffle(cards, random);
+  const booster = sortCardsByRarity(shuffle(cards, random));
 
   try {
     await addCardsToCollection(booster, { user: targetUser });
@@ -305,10 +332,15 @@ function boosterRevealCardMarkup(card, index, { featured = false } = {}) {
   const artMarkup = art
     ? `<img src="${escapeHtml(art)}" alt="Illustration de ${escapeHtml(card.name)}">`
     : `<span class="scg-reveal-card-placeholder" aria-hidden="true"><i class="fa-solid fa-crown"></i></span>`;
+  const sparkles = featured
+    ? `<span class="scg-card-sparkles" aria-hidden="true">${Array.from({ length: 12 }, (_, sparkleIndex) => `<i style="--sparkle-index:${sparkleIndex}"></i>`).join("")}</span>`
+    : "";
   return `
-    <article class="scg-reveal-card scg-rarity-${escapeHtml(card.rarity)}${featured ? " is-featured" : ""}" style="--reveal-index:${index}">
+    <article class="scg-reveal-card scg-rarity-${escapeHtml(card.rarity)}${featured ? " is-featured" : ""}" data-reveal-index="${index}" aria-hidden="true">
+      <span class="scg-card-reveal-flare" aria-hidden="true"></span>
+      ${sparkles}
       <div class="scg-reveal-card-art">${artMarkup}</div>
-      <span class="scg-reveal-rarity">${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
+      <span class="scg-reveal-rarity"><i class="fa-solid ${featured ? "fa-crown" : "fa-star"}" aria-hidden="true"></i>${escapeHtml(RARITY_LABELS[card.rarity] ?? card.rarity)}</span>
       <strong>${escapeHtml(card.name)}</strong>
     </article>
   `;
@@ -319,69 +351,141 @@ function animateBooster(cards) {
 
   document.querySelector(".scg-booster-opening")?.remove();
 
-  const uniqueIndex = cards.findIndex((card) => card.rarity === "unique");
-  const uniqueCard = uniqueIndex >= 0 ? cards[uniqueIndex] : null;
+  const orderedCards = sortCardsByRarity(cards);
+  const highestRarity = getHighestRarity(orderedCards) ?? "rare";
+  const hasUnique = highestRarity === "unique";
+  const themeRarity = hasUnique ? "unique" : highestRarity === "rare" ? "rare" : "neutral";
   const overlay = document.createElement("div");
-  overlay.className = `scg-booster-opening${uniqueCard ? " has-unique" : ""}`;
+  overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}`;
+  overlay.dataset.highestRarity = highestRarity;
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", uniqueCard ? "Révélation d’une carte Unique" : "Ouverture d’un booster");
-
-  const uniqueStage = uniqueCard ? `
-    <div class="scg-unique-cinematic" aria-hidden="true">
-      <span class="scg-unique-star"></span>
-      <span class="scg-unique-trail"></span>
-      <span class="scg-unique-burst"></span>
-      <span class="scg-unique-crown"><i class="fa-solid fa-crown"></i></span>
-    </div>
-    <section class="scg-unique-stage" aria-live="polite">
-      <p>Une lumière royale traverse les Six Couronnes…</p>
-      ${boosterRevealCardMarkup(uniqueCard, uniqueIndex, { featured: true })}
-      <div class="scg-unique-title"><span>Carte</span><strong>Unique</strong></div>
-    </section>
-  ` : "";
+  overlay.setAttribute("aria-label", hasUnique ? "Ouverture d’un booster avec carte Unique" : "Ouverture d’un booster");
 
   overlay.innerHTML = `
+    <div class="scg-booster-energy" aria-hidden="true">
+      <span class="scg-booster-energy-core"></span>
+      <span class="scg-booster-energy-ring"></span>
+      <span class="scg-booster-energy-rays"></span>
+    </div>
     <div class="scg-booster-pack" aria-hidden="true">
       <i class="fa-solid fa-box-open"></i>
       <strong>Ouverture du booster…</strong>
       <span class="scg-pack-sigil"><i class="fa-solid fa-crown"></i></span>
     </div>
-    ${uniqueStage}
     <section class="scg-booster-results" aria-live="polite">
       <header>
         <span><i class="fa-solid fa-star"></i></span>
-        <div><small>Booster des Six Couronnes</small><h2>Vos cinq cartes</h2></div>
+        <div>
+          <small>Booster des Six Couronnes</small>
+          <h2>Révélation des cartes</h2>
+          <p class="scg-booster-progress" data-reveal-status>La magie se rassemble…</p>
+        </div>
       </header>
       <div class="scg-booster-reveal">
-        ${cards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
+        ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
       </div>
     </section>
-    <button type="button" class="scg-booster-continue" data-action="continue-booster">Passer l’animation</button>
+    <button type="button" class="scg-booster-continue" data-action="continue-booster">Tout révéler</button>
   `;
 
   document.body.appendChild(overlay);
   const button = overlay.querySelector("[data-action='continue-booster']");
-  const timers = [];
+  const status = overlay.querySelector("[data-reveal-status]");
+  const cardElements = Array.from(overlay.querySelectorAll(".scg-reveal-card"));
+  const timers = new Set();
+  let revealIndex = 0;
   let resultsShown = false;
+  let sequenceFinished = false;
 
   const schedule = (callback, delay) => {
-    const timer = globalThis.setTimeout(callback, delay);
-    timers.push(timer);
+    const timer = globalThis.setTimeout(() => {
+      timers.delete(timer);
+      callback();
+    }, delay);
+    timers.add(timer);
+    return timer;
+  };
+
+  const clearTimers = () => {
+    timers.forEach((timer) => globalThis.clearTimeout(timer));
+    timers.clear();
+  };
+
+  const updateStatus = (card, index) => {
+    if (!status) return;
+    const rarity = RARITY_LABELS[card.rarity] ?? card.rarity;
+    status.textContent = `${index + 1} / ${orderedCards.length} · ${rarity}`;
+  };
+
+  const revealCard = (index, { fast = false } = {}) => {
+    const card = orderedCards[index];
+    const element = cardElements[index];
+    if (!card || !element || element.classList.contains("is-revealed")) return;
+
+    if (fast) element.classList.add("is-fast-reveal");
+    element.classList.add("is-revealed");
+    element.setAttribute("aria-hidden", "false");
+    updateStatus(card, index);
+
+    if (card.rarity === "rare") {
+      overlay.classList.add("is-rare-impact");
+      schedule(() => overlay.classList.remove("is-rare-impact"), 850);
+    }
+    if (card.rarity === "unique") {
+      overlay.classList.add("is-unique-impact");
+      schedule(() => overlay.classList.remove("is-unique-impact"), 1800);
+    }
+  };
+
+  const finishSequence = () => {
+    if (sequenceFinished) return;
+    sequenceFinished = true;
+    overlay.classList.add("is-complete");
+    if (status) status.textContent = hasUnique ? "Une carte Unique rejoint votre collection !" : "Les cinq cartes sont révélées.";
+    button.textContent = "Fermer";
+  };
+
+  const revealNext = () => {
+    if (revealIndex >= orderedCards.length) {
+      finishSequence();
+      return;
+    }
+
+    const card = orderedCards[revealIndex];
+    revealCard(revealIndex);
+    revealIndex += 1;
+
+    const delay = card.rarity === "unique"
+      ? 1750
+      : card.rarity === "rare"
+        ? 1050
+        : 720;
+    schedule(revealNext, delay);
+  };
+
+  const revealAll = () => {
+    clearTimers();
+    overlay.classList.add("is-fast-forward");
+    for (let index = revealIndex; index < orderedCards.length; index += 1) {
+      revealCard(index, { fast: true });
+    }
+    revealIndex = orderedCards.length;
+    schedule(() => overlay.classList.remove("is-fast-forward"), 80);
+    finishSequence();
   };
 
   const showResults = () => {
     if (resultsShown) return;
     resultsShown = true;
-    timers.forEach((timer) => globalThis.clearTimeout(timer));
-    timers.length = 0;
-    overlay.classList.remove("is-pack-charged", "is-unique-flight", "is-unique-reveal");
+    overlay.classList.remove("is-pack-charged", "is-pack-burst");
     overlay.classList.add("is-results");
-    button.textContent = "Fermer";
+    if (status) status.textContent = "Révélation 1 / 5…";
+    schedule(revealNext, 520);
   };
 
   const close = () => {
-    timers.forEach((timer) => globalThis.clearTimeout(timer));
+    clearTimers();
     document.removeEventListener("keydown", onKeyDown);
     overlay.classList.add("is-closing");
     globalThis.setTimeout(() => overlay.remove(), 260);
@@ -393,6 +497,7 @@ function animateBooster(cards) {
 
   button.addEventListener("click", () => {
     if (!resultsShown) showResults();
+    if (!sequenceFinished) revealAll();
     else close();
   });
   document.addEventListener("keydown", onKeyDown);
@@ -403,14 +508,12 @@ function animateBooster(cards) {
 
   const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
   if (reducedMotion) {
-    schedule(showResults, 120);
-  } else if (uniqueCard) {
-    schedule(() => overlay.classList.add("is-pack-charged"), 650);
-    schedule(() => overlay.classList.add("is-unique-flight"), 1450);
-    schedule(() => overlay.classList.add("is-unique-reveal"), 2950);
-    schedule(showResults, 6200);
+    schedule(showResults, 80);
+    schedule(revealAll, 160);
   } else {
-    schedule(showResults, 1050);
+    schedule(() => overlay.classList.add("is-pack-charged"), 480);
+    schedule(() => overlay.classList.add("is-pack-burst"), 1120);
+    schedule(showResults, 2050);
   }
 
   button.focus({ preventScroll: true });

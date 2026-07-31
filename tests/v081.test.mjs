@@ -91,16 +91,12 @@ test("la fenêtre de collection défile globalement jusqu’aux groupes de carte
   assert.match(css, /\.scg-collection-shell \.scg-collection-scroll \{[\s\S]*?overflow: visible;/);
 });
 
-test("une carte Unique utilise une révélation cinématique avant les résultats", async () => {
+test("l’ouverture de booster conserve une mise en scène et un mode de mouvement réduit", async () => {
   const [script, css] = await Promise.all([
     readFile(new URL("scripts/boosters.js", root), "utf8"),
     readFile(new URL("styles/six-crowns.css", root), "utf8")
   ]);
-  assert.match(script, /is-unique-flight/);
-  assert.match(script, /is-unique-reveal/);
-  assert.match(script, /Une lumière royale traverse les Six Couronnes/);
-  assert.match(script, /schedule\(showResults, 6200\)/);
-  assert.match(css, /@keyframes scg-unique-star-flight/);
-  assert.match(css, /\.scg-unique-stage/);
+  assert.match(script, /scg-booster-opening/);
+  assert.match(script, /prefers-reduced-motion: reduce/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
 });

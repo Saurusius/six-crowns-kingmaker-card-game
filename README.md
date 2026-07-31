@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.1
+## Règles du prototype 0.8.2
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -35,8 +35,8 @@ Le catalogue comprend désormais **160 cartes**, réparties en **quatre collecti
 
 - **Commun** — blanc : 104 cartes ;
 - **Peu commune** — orange : 28 cartes ;
-- **Rare** — bleu : 25 cartes ;
-- **Unique** — violet : 3 cartes.
+- **Rare** — bleu : 21 cartes ;
+- **Unique** — violet : 7 cartes.
 
 Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les personnages nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
@@ -54,7 +54,7 @@ L’écran **Ma collection** affiche les 160 cartes collectionnables du module, 
 
 Chaque profil possède également un nombre de **boosters disponibles**. Un compte non MJ ne peut ouvrir un booster que si un MJ lui en a offert au moins un ; chaque ouverture consomme un booster. Le MJ peut créditer plusieurs boosters à un joueur depuis les outils de collection, par exemple lors d’une montée de niveau ou comme récompense ponctuelle.
 
-Lorsqu’une carte **Unique** est tirée, l’ouverture déclenche une révélation cinématique dédiée : traînée violette, éclat royal, carte isolée au centre de l’écran puis présentation du booster complet.
+Les cinq cartes d’un booster sont présentées progressivement, de la rareté la plus faible à la plus élevée : **Commun**, **Peu commune**, **Rare**, puis **Unique**. La meilleure rareté tirée dicte la couleur de toute l’animation : bleu brillant pour un booster culminant sur une Rare, violet brillant lorsqu’une Unique est présente. Une carte Unique apparaît toujours en dernier et bénéficie de paillettes, d’un halo renforcé et d’un bandeau de rareté spécialement animé.
 
 ## Constructeur de deck
 
