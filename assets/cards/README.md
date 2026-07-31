@@ -1,22 +1,26 @@
 # Illustrations des cartes
 
-La v0.7.17 accepte une illustration unique ou trois variantes optimisées.
-Les chemins sont définis directement dans les fichiers JSON de `data/cards/`.
+Depuis la v0.8.64, les **160 cartes** sont intégralement illustrées. Les chemins utilisés par Foundry sont définis dans les fichiers JSON de `data/cards/` et proviennent du manifeste unique `documentation/manifest-cards.json`.
 
-## Solution recommandée pour commencer
+Chaque carte possède trois variantes WebP au ratio vertical 5:7 :
 
-Une seule illustration WebP suffit. Renseignez seulement `full` : le module la
-réutilise automatiquement dans la main, le deckbuilder et le plateau.
+- `full.webp` — 900 × 1260 px : collection et grande prévisualisation ;
+- `medium.webp` — 450 × 630 px : main, mulligan et boosters ;
+- `thumb.webp` — 225 × 315 px : plateau et constructeur de deck.
 
-```json
-"art": {
-  "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn.webp",
-  "medium": null,
-  "thumb": null
-}
+## Arborescence
+
+```text
+assets/cards/
+  six-crowns/<slug>/full.webp
+  six-crowns/<slug>/medium.webp
+  six-crowns/<slug>/thumb.webp
+  aldori/<slug>/...
+  iron-khans/<slug>/...
+  stolen-lands-arcana/<slug>/...
 ```
 
-## Solution optimisée
+Exemple de données :
 
 ```json
 "art": {
@@ -26,32 +30,4 @@ réutilise automatiquement dans la main, le deckbuilder et le plateau.
 }
 ```
 
-Utilisation :
-
-- `full` : collection et grande prévisualisation ;
-- `medium` : main et mulligan ;
-- `thumb` : board et constructeur de deck.
-
-Si `medium` ou `thumb` est absent, la meilleure variante disponible est utilisée.
-Une image introuvable est automatiquement remplacée par le symbole de faction.
-
-## Résolutions conseillées
-
-- `full` : 900 × 1260 px ;
-- `medium` : 450 × 630 px ;
-- `thumb` : 225 × 315 px ;
-- format WebP, ratio vertical 5:7 ;
-- ne pas intégrer le nom, la force, la rareté ou les règles dans l’image.
-
-## Organisation conseillée
-
-```text
-assets/cards/
-  six-crowns/
-  aldori/
-  iron-khans/
-  stolen-lands-arcana/
-```
-
-Les 160 cartes possèdent déjà un bloc `art` vide dans leurs données. Il suffit
-donc d’ajouter les fichiers et de compléter les chemins correspondants.
+Le script `npm run validate` vérifie désormais que chaque carte possède ses trois chemins, que les fichiers existent et que leurs dimensions sont conformes. Le fallback de faction reste conservé pour protéger l’interface en cas de fichier endommagé ou déplacé après installation.

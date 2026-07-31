@@ -64,9 +64,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/thumb.webp"
     },
     "type": "personnage"
   },
@@ -179,9 +179,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/thumb.webp"
     },
     "type": "personnage"
   },
@@ -202,9 +202,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/thumb.webp"
     },
     "type": "personnage"
   },
@@ -249,9 +249,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/thumb.webp"
     },
     "type": "personnage"
   },
@@ -570,9 +570,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/thumb.webp"
     },
     "type": "tactique"
   },

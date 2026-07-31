@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.8.64
+
+- Intègre les illustrations des 160 cartes dans les données du catalogue.
+- Fournit systématiquement les variantes `full` (900 × 1260), `medium` (450 × 630) et `thumb` (225 × 315).
+- Régénère le manifeste d’illustrations et la carte partagée utilisée par les decks de démonstration.
+- Ajoute les alias manquants pour que les 80 cartes des quatre decks de démonstration disposent toutes d’un visuel.
+- Vérifie automatiquement l’existence, le format WebP et les dimensions des 480 illustrations lors de `npm run validate`.
+- Supprime les anciens audits et mappings partiels devenus contradictoires.
+
 ## 0.8.63
 
 - Sort complètement l’analyse du deck du constructeur principal et l’ouvre dans une fenêtre dédiée.

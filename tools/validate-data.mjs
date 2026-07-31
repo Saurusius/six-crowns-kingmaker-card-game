@@ -1,5 +1,7 @@
-import { readdir, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 
+const MODULE_ID = "six-crowns-kingmaker-card-game";
+const MODULE_PREFIX = `modules/${MODULE_ID}/`;
 const root = new URL("../data/cards/", import.meta.url);
 const expectedCollections = new Map([
   ["six-crowns.json", "six-crowns"],
@@ -7,6 +9,11 @@ const expectedCollections = new Map([
   ["iron-khans.json", "iron-khans"],
   ["stolen-lands-arcana.json", "stolen-lands-arcana"]
 ]);
+const expectedArtDimensions = Object.freeze({
+  full: [900, 1260],
+  medium: [450, 630],
+  thumb: [225, 315]
+});
 const files = (await readdir(root)).filter((file) => file.endsWith(".json"));
 if (files.length !== expectedCollections.size || files.some((file) => !expectedCollections.has(file))) {
   throw new Error(`Le catalogue doit être réparti dans exactement quatre collections : ${[...expectedCollections.keys()].join(", ")}.`);
@@ -34,6 +41,75 @@ function expectedStrength(card) {
   for (const ability of card.abilities) value += abilityStrengthModifier[ability] ?? 0;
   return Math.max(1, Math.min(10, value));
 }
+
+function localAssetUrl(foundryPath) {
+  if (!foundryPath.startsWith(MODULE_PREFIX)) {
+    throw new Error(`chemin d’illustration hors module : ${foundryPath}`);
+  }
+  return new URL(`../${foundryPath.slice(MODULE_PREFIX.length)}`, import.meta.url);
+}
+
+function webpDimensions(buffer) {
+  if (buffer.length < 30 || buffer.toString("ascii", 0, 4) !== "RIFF" || buffer.toString("ascii", 8, 12) !== "WEBP") {
+    throw new Error("fichier WEBP invalide");
+  }
+
+  let offset = 12;
+  while (offset + 8 <= buffer.length) {
+    const type = buffer.toString("ascii", offset, offset + 4);
+    const size = buffer.readUInt32LE(offset + 4);
+    const data = offset + 8;
+
+    if (type === "VP8X" && data + 10 <= buffer.length) {
+      return [1 + buffer.readUIntLE(data + 4, 3), 1 + buffer.readUIntLE(data + 7, 3)];
+    }
+    if (type === "VP8 " && data + 10 <= buffer.length) {
+      if (buffer[data + 3] !== 0x9d || buffer[data + 4] !== 0x01 || buffer[data + 5] !== 0x2a) {
+        throw new Error("en-tête VP8 invalide");
+      }
+      return [buffer.readUInt16LE(data + 6) & 0x3fff, buffer.readUInt16LE(data + 8) & 0x3fff];
+    }
+    if (type === "VP8L" && data + 5 <= buffer.length) {
+      if (buffer[data] !== 0x2f) throw new Error("en-tête VP8L invalide");
+      const b1 = buffer[data + 1];
+      const b2 = buffer[data + 2];
+      const b3 = buffer[data + 3];
+      const b4 = buffer[data + 4];
+      return [1 + b1 + ((b2 & 0x3f) << 8), 1 + (b2 >> 6) + (b3 << 2) + ((b4 & 0x0f) << 10)];
+    }
+
+    offset = data + size + (size % 2);
+  }
+  throw new Error("dimensions WEBP introuvables");
+}
+
+async function validateCardArt(card, where) {
+  if (!card.art || typeof card.art !== "object" || Array.isArray(card.art)) {
+    throw new Error(`${where}: le bloc art doit être un objet.`);
+  }
+  for (const [variant, expectedDimensions] of Object.entries(expectedArtDimensions)) {
+    const path = card.art[variant];
+    if (typeof path !== "string" || !path.trim()) {
+      throw new Error(`${where}: art.${variant} doit contenir un chemin.`);
+    }
+    if (!path.endsWith(`/${variant}.webp`)) {
+      throw new Error(`${where}: art.${variant} doit pointer vers ${variant}.webp.`);
+    }
+    const url = localAssetUrl(path);
+    try {
+      await access(url);
+    } catch {
+      throw new Error(`${where}: fichier introuvable pour art.${variant} : ${path}`);
+    }
+    const dimensions = webpDimensions(await readFile(url));
+    if (dimensions[0] !== expectedDimensions[0] || dimensions[1] !== expectedDimensions[1]) {
+      throw new Error(
+        `${where}: art.${variant} mesure ${dimensions[0]} × ${dimensions[1]}, attendu ${expectedDimensions[0]} × ${expectedDimensions[1]}.`
+      );
+    }
+  }
+}
+
 const requiredSixCrownsCharacterNames = new Set([
   "Aethryn",
   "Alistair Veyron",
@@ -52,6 +128,7 @@ const foundRequiredNames = new Set();
 const ids = new Set();
 let count = 0;
 let characterCount = 0;
+let illustrationCount = 0;
 
 for (const file of files) {
   const cards = JSON.parse(await readFile(new URL(file, root), "utf8"));
@@ -61,7 +138,7 @@ for (const file of files) {
 
   for (const [index, card] of cards.entries()) {
     const where = `${file}[${index}]`;
-    for (const key of ["id", "name", "faction", "kind", "type", "rows", "strength", "maxCopies", "abilities", "text", "rarity", "isCharacter"]) {
+    for (const key of ["id", "name", "faction", "kind", "type", "rows", "strength", "maxCopies", "abilities", "text", "rarity", "isCharacter", "art"]) {
       if (!(key in card)) throw new Error(`${where}: champ manquant ${key}.`);
     }
     if (ids.has(card.id)) throw new Error(`${where}: identifiant dupliqué ${card.id}.`);
@@ -101,6 +178,8 @@ for (const file of files) {
     if (Math.abs(card.strength - targetStrength) > 1) {
       throw new Error(`${where}: Force ${card.strength} hors budget ; cible ${targetStrength} ± 1.`);
     }
+    await validateCardArt(card, where);
+    illustrationCount += 1;
     if (file === "six-crowns.json" && requiredSixCrownsCharacterNames.has(card.name)) {
       foundRequiredNames.add(card.name);
       if (!card.isCharacter) throw new Error(`${where}: ${card.name} doit être marqué comme personnage.`);
@@ -110,13 +189,14 @@ for (const file of files) {
 }
 
 if (count !== 160) throw new Error(`Le catalogue doit contenir 160 cartes uniques, trouvé : ${count}.`);
+if (illustrationCount !== count) throw new Error(`Chaque carte doit être illustrée : ${illustrationCount}/${count}.`);
 const missingNames = [...requiredSixCrownsCharacterNames].filter((name) => !foundRequiredNames.has(name));
 if (missingNames.length > 0) {
   throw new Error(`Personnages obligatoires manquants du Royaume des Six Couronnes : ${missingNames.join(", ")}.`);
 }
 
 console.log(
-  `Catalogue valide : ${count} cartes réparties en 4 collections de 40, ${characterCount} personnages nommés — `
+  `Catalogue valide : ${count} cartes illustrées en trois résolutions, réparties en 4 collections de 40, ${characterCount} personnages nommés — `
   + `${rarityCounts.commun} Communes, ${rarityCounts.peuCommune} Peu communes, `
   + `${rarityCounts.rare} Rares et ${rarityCounts.unique} Uniques.`
 );

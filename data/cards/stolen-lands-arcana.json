@@ -111,9 +111,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/thumb.webp"
     },
     "type": "unite"
   },
@@ -134,9 +134,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/thumb.webp"
     },
     "type": "unite"
   },
@@ -155,9 +155,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/thumb.webp"
     },
     "type": "unite"
   },
@@ -178,9 +178,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/thumb.webp"
     },
     "type": "unite"
   },
@@ -199,9 +199,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/thumb.webp"
     },
     "type": "unite"
   },
@@ -221,9 +221,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/thumb.webp"
     },
     "type": "unite"
   },
@@ -242,9 +242,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/thumb.webp"
     },
     "type": "unite"
   },
@@ -263,9 +263,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/thumb.webp"
     },
     "type": "unite"
   },
@@ -285,9 +285,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/thumb.webp"
     },
     "type": "unite"
   },
@@ -329,9 +329,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/thumb.webp"
     },
     "type": "unite"
   },
@@ -352,9 +352,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/thumb.webp"
     },
     "type": "unite"
   },
@@ -373,9 +373,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/thumb.webp"
     },
     "type": "unite"
   },
@@ -420,9 +420,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/thumb.webp"
     },
     "type": "personnage"
   },
@@ -443,9 +443,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/thumb.webp"
     },
     "type": "unite"
   },
@@ -466,9 +466,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/thumb.webp"
     },
     "type": "unite"
   },
@@ -488,9 +488,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/thumb.webp"
     },
     "type": "unite"
   },
@@ -511,9 +511,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/thumb.webp"
     },
     "type": "unite"
   },
@@ -535,9 +535,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/thumb.webp"
     },
     "type": "unite"
   },
@@ -558,9 +558,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/thumb.webp"
     },
     "type": "unite"
   },
@@ -582,9 +582,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/thumb.webp"
     },
     "type": "unite"
   },
@@ -604,9 +604,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/thumb.webp"
     },
     "type": "unite"
   },
@@ -627,9 +627,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/thumb.webp"
     },
     "type": "unite"
   },
@@ -650,9 +650,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/thumb.webp"
     },
     "type": "unite"
   },
@@ -673,9 +673,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/thumb.webp"
     },
     "type": "unite"
   },
@@ -694,9 +694,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/thumb.webp"
     },
     "type": "unite"
   },
@@ -717,9 +717,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/thumb.webp"
     },
     "type": "unite"
   },
@@ -739,9 +739,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/thumb.webp"
     },
     "type": "unite"
   },
@@ -762,9 +762,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/thumb.webp"
     },
     "type": "unite"
   },
@@ -785,9 +785,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/thumb.webp"
     },
     "type": "unite"
   },
@@ -806,9 +806,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/thumb.webp"
     },
     "type": "unite"
   },
@@ -830,9 +830,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/thumb.webp"
     },
     "type": "unite"
   },
@@ -877,9 +877,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/thumb.webp"
     },
     "type": "unite"
   },
@@ -898,9 +898,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/thumb.webp"
     },
     "type": "unite"
   }

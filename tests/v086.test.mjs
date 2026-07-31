@@ -11,14 +11,14 @@ function readJson(relative) {
   return JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 }
 
-test("la v0.8.6 intègre 114 illustrations au catalogue", () => {
+test("la v0.8.6 constitue le socle de l’intégration des illustrations", () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.equal(manifest.version, "0.8.6");
-  assert.equal(manifest.integratedCardArtCount, 114);
+  assert.match(manifest.version, /^0\.8\.6\d*$/);
+  assert.ok(manifest.integratedCardArtCount >= 114);
 
   const cards = ["six-crowns", "aldori", "iron-khans", "stolen-lands-arcana"]
     .flatMap((file) => readJson(`data/cards/${file}.json`));
-  assert.equal(cards.filter((card) => card.art?.full).length, 114);
+  assert.ok(cards.filter((card) => card.art?.full).length >= 114);
 });
 
 test("la carte d’illustrations partagée alimente les decks de démonstration", () => {

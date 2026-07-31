@@ -1,6 +1,8 @@
 /**
- * Carte des illustrations générée depuis le mapping v2.
- * Mise à jour automatique : 114 cartes illustrées.
+ * Carte centralisée des illustrations.
+ *
+ * Fichier généré depuis documentation/manifest-cards.json.
+ * Ne pas maintenir les chemins à la main : utiliser le manifeste comme source de vérité.
  */
 export const CARD_ART_BY_NAME = Object.freeze({
   "Académicien du Duel parfait": {
@@ -23,6 +25,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne/thumb.webp"
   },
+  "Alistair Veyron": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alistair-veyron/thumb.webp"
+  },
+  "Ankou du Premier Monde": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ankou-du-premier-monde/thumb.webp"
+  },
   "Arbalétrier lourd": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/medium.webp",
@@ -42,6 +54,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/thumb.webp"
+  },
+  "Arbres éveillés": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/arbres-eveilles/thumb.webp"
+  },
+  "Archers de Brumelande": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/thumb.webp"
+  },
+  "Archers de Restov": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/thumb.webp"
   },
   "Archers des remparts": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/full.webp",
@@ -63,10 +90,20 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais/thumb.webp"
   },
+  "Bannière des Frontières": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-des-frontieres/thumb.webp"
+  },
   "Bannière royale": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/thumb.webp"
+  },
+  "Boggards enchantés": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/boggards-enchantes/thumb.webp"
   },
   "Bokken, alchimiste des Marches": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/full.webp",
@@ -82,6 +119,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/thumb.webp"
+  },
+  "Brise-portes cuirassé": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/thumb.webp"
+  },
+  "Brume vivante": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/brume-vivante/thumb.webp"
   },
   "Béliers de siège nomades": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/beliers-de-siege-nomades/full.webp",
@@ -123,10 +170,20 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes/thumb.webp"
   },
+  "Champignons marcheurs": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/champignons-marcheurs/thumb.webp"
+  },
   "Championne du Cercle aldori": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/thumb.webp"
+  },
+  "Chariot de guerre": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/thumb.webp"
   },
   "Chasseurs de chevaux": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chasseurs-de-chevaux/full.webp",
@@ -138,15 +195,30 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil/thumb.webp"
   },
+  "Chat-sorcier": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chat-sorcier/thumb.webp"
+  },
   "Chevaliers des Six Couronnes": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/thumb.webp"
   },
+  "Chevaliers d’épines": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevaliers-d-epines/thumb.webp"
+  },
   "Chevaucheuse de l’Orage": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/thumb.webp"
+  },
+  "Chevreuils de verre": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/chevreuils-de-verre/thumb.webp"
   },
   "Compagnie des Rubans rouges": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/compagnie-des-rubans-rouges/full.webp",
@@ -162,6 +234,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/thumb.webp"
+  },
+  "Corbeaux prophétiques": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/corbeaux-prophetiques/thumb.webp"
+  },
+  "Cour des Feux follets": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cour-des-feux-follets/thumb.webp"
   },
   "Dame Blanche de Surtova": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/full.webp",
@@ -182,6 +264,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/thumb.webp"
+  },
+  "Dryade ancienne": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/thumb.webp"
+  },
+  "Dryade guérisseuse": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-guerisseuse/thumb.webp"
+  },
+  "Dryades anciennes": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/dryade-ancienne/thumb.webp"
   },
   "Duelliste vétéran": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duelliste-veteran/full.webp",
@@ -213,6 +310,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane/thumb.webp"
   },
+  "Esprits des sources": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/esprits-des-sources/thumb.webp"
+  },
+  "Farfadets des pierres": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/farfadets-des-pierres/thumb.webp"
+  },
   "Fauconnier des steppes": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/medium.webp",
@@ -222,6 +329,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/thumb.webp"
+  },
+  "Faucons de guerre": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/thumb.webp"
+  },
+  "Feux follets": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/feux-follets/thumb.webp"
   },
   "Forgerons de campagne": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/forgerons-de-campagne/full.webp",
@@ -233,7 +350,7 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere/thumb.webp"
   },
-  "Garde du Serment de Restov": {
+  "Garde de Restov": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/thumb.webp"
@@ -243,10 +360,20 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/thumb.webp"
   },
+  "Garde du Serment de Restov": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/thumb.webp"
+  },
   "Garde d’honneur de Restov": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/thumb.webp"
+  },
+  "Garde montée de la Khanesse": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/thumb.webp"
   },
   "Gardes de l’Avant-poste": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardes-de-l-avant-poste/full.webp",
@@ -277,6 +404,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/thumb.webp"
+  },
+  "Gobelins féeriques": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/gobelins-feeriques/thumb.webp"
+  },
+  "Géant couvert de mousse": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/geant-couvert-de-mousse/thumb.webp"
   },
   "Hamadryade millénaire": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/hamadryade-millenaire/full.webp",
@@ -363,6 +500,11 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour/thumb.webp"
   },
+  "Lianes étrangleuses": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/lianes-etrangleuses/thumb.webp"
+  },
   "Licorne des chemins perdus": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus/medium.webp",
@@ -377,6 +519,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/thumb.webp"
+  },
+  "Loups à ramures": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/loups-a-ramures/thumb.webp"
+  },
+  "Lucy": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lucy/thumb.webp"
+  },
+  "Lysa": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/lysa/thumb.webp"
   },
   "Maegar Varn": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/maegar-varn/full.webp",
@@ -433,6 +590,11 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande/thumb.webp"
   },
+  "Meute des plaines grises": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/thumb.webp"
+  },
   "Mikhaïl Rassvet": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet/medium.webp",
@@ -443,6 +605,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin/thumb.webp"
   },
+  "Mimique de la clairière": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/mimique-de-la-clairiere/thumb.webp"
+  },
+  "Nixie des eaux vertes": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/thumb.webp"
+  },
+  "Nixies des eaux vertes": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nixie-des-eaux-vertes/thumb.webp"
+  },
   "Nyrissa, Reine des Épines": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/medium.webp",
@@ -452,6 +629,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/thumb.webp"
+  },
+  "Ondines de la Sellen": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ondines-de-la-sellen/thumb.webp"
+  },
+  "Papillons de nuit géants": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/papillons-de-nuit-geants/thumb.webp"
   },
   "Passeurs de la Sellen": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/passeurs-de-la-sellen/full.webp",
@@ -483,6 +670,16 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue/thumb.webp"
   },
+  "Pionniers du royaume": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/thumb.webp"
+  },
+  "Pixies des clairières": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/pixies-des-clairieres/thumb.webp"
+  },
   "Portail du Premier Monde": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/medium.webp",
@@ -503,6 +700,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov/thumb.webp"
   },
+  "Quicklings du sous-bois": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/quicklings-du-sous-bois/thumb.webp"
+  },
+  "Redéploiement éclair": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/thumb.webp"
+  },
+  "Ronces animées": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/ronces-animees/thumb.webp"
+  },
   "Salon des Lames": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames/medium.webp",
@@ -513,20 +725,50 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes/thumb.webp"
   },
+  "Satyre rieur": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/satyre-rieur/thumb.webp"
+  },
   "Sentinelles du Pont du Dragon": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/thumb.webp"
+  },
+  "Serpents des brumes": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serpents-des-brumes/thumb.webp"
   },
   "Serviteurs de la Première Épée": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/thumb.webp"
   },
+  "Serviteurs de l’Épine": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/serviteurs-de-l-epine/thumb.webp"
+  },
+  "Sery": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sery/thumb.webp"
+  },
+  "Tambours de la Horde": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/thumb.webp"
+  },
   "Tentes du conseil khan": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/thumb.webp"
+  },
+  "Tertre aux murmures": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/tertre-aux-murmures/thumb.webp"
   },
   "Thea": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/full.webp",
@@ -537,6 +779,21 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/thumb.webp"
+  },
+  "Treant du Bois oublié": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/treant-du-bois-oublie/thumb.webp"
+  },
+  "Troll moussu": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/troll-moussu/thumb.webp"
+  },
+  "Veilleurs des feux de camp": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/thumb.webp"
   },
   "Veilleurs des Hautes Marches": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/veilleurs-des-hautes-marches/full.webp",
@@ -553,15 +810,20 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/thumb.webp"
   },
-  "Éclaireurs de Restov": {
-    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/full.webp",
-    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/medium.webp",
-    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/thumb.webp"
+  "Vordakai": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/vordakai/thumb.webp"
   },
   "Éclaireurs de la Sellen": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/thumb.webp"
+  },
+  "Éclaireurs de Restov": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/thumb.webp"
   },
   "Éclaireurs des herbes hautes": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireurs-des-herbes-hautes/full.webp",
@@ -577,6 +839,11 @@ export const CARD_ART_BY_NAME = Object.freeze({
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/thumb.webp"
+  },
+  "Écuyers de la Maison": {
+    "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/full.webp",
+    "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/medium.webp",
+    "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/thumb.webp"
   },
   "Émissaires de la Cour": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/emissaires-de-la-cour/full.webp",

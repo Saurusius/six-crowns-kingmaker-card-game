@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.63
+## Règles du prototype 0.8.64
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -46,17 +46,17 @@ Le catalogue comprend désormais **160 cartes**, réparties en **quatre collecti
 
 Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les personnages nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
-## Nouveautés de la v0.8.63
+## Nouveautés de la v0.8.64
 
-- analyse du deck déplacée dans une fenêtre autonome ;
-- panneau latéral **Deck actuel** enrichi avec nom, chargement, sauvegarde, renommage, duplication et suppression ;
-- mosaïque des cartes disponibles libérée de tous les panneaux d’analyse et de gestion.
+- intégration complète des **160 illustrations** du catalogue ;
+- trois variantes optimisées par carte : `full`, `medium` et `thumb` ;
+- suppression des 46 derniers blocs d’illustration vides ;
+- carte d’illustrations des decks de démonstration régénérée depuis le manifeste ;
+- ajout d’alias pour que toutes les cartes de démonstration disposent également d’un visuel ;
+- validation automatique de l’existence, du format WebP et des dimensions des 480 fichiers de cartes ;
+- retrait des anciens audits et mappings devenus obsolètes.
 
-- constructeur de deck en mosaïque avec filtres responsive ;
-- iconographie unifiée entre glossaire, collection et cartes ;
-- pastilles de rareté illustrées dans « Ma collection » ;
-- tirage au sort enrichi et animation de pièce retravaillée ;
-- choix de mulligan indiqué par une coche ou une icône de remplacement.
+La v0.8.63 avait déplacé l’analyse du deck dans une fenêtre autonome et regroupé la gestion des decks dans le panneau latéral **Deck actuel**.
 
 ## Boosters et collection personnelle
 
@@ -153,10 +153,10 @@ const boostersDisponibles = await api.getBoosterCredits();
 
 ## Illustrations de cartes
 
-Chaque carte peut recevoir un chemin `image`. Sans image, un visuel temporaire propre à sa faction est affiché automatiquement. Consultez `assets/cards/README.md` pour le format et l’arborescence recommandés.
+Les **160 cartes** sont illustrées et possèdent trois variantes optimisées : `full`, `medium` et `thumb`. Les chemins sont stockés dans le bloc `art` de chaque carte et sont synchronisés avec `documentation/manifest-cards.json`.
 
-## Illustrations
+Le module conserve un fallback visuel propre à chaque faction afin de rester utilisable si un fichier est déplacé ou endommagé après installation. Consultez `assets/cards/README.md` pour l’arborescence et les résolutions attendues.
 
-La v0.8.6 intègre **114 illustrations sur 160 cartes**. Chaque carte illustrée possède trois variantes optimisées (`full`, `medium`, `thumb`). Les 46 cartes restantes utilisent automatiquement le placeholder prévu par le module.
+## Audit des illustrations
 
-Le mapping de production et l’audit détaillé sont conservés dans `docs/illustrations`.
+L’audit de conformité, le mapping complet, les manifestes et les sommes de contrôle sont conservés dans `documentation/`. Les anciens documents partiels de `docs/illustrations` ont été supprimés afin d’éviter toute confusion avec l’état actuel du catalogue.

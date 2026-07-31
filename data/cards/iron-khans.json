@@ -353,9 +353,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chariot-de-guerre/thumb.webp"
     },
     "type": "unite"
   },
@@ -420,9 +420,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/redeploiement-eclair/thumb.webp"
     },
     "type": "tactique"
   },
@@ -777,9 +777,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/veilleurs-des-feux-de-camp/thumb.webp"
     },
     "type": "unite"
   },
@@ -801,9 +801,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/meute-des-plaines-grises/thumb.webp"
     },
     "type": "unite"
   },
@@ -825,9 +825,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/garde-montee-de-la-khanesse/thumb.webp"
     },
     "type": "unite"
   },
@@ -848,9 +848,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tambours-de-la-horde/thumb.webp"
     },
     "type": "unite"
   },
@@ -869,9 +869,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-portes-cuirasse/thumb.webp"
     },
     "type": "unite"
   },
@@ -892,9 +892,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/faucons-de-guerre/thumb.webp"
     },
     "type": "unite"
   }
