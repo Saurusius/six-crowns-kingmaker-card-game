@@ -65,9 +65,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/jabberwock-des-clairieres/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/jabberwock-des-clairieres/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/jabberwock-des-clairieres/thumb.webp"
     },
     "type": "unite"
   },
@@ -88,9 +88,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/hamadryade-millenaire/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/hamadryade-millenaire/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/hamadryade-millenaire/thumb.webp"
     },
     "type": "unite"
   },
@@ -854,9 +854,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus/thumb.webp"
     },
     "type": "unite"
   },

@@ -33,11 +33,11 @@ test("les templates exposent les textes longs au clavier et au survol", async ()
   assert.match(analytics, /<span title="\{\{name\}\}">/);
 });
 
-test("le manifeste annonce la version 0.8.5", async () => {
+test("le manifeste et le package annoncent la même version", async () => {
   const moduleData = JSON.parse(await read("../module.json"));
   const packageData = JSON.parse(await read("../package.json"));
-  assert.equal(moduleData.version, "0.8.5");
-  assert.equal(packageData.version, "0.8.5");
+  assert.equal(moduleData.version, packageData.version);
+  assert.match(moduleData.version, /^0\.8\.\d+$/);
 });
 
 test("v0.8.5 supprime les barres de défilement de la révélation des boosters", async () => {

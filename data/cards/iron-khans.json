@@ -41,9 +41,9 @@
     "rarity": "unique",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-serment-de-fer/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-serment-de-fer/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-serment-de-fer/thumb.webp"
     },
     "type": "personnage"
   },
@@ -111,9 +111,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-de-fer/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-de-fer/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-de-fer/thumb.webp"
     },
     "type": "unite"
   },
@@ -133,9 +133,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-montes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-montes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-montes/thumb.webp"
     },
     "type": "unite"
   },
@@ -156,9 +156,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-nomades/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-nomades/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-nomades/thumb.webp"
     },
     "type": "unite"
   },
@@ -179,9 +179,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes/thumb.webp"
     },
     "type": "unite"
   },
@@ -200,9 +200,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes/thumb.webp"
     },
     "type": "unite"
   },
@@ -221,9 +221,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/thumb.webp"
     },
     "type": "unite"
   },
@@ -244,9 +244,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-banniere-de-fer/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-banniere-de-fer/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-banniere-de-fer/thumb.webp"
     },
     "type": "unite"
   },
@@ -265,9 +265,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes/thumb.webp"
     },
     "type": "unite"
   },
@@ -286,9 +286,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/marechal-ferrant-khan/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/marechal-ferrant-khan/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/marechal-ferrant-khan/thumb.webp"
     },
     "type": "unite"
   },
@@ -309,9 +309,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/camp-de-guerre-nomade/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/camp-de-guerre-nomade/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/camp-de-guerre-nomade/thumb.webp"
     },
     "type": "unite"
   },
@@ -330,9 +330,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireuse-khan/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireuse-khan/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireuse-khan/thumb.webp"
     },
     "type": "unite"
   },
@@ -375,9 +375,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue/thumb.webp"
     },
     "type": "unite"
   },
@@ -396,9 +396,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes/thumb.webp"
     },
     "type": "unite"
   },
@@ -441,9 +441,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireurs-des-herbes-hautes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireurs-des-herbes-hautes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireurs-des-herbes-hautes/thumb.webp"
     },
     "type": "unite"
   },
@@ -463,9 +463,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-des-gues-noirs/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-des-gues-noirs/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-des-gues-noirs/thumb.webp"
     },
     "type": "unite"
   },
@@ -486,9 +486,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-haches-nomades/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-haches-nomades/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-haches-nomades/thumb.webp"
     },
     "type": "unite"
   },
@@ -509,9 +509,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe/thumb.webp"
     },
     "type": "unite"
   },
@@ -532,9 +532,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardiennes-des-troupeaux/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardiennes-des-troupeaux/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardiennes-des-troupeaux/thumb.webp"
     },
     "type": "unite"
   },
@@ -555,9 +555,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/forgerons-de-campagne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/forgerons-de-campagne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/forgerons-de-campagne/thumb.webp"
     },
     "type": "unite"
   },
@@ -576,9 +576,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/braconniers-des-collines/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/braconniers-des-collines/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/braconniers-des-collines/thumb.webp"
     },
     "type": "unite"
   },
@@ -599,9 +599,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-du-tonnerre/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-du-tonnerre/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-du-tonnerre/thumb.webp"
     },
     "type": "unite"
   },
@@ -623,9 +623,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardes-du-cercle-de-chariots/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardes-du-cercle-de-chariots/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardes-du-cercle-de-chariots/thumb.webp"
     },
     "type": "unite"
   },
@@ -646,9 +646,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/messagers-a-cheval/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/messagers-a-cheval/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/messagers-a-cheval/thumb.webp"
     },
     "type": "unite"
   },
@@ -669,9 +669,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-des-cols/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-des-cols/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-des-cols/thumb.webp"
     },
     "type": "unite"
   },
@@ -690,9 +690,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-du-vent-sec/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-du-vent-sec/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-du-vent-sec/thumb.webp"
     },
     "type": "unite"
   },
@@ -713,9 +713,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan/thumb.webp"
     },
     "type": "unite"
   },
@@ -735,9 +735,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chasseurs-de-chevaux/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chasseurs-de-chevaux/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chasseurs-de-chevaux/thumb.webp"
     },
     "type": "unite"
   },
@@ -756,9 +756,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/beliers-de-siege-nomades/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/beliers-de-siege-nomades/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/beliers-de-siege-nomades/thumb.webp"
     },
     "type": "unite"
   },

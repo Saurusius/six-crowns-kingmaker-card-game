@@ -1,5 +1,15 @@
 # Journal des versions
 
+
+## 0.8.6 — Intégration massive des illustrations
+
+- Intègre 114 illustrations de cartes sur 160, avec trois résolutions optimisées (`full`, `medium`, `thumb`).
+- Met à jour automatiquement les données des cartes et le manifeste des illustrations.
+- Ajoute une carte d’illustrations partagée pour les decks de démonstration.
+- Conserve l’intégralité des compositions sources grâce à un fond flouté discret au ratio 5:7.
+- Livre le mapping corrigé et l’audit v2 dans `docs/illustrations`.
+- Maintient les placeholders pour les 46 cartes encore à produire.
+
 ## 0.8.5 — Lisibilité et textes longs
 
 - agrandissement des cartes détaillées de collection et amélioration de la taille des textes ;

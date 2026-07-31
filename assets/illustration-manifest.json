@@ -1,48 +1,36 @@
 {
-  "version": "0.7.19",
-  "integratedCardArtCount": 20,
+  "version": "0.8.6",
+  "integratedCardArtCount": 114,
   "integratedCardArt": [
     {
-      "id": "AL-11",
-      "name": "Espion de Restov",
-      "source": "portraits/aldori/espion-du-restov.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov"
+      "id": "NE-01",
+      "name": "Maegar Varn",
+      "source": "portraits/six-crowns/maegar-varn.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/maegar-varn"
     },
     {
-      "id": "AL-02",
-      "name": "Jamandi Aldori, Hôtesse de Restov",
-      "source": "portraits/aldori/jamandi-aldori-hotesse-de-restov.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov"
+      "id": "NE-02",
+      "name": "Bokken, alchimiste des Marches",
+      "source": "portraits/six-crowns/bokken-alchimiste-des-marches.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches"
     },
     {
-      "id": "AL-01",
-      "name": "Jamandi Aldori, Première Épée",
-      "source": "portraits/aldori/jamandi-aldori-premiere-epee.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee"
+      "id": "NE-03",
+      "name": "Linzi, chroniqueuse du royaume",
+      "source": "portraits/six-crowns/linzi-chroniqueuse-du-royaume.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/linzi-chroniqueuse-du-royaume"
     },
     {
-      "id": "AL-03",
-      "name": "Vera Sokolneva, Lame noire",
-      "source": "portraits/aldori/vera-sokolneva-lame-noire.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire"
+      "id": "NE-04",
+      "name": "Jubilost Narthropple",
+      "source": "portraits/six-crowns/jubilost-narthropple.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/jubilost-narthropple"
     },
     {
-      "id": "KF-04",
-      "name": "Chevaucheuse de l’Orage",
-      "source": "portraits/iron-khans/chevaucheuse-de-l-orage.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage"
-    },
-    {
-      "id": "KF-03",
-      "name": "Iron Wrath",
-      "source": "portraits/iron-khans/iron-wrath.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath"
-    },
-    {
-      "id": "KF-01",
-      "name": "La Khanesse, Reine sans couronne",
-      "source": "portraits/iron-khans/la-khanesse-reine-sans-couronne.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne"
+      "id": "SC-01",
+      "name": "Odéon de Saulébène",
+      "source": "portraits/six-crowns/odeon-de-saulebene.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene"
     },
     {
       "id": "SC-02",
@@ -51,28 +39,22 @@
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn"
     },
     {
-      "id": "NE-02",
-      "name": "Bokken, alchimiste des Marches",
-      "source": "portraits/six-crowns/bokken.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches"
-    },
-    {
       "id": "SC-04",
       "name": "Dame Blanche de Surtova",
       "source": "portraits/six-crowns/dame-blanche-de-surtova.webp",
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova"
     },
     {
+      "id": "SC-05",
+      "name": "Daowen",
+      "source": "portraits/six-crowns/daowen.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/daowen"
+    },
+    {
       "id": "SC-06",
       "name": "Elias Thornwell",
       "source": "portraits/six-crowns/elias-thornwell.webp",
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell"
-    },
-    {
-      "id": "SC-14",
-      "name": "Garde du palais",
-      "source": "portraits/six-crowns/garde-du-palais.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais"
     },
     {
       "id": "SC-07",
@@ -87,28 +69,580 @@
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda"
     },
     {
-      "id": "SC-01",
-      "name": "Odéon de Saulébène",
-      "source": "portraits/six-crowns/odeon-de-saulebene.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene"
-    },
-    {
       "id": "SC-12",
       "name": "Thea",
-      "source": "portraits/six-crowns/thea.webp.webp",
+      "source": "portraits/six-crowns/thea.webp",
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea"
     },
     {
-      "id": "AA-18",
-      "name": "Cerf blanc du Premier Monde",
-      "source": "portraits/stolen-lands-arcana/cerf-blanc-du-premier-monde.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde"
+      "id": "SC-13",
+      "name": "Chevaliers des Six Couronnes",
+      "source": "portraits/six-crowns/chevaliers-des-six-couronnes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes"
     },
     {
-      "id": "AA-02",
-      "name": "Le Roi-Lanterne",
-      "source": "portraits/stolen-lands-arcana/le-roi-lanterne.webp",
-      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne"
+      "id": "SC-14",
+      "name": "Garde du palais",
+      "source": "portraits/six-crowns/garde-du-palais.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais"
+    },
+    {
+      "id": "SC-15",
+      "name": "Éclaireurs de la Sellen",
+      "source": "portraits/six-crowns/eclaireurs-de-la-sellen.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen"
+    },
+    {
+      "id": "SC-16",
+      "name": "Milice du Moulin",
+      "source": "portraits/six-crowns/milice-du-moulin.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin"
+    },
+    {
+      "id": "SC-17",
+      "name": "Forteresse frontalière",
+      "source": "portraits/six-crowns/forteresse-frontaliere.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere"
+    },
+    {
+      "id": "SC-18",
+      "name": "Arbalétriers de la Couronne",
+      "source": "portraits/six-crowns/arbaletriers-de-la-couronne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne"
+    },
+    {
+      "id": "SC-19",
+      "name": "Gardiens des Béliers Noirs",
+      "source": "portraits/six-crowns/gardiens-des-beliers-noirs.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs"
+    },
+    {
+      "id": "SC-20",
+      "name": "Meuniers de Brumelande",
+      "source": "portraits/six-crowns/meuniers-de-brumelande.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande"
+    },
+    {
+      "id": "SC-21",
+      "name": "Chasseurs d’Erastil",
+      "source": "portraits/six-crowns/chasseurs-d-erastil.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil"
+    },
+    {
+      "id": "SC-22",
+      "name": "Passeurs de la Sellen",
+      "source": "portraits/six-crowns/passeurs-de-la-sellen.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/passeurs-de-la-sellen"
+    },
+    {
+      "id": "SC-23",
+      "name": "Sapeurs des Six Couronnes",
+      "source": "portraits/six-crowns/sapeurs-des-six-couronnes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes"
+    },
+    {
+      "id": "SC-24",
+      "name": "Émissaires de la Cour",
+      "source": "portraits/six-crowns/emissaires-de-la-cour.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/emissaires-de-la-cour"
+    },
+    {
+      "id": "SC-25",
+      "name": "Gardes de l’Avant-poste",
+      "source": "portraits/six-crowns/gardes-de-l-avant-poste.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardes-de-l-avant-poste"
+    },
+    {
+      "id": "SC-26",
+      "name": "Patrouille des Routes royales",
+      "source": "portraits/six-crowns/patrouille-des-routes-royales.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouille-des-routes-royales"
+    },
+    {
+      "id": "SC-27",
+      "name": "Veilleurs des Hautes Marches",
+      "source": "portraits/six-crowns/veilleurs-des-hautes-marches.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/veilleurs-des-hautes-marches"
+    },
+    {
+      "id": "SC-28",
+      "name": "Alchimistes de la Couronne",
+      "source": "portraits/six-crowns/alchimistes-de-la-couronne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne"
+    },
+    {
+      "id": "SC-29",
+      "name": "Archivistes du Palais",
+      "source": "portraits/six-crowns/archivistes-du-palais.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais"
+    },
+    {
+      "id": "SC-30",
+      "name": "Patrouilleurs du Fleuve",
+      "source": "portraits/six-crowns/patrouilleurs-du-fleuve.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouilleurs-du-fleuve"
+    },
+    {
+      "id": "SC-31",
+      "name": "Ingénieurs des Frontières",
+      "source": "portraits/six-crowns/ingenieurs-des-frontieres.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres"
+    },
+    {
+      "id": "SC-32",
+      "name": "Conseil des Six Couronnes",
+      "source": "portraits/six-crowns/conseil-des-six-couronnes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes"
+    },
+    {
+      "id": "SP-01",
+      "name": "Bannière royale",
+      "source": "portraits/six-crowns/banniere-royale.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale"
+    },
+    {
+      "id": "SP-02",
+      "name": "Étendard des Marches",
+      "source": "portraits/six-crowns/etendard-des-marches.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/etendard-des-marches"
+    },
+    {
+      "id": "SP-05",
+      "name": "Diversion diplomatique",
+      "source": "portraits/six-crowns/diversion-diplomatique.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique"
+    },
+    {
+      "id": "AL-01",
+      "name": "Jamandi Aldori, Première Épée",
+      "source": "portraits/aldori/jamandi-aldori-premiere-epee.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee"
+    },
+    {
+      "id": "AL-02",
+      "name": "Jamandi Aldori, Hôtesse de Restov",
+      "source": "portraits/aldori/jamandi-aldori-hotesse-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov"
+    },
+    {
+      "id": "AL-03",
+      "name": "Vera Sokolneva, Lame noire",
+      "source": "portraits/aldori/vera-sokolneva-lame-noire.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire"
+    },
+    {
+      "id": "AL-04",
+      "name": "Elénaïs, l’Héritière déchue",
+      "source": "portraits/aldori/elenais-l-heritiere-dechue.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/elenais-l-heritiere-dechue"
+    },
+    {
+      "id": "AL-05",
+      "name": "Mikhaïl Rassvet",
+      "source": "portraits/aldori/mikhail-rassvet.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet"
+    },
+    {
+      "id": "AL-06",
+      "name": "Maître d’armes aldori",
+      "source": "portraits/aldori/maitre-d-armes-aldori.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitre-d-armes-aldori"
+    },
+    {
+      "id": "AL-07",
+      "name": "Duelliste vétéran",
+      "source": "portraits/aldori/duelliste-veteran.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duelliste-veteran"
+    },
+    {
+      "id": "AL-08",
+      "name": "Cadets aldori",
+      "source": "portraits/aldori/cadets-aldori.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-aldori"
+    },
+    {
+      "id": "AL-09",
+      "name": "Épéistes de Restov",
+      "source": "portraits/aldori/epeistes-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-de-restov"
+    },
+    {
+      "id": "AL-10",
+      "name": "Danseuse à la lame",
+      "source": "portraits/aldori/danseuse-a-la-lame.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/danseuse-a-la-lame"
+    },
+    {
+      "id": "AL-11",
+      "name": "Espion de Restov",
+      "source": "portraits/aldori/espion-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov"
+    },
+    {
+      "id": "AL-12",
+      "name": "Académie aldori",
+      "source": "portraits/aldori/academie-aldori.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academie-aldori"
+    },
+    {
+      "id": "AL-13",
+      "name": "Salon des Lames",
+      "source": "portraits/aldori/salon-des-lames.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames"
+    },
+    {
+      "id": "AL-14",
+      "name": "Arbitre du duel",
+      "source": "portraits/aldori/arbitre-du-duel.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitre-du-duel"
+    },
+    {
+      "id": "AL-15",
+      "name": "Garde d’honneur de Restov",
+      "source": "portraits/aldori/garde-d-honneur-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov"
+    },
+    {
+      "id": "AL-16",
+      "name": "Messagère de la Maison Aldori",
+      "source": "portraits/aldori/messagere-de-la-maison-aldori.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagere-de-la-maison-aldori"
+    },
+    {
+      "id": "AL-17",
+      "name": "Lame de la Première Épée",
+      "source": "portraits/aldori/lame-de-la-premiere-epee.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lame-de-la-premiere-epee"
+    },
+    {
+      "id": "AL-18",
+      "name": "Lames de la Porte rouge",
+      "source": "portraits/aldori/lames-de-la-porte-rouge.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lames-de-la-porte-rouge"
+    },
+    {
+      "id": "AL-19",
+      "name": "Éclaireurs de Restov",
+      "source": "portraits/aldori/eclaireurs-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov"
+    },
+    {
+      "id": "AL-20",
+      "name": "Maîtres de posture",
+      "source": "portraits/aldori/maitres-de-posture.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitres-de-posture"
+    },
+    {
+      "id": "AL-21",
+      "name": "Gardes du quartier des Épées",
+      "source": "portraits/aldori/gardes-du-quartier-des-epees.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-du-quartier-des-epees"
+    },
+    {
+      "id": "AL-22",
+      "name": "Duellistes de l’Aube",
+      "source": "portraits/aldori/duellistes-de-l-aube.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duellistes-de-l-aube"
+    },
+    {
+      "id": "AL-23",
+      "name": "Instructrices de la Lame",
+      "source": "portraits/aldori/instructrices-de-la-lame.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/instructrices-de-la-lame"
+    },
+    {
+      "id": "AL-24",
+      "name": "Messagers de Restov",
+      "source": "portraits/aldori/messagers-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagers-de-restov"
+    },
+    {
+      "id": "AL-25",
+      "name": "Gardes des salles d’armes",
+      "source": "portraits/aldori/gardes-des-salles-d-armes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-des-salles-d-armes"
+    },
+    {
+      "id": "AL-26",
+      "name": "Cadets de la Lame argentée",
+      "source": "portraits/aldori/cadets-de-la-lame-argentee.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee"
+    },
+    {
+      "id": "AL-27",
+      "name": "Archers des remparts",
+      "source": "portraits/aldori/archers-des-remparts.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts"
+    },
+    {
+      "id": "AL-28",
+      "name": "Épéistes du marché haut",
+      "source": "portraits/aldori/epeistes-du-marche-haut.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-du-marche-haut"
+    },
+    {
+      "id": "AL-29",
+      "name": "Espions du Filigrane",
+      "source": "portraits/aldori/espions-du-filigrane.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane"
+    },
+    {
+      "id": "AL-30",
+      "name": "Serviteurs de la Première Épée",
+      "source": "portraits/aldori/serviteurs-de-la-premiere-epee.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee"
+    },
+    {
+      "id": "AL-31",
+      "name": "Porte-lames de Restov",
+      "source": "portraits/aldori/porte-lames-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov"
+    },
+    {
+      "id": "AL-32",
+      "name": "Éclaireuses du Bois rouge",
+      "source": "portraits/aldori/eclaireuses-du-bois-rouge.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge"
+    },
+    {
+      "id": "AL-33",
+      "name": "Arbitres itinérants",
+      "source": "portraits/aldori/arbitres-itinerants.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants"
+    },
+    {
+      "id": "AL-34",
+      "name": "Sentinelles du Pont du Dragon",
+      "source": "portraits/aldori/sentinelles-du-pont-du-dragon.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon"
+    },
+    {
+      "id": "AL-35",
+      "name": "Compagnie des Rubans rouges",
+      "source": "portraits/aldori/compagnie-des-rubans-rouges.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/compagnie-des-rubans-rouges"
+    },
+    {
+      "id": "AL-36",
+      "name": "Championne du Cercle aldori",
+      "source": "portraits/aldori/championne-du-cercle-aldori.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori"
+    },
+    {
+      "id": "AL-37",
+      "name": "Académicien du Duel parfait",
+      "source": "portraits/aldori/academicien-du-duel-parfait.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academicien-du-duel-parfait"
+    },
+    {
+      "id": "AL-38",
+      "name": "Garde du Serment de Restov",
+      "source": "portraits/aldori/garde-du-serment-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov"
+    },
+    {
+      "id": "SP-03",
+      "name": "Manœuvre tactique",
+      "source": "portraits/aldori/man-uvre-tactique.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/man-uvre-tactique"
+    },
+    {
+      "id": "SP-06",
+      "name": "Leurre de cour",
+      "source": "portraits/aldori/leurre-de-cour.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour"
+    },
+    {
+      "id": "KF-01",
+      "name": "La Khanesse, Reine sans couronne",
+      "source": "portraits/iron-khans/la-khanesse-reine-sans-couronne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne"
+    },
+    {
+      "id": "KF-02",
+      "name": "La Khanesse, Serment de Fer",
+      "source": "portraits/iron-khans/la-khanesse-serment-de-fer.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-serment-de-fer"
+    },
+    {
+      "id": "KF-03",
+      "name": "Iron Wrath",
+      "source": "portraits/iron-khans/iron-wrath.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath"
+    },
+    {
+      "id": "KF-04",
+      "name": "Chevaucheuse de l’Orage",
+      "source": "portraits/iron-khans/chevaucheuse-de-l-orage.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage"
+    },
+    {
+      "id": "KF-05",
+      "name": "Cavaliers de fer",
+      "source": "portraits/iron-khans/cavaliers-de-fer.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-de-fer"
+    },
+    {
+      "id": "KF-06",
+      "name": "Archers montés",
+      "source": "portraits/iron-khans/archers-montes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-montes"
+    },
+    {
+      "id": "KF-07",
+      "name": "Lanciers nomades",
+      "source": "portraits/iron-khans/lanciers-nomades.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-nomades"
+    },
+    {
+      "id": "KF-08",
+      "name": "Loups des steppes",
+      "source": "portraits/iron-khans/loups-des-steppes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/loups-des-steppes"
+    },
+    {
+      "id": "KF-09",
+      "name": "Brise-lignes",
+      "source": "portraits/iron-khans/brise-lignes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/brise-lignes"
+    },
+    {
+      "id": "KF-10",
+      "name": "Arbalétrier lourd",
+      "source": "portraits/iron-khans/arbaletrier-lourd.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd"
+    },
+    {
+      "id": "KF-11",
+      "name": "Porte-bannière de fer",
+      "source": "portraits/iron-khans/porte-banniere-de-fer.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-banniere-de-fer"
+    },
+    {
+      "id": "KF-12",
+      "name": "Chamane des steppes",
+      "source": "portraits/iron-khans/chamane-des-steppes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chamane-des-steppes"
+    },
+    {
+      "id": "KF-13",
+      "name": "Maréchal-ferrant khan",
+      "source": "portraits/iron-khans/marechal-ferrant-khan.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/marechal-ferrant-khan"
+    },
+    {
+      "id": "KF-14",
+      "name": "Camp de guerre nomade",
+      "source": "portraits/iron-khans/camp-de-guerre-nomade.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/camp-de-guerre-nomade"
+    },
+    {
+      "id": "KF-15",
+      "name": "Éclaireuse khan",
+      "source": "portraits/iron-khans/eclaireuse-khan.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireuse-khan"
+    },
+    {
+      "id": "KF-17",
+      "name": "Pillards du gué",
+      "source": "portraits/iron-khans/pillards-du-gue.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-du-gue"
+    },
+    {
+      "id": "KF-18",
+      "name": "Fauconnier des steppes",
+      "source": "portraits/iron-khans/fauconnier-des-steppes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/fauconnier-des-steppes"
+    },
+    {
+      "id": "KF-19",
+      "name": "Éclaireurs des herbes hautes",
+      "source": "portraits/iron-khans/eclaireurs-des-herbes-hautes.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/eclaireurs-des-herbes-hautes"
+    },
+    {
+      "id": "KF-20",
+      "name": "Cavaliers des gués noirs",
+      "source": "portraits/iron-khans/cavaliers-des-gues-noirs.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/cavaliers-des-gues-noirs"
+    },
+    {
+      "id": "KF-21",
+      "name": "Porte-haches nomades",
+      "source": "portraits/iron-khans/porte-haches-nomades.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/porte-haches-nomades"
+    },
+    {
+      "id": "KF-22",
+      "name": "Traqueurs de la steppe",
+      "source": "portraits/iron-khans/traqueurs-de-la-steppe.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/traqueurs-de-la-steppe"
+    },
+    {
+      "id": "KF-23",
+      "name": "Gardiennes des troupeaux",
+      "source": "portraits/iron-khans/gardiennes-des-troupeaux.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardiennes-des-troupeaux"
+    },
+    {
+      "id": "KF-24",
+      "name": "Forgerons de campagne",
+      "source": "portraits/iron-khans/forgerons-de-campagne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/forgerons-de-campagne"
+    },
+    {
+      "id": "KF-25",
+      "name": "Braconniers des collines",
+      "source": "portraits/iron-khans/braconniers-des-collines.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/braconniers-des-collines"
+    },
+    {
+      "id": "KF-26",
+      "name": "Lanciers du Tonnerre",
+      "source": "portraits/iron-khans/lanciers-du-tonnerre.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/lanciers-du-tonnerre"
+    },
+    {
+      "id": "KF-27",
+      "name": "Gardes du cercle de chariots",
+      "source": "portraits/iron-khans/gardes-du-cercle-de-chariots.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/gardes-du-cercle-de-chariots"
+    },
+    {
+      "id": "KF-28",
+      "name": "Messagers à cheval",
+      "source": "portraits/iron-khans/messagers-a-cheval.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/messagers-a-cheval"
+    },
+    {
+      "id": "KF-29",
+      "name": "Pillards des cols",
+      "source": "portraits/iron-khans/pillards-des-cols.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/pillards-des-cols"
+    },
+    {
+      "id": "KF-30",
+      "name": "Archers du vent sec",
+      "source": "portraits/iron-khans/archers-du-vent-sec.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/archers-du-vent-sec"
+    },
+    {
+      "id": "KF-31",
+      "name": "Tentes du conseil khan",
+      "source": "portraits/iron-khans/tentes-du-conseil-khan.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/tentes-du-conseil-khan"
+    },
+    {
+      "id": "KF-32",
+      "name": "Chasseurs de chevaux",
+      "source": "portraits/iron-khans/chasseurs-de-chevaux.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chasseurs-de-chevaux"
+    },
+    {
+      "id": "KF-33",
+      "name": "Béliers de siège nomades",
+      "source": "portraits/iron-khans/beliers-de-siege-nomades.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/beliers-de-siege-nomades"
     },
     {
       "id": "AA-01",
@@ -117,10 +651,40 @@
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines"
     },
     {
+      "id": "AA-02",
+      "name": "Le Roi-Lanterne",
+      "source": "portraits/stolen-lands-arcana/le-roi-lanterne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne"
+    },
+    {
+      "id": "AA-03",
+      "name": "Jabberwock des clairières",
+      "source": "portraits/stolen-lands-arcana/jabberwock-des-clairieres.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/jabberwock-des-clairieres"
+    },
+    {
+      "id": "AA-04",
+      "name": "Hamadryade millénaire",
+      "source": "portraits/stolen-lands-arcana/hamadryade-millenaire.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/hamadryade-millenaire"
+    },
+    {
       "id": "AA-14",
       "name": "Portail du Premier Monde",
       "source": "portraits/stolen-lands-arcana/portail-du-premier-monde.webp",
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde"
+    },
+    {
+      "id": "AA-18",
+      "name": "Cerf blanc du Premier Monde",
+      "source": "portraits/stolen-lands-arcana/cerf-blanc-du-premier-monde.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde"
+    },
+    {
+      "id": "AA-37",
+      "name": "Licorne des chemins perdus",
+      "source": "portraits/stolen-lands-arcana/licorne-des-chemins-perdus.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/licorne-des-chemins-perdus"
     }
   ],
   "unmatchedFiles": [],

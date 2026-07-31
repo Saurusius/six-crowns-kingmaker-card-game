@@ -111,9 +111,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/daowen/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/daowen/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/daowen/thumb.webp"
     },
     "type": "personnage"
   },
@@ -294,9 +294,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chevaliers-des-six-couronnes/thumb.webp"
     },
     "type": "unite"
   },
@@ -338,9 +338,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/eclaireurs-de-la-sellen/thumb.webp"
     },
     "type": "unite"
   },
@@ -361,9 +361,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/milice-du-moulin/thumb.webp"
     },
     "type": "unite"
   },
@@ -384,9 +384,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/forteresse-frontaliere/thumb.webp"
     },
     "type": "unite"
   },
@@ -407,9 +407,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/maegar-varn/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/maegar-varn/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/maegar-varn/thumb.webp"
     },
     "type": "personnage"
   },
@@ -454,9 +454,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/linzi-chroniqueuse-du-royaume/thumb.webp"
     },
     "type": "personnage"
   },
@@ -477,9 +477,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/jubilost-narthropple/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/jubilost-narthropple/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/jubilost-narthropple/thumb.webp"
     },
     "type": "personnage"
   },
@@ -500,9 +500,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/banniere-royale/thumb.webp"
     },
     "type": "tactique"
   },
@@ -523,9 +523,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/etendard-des-marches/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/etendard-des-marches/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/etendard-des-marches/thumb.webp"
     },
     "type": "tactique"
   },
@@ -546,9 +546,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/diversion-diplomatique/thumb.webp"
     },
     "type": "tactique"
   },
@@ -591,9 +591,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/thumb.webp"
     },
     "type": "unite"
   },
@@ -614,9 +614,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardiens-des-beliers-noirs/thumb.webp"
     },
     "type": "unite"
   },
@@ -637,9 +637,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/meuniers-de-brumelande/thumb.webp"
     },
     "type": "unite"
   },
@@ -659,9 +659,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/chasseurs-d-erastil/thumb.webp"
     },
     "type": "unite"
   },
@@ -682,9 +682,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/passeurs-de-la-sellen/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/passeurs-de-la-sellen/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/passeurs-de-la-sellen/thumb.webp"
     },
     "type": "unite"
   },
@@ -704,9 +704,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/sapeurs-des-six-couronnes/thumb.webp"
     },
     "type": "unite"
   },
@@ -727,9 +727,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/emissaires-de-la-cour/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/emissaires-de-la-cour/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/emissaires-de-la-cour/thumb.webp"
     },
     "type": "unite"
   },
@@ -750,9 +750,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardes-de-l-avant-poste/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardes-de-l-avant-poste/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/gardes-de-l-avant-poste/thumb.webp"
     },
     "type": "unite"
   },
@@ -771,9 +771,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouille-des-routes-royales/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouille-des-routes-royales/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouille-des-routes-royales/thumb.webp"
     },
     "type": "unite"
   },
@@ -793,9 +793,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/veilleurs-des-hautes-marches/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/veilleurs-des-hautes-marches/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/veilleurs-des-hautes-marches/thumb.webp"
     },
     "type": "unite"
   },
@@ -816,9 +816,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/alchimistes-de-la-couronne/thumb.webp"
     },
     "type": "unite"
   },
@@ -837,9 +837,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/archivistes-du-palais/thumb.webp"
     },
     "type": "unite"
   },
@@ -860,9 +860,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouilleurs-du-fleuve/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouilleurs-du-fleuve/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/patrouilleurs-du-fleuve/thumb.webp"
     },
     "type": "unite"
   },
@@ -883,9 +883,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/ingenieurs-des-frontieres/thumb.webp"
     },
     "type": "unite"
   },
@@ -906,9 +906,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/conseil-des-six-couronnes/thumb.webp"
     },
     "type": "unite"
   }

@@ -11,9 +11,10 @@ function readJson(relative) {
   return JSON.parse(fs.readFileSync(path.join(root, relative), "utf8"));
 }
 
-test("le premier lot contient vingt cartes illustrées avec trois résolutions", () => {
+test("le catalogue illustré contient 114 cartes avec trois résolutions", () => {
   const manifest = readJson("assets/illustration-manifest.json");
-  assert.equal(manifest.integratedCardArtCount, 20);
+  assert.equal(manifest.integratedCardArtCount, 114);
+  assert.equal(manifest.integratedCardArt.length, manifest.integratedCardArtCount);
   assert.deepEqual(manifest.unmatchedFiles, []);
   for (const card of manifest.integratedCardArt) {
     const relativeBase = card.base.replace("modules/six-crowns-kingmaker-card-game/", "");

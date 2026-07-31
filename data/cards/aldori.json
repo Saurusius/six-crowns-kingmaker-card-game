@@ -88,9 +88,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/elenais-l-heritiere-dechue/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/elenais-l-heritiere-dechue/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/elenais-l-heritiere-dechue/thumb.webp"
     },
     "type": "personnage"
   },
@@ -109,9 +109,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/mikhail-rassvet/thumb.webp"
     },
     "type": "personnage"
   },
@@ -132,9 +132,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitre-d-armes-aldori/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitre-d-armes-aldori/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitre-d-armes-aldori/thumb.webp"
     },
     "type": "unite"
   },
@@ -153,9 +153,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duelliste-veteran/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duelliste-veteran/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duelliste-veteran/thumb.webp"
     },
     "type": "unite"
   },
@@ -176,9 +176,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-aldori/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-aldori/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-aldori/thumb.webp"
     },
     "type": "unite"
   },
@@ -199,9 +199,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-de-restov/thumb.webp"
     },
     "type": "unite"
   },
@@ -221,9 +221,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/danseuse-a-la-lame/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/danseuse-a-la-lame/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/danseuse-a-la-lame/thumb.webp"
     },
     "type": "unite"
   },
@@ -265,9 +265,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academie-aldori/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academie-aldori/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academie-aldori/thumb.webp"
     },
     "type": "unite"
   },
@@ -286,9 +286,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/salon-des-lames/thumb.webp"
     },
     "type": "unite"
   },
@@ -307,9 +307,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitre-du-duel/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitre-du-duel/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitre-du-duel/thumb.webp"
     },
     "type": "unite"
   },
@@ -328,9 +328,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-d-honneur-de-restov/thumb.webp"
     },
     "type": "unite"
   },
@@ -349,9 +349,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagere-de-la-maison-aldori/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagere-de-la-maison-aldori/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagere-de-la-maison-aldori/thumb.webp"
     },
     "type": "unite"
   },
@@ -370,9 +370,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lame-de-la-premiere-epee/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lame-de-la-premiere-epee/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lame-de-la-premiere-epee/thumb.webp"
     },
     "type": "unite"
   },
@@ -394,9 +394,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/man-uvre-tactique/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/man-uvre-tactique/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/man-uvre-tactique/thumb.webp"
     },
     "type": "tactique"
   },
@@ -418,9 +418,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/leurre-de-cour/thumb.webp"
     },
     "type": "tactique"
   },
@@ -439,9 +439,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lames-de-la-porte-rouge/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lames-de-la-porte-rouge/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/lames-de-la-porte-rouge/thumb.webp"
     },
     "type": "unite"
   },
@@ -462,9 +462,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireurs-de-restov/thumb.webp"
     },
     "type": "unite"
   },
@@ -485,9 +485,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitres-de-posture/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitres-de-posture/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/maitres-de-posture/thumb.webp"
     },
     "type": "unite"
   },
@@ -508,9 +508,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-du-quartier-des-epees/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-du-quartier-des-epees/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-du-quartier-des-epees/thumb.webp"
     },
     "type": "unite"
   },
@@ -530,9 +530,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duellistes-de-l-aube/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duellistes-de-l-aube/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/duellistes-de-l-aube/thumb.webp"
     },
     "type": "unite"
   },
@@ -553,9 +553,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/instructrices-de-la-lame/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/instructrices-de-la-lame/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/instructrices-de-la-lame/thumb.webp"
     },
     "type": "unite"
   },
@@ -576,9 +576,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagers-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagers-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/messagers-de-restov/thumb.webp"
     },
     "type": "unite"
   },
@@ -597,9 +597,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-des-salles-d-armes/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-des-salles-d-armes/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/gardes-des-salles-d-armes/thumb.webp"
     },
     "type": "unite"
   },
@@ -620,9 +620,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/cadets-de-la-lame-argentee/thumb.webp"
     },
     "type": "unite"
   },
@@ -641,9 +641,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/archers-des-remparts/thumb.webp"
     },
     "type": "unite"
   },
@@ -664,9 +664,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-du-marche-haut/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-du-marche-haut/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/epeistes-du-marche-haut/thumb.webp"
     },
     "type": "unite"
   },
@@ -686,9 +686,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espions-du-filigrane/thumb.webp"
     },
     "type": "unite"
   },
@@ -709,9 +709,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/serviteurs-de-la-premiere-epee/thumb.webp"
     },
     "type": "unite"
   },
@@ -730,9 +730,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/porte-lames-de-restov/thumb.webp"
     },
     "type": "unite"
   },
@@ -751,9 +751,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/eclaireuses-du-bois-rouge/thumb.webp"
     },
     "type": "unite"
   },
@@ -774,9 +774,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/arbitres-itinerants/thumb.webp"
     },
     "type": "unite"
   },
@@ -798,9 +798,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/sentinelles-du-pont-du-dragon/thumb.webp"
     },
     "type": "unite"
   },
@@ -821,9 +821,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/compagnie-des-rubans-rouges/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/compagnie-des-rubans-rouges/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/compagnie-des-rubans-rouges/thumb.webp"
     },
     "type": "unite"
   },
@@ -845,9 +845,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/championne-du-cercle-aldori/thumb.webp"
     },
     "type": "unite"
   },
@@ -868,9 +868,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academicien-du-duel-parfait/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academicien-du-duel-parfait/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/academicien-du-duel-parfait/thumb.webp"
     },
     "type": "unite"
   },
@@ -891,9 +891,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/garde-du-serment-de-restov/thumb.webp"
     },
     "type": "unite"
   }

@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.5
+## Règles du prototype 0.8.6
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -142,3 +142,9 @@ const boostersDisponibles = await api.getBoosterCredits();
 ## Illustrations de cartes
 
 Chaque carte peut recevoir un chemin `image`. Sans image, un visuel temporaire propre à sa faction est affiché automatiquement. Consultez `assets/cards/README.md` pour le format et l’arborescence recommandés.
+
+## Illustrations
+
+La v0.8.6 intègre **114 illustrations sur 160 cartes**. Chaque carte illustrée possède trois variantes optimisées (`full`, `medium`, `thumb`). Les 46 cartes restantes utilisent automatiquement le placeholder prévu par le module.
+
+Le mapping de production et l’audit détaillé sont conservés dans `docs/illustrations`.
