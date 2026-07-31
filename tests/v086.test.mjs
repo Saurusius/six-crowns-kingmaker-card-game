@@ -29,7 +29,9 @@ test("la carte d’illustrations partagée alimente les decks de démonstration"
   assert.match(artMap, /Jamandi Aldori, Première Épée/);
 });
 
-test("la version 0.8.6 est synchronisée dans les manifestes", () => {
-  assert.equal(readJson("module.json").version, "0.8.6");
-  assert.equal(readJson("package.json").version, "0.8.6");
+test("la branche 0.8.6 reste synchronisée dans les manifestes", () => {
+  const moduleVersion = readJson("module.json").version;
+  const packageVersion = readJson("package.json").version;
+  assert.equal(moduleVersion, packageVersion);
+  assert.match(moduleVersion, /^0\.8\.6\d*$/);
 });

@@ -105,16 +105,19 @@
 
   {{#if isCoinToss}}
     <section class="scg-coin-panel">
-      <div class="scg-versus">
-        <span>{{player.name}}</span>
-        <strong>contre</strong>
-        <span>{{opponent.name}}</span>
+      <div class="scg-coin-ambience" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="scg-versus scg-versus-banner">
+        <span class="scg-versus-side"><i class="fa-solid fa-crown"></i>{{player.name}}</span>
+        <strong><small>le destin choisit</small>contre</strong>
+        <span class="scg-versus-side"><i class="fa-solid fa-chess-knight"></i>{{opponent.name}}</span>
       </div>
 
       <div class="scg-coin-stage">
+        <span class="scg-coin-orbit" aria-hidden="true"></span>
+        <span class="scg-coin-shadow" aria-hidden="true"></span>
         <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
-          <div class="scg-coin-face scg-coin-front"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="scg-coin-face scg-coin-back"><i class="fa-solid fa-sword"></i></div>
+          <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
+          <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
         </div>
         {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
       </div>
@@ -152,7 +155,7 @@
       <div class="scg-mulligan-grid">
         {{#each player.hand}}
           <article class="scg-mulligan-card-wrap" data-mulligan-card-id="{{id}}">
-            <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}">
+            <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}" title="{{#if mulliganSelected}}Cliquer pour conserver {{name}}{{else}}Cliquer pour remplacer {{name}}{{/if}}">
               <span class="scg-card-art">
                 {{#if hasImage}}
                   <img src="{{artMedium}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
@@ -162,13 +165,13 @@
                 <span class="scg-strength">{{strength}}</span>
                 <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
                 <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                <span class="scg-mulligan-choice {{#if mulliganSelected}}is-replace{{else}}is-keep{{/if}}" aria-label="{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}" title="{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}"><i class="{{#if mulliganSelected}}fa-solid fa-rotate{{else}}fa-solid fa-check{{/if}}"></i></span>
               </span>
               <span class="scg-card-body">
                 <strong class="scg-card-name">{{name}}</strong>
                 <span class="scg-effect-icons">
                   {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                 </span>
-                <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
               </span>
             </button>
             <button

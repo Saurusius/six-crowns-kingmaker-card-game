@@ -8,10 +8,10 @@ export const FACTION_DETAILS = Object.freeze({
 });
 
 export const RARITY_DETAILS = Object.freeze({
-  commun: Object.freeze({ label: "Commun", colorName: "blanc", order: 1 }),
-  peuCommune: Object.freeze({ label: "Peu commune", colorName: "orange", order: 2 }),
-  rare: Object.freeze({ label: "Rare", colorName: "bleu", order: 3 }),
-  unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4 })
+  commun: Object.freeze({ label: "Commun", colorName: "blanc", order: 1, icon: "fa-regular fa-circle" }),
+  peuCommune: Object.freeze({ label: "Peu commune", colorName: "orange", order: 2, icon: "fa-solid fa-star" }),
+  rare: Object.freeze({ label: "Rare", colorName: "bleu", order: 3, icon: "fa-solid fa-gem" }),
+  unique: Object.freeze({ label: "Unique", colorName: "violet", order: 4, icon: "fa-solid fa-crown" })
 });
 
 export const CARD_TYPE_DETAILS = Object.freeze({
@@ -122,6 +122,7 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       playable: isPlayableCard(card),
       displayName: discovered ? card.name : "Carte inconnue",
       rarityLabel: rarity.label,
+      rarityIcon: rarity.icon ?? "fa-regular fa-circle",
       rarityOrder: rarity.order,
       factionLabel: faction.label,
       factionSymbol: faction.symbol,
@@ -180,6 +181,8 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         typeIcon: CARD_TYPE_DETAILS[card.type]?.icon ?? "fa-solid fa-clone",
         rowBadges: (card.rows ?? []).map((row) => ({ id: row, label: ROW_DETAILS[row]?.label ?? row, icon: ROW_DETAILS[row]?.icon ?? "fa-solid fa-minus" })),
         rarityLabel: rarity.label,
+        rarityIcon: rarity.icon ?? "fa-regular fa-circle",
+        primaryRowIcon: ROW_DETAILS[card.rows?.[0]]?.icon ?? "fa-solid fa-minus",
         traitBadges: buildTraitBadges(card),
         traitSummary: describeTraits(card),
         ...(() => { const art = normalizeCardArt(card); return { hasArt: art.hasArt, artFull: art.full, artMedium: art.medium, artThumb: art.thumb }; })()
@@ -241,6 +244,8 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       typeIcon: CARD_TYPE_DETAILS[card.type]?.icon ?? "fa-solid fa-clone",
       rowBadges: (card.rows ?? []).map((row) => ({ id: row, label: ROW_DETAILS[row]?.label ?? row, icon: ROW_DETAILS[row]?.icon ?? "fa-solid fa-minus" })),
       rarityLabel: rarity.label,
+      rarityIcon: rarity.icon ?? "fa-regular fa-circle",
+      primaryRowIcon: ROW_DETAILS[card.rows?.[0]]?.icon ?? "fa-solid fa-minus",
       traitBadges: buildTraitBadges(card),
       traitSummary: describeTraits(card),
       ...(() => { const art = normalizeCardArt(card); return { hasArt: art.hasArt, artFull: art.full, artMedium: art.medium, artThumb: art.thumb }; })()

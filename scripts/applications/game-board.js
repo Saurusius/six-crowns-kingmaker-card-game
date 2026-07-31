@@ -261,7 +261,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
               console.error(`${MODULE_TITLE} | Tirage au sort impossible`, error);
               ui.notifications.error(error.message);
             }
-          }, 1450);
+          }, 1850);
         } catch (error) {
           ui.notifications.warn(error.message);
         }

@@ -8,7 +8,8 @@ export const GLOSSARY_ENTRIES = Object.freeze([
     category: "Capacité",
     label: entry.label,
     description: entry.description,
-    iconUrl: entry.iconUrl
+    iconUrl: entry.iconUrl,
+    visualClass: "is-trait"
   })),
   ...Object.entries(CARD_TYPE_DETAILS).map(([id, entry]) => Object.freeze({
     id: `type-${id}`,
@@ -18,7 +19,9 @@ export const GLOSSARY_ENTRIES = Object.freeze([
       ? "Personnage nommé du royaume ou des Terres Dérobées. Ces cartes sont au minimum Rares."
       : id === "tactique"
         ? "Carte jouable représentant une manœuvre, un événement ou un avantage stratégique."
-        : "Formation militaire, créature ou groupe combattant déployé sur une ligne."
+        : "Formation militaire, créature ou groupe combattant déployé sur une ligne.",
+    iconClass: entry.icon,
+    visualClass: "is-type"
   })),
   ...Object.entries(ROW_DETAILS).map(([id, entry]) => Object.freeze({
     id: `row-${id}`,
@@ -28,7 +31,9 @@ export const GLOSSARY_ENTRIES = Object.freeze([
       ? "Ligne de mêlée, des défenseurs et des unités de choc."
       : id === "escarmouche"
         ? "Ligne des tireurs, éclaireurs et manœuvres rapides."
-        : "Ligne de l’influence, des soutiens, de la magie et des fortifications."
+        : "Ligne de l’influence, des soutiens, de la magie et des fortifications.",
+    iconClass: entry.icon,
+    visualClass: "is-row"
   })),
   ...Object.entries(RARITY_DETAILS).map(([id, entry]) => Object.freeze({
     id: `rarity-${id}`,
@@ -40,7 +45,9 @@ export const GLOSSARY_ENTRIES = Object.freeze([
         ? "Jusqu’à 3 exemplaires identiques dans un deck."
         : id === "rare"
           ? "Jusqu’à 2 exemplaires identiques dans un deck."
-          : "Un seul exemplaire identique dans un deck."
+          : "Un seul exemplaire identique dans un deck.",
+    iconClass: entry.icon,
+    visualClass: `scg-rarity-${id}`
   }))
 ]);
 
@@ -84,7 +91,7 @@ export function openGlossary() {
     <section class="scg-glossary-dialog">
       <header><div><small>Jeu des Six Couronnes</small><h2>Glossaire des cartes</h2><p>Capacités, lignes, types et raretés réunis au même endroit.</p></div><button type="button" data-action="close-glossary" aria-label="Fermer">×</button></header>
       <div class="scg-glossary-groups">
-        ${getGlossaryGroups().map((group) => `<section><h3>${escapeHtml(group.label)}</h3><div>${group.entries.map((entry) => `<article>${entry.iconUrl ? `<img src="${escapeHtml(entry.iconUrl)}" alt="">` : `<i class="fa-solid fa-crown"></i>`}<span><strong>${escapeHtml(entry.label)}</strong><small>${escapeHtml(entry.description)}</small></span></article>`).join("")}</div></section>`).join("")}
+        ${getGlossaryGroups().map((group) => `<section><h3>${escapeHtml(group.label)}</h3><div>${group.entries.map((entry) => `<article>${entry.iconUrl ? `<span class="scg-glossary-icon ${escapeHtml(entry.visualClass ?? "")}"><img src="${escapeHtml(entry.iconUrl)}" alt=""></span>` : `<span class="scg-glossary-icon ${escapeHtml(entry.visualClass ?? "")}"><i class="${escapeHtml(entry.iconClass ?? "fa-solid fa-circle")}"></i></span>`}<span><strong>${escapeHtml(entry.label)}</strong><small>${escapeHtml(entry.description)}</small></span></article>`).join("")}</div></section>`).join("")}
       </div>
     </section>`;
   const close = () => overlay.remove();

@@ -1,5 +1,13 @@
 # Journal des versions
 
+## 0.8.61
+
+- Refonte mosaïque du constructeur de deck et de ses filtres.
+- Harmonisation des icônes du glossaire et des raretés de collection.
+- Mise en scène enrichie du tirage au sort et animation de pièce améliorée.
+- Icônes de conservation/remplacement plus lisibles pendant le mulligan.
+
+
 
 ## 0.8.6 — Intégration massive des illustrations
 

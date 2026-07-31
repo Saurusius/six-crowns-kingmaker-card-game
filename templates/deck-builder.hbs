@@ -89,46 +89,56 @@
 
   <div class="scg-builder-layout">
     <section class="scg-builder-library">
-      <header>
+      <header class="scg-builder-library-heading">
         <div>
           <h2>Cartes disponibles</h2>
-          <p>Le nombre utilisable dépend de vos exemplaires possédés et de la limite propre à chaque carte.</p>
+          <p>Cliquez sur une carte pour l’ajouter. Clic droit pour retirer un exemplaire.</p>
         </div>
-        <div class="scg-profile-filters scg-builder-filters">
-          <input type="search" name="builder-search" value="{{search}}" placeholder="Rechercher par nom…">
-          <select name="builder-faction"><option value="all">Toutes les collections</option>{{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          <select name="builder-rarity"><option value="all">Toutes les raretés</option>{{#each rarityOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          <select name="builder-type"><option value="all">Tous les types</option>{{#each typeOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          <select name="builder-row"><option value="all">Toutes les lignes</option>{{#each rowOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          <select name="builder-trait"><option value="all">Toutes les capacités</option>{{#each traitOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
-          <select name="builder-sort" aria-label="Trier les cartes">
-            {{#each sortOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>Tri : {{label}}</option>{{/each}}
-          </select>
-        </div>
+        <span class="scg-builder-library-hint"><i class="fa-solid fa-table-cells-large"></i> Vue mosaïque</span>
       </header>
 
-      <div class="scg-builder-card-list">
+      <div class="scg-builder-filter-panel" aria-label="Filtres du constructeur de deck">
+        <label class="scg-builder-search-field">
+          <span><i class="fa-solid fa-magnifying-glass"></i> Rechercher</span>
+          <input type="search" name="builder-search" value="{{search}}" placeholder="Nom, faction, capacité…">
+        </label>
+        <div class="scg-builder-filter-grid">
+          <label><span>Collection</span><select name="builder-faction"><option value="all">Toutes les collections</option>{{#each factionOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+          <label><span>Rareté</span><select name="builder-rarity"><option value="all">Toutes les raretés</option>{{#each rarityOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+          <label><span>Type</span><select name="builder-type"><option value="all">Tous les types</option>{{#each typeOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+          <label><span>Ligne</span><select name="builder-row"><option value="all">Toutes les lignes</option>{{#each rowOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+          <label><span>Capacité</span><select name="builder-trait"><option value="all">Toutes les capacités</option>{{#each traitOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+          <label><span>Tri</span><select name="builder-sort" aria-label="Trier les cartes">{{#each sortOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></label>
+        </div>
+      </div>
+
+      <div class="scg-builder-card-list scg-builder-card-grid">
         {{#each cards}}
-          <article class="scg-builder-card scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
-            <span class="scg-builder-symbol {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
+          <article class="scg-builder-card scg-builder-tile scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
+            <div class="scg-builder-card-art {{#if hasArt}}has-art{{/if}}">
+              {{#if hasArt}}<img src="{{artMedium}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}<span class="scg-builder-card-placeholder">{{factionSymbol}}</span>{{/if}}
+              <strong class="scg-builder-strength">{{strength}}</strong>
+              <span class="scg-rarity-badge scg-rarity-{{rarity}}" title="{{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+              <span class="scg-row-emblem" title="{{#each rowBadges}}{{label}}{{#unless @last}} · {{/unless}}{{/each}}"><i class="{{primaryRowIcon}}"></i></span>
+            </div>
             <div class="scg-builder-card-info">
               <strong title="{{name}}">{{name}}</strong>
-              <small title="{{factionLabel}} · {{typeLabel}} · {{rarityLabel}} · Force {{strength}}">{{factionLabel}} · <i class="{{typeIcon}}"></i> {{typeLabel}} · {{rarityLabel}} · Force {{strength}}</small>
+              <small class="scg-builder-meta"><i class="{{typeIcon}}"></i> {{typeLabel}} · {{factionLabel}}</small>
               <span class="scg-card-symbol-line">{{#each rowBadges}}<span title="{{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
               <div class="scg-effect-icons scg-builder-traits">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
-              <p class="scg-builder-card-effect" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>
+              <p class="scg-builder-card-effect" tabindex="0" title="{{text}}" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>
             </div>
-            <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
-              <strong>Possédées : {{ownedCount}}</strong>
-              <small>Utilisées : {{inDeck}}</small>
-              <small>Disponibles : {{availableCount}}</small>
-              <small>Limite du deck : {{maxCopies}}</small>
-            </div>
-            <div class="scg-builder-stepper" aria-label="Quantité dans le deck">
-              <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}}>−</button>
-              <strong>{{inDeck}}</strong>
-              <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled title="{{addDisabledReason}}"{{/unless}}>+</button>
-            </div>
+            <footer class="scg-builder-tile-footer">
+              <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
+                <strong>{{ownedCount}} possédée(s)</strong>
+                <small>{{inDeck}} dans le deck · limite {{maxCopies}}</small>
+              </div>
+              <div class="scg-builder-stepper" aria-label="Quantité dans le deck">
+                <button type="button" data-action="remove-card" data-card-id="{{id}}" {{#unless canRemove}}disabled{{/unless}} aria-label="Retirer {{name}}">−</button>
+                <strong>{{inDeck}}</strong>
+                <button type="button" data-action="add-card" data-card-id="{{id}}" {{#unless canAdd}}disabled title="{{addDisabledReason}}"{{/unless}} aria-label="Ajouter {{name}}">+</button>
+              </div>
+            </footer>
           </article>
         {{else}}
           <div class="scg-builder-empty">
