@@ -10,7 +10,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "unique",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-02",
@@ -23,7 +28,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-03",
@@ -40,7 +50,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-04",
@@ -58,7 +73,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-05",
@@ -75,7 +95,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-06",
@@ -91,7 +116,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-07",
@@ -108,7 +138,12 @@
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-08",
@@ -125,7 +160,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-09",
@@ -140,7 +180,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-10",
@@ -155,7 +200,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-11",
@@ -172,7 +222,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-12",
@@ -187,7 +242,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-13",
@@ -202,7 +262,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-14",
@@ -219,7 +284,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-15",
@@ -234,7 +304,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-16",
@@ -251,7 +326,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-17",
@@ -267,7 +347,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-18",
@@ -282,7 +367,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-04",
@@ -297,7 +387,12 @@
     ],
     "text": "Renfort : déploie automatiquement les autres copies de cette carte présentes dans la pioche.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-19",
@@ -312,7 +407,12 @@
     "abilities": [],
     "text": "Une troupe mobile sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-20",
@@ -328,7 +428,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-21",
@@ -345,7 +450,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-22",
@@ -362,7 +472,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-23",
@@ -379,7 +494,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-24",
@@ -396,7 +516,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-25",
@@ -411,7 +536,12 @@
     "abilities": [],
     "text": "Une troupe de tir sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-26",
@@ -428,7 +558,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-27",
@@ -446,7 +581,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-28",
@@ -463,7 +603,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-29",
@@ -480,7 +625,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-30",
@@ -495,7 +645,12 @@
     "abilities": [],
     "text": "Une troupe de tir sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-31",
@@ -512,7 +667,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-32",
@@ -528,7 +688,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-33",
@@ -543,7 +708,12 @@
     "abilities": [],
     "text": "Une unité de choc sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-34",
@@ -558,7 +728,12 @@
     "abilities": [],
     "text": "Une unité de domaine sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-35",
@@ -576,7 +751,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-36",
@@ -594,7 +774,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-37",
@@ -611,7 +796,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-38",
@@ -626,7 +816,12 @@
     "abilities": [],
     "text": "Une unité de choc sans effet supplémentaire.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "KF-39",
@@ -643,6 +838,11 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   }
 ]

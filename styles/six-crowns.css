@@ -2758,3 +2758,516 @@ body > .scg-global-modal.scg-mulligan-preview-backdrop {
     grid-template-columns: 42px minmax(0, 1fr) 104px;
   }
 }
+
+
+/* -------------------------------------------------------------------------
+ * v0.7.16 — audit global des traits et confinement de tous les contenus
+ * ---------------------------------------------------------------------- */
+
+/* Les sources d’infobulles restent invisibles dans leur fenêtre. Chaque
+ * pictogramme est géré par la couche globale, au survol, au focus ou au clic. */
+.scg-trait-icon[data-scg-trait-icon] {
+  flex: 0 0 auto;
+  cursor: help;
+  touch-action: manipulation;
+}
+
+.scg-trait-icon[data-scg-trait-icon]:focus-visible {
+  outline: 2px solid #f0cf6a;
+  outline-offset: 2px;
+}
+
+.scg-floating-popup,
+.scg-floating-popup * {
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Garde-fous typographiques communs. */
+.scg-shell :where(p, small, li),
+.scg-profile-shell :where(p, small, li) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.scg-toolbar > *,
+.scg-scorebar > *,
+.scg-profile-toolbar > *,
+.scg-builder-management > *,
+.scg-builder-library > header > *,
+.scg-builder-deck-list > header > *,
+.scg-collection-group-header > *,
+.scg-gm-tools-grid > *,
+.scg-deck-analysis > *,
+.scg-analysis-card > header > * {
+  min-width: 0;
+}
+
+.scg-toolbar button,
+.scg-profile-actions button,
+.scg-builder-management-actions button,
+.scg-gm-actions button,
+.scg-play-actions button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Constructeur de deck : chaque entrée devient une cellule fermée. Les
+ * popups étant globales, aucun enfant n’a besoin de dépasser du cadre. */
+.scg-builder-card-list,
+.scg-builder-selected-scroll {
+  overflow-x: hidden;
+}
+
+.scg-builder-card {
+  min-height: 90px;
+  grid-template-columns: 46px minmax(0, 1fr) minmax(118px, 132px) 104px;
+  align-items: center;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.scg-builder-card-info {
+  min-width: 0;
+  max-width: 100%;
+  grid-template-rows: auto auto auto 24px;
+  align-content: center;
+  overflow: hidden;
+}
+
+.scg-builder-card-info > strong,
+.scg-builder-card-info > small,
+.scg-builder-card-info > span {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scg-builder-card-info > strong {
+  line-height: 1.18;
+}
+
+.scg-builder-traits,
+.scg-builder-selected-traits {
+  width: 100%;
+  min-width: 0;
+  min-height: 22px;
+  height: 22px;
+  max-height: 22px;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-self: end;
+  gap: 4px;
+  margin: 2px 0 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.scg-builder-traits:empty,
+.scg-builder-selected-traits:empty {
+  height: 0;
+  min-height: 0;
+  margin: 0;
+}
+
+.scg-builder-traits .scg-trait-icon,
+.scg-builder-selected-traits .scg-trait-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.scg-builder-owned {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scg-builder-owned strong,
+.scg-builder-owned small {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scg-builder-stepper {
+  min-width: 0;
+  max-width: 104px;
+  overflow: hidden;
+}
+
+.scg-builder-selected {
+  min-height: 58px;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.scg-builder-selected > div {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scg-builder-selected small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Collection : les fiches ne laissent plus sortir leur texte ou leurs icônes.
+ * Les infobulles visibles vivent désormais exclusivement sous document.body. */
+.scg-collection-group,
+.scg-collection-grid {
+  min-width: 0;
+}
+
+.scg-collection-card {
+  min-width: 0;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.scg-collection-card-body {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scg-collection-card-body > strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  line-height: 1.18;
+}
+
+.scg-collection-card-body > small,
+.scg-collection-card-body > span {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scg-collection-traits {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  height: 38px;
+  max-height: 38px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.scg-collection-card-body p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow-wrap: anywhere;
+}
+
+.scg-collection-card-body footer {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 5px;
+}
+
+.scg-collection-card-body footer span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Board, main et mulligan. */
+.scg-card,
+.scg-card-body,
+.scg-card-caption,
+.scg-hand-card-top,
+.scg-hand-card-info,
+.scg-mulligan-card-wrap {
+  min-width: 0;
+}
+
+.scg-board-card,
+.scg-hand-card,
+.scg-mulligan-card {
+  overflow: hidden;
+}
+
+.scg-board-card .scg-card-caption {
+  overflow: hidden;
+}
+
+.scg-board-card .scg-card-caption strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scg-board-card .scg-effect-icons {
+  min-width: 0;
+  max-width: 46px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.scg-board-card .scg-effect-icons > .scg-trait-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.scg-hand-card-info {
+  overflow: hidden;
+}
+
+.scg-hand-card-info .scg-card-name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.scg-hand-card-info .scg-rarity-line {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scg-hand-card-info .scg-effect-icons,
+.scg-mulligan-card .scg-effect-icons {
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.scg-play-actions button {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.scg-detail-card .scg-card-body {
+  overflow: hidden;
+}
+
+.scg-detail-card .scg-card-name,
+.scg-mulligan-card .scg-card-effect,
+.scg-mulligan-mark {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scg-mulligan-card .scg-card-effect {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.scg-mulligan-preview-card {
+  max-width: min(920px, calc(100vw - 48px));
+}
+
+.scg-mulligan-preview-body {
+  min-width: 0;
+  overflow: auto;
+}
+
+.scg-mulligan-preview-body h3,
+.scg-mulligan-preview-meta,
+.scg-mulligan-preview-effect {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Autres panneaux susceptibles de recevoir des libellés longs. */
+.scg-deck-summary,
+.scg-rulebook-card,
+.scg-turn-card,
+.scg-zone-card,
+.scg-faction-counter,
+.scg-analysis-card,
+.scg-deck-validation {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.scg-deck-summary > div,
+.scg-faction-counter > div,
+.scg-analysis-card > header {
+  min-width: 0;
+}
+
+.scg-deck-summary strong,
+.scg-deck-summary small,
+.scg-zone-card strong,
+.scg-zone-card small,
+.scg-faction-counter strong,
+.scg-faction-counter small,
+.scg-analysis-card > header span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scg-deck-summary p,
+.scg-rulebook-card li,
+.scg-turn-card p,
+.scg-deck-validation li {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1000px) {
+  .scg-builder-card {
+    grid-template-columns: 42px minmax(0, 1fr) 108px 100px;
+  }
+}
+
+@media (max-width: 780px) {
+  .scg-builder-card {
+    min-height: 84px;
+    grid-template-columns: 42px minmax(0, 1fr) 100px;
+  }
+
+  .scg-collection-card-body footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v0.7.17 — Illustrations de cartes */
+.scg-card-art img,
+.scg-hand-card-art img,
+.scg-mulligan-preview-art img,
+.scg-collection-card-art img,
+.scg-builder-symbol img,
+.scg-builder-selected-art img,
+.scg-booster-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scg-card-art img,
+.scg-hand-card-art img,
+.scg-builder-symbol img,
+.scg-builder-selected-art img {
+  object-fit: cover;
+  object-position: center 24%;
+}
+
+.scg-board-card .scg-card-art img {
+  object-position: center 20%;
+}
+
+.scg-mulligan-preview-art img,
+.scg-collection-art-popover img {
+  object-fit: contain;
+  object-position: center;
+  background: rgba(0, 0, 0, .28);
+}
+
+.scg-collection-card-art {
+  position: relative;
+  overflow: hidden;
+}
+.scg-collection-card-art.has-art {
+  min-height: 220px;
+  background: #11100e;
+}
+.scg-collection-card-art.has-art > img {
+  object-fit: cover;
+  object-position: center 18%;
+  transition: transform .18s ease, filter .18s ease;
+}
+.scg-collection-card:hover .scg-collection-card-art.has-art > img {
+  transform: scale(1.025);
+  filter: brightness(1.05);
+}
+.scg-collection-card-art.has-art::after {
+  content: "";
+  position: absolute;
+  inset: 42% 0 0;
+  pointer-events: none;
+  background: linear-gradient(transparent, rgba(8, 8, 7, .78));
+}
+.scg-collection-card-art > .scg-collection-strength,
+.scg-collection-card-art > .scg-rarity-badge {
+  z-index: 2;
+}
+
+.scg-collection-art-popover {
+  width: min(440px, calc(100vw - 32px));
+}
+.scg-collection-art-popover > img {
+  width: 100%;
+  max-height: min(62vh, 720px);
+  margin: 0 0 9px;
+  border: 1px solid color-mix(in srgb, var(--scg-popup-accent) 72%, #3b3427);
+  border-radius: 6px;
+}
+
+.scg-builder-symbol,
+.scg-builder-selected-art {
+  overflow: hidden;
+  border: 1px solid #756a4d;
+  background: #26221b;
+}
+.scg-builder-symbol.has-art,
+.scg-builder-selected-art.has-art {
+  color: transparent;
+}
+.scg-builder-symbol img,
+.scg-builder-selected-art img {
+  border-radius: inherit;
+}
+.scg-builder-selected-art {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 44px;
+  min-width: 34px;
+  border-radius: 4px;
+  color: var(--scg-rarity-color);
+}
+
+.scg-booster-card {
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+}
+.scg-booster-art {
+  width: 42px;
+  height: 58px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.scg-generated-art-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 34px;
+  color: #f0cf6a;
+  background: radial-gradient(circle at center, rgba(240, 207, 106, .15), rgba(0, 0, 0, .3));
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+@media (max-height: 820px) {
+  .scg-collection-card-art.has-art { min-height: 180px; }
+}

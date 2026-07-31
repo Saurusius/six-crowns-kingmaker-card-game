@@ -102,13 +102,13 @@
       <div class="scg-builder-card-list">
         {{#each cards}}
           <article class="scg-builder-card scg-rarity-{{rarity}}" data-builder-card data-faction="{{faction}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}}">
-            <span class="scg-builder-symbol">{{factionSymbol}}</span>
+            <span class="scg-builder-symbol {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div class="scg-builder-card-info">
               <strong>{{name}}</strong>
               <small>{{factionLabel}} · {{rarityLabel}} · Force {{strength}}</small>
               <span>{{#each rows}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
               <div class="scg-effect-icons scg-builder-traits">
-                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </div>
             </div>
             <div class="scg-builder-owned" aria-label="Exemplaires de la carte">
@@ -138,12 +138,12 @@
       <div class="scg-builder-selected-scroll">
         {{#each selectedCards}}
           <article class="scg-builder-selected scg-rarity-{{rarity}}">
-            <span>{{factionSymbol}}</span>
+            <span class="scg-builder-selected-art {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
             <div>
               <strong>{{name}}</strong>
               <small>{{rarityLabel}} · possédées {{ownedCount}} · utilisées {{inDeck}}</small>
               <div class="scg-effect-icons scg-builder-selected-traits">
-                {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
               </div>
             </div>
             <button type="button" data-action="remove-card" data-card-id="{{id}}">−</button>

@@ -1,4 +1,5 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
+import { withNormalizedCardArt } from "./art.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
@@ -61,7 +62,7 @@ async function setBoosterCredits(targetUser, value) {
 export async function loadCardCatalog() {
   catalogPromise ??= Promise.all(CARD_FILES.map((file) => loadJson(
     `modules/${MODULE_ID}/data/cards/${file}`
-  ))).then((groups) => groups.flat());
+  ))).then((groups) => groups.flat().map((card) => withNormalizedCardArt(card)));
   return catalogPromise;
 }
 
@@ -184,6 +185,7 @@ export async function resetCollectionForUser({ userId } = {}) {
 function boosterChatContent(cards, targetUser, remainingCredits = null) {
   const rows = cards.map((card, index) => `
     <article class="scg-booster-card scg-booster-${escapeHtml(card.rarity)}">
+      ${card.artMedium ? `<img class="scg-booster-art" src="${escapeHtml(card.artMedium)}" alt="Illustration de ${escapeHtml(card.name)}">` : ""}
       <span class="scg-booster-number">${index + 1}</span>
       <span class="scg-booster-name">${escapeHtml(card.name)}</span>
       <span class="scg-booster-faction">${escapeHtml(card.faction)}</span>

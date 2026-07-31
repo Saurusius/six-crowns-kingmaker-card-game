@@ -10,7 +10,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "unique",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-02",
@@ -23,7 +28,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-03",
@@ -40,7 +50,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-04",
@@ -57,7 +72,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-05",
@@ -74,7 +94,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-06",
@@ -91,7 +116,12 @@
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-07",
@@ -106,7 +136,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-08",
@@ -123,7 +158,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-09",
@@ -138,7 +178,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-10",
@@ -154,7 +199,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-11",
@@ -169,7 +219,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-12",
@@ -184,7 +239,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-13",
@@ -200,7 +260,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-14",
@@ -217,7 +282,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-15",
@@ -232,7 +302,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-16",
@@ -249,7 +324,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-17",
@@ -264,7 +344,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-18",
@@ -282,7 +367,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "rare",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "NE-05",
@@ -299,7 +389,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-19",
@@ -316,7 +411,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-20",
@@ -333,7 +433,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-21",
@@ -349,7 +454,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-22",
@@ -366,7 +476,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-23",
@@ -384,7 +499,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-24",
@@ -401,7 +521,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-25",
@@ -419,7 +544,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-26",
@@ -435,7 +565,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-27",
@@ -452,7 +587,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-28",
@@ -469,7 +609,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-29",
@@ -486,7 +631,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-30",
@@ -501,7 +651,12 @@
     "abilities": [],
     "text": "Une créature féerique sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-31",
@@ -518,7 +673,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-32",
@@ -534,7 +694,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-33",
@@ -551,7 +716,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-34",
@@ -568,7 +738,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-35",
@@ -583,7 +758,12 @@
     "abilities": [],
     "text": "Une créature féerique sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-36",
@@ -601,7 +781,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-37",
@@ -619,7 +804,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-38",
@@ -636,7 +826,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AA-39",
@@ -651,6 +846,11 @@
     "abilities": [],
     "text": "Une créature massive sans effet supplémentaire.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   }
 ]

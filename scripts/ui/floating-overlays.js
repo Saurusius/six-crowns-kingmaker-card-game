@@ -10,6 +10,7 @@ let activeAnchor = null;
 let activeSource = null;
 let activeKind = null;
 let activePreferredPlacement = "auto";
+let activePinned = false;
 let repositionFrame = null;
 
 function viewportSize() {
@@ -44,6 +45,7 @@ function clearRepositionFrame() {
 function hidePopup(ownerId = null) {
   if (ownerId && activeOwnerId && ownerId !== activeOwnerId) return;
   clearRepositionFrame();
+  activeAnchor?.setAttribute?.("aria-expanded", "false");
   if (activePopup) {
     activePopup.hidden = true;
     activePopup.replaceChildren();
@@ -56,6 +58,7 @@ function hidePopup(ownerId = null) {
   activeSource = null;
   activeKind = null;
   activePreferredPlacement = "auto";
+  activePinned = false;
 }
 
 function placementCandidates(anchorRect, popupRect, preferredPlacement) {
@@ -140,8 +143,9 @@ function schedulePosition() {
   if (repositionFrame === null) positionActivePopup();
 }
 
-function showPopup({ anchor, source, ownerId, kind, preferredPlacement = "auto" }) {
+function showPopup({ anchor, source, ownerId, kind, preferredPlacement = "auto", pinned = false }) {
   if (!anchor?.isConnected || !source) return;
+  if (activeAnchor && activeAnchor !== anchor) activeAnchor.setAttribute?.("aria-expanded", "false");
   const layer = ensureLayer();
   let popup = layer.querySelector(".scg-floating-popup");
   if (!popup) {
@@ -159,7 +163,7 @@ function showPopup({ anchor, source, ownerId, kind, preferredPlacement = "auto" 
   popup.style.left = "0px";
   popup.style.top = "0px";
 
-  const card = anchor.closest?.(".scg-card");
+  const card = anchor.closest?.(".scg-card, [data-scg-card-popup]");
   const accent = card ? getComputedStyle(card).getPropertyValue("--scg-card-accent").trim() : "";
   popup.style.setProperty("--scg-popup-accent", accent || "#c8a94f");
 
@@ -170,6 +174,8 @@ function showPopup({ anchor, source, ownerId, kind, preferredPlacement = "auto" 
   activeSource = source;
   activeKind = kind;
   activePreferredPlacement = preferredPlacement;
+  activePinned = Boolean(pinned);
+  anchor.setAttribute?.("aria-expanded", "true");
   schedulePosition();
 }
 
@@ -181,6 +187,24 @@ function restoreCardPopup(card, ownerId) {
   showPopup({ anchor: card, source, ownerId, kind: "card", preferredPlacement });
 }
 
+
+function bindArtFallbacks(root, removers) {
+  root.querySelectorAll("img[data-scg-art-fallback]").forEach((image) => {
+    const replaceBrokenImage = () => {
+      if (!image.isConnected || image.dataset.fallbackApplied === "true") return;
+      image.dataset.fallbackApplied = "true";
+      const fallback = document.createElement("span");
+      fallback.className = "scg-generated-art-fallback";
+      fallback.textContent = image.dataset.fallbackSymbol || "◆";
+      fallback.setAttribute("aria-label", "Illustration indisponible");
+      image.replaceWith(fallback);
+    };
+    image.addEventListener("error", replaceBrokenImage, { once: true });
+    removers.push(() => image.removeEventListener("error", replaceBrokenImage));
+    if (image.complete && image.naturalWidth === 0) replaceBrokenImage();
+  });
+}
+
 /**
  * Rend toutes les infobulles et fiches de carte dans une couche attachée au
  * document plutôt que dans la fenêtre Foundry. Elles ne peuvent donc plus être
@@ -189,12 +213,13 @@ function restoreCardPopup(card, ownerId) {
 export function bindFloatingOverlays(root, { ownerId = MODULE_ID } = {}) {
   if (!root) return () => {};
   const removers = [];
+  bindArtFallbacks(root, removers);
   const listen = (element, type, handler, options) => {
     element.addEventListener(type, handler, options);
     removers.push(() => element.removeEventListener(type, handler, options));
   };
 
-  root.querySelectorAll(".scg-card").forEach((card) => {
+  root.querySelectorAll(".scg-card, [data-scg-card-popup]").forEach((card) => {
     const source = card.querySelector(":scope > .scg-card-popover, :scope .scg-card-popover");
     if (!source) return;
     const preferredPlacement = card.closest(".scg-opponent") ? "bottom" : "top";
@@ -202,13 +227,17 @@ export function bindFloatingOverlays(root, { ownerId = MODULE_ID } = {}) {
     listen(card, "pointerenter", () => {
       showPopup({ anchor: card, source, ownerId, kind: "card", preferredPlacement });
     });
-    listen(card, "pointerleave", () => hidePopup(ownerId));
+    listen(card, "pointerleave", () => {
+      if (activePinned && activeKind === "trait" && card.contains(activeAnchor)) return;
+      hidePopup(ownerId);
+    });
     listen(card, "focusin", (event) => {
       if (event.target.closest?.(".scg-trait-icon")) return;
       showPopup({ anchor: card, source, ownerId, kind: "card", preferredPlacement });
     });
     listen(card, "focusout", (event) => {
       if (event.relatedTarget && card.contains(event.relatedTarget)) return;
+      if (activePinned && activeKind === "trait" && card.contains(activeAnchor)) return;
       hidePopup(ownerId);
     });
   });
@@ -216,23 +245,53 @@ export function bindFloatingOverlays(root, { ownerId = MODULE_ID } = {}) {
   root.querySelectorAll(".scg-trait-icon").forEach((traitIcon) => {
     const source = traitIcon.querySelector(":scope > .scg-trait-tooltip");
     if (!source) return;
-    const card = traitIcon.closest(".scg-card");
+    const card = traitIcon.closest(".scg-card, [data-scg-card-popup]");
+    traitIcon.setAttribute("aria-haspopup", "true");
+    traitIcon.setAttribute("aria-expanded", "false");
 
-    const open = () => {
-      showPopup({ anchor: traitIcon, source, ownerId, kind: "trait", preferredPlacement: "auto" });
+    const open = ({ pinned = false } = {}) => {
+      showPopup({ anchor: traitIcon, source, ownerId, kind: "trait", preferredPlacement: "auto", pinned });
     };
     const close = () => {
       globalThis.setTimeout(() => {
+        if (activePinned && activeAnchor === traitIcon) return;
         if (traitIcon.matches(":hover") || traitIcon.matches(":focus-within")) return;
         restoreCardPopup(card, ownerId);
       }, 20);
     };
+    const togglePinned = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (activeAnchor === traitIcon && activeKind === "trait" && activePinned) {
+        hidePopup(ownerId);
+        return;
+      }
+      open({ pinned: true });
+    };
 
-    listen(traitIcon, "pointerenter", open);
+    listen(traitIcon, "pointerenter", () => open());
     listen(traitIcon, "pointerleave", close);
-    listen(traitIcon, "focusin", open);
+    listen(traitIcon, "focusin", () => open());
     listen(traitIcon, "focusout", close);
+    listen(traitIcon, "click", togglePinned);
+    listen(traitIcon, "keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") togglePinned(event);
+      else if (event.key === "Escape") hidePopup(ownerId);
+    });
   });
+
+  const dismissPinned = (event) => {
+    if (activeOwnerId !== ownerId || !activePinned) return;
+    if (event.target?.closest?.(".scg-trait-icon") === activeAnchor) return;
+    hidePopup(ownerId);
+  };
+  const dismissOnEscape = (event) => {
+    if (event.key === "Escape" && activeOwnerId === ownerId) hidePopup(ownerId);
+  };
+  document.addEventListener("pointerdown", dismissPinned, true);
+  document.addEventListener("keydown", dismissOnEscape, true);
+  removers.push(() => document.removeEventListener("pointerdown", dismissPinned, true));
+  removers.push(() => document.removeEventListener("keydown", dismissOnEscape, true));
 
   const reposition = () => {
     if (activeOwnerId === ownerId && activePopup && !activePopup.hidden) schedulePosition();

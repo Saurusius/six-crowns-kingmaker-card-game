@@ -117,14 +117,18 @@
         <div class="scg-collection-grid">
           {{#each cards}}
             <article class="scg-collection-card {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
-              data-collection-card
+              data-collection-card data-scg-card-popup
               data-rarity="{{filterRarity}}"
               data-rows="{{filterRows}}"
               data-ownership="{{ownershipState}}"
               data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}}{{else}}Carte inconnue {{id}}{{/if}}">
               {{#if discovered}}
-                <div class="scg-collection-card-art">
-                  <span class="scg-collection-card-symbol">{{factionSymbol}}</span>
+                <div class="scg-collection-card-art {{#if hasArt}}has-art{{/if}}">
+                  {{#if hasArt}}
+                    <img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                  {{else}}
+                    <span class="scg-collection-card-symbol">{{factionSymbol}}</span>
+                  {{/if}}
                   {{#if playable}}<strong class="scg-collection-strength">{{strength}}</strong>{{/if}}
                   <span class="scg-rarity-badge scg-rarity-{{rarity}}">{{rarityLabel}}</span>
                 </div>
@@ -137,13 +141,19 @@
                     <span>Carte de {{kind}} — non jouable pour le moment</span>
                   {{/if}}
                   <div class="scg-effect-icons scg-collection-traits">
-                    {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                    {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                   </div>
                   {{#if text}}<p>{{text}}</p>{{/if}}
                   <footer>
                     <span>Possédée ×{{ownedCount}}</span>
                     <span>Maximum par deck : {{maxCopies}}</span>
                   </footer>
+                </div>
+                <div class="scg-card-popover scg-collection-art-popover">
+                  {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
+                  <strong>{{name}}</strong>
+                  <span>{{rarityLabel}} · {{factionLabel}}{{#if playable}} · Force {{strength}}{{/if}}</span>
+                  {{#if text}}<p>{{text}}</p>{{/if}}
                 </div>
               {{else}}
                 <div class="scg-hidden-card-back">

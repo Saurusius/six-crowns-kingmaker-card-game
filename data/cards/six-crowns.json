@@ -15,7 +15,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "unique",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-02",
@@ -33,7 +38,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-03",
@@ -50,7 +60,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-04",
@@ -68,7 +83,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-05",
@@ -85,7 +105,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-06",
@@ -100,7 +125,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-07",
@@ -117,7 +147,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-08",
@@ -133,7 +168,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-09",
@@ -150,7 +190,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-10",
@@ -167,7 +212,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-11",
@@ -183,7 +233,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-12",
@@ -199,7 +254,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-13",
@@ -214,7 +274,12 @@
     "abilities": [],
     "text": "",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-14",
@@ -229,7 +294,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-15",
@@ -246,7 +316,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-16",
@@ -263,7 +338,12 @@
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-17",
@@ -280,7 +360,12 @@
     ],
     "text": "Peut rester sur le plateau entre deux manches avec une force réduite.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "NE-01",
@@ -297,7 +382,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "NE-02",
@@ -312,7 +402,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "NE-03",
@@ -330,7 +425,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros. Donne aussi +1 aux autres unités de sa ligne.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "NE-04",
@@ -345,7 +445,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-01",
@@ -360,7 +465,12 @@
     ],
     "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-02",
@@ -375,7 +485,12 @@
     ],
     "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-05",
@@ -390,7 +505,12 @@
     ],
     "text": "Bastion : peut rester entre deux manches avec une force réduite de moitié lorsqu’elle devient jouable.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-07",
@@ -405,7 +525,12 @@
     ],
     "text": "Soutien : donne +1 à toutes les autres cartes alliées de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-18",
@@ -420,7 +545,12 @@
     "abilities": [],
     "text": "Une troupe régulière sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-19",
@@ -437,7 +567,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-20",
@@ -454,7 +589,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-21",
@@ -470,7 +610,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-22",
@@ -487,7 +632,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-23",
@@ -503,7 +653,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-24",
@@ -520,7 +675,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-25",
@@ -537,7 +697,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-26",
@@ -552,7 +717,12 @@
     "abilities": [],
     "text": "Une patrouille régulière sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-27",
@@ -568,7 +738,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-28",
@@ -585,7 +760,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-29",
@@ -600,7 +780,12 @@
     "abilities": [],
     "text": "Une unité de domaine sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-30",
@@ -617,7 +802,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-31",
@@ -634,7 +824,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SC-32",
@@ -651,6 +846,11 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   }
 ]

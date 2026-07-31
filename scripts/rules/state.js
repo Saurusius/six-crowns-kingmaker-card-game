@@ -2,6 +2,7 @@ import { ROWS } from "../constants.js";
 import { buildTraitBadges, describeTraits } from "../traits.js";
 import { calculateSideScores, hasAbility } from "./scoring.js";
 import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
+import { normalizeCardArt } from "../art.js";
 
 const RANDOM_DECK_ID = "random";
 
@@ -603,13 +604,19 @@ function prepareCardView(card, rowCards = null, mulliganSelection = []) {
       .rowDetails["avant-garde"].cards.find((candidate) => candidate.id === card.id)?.effectiveStrength ?? card.strength
     : card.strength;
   const badges = traitBadges(card);
+  const art = normalizeCardArt(card);
   const faction = FACTION_VISUALS[card.factionId] ?? { symbol: "◆", label: "Neutre" };
   const rowChoices = card.rows.map((row) => ({ id: row, label: ROW_LABELS[row], icon: ROW_ICONS[row] }));
   return {
     ...card,
     effectiveStrength,
     isModified: effectiveStrength !== card.strength,
-    hasImage: Boolean(card.image),
+    hasImage: art.hasArt,
+    hasArt: art.hasArt,
+    artFull: art.full,
+    artMedium: art.medium,
+    artThumb: art.thumb,
+    image: art.medium,
     factionSymbol: faction.symbol,
     factionLabel: faction.label,
     factionClass: `scg-faction-${card.factionId ?? "neutral"}`,

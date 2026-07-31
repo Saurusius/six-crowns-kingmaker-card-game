@@ -1,4 +1,5 @@
 import { buildTraitBadges, describeTraits } from "./traits.js";
+import { normalizeCardArt } from "./art.js";
 export const FACTION_DETAILS = Object.freeze({
   "six-crowns": Object.freeze({ label: "Royaume des Six Couronnes", symbol: "♛", order: 1 }),
   aldori: Object.freeze({ label: "Maison Aldori", symbol: "⚔", order: 2 }),
@@ -97,7 +98,8 @@ export function buildCollectionGroups(catalog = [], collection = {}) {
       factionSymbol: faction.symbol,
       maxCopies: Math.max(1, Number.parseInt(card.maxCopies ?? 1, 10) || 1),
       traitBadges: buildTraitBadges(card),
-      traitSummary: describeTraits(card)
+      traitSummary: describeTraits(card),
+      ...(() => { const art = normalizeCardArt(card); return { hasArt: art.hasArt, artFull: art.full, artMedium: art.medium, artThumb: art.thumb }; })()
     });
   }
 
@@ -141,7 +143,8 @@ export function buildOwnedPlayableCards(catalog = [], collection = {}, deckCards
         factionSymbol: faction.symbol,
         rarityLabel: rarity.label,
         traitBadges: buildTraitBadges(card),
-        traitSummary: describeTraits(card)
+        traitSummary: describeTraits(card),
+        ...(() => { const art = normalizeCardArt(card); return { hasArt: art.hasArt, artFull: art.full, artMedium: art.medium, artThumb: art.thumb }; })()
       };
     });
 }
@@ -192,7 +195,8 @@ export function buildSelectedDeckCards(catalog = [], collection = {}, deckCards 
       factionSymbol: faction.symbol,
       rarityLabel: rarity.label,
       traitBadges: buildTraitBadges(card),
-      traitSummary: describeTraits(card)
+      traitSummary: describeTraits(card),
+      ...(() => { const art = normalizeCardArt(card); return { hasArt: art.hasArt, artFull: art.full, artMedium: art.medium, artThumb: art.thumb }; })()
     };
   });
 }
@@ -324,7 +328,8 @@ export function expandCustomDeckCards(deck, catalog = []) {
         strength: card.strength,
         rows: [...card.rows],
         abilities: [...(card.abilities ?? [])],
-        image: card.image ?? null,
+        art: { ...normalizeCardArt(card) },
+        image: normalizeCardArt(card).medium,
         rarity: card.rarity ?? "commun",
         isCharacter: Boolean(card.isCharacter),
         factionId: card.faction === "stolen-lands-arcana" ? "arcana" : (card.faction ?? "neutral")

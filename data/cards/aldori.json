@@ -10,7 +10,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-02",
@@ -23,7 +28,12 @@
     "abilities": [],
     "text": "Effet de chef réservé à une version ultérieure.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-03",
@@ -41,7 +51,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-04",
@@ -57,7 +72,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-05",
@@ -72,7 +92,12 @@
     "abilities": [],
     "text": "",
     "rarity": "rare",
-    "isCharacter": true
+    "isCharacter": true,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-06",
@@ -89,7 +114,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-07",
@@ -104,7 +134,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-08",
@@ -121,7 +156,12 @@
     ],
     "text": "Les copies identiques présentes sur la ligne se renforcent.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-09",
@@ -138,7 +178,12 @@
     ],
     "text": "Joue les autres copies de cette carte depuis le deck.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-10",
@@ -154,7 +199,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-11",
@@ -169,7 +219,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-12",
@@ -186,7 +241,12 @@
     ],
     "text": "Donne +1 aux autres unités de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-13",
@@ -201,7 +261,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-14",
@@ -216,7 +281,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-15",
@@ -231,7 +301,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-16",
@@ -246,7 +321,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-17",
@@ -261,7 +341,12 @@
     "abilities": [],
     "text": "",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-03",
@@ -276,7 +361,12 @@
     ],
     "text": "Renfort : déploie automatiquement les autres copies de cette carte présentes dans la pioche.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "SP-06",
@@ -291,7 +381,12 @@
     ],
     "text": "Bastion : peut rester entre deux manches avec une force réduite de moitié lorsqu’elle devient jouable.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-18",
@@ -306,7 +401,12 @@
     "abilities": [],
     "text": "Une troupe aldori sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-19",
@@ -323,7 +423,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-20",
@@ -340,7 +445,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-21",
@@ -357,7 +467,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-22",
@@ -373,7 +488,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-23",
@@ -390,7 +510,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-24",
@@ -407,7 +532,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-25",
@@ -422,7 +552,12 @@
     "abilities": [],
     "text": "Une unité de domaine sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-26",
@@ -439,7 +574,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-27",
@@ -454,7 +594,12 @@
     "abilities": [],
     "text": "Une troupe de tir sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-28",
@@ -471,7 +616,12 @@
     ],
     "text": "Gagne +2 par autre copie identique sur la même ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-29",
@@ -487,7 +637,12 @@
     "abilities": [],
     "text": "Peut être jouée sur l’une de ses lignes autorisées.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-30",
@@ -504,7 +659,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-31",
@@ -519,7 +679,12 @@
     "abilities": [],
     "text": "Une troupe aldori sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-32",
@@ -534,7 +699,12 @@
     "abilities": [],
     "text": "Une troupe mobile sans effet supplémentaire.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-33",
@@ -551,7 +721,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-34",
@@ -569,7 +744,12 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-35",
@@ -586,7 +766,12 @@
     ],
     "text": "Déploie les autres copies disponibles depuis la pioche.",
     "rarity": "commun",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-36",
@@ -604,7 +789,12 @@
     ],
     "text": "Remporte les égalités de sa ligne si le camp adverse n’y possède pas autant de Héros.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-37",
@@ -621,7 +811,12 @@
     ],
     "text": "Donne +1 aux autres cartes de sa ligne.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   },
   {
     "id": "AL-38",
@@ -638,6 +833,11 @@
     ],
     "text": "Peut rester entre deux manches avec une force réduite de moitié.",
     "rarity": "peuCommune",
-    "isCharacter": false
+    "isCharacter": false,
+    "art": {
+      "full": null,
+      "medium": null,
+      "thumb": null
+    }
   }
 ]

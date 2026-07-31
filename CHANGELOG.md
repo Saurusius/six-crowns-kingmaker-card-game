@@ -1,5 +1,25 @@
 # Journal des versions
 
+## 0.7.17 — Support complet des illustrations
+
+- ajout du bloc `art.full / art.medium / art.thumb` aux 160 cartes collectionnables ;
+- une seule illustration `full` peut être réutilisée automatiquement dans toutes les interfaces ;
+- meilleure résolution affichée dans la collection et les grandes prévisualisations ;
+- variantes medium utilisées dans la main et le mulligan ;
+- miniatures utilisées sur le board et dans le constructeur de deck ;
+- illustrations visibles dans les résultats de boosters ;
+- fallback automatique vers le symbole de faction lorsqu’un fichier est absent ;
+- documentation et arborescence prêtes pour accueillir les fichiers WebP.
+
+## 0.7.16 — Audit global de l’interface
+
+- revue complète des pictogrammes de traits dans la collection, le deckbuilder, le board, la main et le mulligan ;
+- toutes les icônes utilisent désormais la couche globale de popups au survol, au focus et au clic ;
+- ajout d’une fermeture au clic extérieur ou avec la touche Échap ;
+- confinement systématique des textes, compteurs et pictogrammes dans leurs cellules ;
+- correction générale des débordements dans le deckbuilder, la collection, les cartes, les panneaux d’analyse et les outils MJ ;
+- ajout de tests d’audit couvrant toutes les vues principales.
+
 ## 0.7.15 — Deckbuilder recalibré et analyse réductible
 
 - correction des lignes de cartes du constructeur afin que les traits, compteurs et boutons n’empiètent plus sur les entrées voisines ;

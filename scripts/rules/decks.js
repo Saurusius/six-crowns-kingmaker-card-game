@@ -1,4 +1,5 @@
 import { expandCustomDeckCards } from "../collection-rules.js";
+import { normalizeCardArt } from "../art.js";
 
 export const PREDEFINED_RARITY_COUNTS = Object.freeze({
   commun: 15,
@@ -195,7 +196,8 @@ export function cloneDeck(deckId) {
   return deck.cards.map((card) => ({
     ...card,
     factionId: card.factionId ?? deckId,
-    image: card.image ?? null,
+    art: { ...normalizeCardArt(card) },
+    image: normalizeCardArt(card).medium,
     rows: [...card.rows],
     abilities: [...card.abilities]
   }));

@@ -153,7 +153,7 @@
             <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}">
               <span class="scg-card-art">
                 {{#if hasImage}}
-                  <img src="{{image}}" alt="Illustration de {{name}}">
+                  <img src="{{artMedium}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
                 {{else}}
                   <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
                 {{/if}}
@@ -164,7 +164,7 @@
               <span class="scg-card-body">
                 <strong class="scg-card-name">{{name}}</strong>
                 <span class="scg-effect-icons">
-                  {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                  {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                 </span>
                 <small class="scg-card-effect">{{effectText}}</small>
                 <span class="scg-mulligan-mark">{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}</span>
@@ -189,7 +189,7 @@
             <article class="scg-card scg-mulligan-preview-card {{factionClass}} {{rarityClass}}" data-preview-card-id="{{id}}" hidden>
               <div class="scg-mulligan-preview-art">
                 {{#if hasImage}}
-                  <img src="{{image}}" alt="Illustration de {{name}}">
+                  <img src="{{artFull}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
                 {{else}}
                   <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
                 {{/if}}
@@ -202,7 +202,7 @@
                 <h3>{{name}}</h3>
                 <p class="scg-mulligan-preview-meta"><strong>Ligne(s) :</strong> {{rowSummary}} · <strong>Force :</strong> {{strength}}</p>
                 <div class="scg-mulligan-preview-traits">
-                  {{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                  {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                 </div>
                 <p class="scg-mulligan-preview-effect">{{effectText}}</p>
               </div>
@@ -265,7 +265,7 @@
                 <div class="scg-hand-card-top">
                   <div class="scg-hand-card-art">
                     {{#if hasImage}}
-                      <img src="{{image}}" alt="Illustration de {{name}}">
+                      <img src="{{artMedium}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
                     {{else}}
                       <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
                     {{/if}}
@@ -274,7 +274,7 @@
                   <div class="scg-hand-card-info">
                     <strong class="scg-card-name">{{name}}</strong>
                     <span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span>
-                    <div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
+                    <div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
                   </div>
                 </div>
                 <div class="scg-play-actions">
@@ -314,7 +314,7 @@
                   <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}}">
                     <div class="scg-card-art">
                       {{#if hasImage}}
-                        <img src="{{image}}" alt="Illustration de {{name}}">
+                        <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
                       {{else}}
                         <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
                       {{/if}}
@@ -325,7 +325,7 @@
                     </div>
                     <div class="scg-card-caption">
                       <strong>{{name}}</strong>
-                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
                     </div>
                     <div class="scg-card-popover">
                       <strong>{{name}}</strong>
@@ -355,7 +355,7 @@
                   <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}}">
                     <div class="scg-card-art">
                       {{#if hasImage}}
-                        <img src="{{image}}" alt="Illustration de {{name}}">
+                        <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
                       {{else}}
                         <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
                       {{/if}}
@@ -366,7 +366,7 @@
                     </div>
                     <div class="scg-card-caption">
                       <strong>{{name}}</strong>
-                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
                     </div>
                     <div class="scg-card-popover">
                       <strong>{{name}}</strong>
