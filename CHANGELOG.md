@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.8.65
+
+- Conserve la position de défilement du constructeur lors de l’ajout ou du retrait d’une carte.
+- Retire le bouton d’analyse redondant du panneau latéral et conserve uniquement l’accès supérieur droit.
+- Stabilise l’ordre des actions de deck : Nouveau, Charger, Enregistrer, Renommer, Dupliquer et Supprimer.
+- Place Nouveau en haut à gauche et Supprimer en bas à droite, y compris lorsque certaines actions sont désactivées.
+- Recompose les actions de fin de booster en colonne, avec Ouvrir un autre booster au-dessus de Fermer.
+- Rend le bouton de nouvelle ouverture plus attractif et le grise automatiquement lorsqu’aucun booster n’est disponible.
+
 ## 0.8.64
 
 - Intègre les illustrations des 160 cartes dans les données du catalogue.

@@ -453,7 +453,14 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
         ${orderedCards.map((card, index) => boosterRevealCardMarkup(card, index, { featured: card.rarity === "unique" })).join("")}
       </div>
     </section>
-    <div class="scg-booster-actions"><button type="button" class="scg-booster-again" data-action="open-another-booster" hidden><i class="fa-solid fa-box-open"></i> Ouvrir un autre</button><button type="button" class="scg-booster-continue" data-action="continue-booster">Tout révéler</button></div>
+    <div class="scg-booster-actions">
+      <button type="button" class="scg-booster-again" data-action="open-another-booster" hidden disabled>
+        <i class="fa-solid fa-box-open"></i>
+        <span>Ouvrir un autre booster</span>
+        <small data-booster-again-status>Vérification des boosters disponibles…</small>
+      </button>
+      <button type="button" class="scg-booster-continue" data-action="continue-booster">Tout révéler</button>
+    </div>
   `;
 
   document.body.appendChild(overlay);
@@ -462,6 +469,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   const button = overlay.querySelector("[data-action='continue-booster']");
   const status = overlay.querySelector("[data-reveal-status]");
   const againButton = overlay.querySelector("[data-action='open-another-booster']");
+  const againStatus = overlay.querySelector("[data-booster-again-status]");
   const cardElements = Array.from(overlay.querySelectorAll(".scg-reveal-card"));
   const timers = new Set();
   let revealIndex = 0;
@@ -515,8 +523,31 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     const newCount = orderedCards.filter((card) => card.isNew).length;
     if (status) status.textContent = hasUnique ? `Carte Unique obtenue · ${newCount} nouvelle(s) carte(s)` : `${newCount} nouvelle(s) carte(s) · cinq cartes révélées`;
     button.textContent = totalPacks > 1 && packIndex < totalPacks ? "Booster suivant" : "Fermer";
-    if (totalPacks === 1) {
-      Promise.resolve(game.user.isGM ? 1 : getBoosterCredits()).then((credits) => { if (againButton && credits > 0) againButton.hidden = false; });
+    if (totalPacks === 1 && againButton) {
+      againButton.hidden = false;
+      Promise.resolve(game.user.isGM ? Number.POSITIVE_INFINITY : getBoosterCredits())
+        .then((credits) => {
+          const canOpenAnother = game.user.isGM || credits > 0;
+          againButton.disabled = !canOpenAnother;
+          againButton.setAttribute("aria-disabled", String(!canOpenAnother));
+          againButton.title = canOpenAnother
+            ? "Ouvrir immédiatement un nouveau booster"
+            : "Aucun booster disponible sur ce profil";
+          if (againStatus) {
+            againStatus.textContent = game.user.isGM
+              ? "Ouverture MJ illimitée"
+              : canOpenAnother
+                ? `${credits} booster${credits > 1 ? "s" : ""} encore disponible${credits > 1 ? "s" : ""}`
+                : "Aucun booster disponible";
+          }
+        })
+        .catch((error) => {
+          console.error(`${MODULE_TITLE} | Vérification des boosters impossible`, error);
+          againButton.disabled = true;
+          againButton.setAttribute("aria-disabled", "true");
+          againButton.title = "Disponibilité des boosters impossible à vérifier";
+          if (againStatus) againStatus.textContent = "Disponibilité impossible à vérifier";
+        });
     }
   };
 
@@ -577,6 +608,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
     else close();
   });
   againButton?.addEventListener("click", () => {
+    if (againButton.disabled) return;
     clearTimers();
     document.removeEventListener("keydown", onKeyDown);
     document.documentElement.classList.remove("scg-booster-open");

@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.8.64
+## Règles du prototype 0.8.65
 
 Chaque joueur choisit un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu. Dix cartes sont distribuées au début de la partie, puis chaque camp peut remplacer jusqu’à deux cartes une seule fois.
 
@@ -46,17 +46,15 @@ Le catalogue comprend désormais **160 cartes**, réparties en **quatre collecti
 
 Cette répartition du catalogue découle de la règle imposant une rareté minimale **Rare** à tous les personnages nommés. Les probabilités d’ouverture des boosters restent indépendantes de cette répartition.
 
-## Nouveautés de la v0.8.64
+## Nouveautés de la v0.8.65
 
-- intégration complète des **160 illustrations** du catalogue ;
-- trois variantes optimisées par carte : `full`, `medium` et `thumb` ;
-- suppression des 46 derniers blocs d’illustration vides ;
-- carte d’illustrations des decks de démonstration régénérée depuis le manifeste ;
-- ajout d’alias pour que toutes les cartes de démonstration disposent également d’un visuel ;
-- validation automatique de l’existence, du format WebP et des dimensions des 480 fichiers de cartes ;
-- retrait des anciens audits et mappings devenus obsolètes.
+- suppression du second accès redondant à l’analyse du deck : le bouton reste uniquement dans l’en-tête, en haut à droite ;
+- conservation de la position de défilement de la mosaïque et du panneau latéral lors de l’ajout ou du retrait d’une carte ;
+- réorganisation stable des actions de deck, avec **Nouveau** en haut à gauche et **Supprimer** toujours en bas à droite ;
+- nouveau bouton **Ouvrir un autre booster**, plus visible et placé directement au-dessus de **Fermer** ;
+- affichage permanent de l’état de disponibilité du prochain booster : actif pour le MJ ou lorsqu’un ticket reste disponible, grisé sinon.
 
-La v0.8.63 avait déplacé l’analyse du deck dans une fenêtre autonome et regroupé la gestion des decks dans le panneau latéral **Deck actuel**.
+La v0.8.64 avait intégré les illustrations des 160 cartes et leurs trois résolutions optimisées.
 
 ## Boosters et collection personnelle
 

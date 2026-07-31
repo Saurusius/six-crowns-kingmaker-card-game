@@ -162,6 +162,62 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     else delete this.draft.cards[cardId];
   }
 
+  _captureScrollState() {
+    if (!this.element) return null;
+
+    const regions = {};
+    this.element.querySelectorAll("[data-preserve-scroll]").forEach((region) => {
+      const key = region.dataset.preserveScroll;
+      if (!key) return;
+      regions[key] = { top: region.scrollTop, left: region.scrollLeft };
+    });
+
+    const windowContent = this.element.matches?.(".window-content")
+      ? this.element
+      : this.element.querySelector(".window-content") ?? this.element.closest?.(".window-content");
+
+    return {
+      regions,
+      windowContent: windowContent
+        ? { top: windowContent.scrollTop, left: windowContent.scrollLeft }
+        : null
+    };
+  }
+
+  _restoreScrollState(state) {
+    if (!state || !this.element) return;
+
+    const restore = () => {
+      for (const [key, position] of Object.entries(state.regions ?? {})) {
+        const region = this.element.querySelector(`[data-preserve-scroll="${key}"]`);
+        if (!region) continue;
+        region.scrollTop = position.top;
+        region.scrollLeft = position.left;
+      }
+
+      const windowContent = this.element.matches?.(".window-content")
+        ? this.element
+        : this.element.querySelector(".window-content") ?? this.element.closest?.(".window-content");
+      if (windowContent && state.windowContent) {
+        windowContent.scrollTop = state.windowContent.top;
+        windowContent.scrollLeft = state.windowContent.left;
+      }
+    };
+
+    restore();
+    if (typeof globalThis.requestAnimationFrame === "function") {
+      globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(restore));
+    } else {
+      globalThis.setTimeout(restore, 0);
+    }
+  }
+
+  async _renderAfterCardChange() {
+    const scrollState = this._captureScrollState();
+    await this.render({ force: true });
+    this._restoreScrollState(scrollState);
+  }
+
   async _onRender(context, options) {
     await super._onRender(context, options);
 
@@ -237,28 +293,28 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
           return;
         }
         this._changeCard(card.dataset.cardId, 1);
-        await this.render({ force: true });
+        await this._renderAfterCardChange();
       });
       card.addEventListener("contextmenu", async (event) => {
         if (event.target.closest("button, [data-scg-trait-icon]")) return;
         event.preventDefault();
         if ((this.draft.cards[card.dataset.cardId] ?? 0) <= 0) return;
         this._changeCard(card.dataset.cardId, -1);
-        await this.render({ force: true });
+        await this._renderAfterCardChange();
       });
     });
 
     this.element.querySelectorAll("[data-action='add-card']").forEach((button) => {
       button.addEventListener("click", async () => {
         this._changeCard(button.dataset.cardId, 1);
-        await this.render({ force: true });
+        await this._renderAfterCardChange();
       });
     });
 
     this.element.querySelectorAll("[data-action='remove-card']").forEach((button) => {
       button.addEventListener("click", async () => {
         this._changeCard(button.dataset.cardId, -1);
-        await this.render({ force: true });
+        await this._renderAfterCardChange();
       });
     });
 

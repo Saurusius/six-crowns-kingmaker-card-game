@@ -14,7 +14,7 @@
     </div>
   </header>
 
-  <div class="scg-builder-layout">
+  <div class="scg-builder-layout" data-preserve-scroll="layout">
     <section class="scg-builder-library">
       <header class="scg-builder-library-heading">
         <div>
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <div class="scg-builder-card-list scg-builder-card-grid">
+      <div class="scg-builder-card-list scg-builder-card-grid" data-preserve-scroll="library">
         {{#each cards}}
           <article class="scg-builder-card scg-builder-tile scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
             <div class="scg-builder-card-art {{#if hasArt}}has-art{{/if}}">
@@ -93,8 +93,8 @@
           </select>
         </label>
         <div class="scg-builder-side-actions">
-          <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
           <button type="button" data-action="new-deck"><i class="fa-solid fa-file-circle-plus"></i> Nouveau</button>
+          <button type="button" data-action="load-deck"><i class="fa-solid fa-folder-open"></i> Charger</button>
           <button type="button" class="is-primary" data-action="save-deck" {{#unless canSave}}disabled{{/unless}}><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
           <button type="button" data-action="rename-deck" {{#unless canRename}}disabled{{/unless}}><i class="fa-solid fa-pen"></i> Renommer</button>
           <button type="button" data-action="duplicate-deck" {{#unless canDuplicate}}disabled{{/unless}}><i class="fa-solid fa-copy"></i> Dupliquer</button>
@@ -114,13 +114,7 @@
         </section>
       {{/if}}
 
-      <button type="button" class="scg-builder-side-analysis" data-action="open-deck-analysis">
-        <i class="fa-solid fa-chart-pie"></i>
-        <span><strong>Analyse du deck</strong><small>Courbe de force, lignes, raretés et capacités</small></span>
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-      </button>
-
-      <div class="scg-builder-selected-scroll">
+      <div class="scg-builder-selected-scroll" data-preserve-scroll="selected">
         {{#each selectedCards}}
           <article class="scg-builder-selected scg-rarity-{{rarity}}">
             <span class="scg-builder-selected-art {{#if hasArt}}has-art{{/if}}">{{#if hasArt}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{else}}{{factionSymbol}}{{/if}}</span>
