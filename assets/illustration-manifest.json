@@ -1,0 +1,135 @@
+{
+  "version": "0.7.19",
+  "integratedCardArtCount": 20,
+  "integratedCardArt": [
+    {
+      "id": "AL-11",
+      "name": "Espion de Restov",
+      "source": "portraits/aldori/espion-du-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov"
+    },
+    {
+      "id": "AL-02",
+      "name": "Jamandi Aldori, Hôtesse de Restov",
+      "source": "portraits/aldori/jamandi-aldori-hotesse-de-restov.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov"
+    },
+    {
+      "id": "AL-01",
+      "name": "Jamandi Aldori, Première Épée",
+      "source": "portraits/aldori/jamandi-aldori-premiere-epee.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee"
+    },
+    {
+      "id": "AL-03",
+      "name": "Vera Sokolneva, Lame noire",
+      "source": "portraits/aldori/vera-sokolneva-lame-noire.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire"
+    },
+    {
+      "id": "KF-04",
+      "name": "Chevaucheuse de l’Orage",
+      "source": "portraits/iron-khans/chevaucheuse-de-l-orage.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage"
+    },
+    {
+      "id": "KF-03",
+      "name": "Iron Wrath",
+      "source": "portraits/iron-khans/iron-wrath.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath"
+    },
+    {
+      "id": "KF-01",
+      "name": "La Khanesse, Reine sans couronne",
+      "source": "portraits/iron-khans/la-khanesse-reine-sans-couronne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne"
+    },
+    {
+      "id": "SC-02",
+      "name": "Aethryn",
+      "source": "portraits/six-crowns/aethryn.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn"
+    },
+    {
+      "id": "NE-02",
+      "name": "Bokken, alchimiste des Marches",
+      "source": "portraits/six-crowns/bokken.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches"
+    },
+    {
+      "id": "SC-04",
+      "name": "Dame Blanche de Surtova",
+      "source": "portraits/six-crowns/dame-blanche-de-surtova.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova"
+    },
+    {
+      "id": "SC-06",
+      "name": "Elias Thornwell",
+      "source": "portraits/six-crowns/elias-thornwell.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell"
+    },
+    {
+      "id": "SC-14",
+      "name": "Garde du palais",
+      "source": "portraits/six-crowns/garde-du-palais.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais"
+    },
+    {
+      "id": "SC-07",
+      "name": "Harald Lodovka Menak",
+      "source": "portraits/six-crowns/harald-lodovka-menak.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak"
+    },
+    {
+      "id": "SC-10",
+      "name": "Mama Oluda",
+      "source": "portraits/six-crowns/mama-oluda.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda"
+    },
+    {
+      "id": "SC-01",
+      "name": "Odéon de Saulébène",
+      "source": "portraits/six-crowns/odeon-de-saulebene.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene"
+    },
+    {
+      "id": "SC-12",
+      "name": "Thea",
+      "source": "portraits/six-crowns/thea.webp.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea"
+    },
+    {
+      "id": "AA-18",
+      "name": "Cerf blanc du Premier Monde",
+      "source": "portraits/stolen-lands-arcana/cerf-blanc-du-premier-monde.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde"
+    },
+    {
+      "id": "AA-02",
+      "name": "Le Roi-Lanterne",
+      "source": "portraits/stolen-lands-arcana/le-roi-lanterne.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne"
+    },
+    {
+      "id": "AA-01",
+      "name": "Nyrissa, Reine des Épines",
+      "source": "portraits/stolen-lands-arcana/nyrissa-reine-des-epines.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines"
+    },
+    {
+      "id": "AA-14",
+      "name": "Portail du Premier Monde",
+      "source": "portraits/stolen-lands-arcana/portail-du-premier-monde.webp",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde"
+    }
+  ],
+  "unmatchedFiles": [],
+  "interfaceAssets": [
+    "assets/interface/backgrounds/deck-selection.webp",
+    "assets/interface/backgrounds/table.webp",
+    "assets/interface/placeholders/card-placeholder.webp",
+    "assets/interface/placeholders/collection-empty.webp",
+    "assets/interface/placeholders/deck-empty.webp",
+    "assets/interface/placeholders/portrait-placeholder.webp"
+  ]
+}

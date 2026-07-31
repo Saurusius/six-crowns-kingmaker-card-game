@@ -17,9 +17,9 @@
     "rarity": "unique",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/thumb.webp"
     }
   },
   {
@@ -40,9 +40,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/aethryn/thumb.webp"
     }
   },
   {
@@ -85,9 +85,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/dame-blanche-de-surtova/thumb.webp"
     }
   },
   {
@@ -127,9 +127,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/elias-thornwell/thumb.webp"
     }
   },
   {
@@ -149,9 +149,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/harald-lodovka-menak/thumb.webp"
     }
   },
   {
@@ -214,9 +214,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/mama-oluda/thumb.webp"
     }
   },
   {
@@ -256,9 +256,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/thea/thumb.webp"
     }
   },
   {
@@ -296,9 +296,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/garde-du-palais/thumb.webp"
     }
   },
   {
@@ -404,9 +404,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/bokken-alchimiste-des-marches/thumb.webp"
     }
   },
   {

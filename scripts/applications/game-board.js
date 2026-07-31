@@ -44,7 +44,7 @@ function findActorByName(name) {
 function profileFromActor(actor, fallbackName, fallbackImage = null) {
   return {
     name: actor?.name ?? fallbackName,
-    image: actor?.img ?? fallbackImage ?? "icons/svg/mystery-man.svg",
+    image: actor?.img ?? fallbackImage ?? "modules/six-crowns-kingmaker-card-game/assets/interface/placeholders/portrait-placeholder.webp",
     hasPortrait: Boolean(actor?.img ?? fallbackImage)
   };
 }

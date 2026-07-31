@@ -1,5 +1,15 @@
 # Journal des versions
 
+## 0.7.19 — Premier lot d’illustrations intégré
+
+- intégration de 20 premières illustrations de cartes fournies par l’utilisateur ;
+- génération automatique de variantes `full`, `medium` et `thumb` au ratio 5:7 ;
+- illustration haute définition dans la collection et les prévisualisations ;
+- miniatures optimisées dans la main, le deckbuilder, les boosters et le plateau ;
+- ajout du fond illustré de sélection des decks et du fond simple de table en bois ;
+- intégration des placeholders de carte, portrait, collection vide et deck vide ;
+- ajout d’un manifeste d’illustrations pour faciliter les prochains lots.
+
 ## 0.7.18 — Mulligan épuré et portraits de duel
 
 - suppression du texte d’effet sur les cartes de la main de départ ;

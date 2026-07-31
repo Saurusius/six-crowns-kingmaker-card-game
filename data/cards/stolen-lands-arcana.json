@@ -12,9 +12,9 @@
     "rarity": "unique",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/nyrissa-reine-des-epines/thumb.webp"
     }
   },
   {
@@ -30,9 +30,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/le-roi-lanterne/thumb.webp"
     }
   },
   {
@@ -284,9 +284,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/portail-du-premier-monde/thumb.webp"
     }
   },
   {
@@ -369,9 +369,9 @@
     "rarity": "rare",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/stolen-lands-arcana/cerf-blanc-du-premier-monde/thumb.webp"
     }
   },
   {

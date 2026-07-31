@@ -12,9 +12,9 @@
     "rarity": "unique",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/thumb.webp"
     }
   },
   {
@@ -52,9 +52,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/iron-wrath/thumb.webp"
     }
   },
   {
@@ -75,9 +75,9 @@
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/chevaucheuse-de-l-orage/thumb.webp"
     }
   },
   {

@@ -12,9 +12,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/thumb.webp"
     }
   },
   {
@@ -30,9 +30,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-hotesse-de-restov/thumb.webp"
     }
   },
   {
@@ -53,9 +53,9 @@
     "rarity": "rare",
     "isCharacter": true,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/vera-sokolneva-lame-noire/thumb.webp"
     }
   },
   {
@@ -221,9 +221,9 @@
     "rarity": "commun",
     "isCharacter": false,
     "art": {
-      "full": null,
-      "medium": null,
-      "thumb": null
+      "full": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/full.webp",
+      "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/medium.webp",
+      "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/aldori/espion-de-restov/thumb.webp"
     }
   },
   {
