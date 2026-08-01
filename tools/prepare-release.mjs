@@ -23,6 +23,7 @@ const entries = [
   "styles",
   "templates",
   "documentation/RULES.md",
+  "documentation/PVP-BETA.md",
   "LICENSE",
   "NOTICE.md",
   "README.md",

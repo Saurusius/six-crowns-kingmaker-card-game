@@ -802,8 +802,8 @@ function rowStatusFor(side, rowControl) {
 function prepareSpellView(state, side) {
   ensureSpellState(state);
   const slot = state.spells[side];
-  const definition = getEventSpellDefinition(slot.id);
-  const hidden = side === "opponent" && !slot.revealed && !slot.used;
+  const hidden = side === "opponent" && Boolean(slot.secret || (!slot.revealed && !slot.used));
+  const definition = hidden && slot.secret ? null : getEventSpellDefinition(slot.id);
   const options = definition ? buildEventSpellActivationOptions(state, side) : { canActivate: false, reason: "Aucun sortilège équipé." };
   return {
     id: definition?.id ?? null,
@@ -816,7 +816,7 @@ function prepareSpellView(state, side) {
     used: Boolean(slot.used),
     revealed: !hidden,
     hidden,
-    equipped: Boolean(definition),
+    equipped: hidden ? Boolean(slot.equipped ?? slot.id) : Boolean(definition),
     canActivate: side === "player" && Boolean(options.canActivate),
     reason: options.reason ?? ""
   };

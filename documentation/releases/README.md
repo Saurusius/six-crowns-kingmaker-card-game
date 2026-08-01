@@ -2,6 +2,10 @@
 
 Les notes de publication sont conservées ici afin de garder la racine du dépôt lisible.
 
+## Branche 0.12
+
+- [v0.12.0 — Arène PvP synchronisée](v0.12.0.md)
+
 ## Branche 0.11
 
 - [v0.11.0 — Hub central et navigation unifiée](v0.11.0.md)

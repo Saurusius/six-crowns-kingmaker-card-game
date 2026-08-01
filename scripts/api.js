@@ -31,6 +31,8 @@ import {
 let home;
 let board;
 let analyticsDashboard;
+let pvpLobby;
+const pvpBoards = new Map();
 
 
 /** Ouvre l’écran d’accueil central du module. */
@@ -39,6 +41,28 @@ export async function openHome() {
   if (!home || !home.rendered) home = new SixCrownsHome();
   await home.render({ force: true });
   return home;
+}
+
+
+/** Ouvre l’arène multijoueur et ses invitations. */
+export async function openPvp() {
+  const { SixCrownsPvpLobby } = await import("./applications/pvp-lobby.js");
+  if (!pvpLobby || !pvpLobby.rendered) pvpLobby = new SixCrownsPvpLobby();
+  await pvpLobby.render({ force: true });
+  return pvpLobby;
+}
+
+/** Ouvre ou restaure le plateau d’un duel PvP précis. */
+export async function openPvpBoard(matchId) {
+  if (!matchId) throw new Error("Identifiant de duel PvP manquant.");
+  const { SixCrownsPvpBoard } = await import("./applications/pvp-board.js");
+  let app = pvpBoards.get(matchId);
+  if (!app || !app.rendered) {
+    app = new SixCrownsPvpBoard(matchId);
+    pvpBoards.set(matchId, app);
+  }
+  await app.render({ force: true });
+  return app;
 }
 
 /** Ouvre le tableau d’équilibrage réservé aux MJ. */

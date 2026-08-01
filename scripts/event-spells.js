@@ -316,7 +316,7 @@ export function activateEventSpellEffect(state, side = "player", payload = {}) {
     const ownCandidates = weakestCandidates(own);
     const enemyCandidates = weakestCandidates(enemy);
     const ownChoice = ownCandidates.find(({ card }) => card.id === payload.cardId) ?? ownCandidates[0];
-    const enemyChoice = selectAiHydraVictim(enemyCandidates);
+    const enemyChoice = enemyCandidates.find(({ card }) => card.id === payload.opponentCardId) ?? selectAiHydraVictim(enemyCandidates);
     if (!ownChoice || !enemyChoice) throw new Error("L’Hydre ne trouve aucune victime valable.");
     for (const choice of [ownChoice, enemyChoice]) {
       choice.card.spellExcluded = true;

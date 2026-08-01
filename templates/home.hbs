@@ -6,7 +6,7 @@
       <div>
         <small>Jeu de cartes des Terres Dérobées</small>
         <h1>Le Jeu des Six Couronnes</h1>
-        <p>Bienvenue, {{userName}}. Choisissez votre prochaine étape.</p>
+        <p>Bienvenue {{userName}}.</p>
       </div>
     </div>
     <span class="scg-home-version">v{{version}}</span>
@@ -22,8 +22,11 @@
       <div class="scg-home-hero-copy">
         <span>Trois lignes. Deux gemmes. Une couronne.</span>
         <h2>Que la partie commence.</h2>
-        <p>Préparez votre deck, équipez un sortilège événementiel et affrontez l’adversaire automatisé.</p>
-        <button type="button" class="scg-home-play-button" data-action="play"><i class="fa-solid fa-play"></i> Jouer une partie</button>
+        <p>Préparez votre deck et armez-vous d’un sortilège emblématique avant d’affronter votre adversaire.</p>
+        <div class="scg-home-play-actions">
+          <button type="button" class="scg-home-play-button is-pvp" data-action="pvp"><i class="fa-solid fa-khanda"></i> Affronter un joueur</button>
+          <button type="button" class="scg-home-play-button is-solo" data-action="play"><i class="fa-solid fa-robot"></i> Affronter l’adversaire automatisé</button>
+        </div>
       </div>
     </section>
 

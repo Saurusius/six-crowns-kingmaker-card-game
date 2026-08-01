@@ -17,6 +17,8 @@ import {
   loadCardCatalog,
   openHome,
   openBoard,
+  openPvp,
+  openPvpBoard,
   openAnalyticsDashboard,
   openBooster,
   openBoosters,
@@ -32,10 +34,13 @@ import {
 } from "./api.js";
 import { handleTradeSocket, registerTradeSettings } from "./trades.js";
 import { handleAnalyticsSocket, registerAnalyticsSetting } from "./analytics.js";
+import { handlePvpSocket, registerPvpSettings, resumePvpSession } from "./pvp/service.js";
 
 const api = Object.freeze({
   openHome,
   openBoard,
+  openPvp,
+  openPvpBoard,
   openAnalyticsDashboard,
   openBooster,
   openBoosters,
@@ -81,6 +86,7 @@ Hooks.once("init", () => {
   console.log(`${MODULE_TITLE} | Initialisation`);
   registerTradeSettings();
   registerAnalyticsSetting();
+  registerPvpSettings();
   exposeApi();
 });
 
@@ -114,6 +120,7 @@ Hooks.on(`${MODULE_ID}.collectionUpdated`, async (_collection, userId) => {
 
 Hooks.once("ready", () => {
   game.socket.on(`module.${MODULE_ID}`, async (data) => {
+    if (await handlePvpSocket(data)) return;
     if (await handleTradeSocket(data)) return;
     if (await handleAnalyticsSocket(data)) return;
     if (data.type === "trade-sync" && data.users?.includes(game.user.id)) {
@@ -128,4 +135,9 @@ Hooks.once("ready", () => {
     if (data.type === "trade-error" && data.userId === game.user.id) ui.notifications.error(data.message);
     if (data.type === "analytics-sync" && game.user.isGM) Hooks.callAll(`${MODULE_ID}.analyticsUpdated`);
   });
+});
+
+
+Hooks.once("ready", () => {
+  globalThis.setTimeout(() => void resumePvpSession(), 350);
 });

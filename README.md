@@ -2,11 +2,11 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.11.0-c9a44d)
+![Version](https://img.shields.io/badge/version-0.12.0-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
-Le module propose une expérience complète dans Foundry VTT : un hub central illustré, des parties contre un adversaire automatisé, une collection personnelle, des boosters, un constructeur de deck, des échanges entre joueurs et des outils d’équilibrage pour le MJ.
+Le module propose une expérience complète dans Foundry VTT : un hub central illustré, des parties solo contre un adversaire automatisé, une arène PvP synchronisée, une collection personnelle, des boosters, un constructeur de deck, des échanges entre joueurs et des outils d’équilibrage pour le MJ.
 
 ## Installation
 
@@ -38,7 +38,8 @@ La macro **Jouer au Jeu des Six Couronnes** ouvre désormais l’écran d’accu
 
 | Espace | Fonction |
 |---|---|
-| **Jouer une partie** | ouvre le plateau et la préparation de partie |
+| **Affronter un joueur** | ouvre l’arène PvP, les invitations et les parties en cours |
+| **Affronter l’adversaire automatisé** | ouvre le plateau et la préparation d’une partie solo |
 | **Ma collection** | consulte les cartes possédées, les échanges, l’historique et les outils de tickets |
 | **Mes decks** | ouvre le constructeur, les filtres, la sauvegarde et l’analyse de deck |
 | **Boosters** | ouvre les boosters classiques, spéciaux ou événementiels |
@@ -60,6 +61,22 @@ Des boutons **Accueil** sont également disponibles dans le plateau, la collecti
 - gestion des tours, passages, scores de ligne, gemmes et manches ;
 - sauvegarde et restauration automatique d’une partie interrompue ;
 - écran final de victoire, défaite ou égalité et bouton de revanche.
+
+### Arène PvP — bêta
+
+- duels synchronisés en **1 contre 1** entre profils Foundry connectés ;
+- invitation, acceptation, salon privé et verrouillage indépendant des équipements ;
+- validation côté MJ des decks personnalisés et des cartes réellement possédées ;
+- sortilèges emblématiques gardés secrets jusqu’à leur activation ;
+- mains adverses expurgées des instantanés envoyés aux autres joueurs et aux spectateurs ;
+- remplacement initial de deux cartes maximum, tours, passages, manches et revanche synchronisés ;
+- sauvegarde par le MJ hôte et reprise automatique après fermeture ou reconnexion ;
+- abandon, historique compact des actions et statistiques personnelles ;
+- spectateurs désactivés par défaut et activables depuis le salon ;
+- console MJ pour resynchroniser, débloquer un tour, annuler une partie ou déclarer un résultat ;
+- aucun chronomètre, aucune mise et aucune perte de carte.
+
+Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvegarde. Les limites et le protocole de test de cette bêta sont détaillés dans [`documentation/PVP-BETA.md`](documentation/PVP-BETA.md).
 
 ### Cartes et collection
 
@@ -126,16 +143,20 @@ Une manche est gagnée d’abord au nombre de lignes contrôlées, puis à la Pu
 
 Les règles détaillées sont disponibles dans le module et dans [`documentation/RULES.md`](documentation/RULES.md).
 
-## Version 0.11.0
+## Version 0.12.0
 
-Cette version ajoute :
+Cette version inaugure la **bêta PvP** :
 
-- un véritable écran d’accueil illustré servant de hub central ;
-- un accès direct à toutes les interfaces et aux trois familles de boosters ;
-- la suppression des anciennes commandes de chat ;
-- un carrousel horizontal automatique pour la sélection des sortilèges ;
-- un règlement dont chaque bulle possède désormais un intitulé précis et non redondant ;
-- une documentation GitHub réorganisée autour des fonctionnalités réellement disponibles.
+- une arène multijoueur accessible depuis le hub ;
+- des invitations directes et un salon de préparation synchronisé ;
+- des duels 1 contre 1 arbitrés par le MJ hôte ;
+- des mains et sortilèges adverses masqués dans les instantanés clients ;
+- la reconnexion, l’abandon, les revanches et les spectateurs optionnels ;
+- une console MJ de surveillance et de déblocage ;
+- un historique et des statistiques PvP personnelles ;
+- les nouvelles formulations de la page d’accueil.
+
+Cette branche reste une bêta multijoueur : une première partie réelle avec deux navigateurs et un MJ est recommandée avant une soirée de tournoi.
 
 Consultez le [`CHANGELOG.md`](CHANGELOG.md) pour l’historique complet.
 
@@ -157,7 +178,7 @@ npm run check
 Préparer une archive de release :
 
 ```bash
-npm run prepare-release -- 0.11.0
+npm run prepare-release -- 0.12.0
 ```
 
 Le dépôt publie automatiquement une release lorsqu’un tag au format `vX.Y.Z` est poussé sur GitHub.
@@ -165,6 +186,7 @@ Le dépôt publie automatiquement une release lorsqu’un tag au format `vX.Y.Z`
 ## Documentation
 
 - [Règles complètes](documentation/RULES.md)
+- [Guide de la bêta PvP](documentation/PVP-BETA.md)
 - [Journal des modifications](CHANGELOG.md)
 - [Archives des releases](documentation/releases/README.md)
 - [Méthode d’équilibrage](CARD_BALANCE.md)

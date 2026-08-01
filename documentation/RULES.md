@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du prototype **0.11.0**.
+Cette page décrit les règles du prototype **0.12.0**.
 
 ## But de la partie
 
@@ -123,6 +123,21 @@ Les doublons sont autorisés. Chaque ouverture consomme le ticket correspondant.
 - **Chancla de titane** : retire 4 Puissance à une carte adverse jusqu’à la fin de la manche, sans la faire descendre sous 0.
 - **Hydre vorace** : exclut du score la carte la plus faible de chaque camp pour la manche.
 
+## Duels PvP
+
+Le mode PvP applique les mêmes règles de cartes, de lignes, de score et de victoire que le mode solo.
+
+1. Un joueur connecté invite un autre profil depuis l’arène.
+2. Chaque joueur sélectionne et valide son propre deck ainsi qu’un éventuel sortilège emblématique.
+3. Le duel commence automatiquement lorsque les deux joueurs sont prêts.
+4. Chaque joueur effectue son propre remplacement initial, puis joue uniquement pendant son tour.
+5. Un joueur peut abandonner ; l’adversaire est alors déclaré vainqueur.
+6. Une revanche ne commence que lorsque les deux participants la demandent.
+
+Les spectateurs sont désactivés par défaut. Lorsqu’ils sont autorisés, ils voient le plateau et les scores, mais pas les mains ni les sortilèges qui n’ont pas été activés. Aucun chronomètre, aucune mise et aucune perte de carte ne sont appliqués.
+
+Un MJ connecté sert d’arbitre technique : il conserve l’état de la partie, valide les actions et peut resynchroniser ou débloquer exceptionnellement un duel.
+
 ## Sauvegarde et profils
 
-Les collections, decks personnels, tickets et parties en cours sont enregistrés sur le profil Foundry connecté. Chaque joueur possède donc ses propres données.
+Les collections, decks personnels et tickets sont enregistrés sur le profil Foundry connecté. Chaque joueur possède donc ses propres données. Les duels PvP sont sauvegardés au niveau du monde par le MJ hôte afin de permettre la synchronisation et la reconnexion des deux participants.

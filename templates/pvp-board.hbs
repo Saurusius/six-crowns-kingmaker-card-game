@@ -1,0 +1,511 @@
+<section class="scg-shell scg-pvp-board-shell">
+  <header class="scg-toolbar">
+    <div class="scg-round-heading">
+      <strong>{{#if round}}Manche {{round}}{{else}}Nouvelle partie{{/if}}</strong>
+      <span class="scg-status">{{phaseLabel}}</span>
+      {{#if showBoard}}<span class="scg-turn">Tour : {{turnLabel}}</span>{{/if}}
+    </div>
+    <div class="scg-toolbar-actions">
+      <button type="button" data-action="open-home"><i class="fa-solid fa-khanda"></i> Arène PvP</button>
+      <button type="button" data-action="open-rulebook"><i class="fa-solid fa-scroll"></i> Règlement</button>
+      <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      {{#if canAct}}<button type="button" class="scg-danger-button" data-action="surrender"><i class="fa-solid fa-flag-white"></i> Abandonner</button>{{else}}{{#if isSpectator}}<span class="scg-pvp-spectator-chip"><i class="fa-solid fa-eye"></i> Spectateur</span>{{/if}}{{/if}}
+      {{#if canRematch}}
+        <button type="button" class="scg-primary-button" data-action="rematch" {{#if rematchRequested}}disabled{{else}}{{#unless canRequestRematch}}disabled{{/unless}}{{/if}}><i class="fa-solid fa-arrows-rotate"></i> {{#if rematchRequested}}Revanche demandée{{else}}Demander une revanche{{/if}}</button>
+      {{else}}{{#if canStartNextRound}}
+        <button type="button" data-action="next-round" {{#unless canAct}}disabled{{/unless}}><i class="fa-solid fa-forward"></i> Manche suivante</button>
+      {{else}}
+        {{#if showBoard}}<button type="button" data-action="pass" {{#unless canPlayerAct}}disabled{{/unless}}><i class="fa-solid fa-flag"></i> Passer</button>{{/if}}
+      {{/if}}{{/if}}
+    </div>
+  </header>
+
+  <p class="scg-message">{{message}}</p>
+
+  {{#if hasActionLog}}
+    <details class="scg-match-log scg-pvp-action-log">
+      <summary><i class="fa-solid fa-clock-rotate-left"></i> Historique des actions</summary>
+      <div>
+        {{#each actionLog}}
+          <article><small>Manche {{round}}</small><span>{{message}}</span></article>
+        {{/each}}
+      </div>
+    </details>
+  {{/if}}
+
+  {{#if isSpellSelection}}
+    <section class="scg-setup-panel scg-spell-selection-panel">
+      <div class="scg-setup-heading scg-spell-selection-heading">
+        <div>
+          <small>Après les decks · avant le lancer de pièce</small>
+          <h2>Choisissez votre sortilège</h2>
+          <p>Les decks sont maintenant sélectionnés. Choisissez secrètement un sortilège de votre collection ; une seule activation sera possible pendant toute la partie.</p>
+        </div>
+        <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> Terres Dérobées · 5 cartes dorées</span>
+      </div>
+
+      <div class="scg-selected-decks-summary">
+        <article><i class="fa-solid fa-crown"></i><span><small>Votre deck</small><strong>{{selectedPlayerDeckLabel}}</strong></span></article>
+        <i class="fa-solid fa-arrow-right"></i>
+        <article><i class="fa-solid fa-chess-knight"></i><span><small>Deck adverse</small><strong>{{selectedOpponentDeckLabel}}</strong></span></article>
+      </div>
+
+      <div class="scg-spell-carousel-block {{#if hasMultipleEventSpells}}is-scrollable{{/if}}">
+        <div class="scg-spell-carousel-heading">
+          <span><i class="fa-solid fa-images"></i> Sélection de sortilèges</span>
+          {{#if hasMultipleEventSpells}}<small>{{eventSpellChoiceCount}} cartes disponibles · faites défiler horizontalement</small>{{/if}}
+        </div>
+        <div class="scg-spell-choice-carousel" role="list" tabindex="0" aria-label="Sortilèges événementiels disponibles">
+          <button type="button" role="listitem" class="scg-spell-choice-card is-no-spell {{#if noSpellSelected}}is-selected{{/if}}" data-action="select-no-spell">
+            <span class="scg-spell-choice-art"><i class="fa-solid fa-ban"></i></span>
+            <span><small>Option libre</small><strong>Sans sortilège</strong><p>Entrez dans la partie sans pouvoir événementiel.</p></span>
+            <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
+          </button>
+          {{#each eventSpellChoices}}
+            <button type="button" role="listitem" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}}" data-action="select-event-spell" data-spell-id="{{id}}">
+              <span class="scg-spell-choice-art"><img src="{{artMedium}}" alt="Illustration de {{name}}"></span>
+              <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p>{{text}}</p></span>
+              <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
+            </button>
+          {{/each}}
+        </div>
+      </div>
+
+      {{#unless hasOwnedEventSpells}}
+        <div class="scg-spell-empty-state"><i class="fa-solid fa-lock"></i><div><strong>Aucun sortilège possédé</strong><p>Les cartes non obtenues restent entièrement secrètes. Ouvrez un booster événementiel ou consultez votre collection pour en débloquer.</p></div></div>
+      {{/unless}}
+
+      <div class="scg-spell-selection-note">
+        <i class="fa-solid fa-user-secret"></i>
+        <span><strong>Choix secret</strong> Le sortilège adverse sera lui aussi verrouillé maintenant, puis restera face cachée jusqu’à son activation.</span>
+      </div>
+      <div class="scg-setup-actions">
+        <button class="scg-secondary-button" type="button" data-action="back-to-decks"><i class="fa-solid fa-arrow-left"></i> Modifier les decks</button>
+        <button class="scg-secondary-button" type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{eventBoosterButtonLabel}}</button>
+        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Voir la collection</button>
+        <button class="scg-primary-button" type="button" data-action="lock-event-spell"><i class="fa-solid fa-coins"></i> Verrouiller et passer au lancer de pièce</button>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if isDeckSelection}}
+    <section class="scg-setup-panel scg-deck-preparation">
+      <div class="scg-setup-heading scg-deck-preparation-heading">
+        <div>
+          <small>Préparation de la confrontation</small>
+          <h2>Choisissez vos deux armées</h2>
+          <p>Sélectionnez directement les decks dans les galeries ci-dessous. Les decks de démonstration sont indépendants de votre collection ; vos decks personnalisés restent soumis aux limites de construction.</p>
+        </div>
+        <span class="scg-deck-rule-chip"><i class="fa-solid fa-layer-group"></i> 20 cartes par deck</span>
+      </div>
+
+      <div class="scg-setup-sequence" aria-label="Étapes de préparation">
+        <span class="is-current"><i class="fa-solid fa-layer-group"></i> 1. Decks</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span><i class="fa-solid fa-wand-sparkles"></i> 2. Sortilège</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span><i class="fa-solid fa-coins"></i> 3. Lancer de pièce</span>
+      </div>
+
+      <div class="scg-deck-choice-columns">
+        <section class="scg-deck-choice-panel is-player">
+          <header><span><i class="fa-solid fa-crown"></i></span><div><small>Votre camp</small><h3>Votre deck</h3></div></header>
+          <input type="hidden" name="player-deck" value="{{selectedPlayerDeck}}">
+          <div class="scg-deck-choice-grid">
+            <button type="button" class="scg-deck-choice-card is-random {{#if playerDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="random">
+              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Le destin choisit votre armée.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+            </button>
+            {{#each decks}}
+              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if playerSelected}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="{{id}}">
+                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+              </button>
+            {{/each}}
+          </div>
+        </section>
+
+        <section class="scg-deck-choice-panel is-opponent">
+          <header><span><i class="fa-solid fa-chess-knight"></i></span><div><small>Camp adverse</small><h3>Deck adverse</h3></div></header>
+          <input type="hidden" name="opponent-deck" value="{{selectedOpponentDeck}}">
+          <div class="scg-deck-choice-grid">
+            <button type="button" class="scg-deck-choice-card is-random {{#if opponentDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="random">
+              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Un adversaire imprévisible.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+            </button>
+            {{#each decks}}
+              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if opponentSelected}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="{{id}}">
+                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
+              </button>
+            {{/each}}
+          </div>
+        </section>
+      </div>
+
+      <div class="scg-setup-actions">
+        <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Ma collection</button>
+        <button class="scg-secondary-button" type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Mes decks</button>
+        <button class="scg-primary-button" type="button" data-action="start-game"><i class="fa-solid fa-wand-sparkles"></i> Valider les decks et choisir un sortilège</button>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if isCoinToss}}
+    <section class="scg-coin-panel">
+      <div class="scg-coin-ambience" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="scg-versus scg-versus-banner">
+        <span class="scg-versus-side"><i class="fa-solid fa-crown"></i>{{player.name}}</span>
+        <strong><small>le destin choisit</small>contre</strong>
+        <span class="scg-versus-side"><i class="fa-solid fa-chess-knight"></i>{{opponent.name}}</span>
+      </div>
+
+      <div class="scg-coin-stage">
+        <span class="scg-coin-orbit" aria-hidden="true"></span>
+        <span class="scg-coin-shadow" aria-hidden="true"></span>
+        <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
+          <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
+          <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
+        </div>
+        {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
+      </div>
+
+      {{#if coin.resolved}}
+        <div class="scg-coin-summary {{#if coinPlayerWon}}is-win{{else}}is-loss{{/if}}">
+          La pièce montre <strong><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong> · <strong>{{firstPlayerName}}</strong> jouera en premier.
+        </div>
+        <button class="scg-primary-button" type="button" data-action="continue-after-coin" {{#unless canContinueCoin}}disabled{{/unless}}>Préparer les mains</button>
+      {{else}}
+        {{#if coin.flipping}}
+          <div class="scg-coin-summary">Votre choix : <strong><i class="{{coinChoiceIcon}}"></i> {{coinChoiceLabel}}</strong></div>
+          <button class="scg-primary-button" type="button" disabled><i class="fa-solid fa-coins"></i> La pièce tourne…</button>
+        {{else}}
+          <div class="scg-coin-choice" role="group" aria-label="Choisissez Bouclier ou Épée">
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="shield">
+              <span class="scg-choice-symbol"><i class="fa-solid fa-shield-halved"></i></span><strong>Bouclier</strong>
+            </button>
+            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="sword">
+              <span class="scg-choice-symbol"><i class="fa-solid fa-sword"></i></span><strong>Épée</strong>
+            </button>
+          </div>
+        {{/if}}
+      {{/if}}
+    </section>
+  {{/if}}
+
+  {{#if isMulligan}}
+    <section class="scg-mulligan-panel">
+      <div class="scg-setup-heading">
+        <h2>Votre main de départ</h2>
+        <p>Sélectionnez jusqu’à deux cartes à remplacer. Sélection : {{mulliganSelectedCount}} / 2.</p>
+      </div>
+
+      <div class="scg-mulligan-grid">
+        {{#each player.hand}}
+          <article class="scg-mulligan-card-wrap" data-mulligan-card-id="{{id}}">
+            <button type="button" class="scg-card scg-detail-card scg-mulligan-card {{factionClass}} {{#if mulliganSelected}}is-selected{{/if}}" data-action="toggle-mulligan" data-card-id="{{id}}" {{#unless @root.canConfirmMulligan}}disabled{{/unless}} title="{{#if mulliganSelected}}Cliquer pour conserver {{name}}{{else}}Cliquer pour remplacer {{name}}{{/if}}">
+              <span class="scg-card-art">
+                {{#if hasImage}}
+                  <img src="{{artMedium}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                {{else}}
+                  <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
+                {{/if}}
+                <span class="scg-strength">{{strength}}</span>
+                <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+                <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                <span class="scg-mulligan-choice {{#if mulliganSelected}}is-replace{{else}}is-keep{{/if}}" aria-label="{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}" title="{{#if mulliganSelected}}À remplacer{{else}}Conserver{{/if}}"><i class="{{#if mulliganSelected}}fa-solid fa-rotate{{else}}fa-solid fa-check{{/if}}"></i></span>
+              </span>
+              <span class="scg-card-body">
+                <strong class="scg-card-name">{{name}}</strong>
+                <span class="scg-mulligan-meta-line"><span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span><span class="scg-mulligan-strength-inline"><i class="fa-solid fa-bolt"></i> Force {{strength}}</span></span>
+                <span class="scg-mulligan-rows" aria-label="Lignes jouables">{{#each rowChoices}}<span class="scg-mulligan-row-chip" title="Peut être jouée sur {{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
+                <span class="scg-effect-icons">
+                  {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                </span>
+              </span>
+            </button>
+            <button
+              type="button"
+              class="scg-mulligan-preview-trigger"
+              data-action="preview-mulligan"
+              data-card-id="{{id}}"
+              title="Prévisualiser {{name}}"
+              aria-label="Prévisualiser {{name}}"
+            ><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+          </article>
+        {{/each}}
+      </div>
+
+      <div class="scg-mulligan-preview-backdrop" data-mulligan-preview hidden tabindex="-1" aria-hidden="true">
+        <div class="scg-mulligan-preview-dialog" role="dialog" aria-modal="true" aria-label="Prévisualisation de la carte">
+          <button type="button" class="scg-mulligan-preview-close" data-action="close-mulligan-preview" title="Fermer la prévisualisation" aria-label="Fermer la prévisualisation"><i class="fa-solid fa-xmark"></i></button>
+          {{#each player.hand}}
+            <article class="scg-card scg-mulligan-preview-card {{factionClass}} {{rarityClass}}" data-preview-card-id="{{id}}" hidden>
+              <div class="scg-mulligan-preview-art">
+                {{#if hasImage}}
+                  <img src="{{artFull}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                {{else}}
+                  <span class="scg-card-placeholder"><span>{{factionSymbol}}</span><small>{{factionLabel}}</small></span>
+                {{/if}}
+                <span class="scg-strength">{{strength}}</span>
+                <span class="scg-rarity-badge {{rarityClass}}" title="Rareté : {{rarityLabel}}"><i class="{{rarityIcon}}"></i></span>
+                <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+              </div>
+              <div class="scg-mulligan-preview-body">
+                <span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span>
+                <h3>{{name}}</h3>
+                <p class="scg-mulligan-preview-meta"><strong>Ligne(s) :</strong> {{rowSummary}} · <strong>Force :</strong> {{strength}}</p>
+                <div class="scg-mulligan-preview-traits">
+                  {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
+                </div>
+                <p class="scg-mulligan-preview-effect">{{effectText}}</p>
+              </div>
+            </article>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="scg-mulligan-footer">
+        <span>Pioche restante : {{player.deck.length}} · Défausse : {{player.discard.length}}</span>
+        <button class="scg-primary-button" type="button" data-action="confirm-mulligan" {{#unless canConfirmMulligan}}disabled{{/unless}}>{{#if canConfirmMulligan}}{{mulliganButtonLabel}}{{else}}Main confirmée · attente de l’adversaire{{/if}}</button>
+      </div>
+    </section>
+  {{/if}}
+
+  {{#if gameSummary}}
+    <section class="scg-end-screen {{gameSummary.screenClass}}">
+      <div class="scg-end-effects" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="scg-end-emblem"><i class="{{gameSummary.icon}}"></i></div>
+      <small>{{gameSummary.eyebrow}}</small>
+      <h1>{{gameSummary.winnerLabel}}</h1>
+      <p class="scg-end-subtitle">{{gameSummary.subtitle}}</p>
+      <div class="scg-end-duel">
+        <article><img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}"><span>{{playerCampLabel}}</span><strong>{{player.name}}</strong><b>{{player.lives}} gemme(s)</b></article>
+        <div><span>{{gameSummary.playerRounds}}</span><small>manches gagnées</small><i class="fa-solid fa-crown"></i><span>{{gameSummary.opponentRounds}}</span></div>
+        <article><img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}"><span>{{opponentCampLabel}}</span><strong>{{opponent.name}}</strong><b>{{opponent.lives}} gemme(s)</b></article>
+      </div>
+      <div class="scg-end-stats">
+        <article><strong>{{gameSummary.rounds}}</strong><span>manches jouées</span></article>
+        <article><strong>{{gameSummary.playerCardsPlayed}}</strong><span>cartes alliées jouées</span></article>
+        <article><strong>{{gameSummary.opponentCardsPlayed}}</strong><span>cartes adverses jouées</span></article>
+      </div>
+      <p class="scg-end-message">{{message}}</p>
+      <div class="scg-end-actions"><button type="button" class="scg-primary-button" data-action="rematch" {{#if rematchRequested}}disabled{{else}}{{#unless canRequestRematch}}disabled{{/unless}}{{/if}}><i class="fa-solid fa-arrows-rotate"></i> {{#if rematchRequested}}Revanche demandée{{else}}Demander une revanche{{/if}}</button><button type="button" data-action="return-lobby"><i class="fa-solid fa-khanda"></i> Retour à l’arène</button></div>
+    </section>
+  {{/if}}
+
+  {{#if showBoard}}
+    <div class="scg-scorebar">
+      <div class="scg-score-side">
+        <span class="scg-muted">{{opponent.name}}</span>
+        <strong>{{opponentScore.total}}</strong>
+        <span class="scg-line-count">{{opponent.controlledLines}} ligne(s)</span>
+        <span class="scg-gems" title="Points de manche restants">
+          {{#each opponent.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
+        </span>
+      </div>
+      <div class="scg-deck-status">
+        <span>La manche se gagne d’abord au contrôle des lignes, puis au total.</span>
+        <span>Le bouton <strong>Règlement</strong> reste disponible pendant toute la partie.</span>
+      </div>
+      <div class="scg-score-side scg-score-side-player">
+        <span class="scg-gems" title="Points de manche restants">
+          {{#each player.gems}}<span class="scg-gem {{#if active}}is-active{{else}}is-empty{{/if}}"></span>{{/each}}
+        </span>
+        <strong>{{playerScore.total}}</strong>
+        <span class="scg-line-count">{{player.controlledLines}} ligne(s)</span>
+        <span class="scg-muted">{{player.name}}</span>
+      </div>
+    </div>
+
+    {{#if isOpponentTurn}}
+      <div class="scg-thinking"><i class="fa-solid fa-hourglass-half"></i> {{opponent.name}} réfléchit…</div>
+    {{/if}}
+
+    <section class="scg-board-layout">
+      <aside class="scg-hand-sidebar {{#unless canPlayerAct}}is-locked{{/unless}}">
+        <div class="scg-side-mini scg-side-mini-opponent">
+          <strong>{{opponent.name}}</strong>
+          <span>{{opponent.handCount}} cartes en main</span>
+          {{#if opponent.passed}}<span class="scg-pass-badge">A passé</span>{{/if}}
+        </div>
+
+        <div class="scg-hand-panel">
+          <div class="scg-side-heading">
+            <strong>Votre main</strong>
+            <span>{{player.hand.length}} cartes à jouer</span>
+          </div>
+          <div class="scg-hand-column">
+            {{#each player.hand}}
+              <article class="scg-card scg-hand-card {{factionClass}} {{rarityClass}}">
+                <div class="scg-hand-card-top">
+                  <div class="scg-hand-card-art">
+                    {{#if hasImage}}
+                      <img src="{{artMedium}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                    {{else}}
+                      <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
+                    {{/if}}
+                    <span class="scg-strength">{{strength}}</span>
+                  </div>
+                  <div class="scg-hand-card-info">
+                    <strong class="scg-card-name">{{name}}</strong>
+                    <span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span>
+                    <div class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</div>
+                  </div>
+                </div>
+                <div class="scg-play-actions">
+                  {{#each rowChoices}}
+                    <button type="button" title="Jouer sur {{label}}" data-action="play-card" data-card-id="{{../id}}" data-row="{{id}}" {{#unless @root.canPlayerAct}}disabled{{/unless}}><i class="{{icon}}"></i> {{label}}</button>
+                  {{/each}}
+                </div>
+                <div class="scg-card-popover scg-hand-popover">
+                  <strong>{{name}}</strong>
+                  <span>{{rarityLabel}} · {{rowSummary}} · Force {{strength}}</span>
+                  <p>{{effectText}}</p>
+                </div>
+              </article>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="scg-side-mini scg-side-mini-player">
+          <strong>{{player.name}}</strong>
+          <span>Pioche {{player.deck.length}} · Défausse {{player.discard.length}}</span>
+          {{#if player.passed}}<span class="scg-pass-badge">Vous avez passé</span>{{/if}}
+        </div>
+      </aside>
+
+      <div class="scg-battlefield-panel">
+        <section class="scg-side scg-opponent {{#if opponent.passed}}is-passed{{/if}}">
+          {{#each opponent.rowList}}
+            <div class="scg-row" data-row="{{id}}">
+              <div class="scg-row-label {{status.className}}">
+                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span>{{label}}</span>
+                <strong>{{score}}</strong>
+                <small class="scg-row-control">{{status.label}}</small>
+              </div>
+              <div class="scg-card-line">
+                {{#each cards}}
+                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}} {{#if isSpellExcluded}}is-spell-excluded{{/if}} {{#if isSummoned}}is-summoned-card{{/if}}">
+                    <div class="scg-card-art">
+                      {{#if hasImage}}
+                        <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                      {{else}}
+                        <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
+                      {{/if}}
+                      <span class="scg-strength">{{effectiveStrength}}</span>
+                      <span class="scg-rarity-dot {{rarityClass}}" title="{{rarityLabel}}"></span>
+                      {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      {{#if hasTemporaryPower}}<span class="scg-spell-power-modifier">{{temporaryPowerLabel}}</span>{{/if}}
+                      {{#if isSpellExcluded}}<span class="scg-spell-excluded-badge" title="Dévorée par un sortilège"><i class="fa-solid fa-dragon"></i></span>{{/if}}
+                      {{#if isSummoned}}<span class="scg-summoned-badge" title="Invocation temporaire"><i class="fa-solid fa-paw"></i></span>{{/if}}
+                      <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                    </div>
+                    <div class="scg-card-caption">
+                      <strong>{{name}}</strong>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
+                    </div>
+                    <div class="scg-card-popover">
+                      <strong>{{name}}</strong>
+                      <span>{{rarityLabel}} · {{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
+                      <p>{{effectText}}</p>
+                    </div>
+                  </article>
+                {{/each}}
+              </div>
+            </div>
+          {{/each}}
+        </section>
+
+        <div class="scg-divider"></div>
+
+        <section class="scg-side scg-player {{#if player.passed}}is-passed{{/if}}">
+          {{#each player.rowList}}
+            <div class="scg-row" data-row="{{id}}">
+              <div class="scg-row-label {{status.className}}">
+                <span class="scg-row-icon"><i class="{{icon}}"></i></span>
+                <span>{{label}}</span>
+                <strong>{{score}}</strong>
+                <small class="scg-row-control">{{status.label}}</small>
+              </div>
+              <div class="scg-card-line">
+                {{#each cards}}
+                  <article class="scg-card scg-board-card {{factionClass}} {{rarityClass}} {{#if isSpellExcluded}}is-spell-excluded{{/if}} {{#if isSummoned}}is-summoned-card{{/if}}">
+                    <div class="scg-card-art">
+                      {{#if hasImage}}
+                        <img src="{{artThumb}}" alt="Illustration de {{name}}" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">
+                      {{else}}
+                        <span class="scg-card-placeholder"><span>{{factionSymbol}}</span></span>
+                      {{/if}}
+                      <span class="scg-strength">{{effectiveStrength}}</span>
+                      <span class="scg-rarity-dot {{rarityClass}}" title="{{rarityLabel}}"></span>
+                      {{#if isModified}}<span class="scg-base-strength">{{strength}}</span>{{/if}}
+                      {{#if hasTemporaryPower}}<span class="scg-spell-power-modifier">{{temporaryPowerLabel}}</span>{{/if}}
+                      {{#if isSpellExcluded}}<span class="scg-spell-excluded-badge" title="Dévorée par un sortilège"><i class="fa-solid fa-dragon"></i></span>{{/if}}
+                      {{#if isSummoned}}<span class="scg-summoned-badge" title="Invocation temporaire"><i class="fa-solid fa-paw"></i></span>{{/if}}
+                      <span class="scg-row-emblem" title="{{rowSummary}}"><i class="{{primaryRowIcon}}"></i></span>
+                    </div>
+                    <div class="scg-card-caption">
+                      <strong>{{name}}</strong>
+                      <span class="scg-effect-icons">{{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}</span>
+                    </div>
+                    <div class="scg-card-popover">
+                      <strong>{{name}}</strong>
+                      <span>{{rarityLabel}} · {{rowSummary}} · Force {{effectiveStrength}}{{#if isModified}} (base {{strength}}){{/if}}</span>
+                      <p>{{effectText}}</p>
+                    </div>
+                  </article>
+                {{/each}}
+              </div>
+            </div>
+          {{/each}}
+        </section>
+      </div>
+
+      <aside class="scg-reserve-sidebar">
+        <div class="scg-zone-stack scg-zone-stack-opponent">
+          <article class="scg-duelist-profile scg-duelist-profile-opponent">
+            <img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}">
+            <div><small>Adversaire</small><strong>{{opponentProfile.name}}</strong></div>
+          </article>
+          <article class="scg-equipped-spell is-opponent {{#if opponentSpell.used}}is-used{{/if}} {{#if opponentSpell.hidden}}is-hidden{{/if}}" data-scg-card-popup>
+            <img src="{{opponentSpell.artThumb}}" alt="{{opponentSpell.name}}">
+            <div><small>Sortilège adverse</small><strong>{{opponentSpell.name}}</strong><span>{{#if opponentSpell.used}}UTILISÉ{{else}}{{#if opponentSpell.hidden}}SECRET{{else}}PRÊT{{/if}}{{/if}}</span></div>
+                      <div class="scg-card-popover scg-spell-popover"><strong>{{opponentSpell.name}}</strong><span>{{#if opponentSpell.hidden}}Choix secret{{else}}{{opponentSpell.activation}}{{/if}}</span><p>{{opponentSpell.text}}</p></div>
+          </article>
+          <article class="scg-zone-card scg-zone-card-deck">
+            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <strong>Deck adverse</strong>
+            <small>{{opponent.deck.length}} carte(s)</small>
+          </article>
+          <article class="scg-zone-card scg-zone-card-discard">
+            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-skull"></i></span></div>
+            <strong>Défausse adverse</strong>
+            <small>{{opponent.discard.length}} carte(s)</small>
+          </article>
+        </div>
+
+        <div class="scg-zone-stack scg-zone-stack-player">
+          <article class="scg-duelist-profile scg-duelist-profile-player">
+            <img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}">
+            <div><small>Votre personnage</small><strong>{{playerProfile.name}}</strong></div>
+          </article>
+          <article class="scg-equipped-spell is-player {{#if playerSpell.used}}is-used{{/if}}" data-scg-card-popup>
+            {{#if playerSpell.equipped}}<img src="{{playerSpell.artThumb}}" alt="{{playerSpell.name}}">{{else}}<span class="scg-equipped-spell-empty"><i class="fa-solid fa-ban"></i></span>{{/if}}
+            <div><small>Votre sortilège</small><strong>{{playerSpell.name}}</strong><span>{{#if playerSpell.used}}UTILISÉ{{else}}{{#if playerSpell.equipped}}PRÊT{{else}}AUCUN{{/if}}{{/if}}</span></div>
+            {{#if playerSpell.equipped}}<button type="button" data-action="activate-event-spell" {{#unless playerSpell.canActivate}}disabled title="{{playerSpell.reason}}"{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Activer</button>{{/if}}
+            <div class="scg-card-popover scg-spell-popover"><strong>{{playerSpell.name}}</strong><span>{{#if playerSpell.used}}Utilisé{{else}}{{playerSpell.activation}}{{/if}}</span><p>{{playerSpell.text}}</p></div>
+          </article>
+          <article class="scg-zone-card scg-zone-card-deck">
+            <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
+            <strong>Votre deck</strong>
+            <small>{{player.deck.length}} carte(s)</small>
+          </article>
+          <article class="scg-zone-card scg-zone-card-discard">
+            <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-fire"></i></span></div>
+            <strong>Votre défausse</strong>
+            <small>{{player.discard.length}} carte(s)</small>
+          </article>
+        </div>
+      </aside>
+    </section>
+  {{/if}}
+</section>

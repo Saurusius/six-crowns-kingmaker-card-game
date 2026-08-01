@@ -2,6 +2,22 @@
 
 L’historique ci-dessous regroupe les évolutions fonctionnelles, visuelles et techniques du module. Les notes destinées aux pages GitHub Releases sont archivées dans [`documentation/releases`](documentation/releases/README.md).
 
+## 0.12.0 — Arène PvP synchronisée
+
+- Ajoute une arène PvP 1 contre 1 accessible directement depuis l’écran d’accueil.
+- Permet d’inviter un profil connecté, d’accepter ou refuser un défi et de préparer le duel dans un salon privé.
+- Valide côté MJ les decks de démonstration, les decks personnalisés, les limites de construction et la possession réelle des cartes.
+- Synchronise le lancer de pièce, les remplacements initiaux, les tours, les cartes jouées, les passages, les sortilèges, les manches et le résultat final.
+- Adapte chaque instantané à son destinataire : main adverse, pioche, défausse et sortilège non révélé sont masqués.
+- Corrige la confidentialité des équipements afin qu’un instantané ne transporte jamais le deck complet ou le sortilège secret de l’adversaire.
+- Sauvegarde les duels sur le monde, permet leur reprise après reconnexion et sérialise les actions traitées par le MJ hôte.
+- Ajoute l’abandon, la revanche consensuelle, l’historique compact des actions et les statistiques personnelles.
+- Ajoute les spectateurs optionnels, sans accès aux mains ni aux sortilèges non utilisés.
+- Fournit au MJ des commandes de resynchronisation, de changement forcé de tour, d’annulation et de déclaration du vainqueur.
+- Ajoute une sélection PvP des sortilèges en carrousel horizontal et conserve le choix secret jusqu’à son activation.
+- Modifie les textes du hub en « Bienvenue [profil]. » et « Préparez votre deck et armez-vous d’un sortilège emblématique avant d’affronter votre adversaire. »
+- Documente les prérequis, limites et tests de la bêta PvP.
+
 ## 0.11.0 — Hub central, carrousel de sortilèges et règlement clarifié
 
 - Ajoute un véritable écran d’accueil illustré, inspiré des hubs de jeux de cartes numériques, pour centraliser toute la navigation du module.

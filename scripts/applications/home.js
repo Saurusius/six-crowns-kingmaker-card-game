@@ -66,7 +66,7 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const discovered = catalog.filter((card) => Number(collection?.[card.id]?.count ?? 0) > 0).length;
     const copies = catalog.reduce((total, card) => total + Math.max(0, Number(collection?.[card.id]?.count ?? 0)), 0);
-    const version = game.modules.get(MODULE_ID)?.version ?? "0.11.0";
+    const version = game.modules.get(MODULE_ID)?.version ?? "0.12.0";
 
     return {
       userName: game.user?.name ?? "Joueur",
@@ -106,6 +106,14 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
         if (typeof api?.openBoard !== "function") throw new Error("Le plateau n’est pas disponible.");
         await api.openBoard();
       }, "Impossible d’ouvrir le plateau.");
+    });
+
+    this.element.querySelector("[data-action='pvp']")?.addEventListener("click", () => {
+      void run(async () => {
+        const api = moduleApi();
+        if (typeof api?.openPvp !== "function") throw new Error("L’arène PvP n’est pas disponible.");
+        await api.openPvp();
+      }, "Impossible d’ouvrir l’arène PvP.");
     });
 
     this.element.querySelector("[data-action='collection']")?.addEventListener("click", () => {

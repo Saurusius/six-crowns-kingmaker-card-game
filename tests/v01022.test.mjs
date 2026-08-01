@@ -55,8 +55,8 @@ test("les manifestes annoncent la version courante", async () => {
   const moduleJson = JSON.parse(await read("../module.json"));
   const packageJson = JSON.parse(await read("../package.json"));
   const lockJson = JSON.parse(await read("../package-lock.json"));
-  assert.equal(moduleJson.version, "0.11.0");
-  assert.equal(packageJson.version, "0.11.0");
-  assert.equal(lockJson.version, "0.11.0");
-  assert.equal(lockJson.packages[""].version, "0.11.0");
+  assert.equal(moduleJson.version, packageJson.version);
+  assert.equal(lockJson.version, packageJson.version);
+  assert.equal(lockJson.packages[""].version, packageJson.version);
+  assert.match(moduleJson.version, /^\d+\.\d+\.\d+$/);
 });
