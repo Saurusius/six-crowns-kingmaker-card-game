@@ -120,46 +120,6 @@
     <button type="button" data-action="recycle-cards"><i class="fa-solid fa-ticket"></i> Recycler 10 cartes contre 1 ticket</button></div>
   </details>
 
-  {{#if isGM}}
-    <section class="scg-gm-tools">
-      <header>
-        <div>
-          <h2><i class="fa-solid fa-user-shield"></i> Outils MJ</h2>
-          <p>Ces actions modifient directement la collection et les boosters disponibles du profil Foundry ciblé.</p>
-        </div>
-      </header>
-      <div class="scg-gm-tools-grid">
-        <label class="scg-gm-target-select">
-          <span>Joueur ciblé</span>
-          <select name="gm-target-user">
-            {{#each gmUsers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{activeLabel}} — {{boosterCredits}} C · {{specialBoosterCredits}} S · {{eventBoosterCredits}} E</option>{{/each}}
-          </select>
-        </label>
-
-        <section class="scg-gm-ticket-panel" aria-label="Offrir des tickets">
-          <header><div><h3><i class="fa-solid fa-ticket"></i> Offrir des tickets</h3><p>Choisissez une quantité, puis attribuez immédiatement le type de ticket voulu.</p></div></header>
-          <div class="scg-gm-ticket-grid">
-            <label class="is-classic"><span><i class="fa-solid fa-box-open"></i> Classiques</span><div><input type="number" name="gm-booster-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-boosters">Offrir</button></div></label>
-            <label class="is-special"><span><i class="fa-solid fa-wand-sparkles"></i> Spéciaux</span><div><input type="number" name="gm-special-ticket-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-special-tickets">Offrir</button></div></label>
-            <label class="is-event"><span><i class="fa-solid fa-star"></i> Événementiels</span><div><input type="number" name="gm-event-ticket-count" value="1" min="1" max="100"><button type="button" data-action="gm-grant-event-tickets">Offrir</button></div></label>
-          </div>
-        </section>
-
-        <section class="scg-gm-card-panel" aria-label="Donner une carte">
-          <header><h3><i class="fa-solid fa-gift"></i> Donner une carte</h3></header>
-          <div>
-            <label class="scg-gm-card-select"><span>Carte</span><select name="gm-card">{{#each gmCards}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{factionLabel}} — {{rarityLabel}}</option>{{/each}}</select></label>
-            <label class="scg-gm-card-count"><span>Exemplaires</span><input type="number" name="gm-card-count" value="1" min="1" max="100"></label>
-            <button type="button" data-action="gm-give-card"><i class="fa-solid fa-gift"></i> Donner</button>
-          </div>
-        </section>
-
-        <div class="scg-gm-danger-zone">
-          <button type="button" class="is-danger" data-action="gm-reset-collection"><i class="fa-solid fa-trash-arrow-up"></i> Réinitialiser la collection</button>
-        </div>
-      </div>
-    </section>
-  {{/if}}
 
   <div class="scg-collection-scroll">
     {{#each groups}}

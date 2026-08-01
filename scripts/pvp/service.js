@@ -4,6 +4,7 @@ import { expandCustomDeckCards, validateCustomDeck } from "../collection-rules.j
 import { cloneDeck, getDeckDefinition } from "../rules/decks.js";
 import { PHASES } from "../rules/state.js";
 import { getEventSpellDefinition } from "../event-spells.js";
+import { awardCrowns } from "../shop.js";
 import {
   activatePvpSpell,
   appendPvpLog,
@@ -344,6 +345,15 @@ async function archiveIfFinished(match) {
   match.status = PVP_STATUS.COMPLETED;
   match.archived = true;
   match.completedAt = now();
+  const winnerSide = match.state?.gameWinner;
+  if (winnerSide && winnerSide !== "tie" && !match.crownsRewarded) {
+    const winnerUserId = match.participants?.[winnerSide]?.userId;
+    if (winnerUserId) {
+      await awardCrowns({ userId: winnerUserId, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory" });
+      match.crownsRewarded = true;
+      notifyUser(winnerUserId, "info", "Victoire ! Vous gagnez 10 Couronnes.", true);
+    }
+  }
   const history = getPvpHistory();
   if (!history.some((entry) => entry.id === match.id)) {
     history.push(historyRecord(match));
@@ -378,7 +388,8 @@ async function processInvite(matches, userId, payload) {
     mulligan: null,
     pendingChoice: null,
     rematchVotes: [],
-    archived: false
+    archived: false,
+    crownsRewarded: false
   };
   matches.push(match);
   await saveMatches(matches);
@@ -496,6 +507,7 @@ async function startMatchIfReady(match) {
   match.pendingChoice = null;
   match.rematchVotes = [];
   match.archived = false;
+  match.crownsRewarded = false;
   return true;
 }
 
@@ -615,6 +627,7 @@ async function processGameAction(matches, userId, action, payload) {
       match.pendingChoice = null;
       match.rematchVotes = [];
       match.archived = false;
+      match.crownsRewarded = false;
       match.participants.player.ready = false;
       match.participants.opponent.ready = false;
     }

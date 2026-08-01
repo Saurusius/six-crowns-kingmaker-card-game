@@ -16,6 +16,8 @@ import {
   grantCardToUser,
   loadCardCatalog,
   openHome,
+  openShop,
+  openGmHub,
   openBoard,
   openPvp,
   openPvpBoard,
@@ -38,6 +40,8 @@ import { handlePvpSocket, registerPvpSettings, resumePvpSession } from "./pvp/se
 
 const api = Object.freeze({
   openHome,
+  openShop,
+  openGmHub,
   openBoard,
   openPvp,
   openPvpBoard,

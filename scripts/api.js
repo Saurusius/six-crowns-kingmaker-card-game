@@ -31,6 +31,8 @@ import {
 let home;
 let board;
 let analyticsDashboard;
+let shop;
+let gmHub;
 let pvpLobby;
 const pvpBoards = new Map();
 
@@ -43,6 +45,25 @@ export async function openHome() {
   return home;
 }
 
+
+
+/** Ouvre la boutique et la réserve de boosters. */
+export async function openShop({ tab = "shop" } = {}) {
+  const { SixCrownsShop } = await import("./applications/shop.js");
+  if (!shop || !shop.rendered) shop = new SixCrownsShop();
+  shop.tab = tab;
+  await shop.render({ force: true });
+  return shop;
+}
+
+/** Ouvre le panneau centralisé réservé au MJ. */
+export async function openGmHub() {
+  if (!game.user?.isGM) throw new Error("L’espace MJ est réservé au MJ.");
+  const { SixCrownsGmHub } = await import("./applications/gm-hub.js");
+  if (!gmHub || !gmHub.rendered) gmHub = new SixCrownsGmHub();
+  await gmHub.render({ force: true });
+  return gmHub;
+}
 
 /** Ouvre l’arène multijoueur et ses invitations. */
 export async function openPvp() {

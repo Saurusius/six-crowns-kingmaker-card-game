@@ -14,19 +14,19 @@
 
   <div class="scg-home-layout">
     <section class="scg-home-hero" aria-label="Présentation du jeu">
+      <div class="scg-home-hero-copy">
+        <span>Trois lignes. Deux gemmes. Une couronne.</span>
+        <h2>Que la partie commence.</h2>
+        <p>Préparez votre deck et armez-vous d’un sortilège emblématique avant d’affronter votre adversaire.</p>
+      </div>
       <div class="scg-home-card-fan" aria-hidden="true">
         <img class="is-left" src="modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/la-khanesse-reine-sans-couronne/medium.webp" alt="">
         <img class="is-center" src="modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/odeon-de-saulebene/medium.webp" alt="">
         <img class="is-right" src="modules/six-crowns-kingmaker-card-game/assets/cards/aldori/jamandi-aldori-premiere-epee/medium.webp" alt="">
       </div>
-      <div class="scg-home-hero-copy">
-        <span>Trois lignes. Deux gemmes. Une couronne.</span>
-        <h2>Que la partie commence.</h2>
-        <p>Préparez votre deck et armez-vous d’un sortilège emblématique avant d’affronter votre adversaire.</p>
-        <div class="scg-home-play-actions">
-          <button type="button" class="scg-home-play-button is-pvp" data-action="pvp"><i class="fa-solid fa-khanda"></i> Affronter un joueur</button>
-          <button type="button" class="scg-home-play-button is-solo" data-action="play"><i class="fa-solid fa-robot"></i> Affronter l’adversaire automatisé</button>
-        </div>
+      <div class="scg-home-play-actions">
+        <button type="button" class="scg-home-play-button is-pvp" data-action="pvp"><i class="fa-solid fa-khanda"></i> Affronter un joueur</button>
+        <button type="button" class="scg-home-play-button is-solo" data-action="play"><i class="fa-solid fa-robot"></i> Affronter l’adversaire automatisé</button>
       </div>
     </section>
 
@@ -43,14 +43,10 @@
         <i class="fa-solid fa-chevron-right"></i>
       </button>
 
-      <section class="scg-home-booster-card">
-        <header><span class="scg-home-menu-icon"><i class="fa-solid fa-box-open"></i></span><div><small>Tickets et révélations</small><strong>Ouvrir des boosters</strong></div></header>
-        <div class="scg-home-booster-actions">
-          <button type="button" data-action="classic-booster" {{#unless canOpenClassic}}disabled{{/unless}}><i class="fa-solid fa-layer-group"></i><span><strong>Classique</strong><small>{{classicCreditLabel}}</small></span></button>
-          <button type="button" data-action="special-booster" {{#unless canOpenSpecial}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i><span><strong>Spécial</strong><small>{{specialCreditLabel}}</small></span></button>
-          <button type="button" data-action="event-booster" {{#unless canOpenEvent}}disabled{{/unless}}><i class="fa-solid fa-star"></i><span><strong>Événementiel</strong><small>{{eventCreditLabel}}</small></span></button>
-        </div>
-      </section>
+      <div class="scg-home-reference-grid scg-home-commerce-grid">
+        <button type="button" data-action="shop"><i class="fa-solid fa-store"></i><span><strong>Boutique</strong><small>Dépensez vos Couronnes chez le Colporteur Gris</small></span></button>
+        <button type="button" data-action="inventory"><i class="fa-solid fa-box-open"></i><span><strong>Mes boosters</strong><small>Consultez et ouvrez vos achats</small></span></button>
+      </div>
 
       <div class="scg-home-reference-grid">
         <button type="button" data-action="rulebook"><i class="fa-solid fa-scroll"></i><span><strong>Règlement</strong><small>Préparation, tours, score et victoire</small></span></button>
@@ -58,9 +54,9 @@
       </div>
 
       {{#if isGM}}
-        <button type="button" class="scg-home-menu-card is-gm" data-action="analytics">
+        <button type="button" class="scg-home-menu-card is-gm" data-action="gm-hub">
           <span class="scg-home-menu-icon"><i class="fa-solid fa-chart-line"></i></span>
-          <span><small>Outils MJ</small><strong>Tableau d’équilibrage</strong><em>Usages, résultats et exports de parties</em></span>
+          <span><small>Outils MJ</small><strong>Espace MJ</strong><em>Couronnes, boosters, tickets, cartes et équilibrage</em></span>
           <i class="fa-solid fa-chevron-right"></i>
         </button>
       {{/if}}

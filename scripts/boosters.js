@@ -334,9 +334,9 @@ function boosterChatContent(cards, targetUser, remainingCredits = null) {
   `;
 }
 
-export async function openBooster({ random = Math.random, user = null, userId = null, animate = true, notify = true } = {}) {
+export async function openBooster({ random = Math.random, user = null, userId = null, animate = true, notify = true, consumeCredit = true } = {}) {
   const targetUser = resolveUser({ user, userId });
-  const requiresCredit = !game.user.isGM;
+  const requiresCredit = !game.user.isGM && consumeCredit;
   let previousCredits = null;
   let remainingCredits = null;
 
@@ -410,12 +410,12 @@ function annotateCards(cards, beforeCollection) {
   });
 }
 
-export async function openSpecialBooster({ faction, random = Math.random, user = null, userId = null, animate = true } = {}) {
+export async function openSpecialBooster({ faction, random = Math.random, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
   const definition = SPECIAL_BOOSTERS[faction];
   if (!definition) throw new Error("Choisissez un booster spécial valide.");
   const targetUser = resolveUser({ user, userId });
   if (targetUser.id !== game.user.id && !game.user.isGM) throw new Error("Vous ne pouvez ouvrir que vos propres boosters.");
-  const requiresCredit = !game.user.isGM;
+  const requiresCredit = !game.user.isGM && consumeCredit;
   const previousCredits = requiresCredit ? await getSpecialBoosterCredits({ user: targetUser }) : null;
   if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket spécial.");
   if (requiresCredit) await setTicketCredits(targetUser, SPECIAL_BOOSTER_CREDITS_FLAG, previousCredits - 1);
@@ -441,11 +441,11 @@ export async function openSpecialBooster({ faction, random = Math.random, user =
   return annotated;
 }
 
-export async function openEventBooster({ boosterId, random = Math.random, user = null, userId = null, animate = true } = {}) {
+export async function openEventBooster({ boosterId, random = Math.random, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
   const definition = EVENT_BOOSTERS.get(boosterId);
   if (!definition) throw new Error("Ce booster événementiel n’est pas configuré.");
   const targetUser = resolveUser({ user, userId });
-  const requiresCredit = !game.user.isGM;
+  const requiresCredit = !game.user.isGM && consumeCredit;
   const previousCredits = requiresCredit ? await getEventBoosterCredits({ user: targetUser }) : null;
   if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket événementiel.");
   if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits - 1);

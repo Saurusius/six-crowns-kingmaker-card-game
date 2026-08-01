@@ -6,6 +6,7 @@ import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
 import { openGlossary, openRulebook } from "../glossary.js";
 import { requestAnalyticsRecord } from "../analytics.js";
+import { awardCrowns } from "../shop.js";
 import { EVENT_BOOSTER_ID, getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
 import {
   PHASES,
@@ -193,6 +194,16 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.matchState.phase === PHASES.GAME_OVER && !this.matchState.analyticsRecorded) {
       this.matchState.analyticsRecorded = true;
       requestAnalyticsRecord(buildMatchAnalyticsRecord(this.matchState, { userId: game.user.id, userName: game.user.name }));
+    }
+    if (this.matchState.phase === PHASES.GAME_OVER && this.matchState.gameWinner === "player" && !this.matchState.crownsRewarded) {
+      this.matchState.crownsRewarded = true;
+      try {
+        await awardCrowns({ amount: 5, label: "Victoire contre l’adversaire automatisé", source: "bot-victory" });
+        ui.notifications.info("Victoire ! Vous gagnez 5 Couronnes.");
+      } catch (error) {
+        this.matchState.crownsRewarded = false;
+        console.error(`${MODULE_TITLE} | Récompense de victoire impossible`, error);
+      }
     }
     await game.user.setFlag(MODULE_ID, "activeMatchState", foundry.utils.deepClone(this.matchState));
   }

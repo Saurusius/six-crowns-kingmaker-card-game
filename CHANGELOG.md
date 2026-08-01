@@ -1,3 +1,13 @@
+# Changelog
+
+## 0.13.1
+
+- Ajout des récompenses automatiques : 10 Couronnes pour une victoire PvP et 5 Couronnes contre le bot.
+- Ajout des règles d’obtention des Couronnes dans le règlement et dans la boutique.
+- Nouvelle illustration du booster classique.
+- Nouvelle illustration du Colporteur Gris.
+- Boutique enrichie de micro-animations : Couronne flottante, lueurs, survols et mouvements subtils.
+
 # Journal des modifications
 
 L’historique ci-dessous regroupe les évolutions fonctionnelles, visuelles et techniques du module. Les notes destinées aux pages GitHub Releases sont archivées dans [`documentation/releases`](documentation/releases/README.md).
@@ -457,3 +467,12 @@ L’historique ci-dessous regroupe les évolutions fonctionnelles, visuelles et 
 
 - Suppression de la météo.
 - Alternance des tours, passages, manches et adversaire automatique.
+
+## 0.13.0 — Boutique des Six Couronnes
+- Ajout de la monnaie personnelle « Couronnes ».
+- Ajout de la boutique du Colporteur Gris avec achat de boosters.
+- Ajout d'un inventaire de boosters achetés et d'un historique de transactions.
+- Conservation des tickets de boosters existants pour les récompenses de campagne.
+- Centralisation des outils MJ dans un nouvel Espace MJ.
+- Ajout de la distribution MJ de Couronnes et de boosters de boutique.
+- Réorganisation de l'accueil afin que les textes recouvrent moins les illustrations.
