@@ -5,6 +5,7 @@
       <p>Les cartes non obtenues restent masquées : leur nom, leur rareté, leur ligne et leurs effets ne sont pas révélés.</p>
     </div>
     <div class="scg-profile-actions">
+      <button type="button" class="scg-option-control" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
       <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
       <button type="button" class="scg-option-control" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
       <button type="button" class="scg-option-control" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Choisir un booster spécial</button>

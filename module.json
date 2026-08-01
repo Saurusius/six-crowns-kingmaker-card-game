@@ -1,39 +1,39 @@
 {
-    "id":  "six-crowns-kingmaker-card-game",
-    "title":  "Le Jeu des Six Couronnes",
-    "description":  "Jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.",
-    "version":  "0.10.22",
-    "authors":  [
-                    {
-                        "name":  "Saurusius",
-                        "url":  "https://github.com/Saurusius"
-                    }
-                ],
-    "compatibility":  {
-                          "minimum":  "14",
-                          "verified":  "14.365"
-                      },
-    "esmodules":  [
-                      "scripts/main.js"
-                  ],
-    "styles":  [
-                   "styles/six-crowns.css"
-               ],
-    "socket":  true,
-    "languages":  [
-                      {
-                          "lang":  "fr",
-                          "name":  "Français",
-                          "path":  "lang/fr.json"
-                      },
-                      {
-                          "lang":  "en",
-                          "name":  "English",
-                          "path":  "lang/en.json"
-                      }
-                  ],
-    "url":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game",
-    "license":  "LICENSE",
-    "manifest":  "https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json",
-    "download":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.10.22/six-crowns-kingmaker-card-game-v0.10.22.zip"
+  "id": "six-crowns-kingmaker-card-game",
+  "title": "Le Jeu des Six Couronnes",
+  "description": "Jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.",
+  "version": "0.11.0",
+  "authors": [
+    {
+      "name": "Saurusius",
+      "url": "https://github.com/Saurusius"
+    }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.365"
+  },
+  "esmodules": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/six-crowns.css"
+  ],
+  "socket": true,
+  "languages": [
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "https://github.com/Saurusius/six-crowns-kingmaker-card-game",
+  "license": "LICENSE",
+  "manifest": "https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json",
+  "download": "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.11.0/six-crowns-kingmaker-card-game-v0.11.0.zip"
 }

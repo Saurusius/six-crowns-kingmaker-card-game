@@ -18,7 +18,7 @@ test("les macros sont réparées et ouvrent les trois fenêtres principales", as
   const boosters = await read("../scripts/boosters.js");
   const macros = await read("../scripts/macros.js");
   assert.match(profile, /Jouer au Jeu des Six Couronnes/);
-  assert.match(profile, /openBoard/);
+  assert.match(profile, /openHome/);
   assert.match(profile, /openCollection/);
   assert.match(profile, /openDeckBuilder/);
   assert.match(boosters, /openBooster/);

@@ -160,7 +160,7 @@ export async function createProfileMacros() {
     {
       name: "Jouer au Jeu des Six Couronnes",
       img: "icons/sundries/gaming/playing-cards-black.webp",
-      command: buildModuleMacroCommand("openBoard", "plateau")
+      command: buildModuleMacroCommand("openHome", "accueil")
     },
     {
       name: "Ma collection des Six Couronnes",

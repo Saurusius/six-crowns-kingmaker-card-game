@@ -2,6 +2,16 @@
 
 L’historique ci-dessous regroupe les évolutions fonctionnelles, visuelles et techniques du module. Les notes destinées aux pages GitHub Releases sont archivées dans [`documentation/releases`](documentation/releases/README.md).
 
+## 0.11.0 — Hub central, carrousel de sortilèges et règlement clarifié
+
+- Ajoute un véritable écran d’accueil illustré, inspiré des hubs de jeux de cartes numériques, pour centraliser toute la navigation du module.
+- Permet d’ouvrir depuis le hub le plateau, la collection, le constructeur de deck, les trois familles de boosters, le règlement, le glossaire et le tableau d’équilibrage MJ.
+- Transforme la macro principale en point d’entrée vers l’accueil et ajoute des boutons de retour au hub dans les interfaces majeures.
+- Supprime les commandes de chat `/sixcouronnes`, `/sixcollection` et `/sixdecks` ainsi que leur documentation.
+- Présente les sortilèges possédés dans un carrousel horizontal avec barre de défilement dès que plusieurs cartes sont disponibles.
+- Remplace les intitulés répétés du règlement par des titres spécifiques pour chaque règle.
+- Réorganise le README afin de documenter clairement les fonctionnalités réellement disponibles.
+
 ## 0.10.22 — Plateau épuré, règlement réparé et macros fiabilisées
 
 - Supprime l’encart « État de la manche » du panneau latéral pendant une partie.

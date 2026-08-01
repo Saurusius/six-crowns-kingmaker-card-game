@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du prototype **0.10.22**.
+Cette page décrit les règles du prototype **0.11.0**.
 
 ## But de la partie
 

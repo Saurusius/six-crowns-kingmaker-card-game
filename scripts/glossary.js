@@ -98,7 +98,7 @@ export function openRulebook() {
     <section class="scg-glossary-dialog scg-rulebook-dialog">
       <header><div><small>Jeu des Six Couronnes</small><h2>Règlement</h2><p>Déroulement d’une partie, préparation, résolution et victoire.</p></div><button type="button" data-action="close-rulebook" aria-label="Fermer">×</button></header>
       <div class="scg-glossary-groups scg-rulebook-groups">
-        ${RULEBOOK.map((group) => `<section><h3>${escapeHtml(group.title)}</h3><div>${group.items.map((entry) => `<article><span class="scg-glossary-icon is-type"><i class="fa-solid fa-scroll"></i></span><span><strong>${escapeHtml(group.title)}</strong><small>${escapeHtml(entry)}</small></span></article>`).join("")}</div></section>`).join("")}
+        ${RULEBOOK.map((group) => `<section><h3>${escapeHtml(group.title)}</h3><div>${group.items.map((entry) => { const item = typeof entry === "string" ? { title: group.title, text: entry, icon: "fa-solid fa-scroll" } : entry; return `<article><span class="scg-glossary-icon is-type"><i class="${escapeHtml(item.icon ?? "fa-solid fa-scroll")}"></i></span><span><strong>${escapeHtml(item.title ?? group.title)}</strong><small>${escapeHtml(item.text ?? "")}</small></span></article>`; }).join("")}</div></section>`).join("")}
       </div>
     </section>`;
   const close = () => overlay.remove();

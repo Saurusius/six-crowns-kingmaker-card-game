@@ -51,12 +51,12 @@ test("la création des macros passe par la classe de document Foundry et conserv
   assert.match(boosters, /upsertModuleMacro/);
 });
 
-test("les manifestes annoncent la version 0.10.22", async () => {
+test("les manifestes annoncent la version courante", async () => {
   const moduleJson = JSON.parse(await read("../module.json"));
   const packageJson = JSON.parse(await read("../package.json"));
   const lockJson = JSON.parse(await read("../package-lock.json"));
-  assert.equal(moduleJson.version, "0.10.22");
-  assert.equal(packageJson.version, "0.10.22");
-  assert.equal(lockJson.version, "0.10.22");
-  assert.equal(lockJson.packages[""].version, "0.10.22");
+  assert.equal(moduleJson.version, "0.11.0");
+  assert.equal(packageJson.version, "0.11.0");
+  assert.equal(lockJson.version, "0.11.0");
+  assert.equal(lockJson.packages[""].version, "0.11.0");
 });

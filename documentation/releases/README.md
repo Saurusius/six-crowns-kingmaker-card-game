@@ -2,6 +2,10 @@
 
 Les notes de publication sont conservées ici afin de garder la racine du dépôt lisible.
 
+## Branche 0.11
+
+- [v0.11.0 — Hub central et navigation unifiée](v0.11.0.md)
+
 ## Branche 0.10
 
 - [v0.10.22 — Plateau épuré, règlement réparé et macros fiabilisées](v0.10.22.md)

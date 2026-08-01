@@ -168,6 +168,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       eventBoosterCredits,
       eventSpellChoices,
       hasOwnedEventSpells: eventSpellChoices.length > 0,
+      hasMultipleEventSpells: eventSpellChoices.length > 1,
+      eventSpellChoiceCount: eventSpellChoices.length,
       selectedPlayerDeckLabel: this.matchState.selectedPlayerDeck === "random" ? "Deck aléatoire" : selectedPlayerDeckDefinition?.name ?? "Deck joueur",
       selectedOpponentDeckLabel: this.matchState.selectedOpponentDeck === "random" ? "Deck aléatoire" : selectedOpponentDeckDefinition?.name ?? "Deck adverse",
       noSpellSelected: !this.matchState.spells?.player?.id,
@@ -444,6 +446,10 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     });
 
 
+    this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
+      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+      if (typeof api?.openHome === "function") void api.openHome();
+    });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
     this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", (event) => {
       event.preventDefault();

@@ -2,11 +2,11 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.10.22-c9a44d)
+![Version](https://img.shields.io/badge/version-0.11.0-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
-Le module réunit un plateau de jeu complet, une collection personnelle, des boosters, un constructeur de deck, des échanges entre joueurs, un adversaire automatisé et une première suite de sortilèges événementiels.
+Le module propose une expérience complète dans Foundry VTT : un hub central illustré, des parties contre un adversaire automatisé, une collection personnelle, des boosters, un constructeur de deck, des échanges entre joueurs et des outils d’équilibrage pour le MJ.
 
 ## Installation
 
@@ -22,7 +22,7 @@ Activez ensuite **Le Jeu des Six Couronnes** dans votre monde.
 
 ### Installation manuelle
 
-Téléchargez l’archive de la dernière [release GitHub](https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases), puis extrayez-la dans :
+Téléchargez l’archive de la dernière release GitHub, puis extrayez-la dans :
 
 ```text
 FoundryVTT/Data/modules/six-crowns-kingmaker-card-game
@@ -30,57 +30,114 @@ FoundryVTT/Data/modules/six-crowns-kingmaker-card-game
 
 Relancez Foundry après l’installation.
 
-## Fonctionnalités principales
-
-- plateau tactique en trois lignes : **Avant-garde**, **Escarmouche** et **Domaine** ;
-- parties contre un autre joueur ou contre un adversaire automatisé ;
-- 165 cartes collectionnables, réparties en quatre collections et une suite événementielle ;
-- boosters classiques, spéciaux et événementiels ;
-- collection personnelle sauvegardée sur le profil Foundry ;
-- échanges de cartes et de tickets entre joueurs ;
-- constructeur de deck avec filtres, sauvegardes, analyse et validation ;
-- sortilèges événementiels secrets, utilisables une fois par partie ;
-- glossaire et règlement consultables dans des fenêtres dédiées ;
-- macros créées et réparées automatiquement par le module ;
-- outils MJ pour distribuer des cartes, des tickets et suivre l’équilibrage.
-
 ## Démarrage rapide
 
-Lors du premier chargement du monde, un compte MJ crée ou met à jour les macros principales :
+Au premier chargement du monde, un compte MJ crée ou met à jour automatiquement les macros du module.
 
-| Macro | Action |
+La macro **Jouer au Jeu des Six Couronnes** ouvre désormais l’écran d’accueil central. Depuis ce hub, les joueurs peuvent accéder à toutes les parties du module :
+
+| Espace | Fonction |
 |---|---|
-| **Jouer au Jeu des Six Couronnes** | ouvre le plateau |
-| **Ma collection** | ouvre la collection personnelle |
-| **Constructeur de deck** | ouvre le constructeur |
-| **Ouvrir un booster** | ouvre l’interface des boosters |
+| **Jouer une partie** | ouvre le plateau et la préparation de partie |
+| **Ma collection** | consulte les cartes possédées, les échanges, l’historique et les outils de tickets |
+| **Mes decks** | ouvre le constructeur, les filtres, la sauvegarde et l’analyse de deck |
+| **Boosters** | ouvre les boosters classiques, spéciaux ou événementiels |
+| **Règlement** | affiche les règles réorganisées dans une fenêtre dédiée |
+| **Glossaire** | explique les capacités, lignes, types et raretés |
+| **Tableau d’équilibrage** | accès MJ aux statistiques et exports de parties |
 
-Les commandes de chat suivantes restent également disponibles :
+Des boutons **Accueil** sont également disponibles dans le plateau, la collection, le constructeur de deck et le tableau d’équilibrage.
 
-```text
-/sixcouronnes
-/sixcollection
-/sixdecks
-```
+## Fonctionnalités
 
-## Règles en une minute
+### Parties tactiques
 
-Chaque joueur prépare un deck de 20 cartes et reçoit une main de 10 cartes pour toute la partie. Les cartes sont jouées à tour de rôle sur trois lignes. Une manche se termine lorsque les deux camps ont passé ou n’ont plus de cartes à jouer.
+- plateau en trois lignes : **Avant-garde**, **Escarmouche** et **Domaine** ;
+- parties solo contre un adversaire automatisé ;
+- sélection directe des decks dans deux galeries ;
+- lancer de pièce animé Bouclier contre Épée ;
+- main de départ de 10 cartes avec remplacement de 2 cartes maximum ;
+- gestion des tours, passages, scores de ligne, gemmes et manches ;
+- sauvegarde et restauration automatique d’une partie interrompue ;
+- écran final de victoire, défaite ou égalité et bouton de revanche.
 
-Le camp qui contrôle le plus de lignes remporte la manche. En cas d’égalité, la Puissance totale départage les joueurs. Le premier camp à faire tomber les deux gemmes adverses remporte la partie.
+### Cartes et collection
 
-Les règles détaillées, les traits, les limites de deck et les boosters sont décrits dans [documentation/RULES.md](documentation/RULES.md).
+- **165 cartes collectionnables** : 160 cartes classiques et 5 cartes dorées événementielles ;
+- quatre collections principales : Royaume des Six Couronnes, Maison Aldori, Khans de Fer et Arcanes des Terres Dérobées ;
+- cartes non découvertes masquées pour éviter les révélations ;
+- filtres par collection, rareté, ligne et possession ;
+- vue compacte ou détaillée et prévisualisation plein écran ;
+- comparaison de deux cartes ;
+- données sauvegardées séparément sur chaque profil Foundry.
 
-## Version 0.10.22
+### Boosters
 
-Cette version corrective :
+- booster classique de **5 cartes** avec une Rare ou Unique garantie ;
+- boosters spéciaux thématiques de **3 cartes** ;
+- booster événementiel **Terres Dérobées** contenant exactement **1 carte dorée** ;
+- tickets classiques, spéciaux et événementiels ;
+- ouverture animée, révélation progressive et effet particulier pour les cartes Uniques ;
+- historique personnel des ouvertures ;
+- possibilité d’ouvrir jusqu’à trois boosters classiques à la suite ;
+- recyclage de 10 cartes contre un ticket de booster classique.
 
-- retire l’état de la manche et le journal du panneau latéral pendant une partie ;
-- répare l’ouverture du règlement et l’aligne sur le fonctionnement du glossaire ;
-- fiabilise les quatre macros principales et leur mise à jour automatique ;
-- ajoute une gestion d’erreur plus claire lorsque le module ou son API ne sont pas disponibles.
+### Construction de deck
 
-Consultez le [journal des modifications](CHANGELOG.md) pour l’historique complet.
+- decks personnalisés de **20 cartes exactement** ;
+- maximum de 3 exemplaires d’une Commune ou Peu commune, 2 d’une Rare et 1 d’une Unique identique ;
+- contrôle des quantités réellement possédées ;
+- recherche et filtres par collection, rareté, type, ligne et capacité ;
+- vues mosaïque et carrousel ;
+- sauvegarde, chargement, renommage, duplication et suppression ;
+- analyse séparée du deck : Puissance moyenne, lignes, raretés, types et capacités ;
+- validation en temps réel avec explication des erreurs.
+
+### Sortilèges événementiels
+
+- choix secret après les decks et avant le lancer de pièce ;
+- seules les cartes dorées réellement possédées sont proposées ;
+- sélection présentée automatiquement dans un carrousel horizontal avec barre de défilement lorsqu’il existe plusieurs choix ;
+- un seul sortilège équipé et une seule activation par partie ;
+- ciblage interactif et révélation animée ;
+- première suite : **Et là, un ours !**, **Une bonne bière**, **Sauvetage de sac**, **Chancla de titane** et **Hydre vorace**.
+
+### Échanges entre joueurs
+
+- offres persistantes envoyées depuis les cartes de la collection ;
+- échange de cartes ou de tickets ;
+- réservation des ressources engagées tant que l’offre est en attente ;
+- acceptation, refus, annulation et historique ;
+- synchronisation et notifications entre les profils concernés.
+
+### Outils MJ
+
+- distribution de tickets classiques, spéciaux et événementiels ;
+- attribution directe de cartes ;
+- réinitialisation d’une collection ;
+- tableau d’équilibrage avec taux d’utilisation, résultats par deck et cartes jamais jouées ;
+- export des données en JSON et CSV.
+
+## Règles essentielles
+
+Chaque camp prépare un deck de 20 cartes et reçoit une main de 10 cartes pour toute la partie. À son tour, il joue une carte sur une ligne autorisée, active éventuellement son sortilège, ou passe définitivement pour la manche.
+
+Une manche est gagnée d’abord au nombre de lignes contrôlées, puis à la Puissance totale en cas d’égalité. Chaque défaite fait perdre une gemme ; le premier camp qui perd ses deux gemmes perd la partie.
+
+Les règles détaillées sont disponibles dans le module et dans [`documentation/RULES.md`](documentation/RULES.md).
+
+## Version 0.11.0
+
+Cette version ajoute :
+
+- un véritable écran d’accueil illustré servant de hub central ;
+- un accès direct à toutes les interfaces et aux trois familles de boosters ;
+- la suppression des anciennes commandes de chat ;
+- un carrousel horizontal automatique pour la sélection des sortilèges ;
+- un règlement dont chaque bulle possède désormais un intitulé précis et non redondant ;
+- une documentation GitHub réorganisée autour des fonctionnalités réellement disponibles.
+
+Consultez le [`CHANGELOG.md`](CHANGELOG.md) pour l’historique complet.
 
 ## Compatibilité
 
@@ -100,7 +157,7 @@ npm run check
 Préparer une archive de release :
 
 ```bash
-npm run prepare-release -- 0.10.22
+npm run prepare-release -- 0.11.0
 ```
 
 Le dépôt publie automatiquement une release lorsqu’un tag au format `vX.Y.Z` est poussé sur GitHub.

@@ -309,6 +309,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       applyFilters();
     });
 
+    this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
+      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+      if (typeof api?.openHome === "function") void api.openHome();
+    });
+
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
       try { await openBooster(); await this.render({ force: true }); }
       catch (error) { console.error(`${MODULE_TITLE} | Booster impossible`, error); ui.notifications.error(error.message); }
