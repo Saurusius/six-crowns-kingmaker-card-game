@@ -1,17 +1,17 @@
 {
-  "name": "six-crowns-kingmaker-card-game",
-  "version": "0.10.21",
-  "private": true,
-  "type": "module",
-  "description": "Foundry VTT module for Le Jeu des Six Couronnes.",
-  "license": "MIT",
-  "scripts": {
-    "test": "node --test",
-    "validate": "node tools/validate-data.mjs",
-    "check": "npm run validate && npm test",
-    "prepare-release": "node tools/prepare-release.mjs"
-  },
-  "engines": {
-    "node": ">=20"
-  }
+    "name":  "six-crowns-kingmaker-card-game",
+    "version":  "0.10.22",
+    "private":  true,
+    "type":  "module",
+    "description":  "Foundry VTT module for Le Jeu des Six Couronnes.",
+    "license":  "MIT",
+    "scripts":  {
+                    "test":  "node --test",
+                    "validate":  "node tools/validate-data.mjs",
+                    "check":  "npm run validate \u0026\u0026 npm test",
+                    "prepare-release":  "node tools/prepare-release.mjs"
+                },
+    "engines":  {
+                    "node":  "\u003e=20"
+                }
 }

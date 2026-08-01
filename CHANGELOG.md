@@ -1,3 +1,16 @@
+# Journal des modifications
+
+L’historique ci-dessous regroupe les évolutions fonctionnelles, visuelles et techniques du module. Les notes destinées aux pages GitHub Releases sont archivées dans [`documentation/releases`](documentation/releases/README.md).
+
+## 0.10.22 — Plateau épuré, règlement réparé et macros fiabilisées
+
+- Supprime l’encart « État de la manche » du panneau latéral pendant une partie.
+- Supprime le journal de partie de l’interface de jeu.
+- Répare le bouton Règlement et l’ouvre dans une fenêtre modale dédiée, sur le même modèle que le glossaire.
+- Centralise la création et la mise à jour des macros du module.
+- Ajoute une API de secours, une gestion d’erreur explicite et des permissions d’exécution aux macros.
+- Vérifie la syntaxe des commandes de macro et la présence des quatre actions principales dans la suite automatisée.
+
 ## 0.10.21 — Correctif de chargement et réparation des macros
 
 - Corrige l’import invalide du règlement qui empêchait l’ouverture du plateau, de la collection et du constructeur de deck.
@@ -7,6 +20,17 @@
 - Affiche un message explicite dans les macros lorsque le module n’est pas activé ou que son API n’est pas disponible.
 - Sépare les étapes d’initialisation afin qu’une erreur sur une macro n’empêche plus les autres outils de se charger.
 - Conserve toutes les améliorations ergonomiques et visuelles de la version 0.10.2.
+
+## 0.10.2 — Lisibilité du jeu et ergonomie des collections
+
+- Améliore la lisibilité des traits et des lignes pendant le choix de la main de départ.
+- Ajoute la prévisualisation du sortilège équipé pendant les parties.
+- Distingue clairement les Unités, Sortilèges et Invocations dans le glossaire.
+- Ouvre le règlement dans une fenêtre dédiée.
+- Ajoute une vue carrousel au constructeur de deck.
+- Maintient les options essentielles de collection lorsque les panneaux secondaires sont réduits.
+- Supprime la prévisualisation automatique au survol dans la collection.
+- Adapte les bordures des cartes à leur collection et à leur rareté.
 
 ## 0.10.1 — Confort et mise en scène des sortilèges
 
@@ -32,7 +56,6 @@
 - Porte le catalogue à 165 cartes collectionnables et met à jour les manifestes d’illustrations.
 - Ajoute les tests du nouveau système et conserve la validation complète du module.
 
-# Changelog
 
 ## 0.9.1
 - Refonte ergonomique des outils MJ pour l’attribution des tickets classiques, spéciaux et événementiels.

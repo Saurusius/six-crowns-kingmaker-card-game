@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { buildModuleMacroCommand, upsertModuleMacro } from "./macros.js";
 import { getCollection, loadCardCatalog } from "./boosters.js";
 import { expandCustomDeckCards, validateCustomDeck } from "./collection-rules.js";
 import { registerCustomDecks } from "./rules/decks.js";
@@ -151,26 +152,6 @@ export async function openDeckBuilder({ onDecksChanged = null, deckId = null } =
   if (deckId) deckBuilderApp.requestedDeckId = deckId;
   await deckBuilderApp.render({ force: true });
   return deckBuilderApp;
-}
-
-function buildModuleMacroCommand(method, label) {
-  return `const module = game.modules.get("${MODULE_ID}");\nif (!module?.active || typeof module.api?.${method} !== "function") {\n  return ui.notifications.error("Le module « Le Jeu des Six Couronnes » n’est pas chargé. Activez-le puis rechargez le monde.");\n}\nawait module.api.${method}();`;
-}
-
-async function upsertModuleMacro(definition) {
-  const existing = game.macros.getName(definition.name);
-  const data = {
-    name: definition.name,
-    type: "script",
-    scope: "global",
-    img: definition.img,
-    command: definition.command
-  };
-  if (existing) {
-    await existing.update(data);
-    return existing;
-  }
-  return Macro.create(data);
 }
 
 export async function createProfileMacros() {

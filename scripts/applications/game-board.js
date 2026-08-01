@@ -4,7 +4,7 @@ import { getBoosterCredits, getCollection, getEventBoosterCredits, openBooster, 
 import { normalizeCardArt } from "../art.js";
 import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
-import { openGlossary } from "../glossary.js";
+import { openGlossary, openRulebook } from "../glossary.js";
 import { requestAnalyticsRecord } from "../analytics.js";
 import { EVENT_BOOSTER_ID, getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
 import {
@@ -30,8 +30,7 @@ import {
   startMatch,
   startNextRound,
   takeOpponentTurn,
-  toggleMulliganCard,
-  toggleRules
+  toggleMulliganCard
 } from "../rules/state.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -172,7 +171,6 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       selectedPlayerDeckLabel: this.matchState.selectedPlayerDeck === "random" ? "Deck aléatoire" : selectedPlayerDeckDefinition?.name ?? "Deck joueur",
       selectedOpponentDeckLabel: this.matchState.selectedOpponentDeck === "random" ? "Deck aléatoire" : selectedOpponentDeckDefinition?.name ?? "Deck adverse",
       noSpellSelected: !this.matchState.spells?.player?.id,
-      rulesOpen: false,
       selectedSpellLockedLabel: view.playerSpell?.equipped ? view.playerSpell.name : "Sans sortilège",
       canOpenEventBooster: game.user.isGM || eventBoosterCredits > 0,
       eventBoosterButtonLabel: game.user.isGM
@@ -447,11 +445,9 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
 
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
-    this.element.querySelectorAll("[data-action='toggle-rules']").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        openRulebook();
-      });
+    this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      openRulebook();
     });
 
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {

@@ -16,21 +16,11 @@ test("le règlement et le glossaire se chargent sans import manquant", () => {
 test("les macros sont réparées et ouvrent les trois fenêtres principales", async () => {
   const profile = await read("../scripts/profile.js");
   const boosters = await read("../scripts/boosters.js");
+  const macros = await read("../scripts/macros.js");
   assert.match(profile, /Jouer au Jeu des Six Couronnes/);
-  assert.match(profile, /existing\.update\(data\)/);
   assert.match(profile, /openBoard/);
   assert.match(profile, /openCollection/);
   assert.match(profile, /openDeckBuilder/);
-  assert.match(boosters, /existing\.update\(data\)/);
   assert.match(boosters, /openBooster/);
-});
-
-test("les manifestes annoncent la version corrective 0.10.21", async () => {
-  const moduleJson = JSON.parse(await read("../module.json"));
-  const packageJson = JSON.parse(await read("../package.json"));
-  const lockJson = JSON.parse(await read("../package-lock.json"));
-  assert.equal(moduleJson.version, "0.10.21");
-  assert.equal(packageJson.version, "0.10.21");
-  assert.equal(lockJson.version, "0.10.21");
-  assert.equal(lockJson.packages[""].version, "0.10.21");
+  assert.match(macros, /existing\.update\(data\)/);
 });

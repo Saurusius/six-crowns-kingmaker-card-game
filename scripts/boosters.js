@@ -1,6 +1,7 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { withNormalizedCardArt } from "./art.js";
 import { EVENT_BOOSTER_ID, EVENT_BOOSTER_IMAGE, EVENT_CARD_BACK, EVENT_SET_LABEL, EVENT_SPELL_IDS } from "./event-spells.js";
+import { buildModuleMacroCommand, upsertModuleMacro } from "./macros.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
@@ -836,20 +837,11 @@ function animateBoosterQueue(boosters = []) {
 }
 
 export async function createBoosterMacro() {
-  if (!game.user.isGM) return null;
-  const data = {
+  return upsertModuleMacro({
     name: BOOSTER_MACRO_NAME,
-    type: "script",
-    scope: "global",
     img: "icons/containers/bags/pack-leather-white-tan.webp",
-    command: `const module = game.modules.get("${MODULE_ID}");\nif (!module?.active || typeof module.api?.openBooster !== "function") {\n  return ui.notifications.error("Le module « Le Jeu des Six Couronnes » n’est pas chargé. Activez-le puis rechargez le monde.");\n}\nawait module.api.openBooster();`
-  };
-  const existing = game.macros.getName(BOOSTER_MACRO_NAME);
-  if (existing) {
-    await existing.update(data);
-    return existing;
-  }
-  return Macro.create(data);
+    command: buildModuleMacroCommand("openBooster", "ouverture de booster")
+  });
 }
 
 export const BOOSTER_RULES = Object.freeze({

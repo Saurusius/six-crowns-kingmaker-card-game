@@ -11,6 +11,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Récupérer le dépôt
         uses: actions/checkout@v4
@@ -38,16 +39,40 @@ jobs:
           node tools/prepare-release.mjs "$VERSION"
 
       - name: Construire le ZIP Foundry
+        id: package
         shell: bash
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ARCHIVE="six-crowns-kingmaker-card-game-v${VERSION}.zip"
+
           cd dist/module
-          zip -r ../../six-crowns-kingmaker-card-game.zip .
+          zip -r "../../${ARCHIVE}" .
           cd ../..
-          cp dist/module/module.json ./module.json
+
+          mkdir -p release-assets
+          cp dist/module/module.json release-assets/module.json
+          echo "archive=${ARCHIVE}" >> "$GITHUB_OUTPUT"
 
       - name: Créer la GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          ARCHIVE: ${{ steps.package.outputs.archive }}
         shell: bash
         run: |
-          gh release create "$GITHUB_REF_NAME"             module.json             six-crowns-kingmaker-card-game.zip             --title "Le Jeu des Six Couronnes $GITHUB_REF_NAME"             --generate-notes
+          NOTES_FILE="documentation/releases/${GITHUB_REF_NAME}.md"
+
+          if [[ -f "$NOTES_FILE" ]]; then
+            gh release create "$GITHUB_REF_NAME" \
+              "$ARCHIVE" \
+              "release-assets/module.json" \
+              --title "Le Jeu des Six Couronnes ${GITHUB_REF_NAME}" \
+              --notes-file "$NOTES_FILE" \
+              --verify-tag
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              "$ARCHIVE" \
+              "release-assets/module.json" \
+              --title "Le Jeu des Six Couronnes ${GITHUB_REF_NAME}" \
+              --generate-notes \
+              --verify-tag
+          fi

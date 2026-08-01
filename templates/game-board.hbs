@@ -1,4 +1,4 @@
-<section class="scg-shell {{#if rulesOpen}}is-rules-open{{/if}}">
+<section class="scg-shell">
   <header class="scg-toolbar">
     <div class="scg-round-heading">
       <strong>{{#if round}}Manche {{round}}{{else}}Nouvelle partie{{/if}}</strong>
@@ -6,7 +6,7 @@
       {{#if showBoard}}<span class="scg-turn">Tour : {{turnLabel}}</span>{{/if}}
     </div>
     <div class="scg-toolbar-actions">
-      <button type="button" data-action="toggle-rules"><i class="fa-solid fa-scroll"></i> Règlement</button>
+      <button type="button" data-action="open-rulebook"><i class="fa-solid fa-scroll"></i> Règlement</button>
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
       {{#if canRematch}}
@@ -20,28 +20,6 @@
   </header>
 
   <p class="scg-message">{{message}}</p>
-
-  {{#if rulesOpen}}
-    <section class="scg-rulebook-panel">
-      <div class="scg-rulebook-header">
-        <div>
-          <h2>Règlement du Jeu des Six Couronnes</h2>
-          <p>Rappel rapide des effets, du déroulement d’une manche et des conditions de victoire.</p>
-        </div>
-        <button type="button" class="scg-rulebook-close" data-action="toggle-rules"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="scg-rulebook-grid">
-        {{#each ruleSections}}
-          <article class="scg-rulebook-card">
-            <h3>{{title}}</h3>
-            <ul>
-              {{#each items}}<li>{{this}}</li>{{/each}}
-            </ul>
-          </article>
-        {{/each}}
-      </div>
-    </section>
-  {{/if}}
 
   {{#if isSpellSelection}}
     <section class="scg-setup-panel scg-spell-selection-panel">
@@ -486,17 +464,6 @@
             <small>{{opponent.discard.length}} carte(s)</small>
           </article>
         </div>
-
-        <div class="scg-turn-card">
-          <strong>{{#if isOpponentTurn}}Tour adverse{{else}}État de la manche{{/if}}</strong>
-          <p>{{message}}</p>
-          <div class="scg-turn-meta">
-            <span><i class="fa-solid fa-shield-halved"></i> {{opponent.controlledLines}} ligne(s) adverses</span>
-            <span><i class="fa-solid fa-sword"></i> {{player.controlledLines}} ligne(s) alliées</span>
-          </div>
-        </div>
-
-        {{#if hasActionLog}}<details class="scg-match-log"><summary><i class="fa-solid fa-list"></i> Journal de partie <b>{{actionLog.length}}</b></summary><div>{{#each actionLog}}<article class="is-{{type}}"><small>Manche {{round}}</small><span>{{message}}</span></article>{{/each}}</div></details>{{/if}}
 
         <div class="scg-zone-stack scg-zone-stack-player">
           <article class="scg-duelist-profile scg-duelist-profile-player">

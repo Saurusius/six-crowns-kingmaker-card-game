@@ -112,7 +112,7 @@ test("les boosters affichent acquisitions, historique, réouverture et ouverture
   assert.match(source, /fastPrelude/);
 });
 
-test("le plateau conserve la partie, journalise et propose une revanche", async () => {
+test("le plateau conserve la partie et propose une revanche", async () => {
   const [source, template] = await Promise.all([
     readFile(new URL("../scripts/applications/game-board.js", import.meta.url), "utf8"),
     readFile(new URL("../templates/game-board.hbs", import.meta.url), "utf8")
@@ -120,7 +120,7 @@ test("le plateau conserve la partie, journalise et propose une revanche", async 
   assert.match(source, /activeMatchState/);
   assert.match(source, /createRematchState/);
   assert.match(source, /requestAnalyticsRecord/);
-  assert.match(template, /Journal de partie/);
+  assert.doesNotMatch(template, /Journal de partie/);
   assert.match(template, /data-action="rematch"/);
 });
 
