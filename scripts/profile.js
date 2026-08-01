@@ -3,6 +3,7 @@ import { buildModuleMacroCommand, upsertModuleMacro } from "./macros.js";
 import { getCollection, loadCardCatalog } from "./boosters.js";
 import { expandCustomDeckCards, validateCustomDeck } from "./collection-rules.js";
 import { registerCustomDecks } from "./rules/decks.js";
+import { transactUserFlags } from "./transactions.js";
 
 export const CUSTOM_DECKS_FLAG = "customDecks";
 
@@ -39,94 +40,110 @@ export async function syncCustomDeckRegistry() {
 }
 
 export async function saveCustomDeck({ id = null, name, cards }) {
-  const [collection, catalog, decks] = await Promise.all([
-    getCollection(),
-    loadCardCatalog(),
-    getCustomDecks()
-  ]);
+  const [collection, catalog] = await Promise.all([getCollection(), loadCardCatalog()]);
   const validation = validateCustomDeck({ name, cards }, catalog, collection);
   if (!validation.valid) throw new Error(validation.errors.join("\n"));
 
   const now = new Date().toISOString();
   const deckId = id || makeId();
-  const existingIndex = decks.findIndex((deck) => deck.id === deckId);
-  const existing = existingIndex >= 0 ? decks[existingIndex] : null;
-  const saved = {
-    id: deckId,
-    name: validation.name,
-    cards: validation.cards,
-    createdAt: existing?.createdAt ?? now,
-    updatedAt: now
-  };
-
-  if (existingIndex >= 0) decks.splice(existingIndex, 1, saved);
-  else decks.push(saved);
-
-  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
+  let decks;
+  let saved;
+  await transactUserFlags({
+    user: game.user,
+    type: "save-deck",
+    flags: [CUSTOM_DECKS_FLAG],
+    metadata: { deckId },
+    mutate: (snapshot) => {
+      decks = Array.isArray(snapshot[CUSTOM_DECKS_FLAG]) ? clone(snapshot[CUSTOM_DECKS_FLAG]) : [];
+      const existingIndex = decks.findIndex((deck) => deck.id === deckId);
+      const existing = existingIndex >= 0 ? decks[existingIndex] : null;
+      saved = {
+        id: deckId,
+        name: validation.name,
+        cards: validation.cards,
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now
+      };
+      if (existingIndex >= 0) decks.splice(existingIndex, 1, saved);
+      else decks.push(saved);
+      return { [CUSTOM_DECKS_FLAG]: decks };
+    }
+  });
   registerValidDecks(decks, catalog, collection);
   Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
   return saved;
 }
 
 export async function renameCustomDeck(deckId, newName) {
-  const [decks, catalog, collection] = await Promise.all([
-    getCustomDecks(),
-    loadCardCatalog(),
-    getCollection()
-  ]);
-  const index = decks.findIndex((entry) => entry.id === deckId);
-  if (index < 0) throw new Error("Deck personnalisé introuvable.");
+  const [catalog, collection] = await Promise.all([loadCardCatalog(), getCollection()]);
   const normalizedName = String(newName ?? "").trim();
   if (!normalizedName) throw new Error("Donnez un nom au deck.");
-  const renamed = {
-    ...decks[index],
-    name: normalizedName,
-    updatedAt: new Date().toISOString()
-  };
-  decks.splice(index, 1, renamed);
-  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
+  let decks;
+  let renamed;
+  await transactUserFlags({
+    user: game.user,
+    type: "rename-deck",
+    flags: [CUSTOM_DECKS_FLAG],
+    metadata: { deckId },
+    mutate: (snapshot) => {
+      decks = Array.isArray(snapshot[CUSTOM_DECKS_FLAG]) ? clone(snapshot[CUSTOM_DECKS_FLAG]) : [];
+      const index = decks.findIndex((entry) => entry.id === deckId);
+      if (index < 0) throw new Error("Deck personnalisé introuvable.");
+      renamed = { ...decks[index], name: normalizedName, updatedAt: new Date().toISOString() };
+      decks.splice(index, 1, renamed);
+      return { [CUSTOM_DECKS_FLAG]: decks };
+    }
+  });
   registerValidDecks(decks, catalog, collection);
   Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
   return renamed;
 }
 
 export async function duplicateCustomDeck(deckId, name = null) {
-  const [decks, catalog, collection] = await Promise.all([
-    getCustomDecks(),
-    loadCardCatalog(),
-    getCollection()
-  ]);
-  const deck = decks.find((entry) => entry.id === deckId);
-  if (!deck) throw new Error("Deck personnalisé introuvable.");
-  const now = new Date().toISOString();
-  const normalizedName = String(name ?? `Copie de ${deck.name}`).trim();
-  if (!normalizedName) throw new Error("Donnez un nom au deck dupliqué.");
-  const duplicate = {
-    id: makeId(),
-    name: normalizedName,
-    cards: clone(deck.cards),
-    createdAt: now,
-    updatedAt: now
-  };
-  decks.push(duplicate);
-  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, decks);
+  const [catalog, collection] = await Promise.all([loadCardCatalog(), getCollection()]);
+  let decks;
+  let duplicate;
+  await transactUserFlags({
+    user: game.user,
+    type: "duplicate-deck",
+    flags: [CUSTOM_DECKS_FLAG],
+    metadata: { sourceDeckId: deckId },
+    mutate: (snapshot) => {
+      decks = Array.isArray(snapshot[CUSTOM_DECKS_FLAG]) ? clone(snapshot[CUSTOM_DECKS_FLAG]) : [];
+      const deck = decks.find((entry) => entry.id === deckId);
+      if (!deck) throw new Error("Deck personnalisé introuvable.");
+      const normalizedName = String(name ?? `Copie de ${deck.name}`).trim();
+      if (!normalizedName) throw new Error("Donnez un nom au deck dupliqué.");
+      const now = new Date().toISOString();
+      duplicate = { id: makeId(), name: normalizedName, cards: clone(deck.cards), createdAt: now, updatedAt: now };
+      decks.push(duplicate);
+      return { [CUSTOM_DECKS_FLAG]: decks };
+    }
+  });
   registerValidDecks(decks, catalog, collection);
   Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
   return duplicate;
 }
 
 export async function deleteCustomDeck(deckId) {
-  const [decks, catalog, collection] = await Promise.all([
-    getCustomDecks(),
-    loadCardCatalog(),
-    getCollection()
-  ]);
-  const nextDecks = decks.filter((deck) => deck.id !== deckId);
-  if (nextDecks.length === decks.length) return false;
-  await game.user.setFlag(MODULE_ID, CUSTOM_DECKS_FLAG, nextDecks);
-  registerValidDecks(nextDecks, catalog, collection);
-  Hooks.callAll(`${MODULE_ID}.decksUpdated`, nextDecks);
-  return true;
+  const [catalog, collection] = await Promise.all([loadCardCatalog(), getCollection()]);
+  let decks;
+  let deleted = false;
+  await transactUserFlags({
+    user: game.user,
+    type: "delete-deck",
+    flags: [CUSTOM_DECKS_FLAG],
+    metadata: { deckId },
+    mutate: (snapshot) => {
+      const current = Array.isArray(snapshot[CUSTOM_DECKS_FLAG]) ? clone(snapshot[CUSTOM_DECKS_FLAG]) : [];
+      decks = current.filter((deck) => deck.id !== deckId);
+      deleted = decks.length !== current.length;
+      return { [CUSTOM_DECKS_FLAG]: decks };
+    }
+  });
+  registerValidDecks(decks, catalog, collection);
+  Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
+  return deleted;
 }
 
 export async function getRuntimeCustomDecks() {

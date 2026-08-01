@@ -90,6 +90,7 @@ export function formatCardRulesText(text = "") {
 export function openRulebook() {
   if (typeof document === "undefined") return null;
   document.querySelector(".scg-rulebook-overlay")?.remove();
+  const previousFocus = document.activeElement;
   const overlay = document.createElement("div");
   overlay.className = "scg-glossary-overlay scg-rulebook-overlay";
   overlay.setAttribute("role", "dialog");
@@ -101,10 +102,15 @@ export function openRulebook() {
         ${RULEBOOK.map((group) => `<section><h3>${escapeHtml(group.title)}</h3><div>${group.items.map((entry) => { const item = typeof entry === "string" ? { title: group.title, text: entry, icon: "fa-solid fa-scroll" } : entry; return `<article><span class="scg-glossary-icon is-type"><i class="${escapeHtml(item.icon ?? "fa-solid fa-scroll")}"></i></span><span><strong>${escapeHtml(item.title ?? group.title)}</strong><small>${escapeHtml(item.text ?? "")}</small></span></article>`; }).join("")}</div></section>`).join("")}
       </div>
     </section>`;
-  const close = () => overlay.remove();
+  const onKeyDown = (event) => { if (event.key === "Escape") close(); };
+  const close = () => {
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.remove();
+    previousFocus?.focus?.({ preventScroll: true });
+  };
   overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
   overlay.querySelector("[data-action='close-rulebook']")?.addEventListener("click", close);
-  overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") close(); });
+  document.addEventListener("keydown", onKeyDown);
   document.body.appendChild(overlay);
   overlay.querySelector("[data-action='close-rulebook']")?.focus();
   return overlay;
@@ -113,6 +119,7 @@ export function openRulebook() {
 export function openGlossary() {
   if (typeof document === "undefined") return null;
   document.querySelector(".scg-glossary-overlay")?.remove();
+  const previousFocus = document.activeElement;
   const overlay = document.createElement("div");
   overlay.className = "scg-glossary-overlay";
   overlay.setAttribute("role", "dialog");
@@ -124,10 +131,15 @@ export function openGlossary() {
         ${getGlossaryGroups().map((group) => `<section><h3>${escapeHtml(group.label)}</h3><div>${group.entries.map((entry) => `<article>${entry.iconUrl ? `<span class="scg-glossary-icon ${escapeHtml(entry.visualClass ?? "")}"><img src="${escapeHtml(entry.iconUrl)}" alt=""></span>` : `<span class="scg-glossary-icon ${escapeHtml(entry.visualClass ?? "")}"><i class="${escapeHtml(entry.iconClass ?? "fa-solid fa-circle")}"></i></span>`}<span><strong>${escapeHtml(entry.label)}</strong><small>${escapeHtml(entry.description)}</small></span></article>`).join("")}</div></section>`).join("")}
       </div>
     </section>`;
-  const close = () => overlay.remove();
+  const onKeyDown = (event) => { if (event.key === "Escape") close(); };
+  const close = () => {
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.remove();
+    previousFocus?.focus?.({ preventScroll: true });
+  };
   overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
   overlay.querySelector("[data-action='close-glossary']")?.addEventListener("click", close);
-  overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") close(); });
+  document.addEventListener("keydown", onKeyDown);
   document.body.appendChild(overlay);
   overlay.querySelector("[data-action='close-glossary']")?.focus();
   return overlay;

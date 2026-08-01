@@ -276,8 +276,12 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     });
 
     this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      if (typeof api?.openHome === "function") void api.openHome();
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        if (typeof api?.openHome !== "function") return;
+        await api.openHome();
+        await this.close();
+      })();
     });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
 

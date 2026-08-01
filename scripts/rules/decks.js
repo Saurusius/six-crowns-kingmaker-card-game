@@ -1,6 +1,6 @@
 import { expandCustomDeckCards } from "../collection-rules.js";
 import { normalizeCardArt } from "../art.js";
-import { CARD_ART_BY_NAME } from "../card-art-map.js";
+import { DEMO_ART_BY_NAME } from "./demo-art.js";
 
 export const PREDEFINED_RARITY_COUNTS = Object.freeze({
   commun: 15,
@@ -124,8 +124,6 @@ const DECK_DEFINITIONS = {
   }
 };
 
-
-const DEMO_ART_BY_NAME = CARD_ART_BY_NAME;
 
 for (const deck of Object.values(DECK_DEFINITIONS)) {
   for (const card of deck.cards) {

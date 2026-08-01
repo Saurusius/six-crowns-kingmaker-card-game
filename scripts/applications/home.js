@@ -71,7 +71,7 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const discovered = catalog.filter((card) => Number(collection?.[card.id]?.count ?? 0) > 0).length;
     const copies = catalog.reduce((total, card) => total + Math.max(0, Number(collection?.[card.id]?.count ?? 0)), 0);
-    const version = game.modules.get(MODULE_ID)?.version ?? "0.13.1";
+    const version = game.modules.get(MODULE_ID)?.version ?? "0.14.4";
 
     return {
       userName: game.user?.name ?? "Joueur",

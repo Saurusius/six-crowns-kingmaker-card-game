@@ -1,5 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { TRAIT_DETAILS, buildTraitBadges } from "./traits.js";
+import { formatDateTime } from "./i18n.js";
+import { signSocketEnvelope, verifySocketEnvelope } from "./socket-auth.js";
 
 export const ANALYTICS_SETTING = "matchAnalytics";
 
@@ -23,25 +25,66 @@ function primaryActiveGm() {
     .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0] ?? null;
 }
 
-export function requestAnalyticsRecord(record) {
+async function storeAnalyticsRecord(data, { local = false } = {}) {
+  if (!local) await verifySocketEnvelope(data, data.actorUserId);
+  const source = sanitizeMatchRecord(data.record);
+  const actor = game.users.get(data.actorUserId);
+  const record = {
+    ...source,
+    userId: actor?.id ?? source.userId,
+    userName: actor?.name ?? source.userName
+  };
+  const entries = getMatchAnalytics();
+  if (!entries.some((entry) => entry.id === record.id)) {
+    entries.push(record);
+    await game.settings.set(MODULE_ID, ANALYTICS_SETTING, entries.slice(-500));
+    const sync = await signSocketEnvelope({ type: "analytics-sync", serverUserId: game.user.id });
+    game.socket.emit(`module.${MODULE_ID}`, sync);
+    Hooks.callAll(`${MODULE_ID}.analyticsUpdated`);
+  }
+  return true;
+}
+
+export async function requestAnalyticsRecord(record) {
   const gm = primaryActiveGm();
   if (!gm) {
     globalThis.ui?.notifications?.warn?.("Aucun MJ actif : les statistiques de cette partie ne peuvent pas être enregistrées.");
     return false;
   }
-  game.socket.emit(`module.${MODULE_ID}`, { type: "analytics-record", record });
-  return true;
+  try {
+    const request = {
+      type: "analytics-record",
+      requestId: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      actorUserId: game.user.id,
+      record
+    };
+    if (gm.id === game.user.id) await storeAnalyticsRecord(request, { local: true });
+    else game.socket.emit(`module.${MODULE_ID}`, await signSocketEnvelope(request));
+    return true;
+  } catch (error) {
+    console.error("Six Crowns | Enregistrement analytique impossible", error);
+    return false;
+  }
 }
 
 export async function handleAnalyticsSocket(data) {
+  if (data.type === "analytics-sync") {
+    try {
+      const gm = primaryActiveGm();
+      if (!data.serverUserId || data.serverUserId !== gm?.id) throw new Error("Synchronisation analytique émise par un hôte non autorisé.");
+      await verifySocketEnvelope(data, data.serverUserId);
+      if (game.user.isGM) Hooks.callAll(`${MODULE_ID}.analyticsUpdated`);
+    } catch (error) {
+      console.warn("Six Crowns | Synchronisation analytique refusée", error);
+    }
+    return true;
+  }
   if (data.type !== "analytics-record") return false;
   if (!game.user.isGM || primaryActiveGm()?.id !== game.user.id) return true;
-  const record = sanitizeMatchRecord(data.record);
-  const entries = getMatchAnalytics();
-  if (!entries.some((entry) => entry.id === record.id)) {
-    entries.push(record);
-    await game.settings.set(MODULE_ID, ANALYTICS_SETTING, entries.slice(-500));
-    game.socket.emit(`module.${MODULE_ID}`, { type: "analytics-sync" });
+  try {
+    await storeAnalyticsRecord(data);
+  } catch (error) {
+    console.warn("Six Crowns | Relevé analytique refusé", error);
   }
   return true;
 }
@@ -145,7 +188,7 @@ export function buildAnalyticsSummary(entries = [], catalog = []) {
     recentMatches: entries.slice(-20).reverse().map((entry) => ({
       ...entry,
       winnerLabel: entry.winner === "player" ? "Victoire" : entry.winner === "opponent" ? "Défaite" : "Égalité",
-      dateLabel: new Date(entry.completedAt).toLocaleString("fr-FR")
+      dateLabel: formatDateTime(entry.completedAt)
     }))
   };
 }

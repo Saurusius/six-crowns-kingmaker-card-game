@@ -198,7 +198,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.matchState.phase === PHASES.GAME_OVER && this.matchState.gameWinner === "player" && !this.matchState.crownsRewarded) {
       this.matchState.crownsRewarded = true;
       try {
-        await awardCrowns({ amount: 5, label: "Victoire contre l’adversaire automatisé", source: "bot-victory" });
+        await awardCrowns({ amount: 5, label: "Victoire contre l’adversaire automatisé", source: "bot-victory", rewardId: this.matchState.matchId });
         ui.notifications.info("Victoire ! Vous gagnez 5 Couronnes.");
       } catch (error) {
         this.matchState.crownsRewarded = false;
@@ -257,9 +257,13 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
     return new Promise((resolve) => {
       this._removeSpellOverlays();
+      const previousFocus = document.activeElement;
       const overlay = document.createElement("div");
       overlay.className = "scg-spell-target-overlay";
       overlay.dataset.scgSpellOverlayOwner = this.id;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", `Ciblage du sortilège ${options.spell.name}`);
       overlay.innerHTML = `
         <form class="scg-spell-target-dialog">
           <header><div><small>Sortilège événementiel</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header>
@@ -268,10 +272,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
           <footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer>
         </form>`;
       document.body.append(overlay);
-      const finish = (value) => { overlay.remove(); resolve(value); };
+      let closed = false;
+      const onKeyDown = (event) => { if (event.key === "Escape") finish(null); };
+      const finish = (value) => {
+        if (closed) return;
+        closed = true;
+        document.removeEventListener("keydown", onKeyDown);
+        overlay.remove();
+        previousFocus?.focus?.({ preventScroll: true });
+        resolve(value);
+      };
       overlay.addEventListener("click", (event) => { if (event.target === overlay) finish(null); });
       overlay.querySelectorAll("[data-spell-cancel]").forEach((button) => button.addEventListener("click", () => finish(null)));
-      overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") finish(null); });
+      document.addEventListener("keydown", onKeyDown);
       if (options.mode === "multi-own-card") {
         overlay.querySelectorAll('input[name="spell-card"]').forEach((input) => input.addEventListener("change", () => {
           const checked = [...overlay.querySelectorAll('input[name="spell-card"]:checked')];
@@ -291,7 +304,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
         return cardId ? finish({ cardId }) : ui.notifications.warn("Choisissez une carte.");
       });
-      overlay.querySelector("input")?.focus();
+      overlay.querySelector("input, button")?.focus({ preventScroll: true });
     });
   }
 
@@ -300,9 +313,13 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     const escape = (value) => foundry.utils.escapeHTML(String(value ?? ""));
     return new Promise((resolve) => {
       this._removeSpellOverlays();
+      const previousFocus = document.activeElement;
       const overlay = document.createElement("div");
       overlay.className = `scg-spell-reveal-overlay is-${side}`;
       overlay.dataset.scgSpellOverlayOwner = this.id;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", result.spell.name);
       overlay.innerHTML = `
         <span class="scg-spell-reveal-aura" aria-hidden="true"></span>
         <span class="scg-spell-reveal-runes" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -319,20 +336,23 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         remaining -= 1;
         if (countdown && remaining > 0) countdown.textContent = `Fermeture automatique dans ${remaining} s · cliquez pour fermer`;
       }, 1000);
+      const onKeyDown = (event) => { if (event.key === "Escape") close(); };
       const timer = globalThis.setTimeout(() => close(), 10000);
       const close = () => {
         if (closed) return;
         closed = true;
         globalThis.clearInterval(interval);
         globalThis.clearTimeout(timer);
+        document.removeEventListener("keydown", onKeyDown);
         overlay.classList.add("is-closing");
         globalThis.setTimeout(() => {
           overlay.remove();
+          previousFocus?.focus?.({ preventScroll: true });
           resolve();
         }, 260);
       };
       overlay.addEventListener("click", close);
-      overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") close(); });
+      document.addEventListener("keydown", onKeyDown);
       overlay.tabIndex = -1;
       overlay.focus({ preventScroll: true });
     });
@@ -458,8 +478,12 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
 
     this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      if (typeof api?.openHome === "function") void api.openHome();
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        if (typeof api?.openHome !== "function") return;
+        await api.openHome();
+        await this.close();
+      })();
     });
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
     this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", (event) => {

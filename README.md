@@ -2,7 +2,7 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.12.0-c9a44d)
+![Version](https://img.shields.io/badge/version-0.14.4-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
@@ -133,7 +133,8 @@ Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvega
 - attribution directe de cartes ;
 - réinitialisation d’une collection ;
 - tableau d’équilibrage avec taux d’utilisation, résultats par deck et cartes jamais jouées ;
-- export des données en JSON et CSV.
+- export des données en JSON et CSV ;
+- réparation des collections, libération des échanges interrompus et export du journal d’audit transactionnel.
 
 ## Règles essentielles
 
@@ -143,28 +144,28 @@ Une manche est gagnée d’abord au nombre de lignes contrôlées, puis à la Pu
 
 Les règles détaillées sont disponibles dans le module et dans [`documentation/RULES.md`](documentation/RULES.md).
 
-## Version 0.12.0
+## Version 0.14.4
 
-Cette version inaugure la **bêta PvP** :
+Cette version consolide le module avant l’élargissement du PvP :
 
-- une arène multijoueur accessible depuis le hub ;
-- des invitations directes et un salon de préparation synchronisé ;
-- des duels 1 contre 1 arbitrés par le MJ hôte ;
-- des mains et sortilèges adverses masqués dans les instantanés clients ;
-- la reconnexion, l’abandon, les revanches et les spectateurs optionnels ;
-- une console MJ de surveillance et de déblocage ;
-- un historique et des statistiques PvP personnelles ;
-- les nouvelles formulations de la page d’accueil.
+- l’état complet des duels est migré vers un journal Foundry sans permission joueur, réservé au MJ hôte ;
+- les anciens réglages monde contenant les mains et les decks sont vidés après migration ;
+- les commandes administratives PvP ne peuvent plus être envoyées à distance et doivent être exécutées depuis la session du MJ hôte ;
+- les requêtes PvP, d’échange et d’analytics sont signées par profil, limitées, dédupliquées et protégées contre les doubles traitements ;
+- les offres passent par un état **Validation** avant tout déplacement de ressources ;
+- achats, récompenses, boosters, recyclages, decks et échanges utilisent désormais des snapshots, révisions et restaurations de secours ;
+- le booster classique équilibre d’abord les quatre factions à rareté identique et préfère une carte Unique non possédée lorsque possible ;
+- l’API globale n’expose plus les fonctions de mutation réservées au MJ ;
+- les styles sont répartis en cinq feuilles fonctionnelles, les visuels de boosters sont convertis en WebP et la map d’illustrations redondante est supprimée ;
+- une suite Node vérifie les cartes, les illustrations, les versions, les imports, la syntaxe, les transactions, les signatures et les probabilités avant chaque release.
 
-Cette branche reste une bêta multijoueur : une première partie réelle avec deux navigateurs et un MJ est recommandée avant une soirée de tournoi.
-
-Consultez le [`CHANGELOG.md`](CHANGELOG.md) pour l’historique complet.
+Le PvP reste conçu pour une table Foundry administrée par un MJ. Les signatures empêchent l’usurpation triviale d’un autre profil et détectent l’altération des paquets, mais elles ne peuvent pas empêcher un joueur de modifier son propre client, son interface ou les données locales auxquelles Foundry lui donne accès. Un anti-triche compétitif complet exigerait toujours un arbitre serveur externe.
 
 ## Compatibilité
 
 - **Foundry VTT minimum :** version 14
 - **Version vérifiée :** 14.365
-- **Langues :** français et anglais
+- **Langue :** français
 
 ## Développement
 
@@ -175,23 +176,28 @@ npm ci
 npm run check
 ```
 
-Préparer une archive de release :
+La commande contrôle notamment les 165 cartes, les 495 illustrations, la syntaxe JavaScript, la cohérence des versions, les probabilités des boosters et l’intégrité des signatures socket.
+
+Préparer l’archive courante :
 
 ```bash
-npm run prepare-release -- 0.12.0
+npm run prepare-release -- 0.14.4
 ```
 
-Le dépôt publie automatiquement une release lorsqu’un tag au format `vX.Y.Z` est poussé sur GitHub.
+Le ZIP est produit dans `dist/`. Les workflows GitHub vérifient chaque push et publient automatiquement l’archive lors d’un tag `vX.Y.Z`.
 
 ## Documentation
 
 - [Règles complètes](documentation/RULES.md)
-- [Guide de la bêta PvP](documentation/PVP-BETA.md)
+- [Guide de la bêta PvP et modèle de confiance](documentation/PVP-BETA.md)
 - [Journal des modifications](CHANGELOG.md)
 - [Archives des releases](documentation/releases/README.md)
 - [Méthode d’équilibrage](CARD_BALANCE.md)
+- [Développement](DEVELOPMENT.md)
+- [Publication d’une release](RELEASING.md)
 - [Guide de contribution](CONTRIBUTING.md)
 - [Documentation des illustrations](documentation/README-INTEGRATION.md)
+- [Sécurité et limites](SECURITY.md)
 
 ## Licence et crédits
 

@@ -28,6 +28,7 @@ import { openDeckBuilder } from "../profile.js";
 import { formatCardRulesText, openGlossary } from "../glossary.js";
 import { buildTradeReservations, decorateTradeOffers, getTradeHistory, getTradeOffers, requestTradeAction, requestTradeCreate } from "../trades.js";
 import { bindFloatingOverlays } from "../ui/floating-overlays.js";
+import { formatDateTime } from "../i18n.js";
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -164,10 +165,22 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     const rarityRank = { commun: 0, peuCommune: 1, rare: 2, unique: 3, doree: 4 };
     const boosterHistoryView = boosterHistory.slice(-8).reverse().map((entry) => ({
       ...entry,
-      dateLabel: new Date(entry.openedAt).toLocaleString("fr-FR"),
+      dateLabel: formatDateTime(entry.openedAt),
       highestRarity: entry.cards.reduce((highest, card) => (rarityRank[card.rarity] ?? -1) > (rarityRank[highest] ?? -1) ? card.rarity : highest, "commun"),
       newCount: entry.cards.filter((card) => card.isNew).length
     }));
+    const recyclableCards = collectionCards
+      .filter((card) => card.deckEligible !== false && card.kind !== "event-spell")
+      .map((card) => ({
+        ...card,
+        count: card.ownedCount,
+        recyclableCount: Math.max(0, card.ownedCount - card.reservedForTrade - 1),
+        rarityRank: rarityRank[card.rarity] ?? 99,
+        searchText: `${card.name} ${card.id} ${card.factionLabel}`
+      }))
+      .filter((card) => card.recyclableCount > 0)
+      .sort((a, b) => a.rarityRank - b.rarityRank || b.recyclableCount - a.recyclableCount || a.name.localeCompare(b.name, "fr"));
+    const recyclableCopies = recyclableCards.reduce((sum, card) => sum + card.recyclableCount, 0);
 
     return {
       userName: game.user.name,
@@ -203,9 +216,13 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       availableTradeCredits: Math.max(0, boosterCredits - reservations.reservedCredits),
       boosterHistory: boosterHistoryView,
       hasBoosterHistory: boosterHistoryView.length > 0,
-      ownedCards: catalog
-        .filter((card) => card.deckEligible !== false && card.kind !== "event-spell" && (collection[card.id]?.count ?? 0) > 0)
-        .map((card) => ({ id: card.id, name: card.name, count: collection[card.id].count })),
+      recyclableCards,
+      recyclableCopies,
+      hasRecyclableCards: recyclableCopies > 0,
+      recycleFactionOptions: Object.entries(FACTION_DETAILS).map(([id, details]) => ({ id, label: details.label })),
+      recycleRarityOptions: Object.entries(RARITY_DETAILS)
+        .filter(([id]) => id !== "doree")
+        .map(([id, details]) => ({ id, label: details.label })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
         : `Ouvrir un booster (${boosterCredits} disponible${boosterCredits > 1 ? "s" : ""})`,
@@ -310,8 +327,12 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     });
 
     this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      if (typeof api?.openHome === "function") void api.openHome();
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        if (typeof api?.openHome !== "function") return;
+        await api.openHome();
+        await this.close();
+      })();
     });
 
     this.element.querySelector("[data-action='open-booster']")?.addEventListener("click", async () => {
@@ -383,11 +404,110 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       this.element.querySelector(`[data-collection-card][data-card-id="${CSS.escape(cardId)}"] [data-action='trade-card']`)?.click();
     });
 
-    this.element.querySelector("[data-action='recycle-cards']")?.addEventListener("click", async () => {
-      const selected=[];
-      this.element.querySelectorAll("[data-recycle-count]").forEach(input=>{ for(let i=0;i<(parseInt(input.value,10)||0);i++) selected.push(input.dataset.cardId); });
-      try { await recycleCardsForBooster(selected); ui.notifications.info("10 cartes recyclées : 1 ticket de booster obtenu."); await this.render({force:true}); }
-      catch(error){ ui.notifications.warn(error.message); }
+    const recycleModal = this.element.querySelector("[data-recycle-modal]");
+    const recycleAction = recycleModal?.querySelector("[data-action='recycle-cards']");
+    const recycleInputs = () => Array.from(recycleModal?.querySelectorAll("[data-recycle-count]") ?? []);
+    const getRecycleTotal = () => recycleInputs().reduce((sum, input) => sum + (Number.parseInt(input.value, 10) || 0), 0);
+    const updateRecycleSelection = (changedInput = null) => {
+      for (const input of recycleInputs()) {
+        const maximum = Math.max(0, Number.parseInt(input.max, 10) || 0);
+        input.value = String(Math.max(0, Math.min(maximum, Number.parseInt(input.value, 10) || 0)));
+      }
+      let total = getRecycleTotal();
+      if (changedInput && total > 10) {
+        changedInput.value = String(Math.max(0, (Number.parseInt(changedInput.value, 10) || 0) - (total - 10)));
+        total = getRecycleTotal();
+      }
+      const selectedLabel = recycleModal?.querySelector("[data-recycle-selected]");
+      const progress = recycleModal?.querySelector("[data-recycle-progress]");
+      const hint = recycleModal?.querySelector("[data-recycle-hint]");
+      if (selectedLabel) selectedLabel.textContent = String(total);
+      if (progress) progress.style.width = `${Math.min(100, total * 10)}%`;
+      if (recycleAction) recycleAction.disabled = total !== 10;
+      if (hint) {
+        hint.textContent = total === 10
+          ? "Sélection prête : le premier exemplaire de chaque carte restera intact."
+          : `Encore ${Math.max(0, 10 - total)} exemplaire${10 - total > 1 ? "s" : ""} à sélectionner.`;
+      }
+    };
+    const clearRecycleSelection = () => {
+      for (const input of recycleInputs()) input.value = "0";
+      updateRecycleSelection();
+    };
+    const applyRecycleFilters = () => {
+      const query = String(recycleModal?.querySelector("[name='recycle-search']")?.value ?? "").trim().toLocaleLowerCase("fr");
+      const faction = recycleModal?.querySelector("[name='recycle-faction']")?.value ?? "all";
+      const rarity = recycleModal?.querySelector("[name='recycle-rarity']")?.value ?? "all";
+      recycleModal?.querySelectorAll("[data-recycle-card]").forEach((card) => {
+        const matches = (!query || String(card.dataset.search ?? "").toLocaleLowerCase("fr").includes(query))
+          && (faction === "all" || card.dataset.faction === faction)
+          && (rarity === "all" || card.dataset.rarity === rarity);
+        card.hidden = !matches;
+      });
+    };
+    const closeRecycleModal = () => {
+      if (recycleModal) recycleModal.hidden = true;
+      clearRecycleSelection();
+    };
+
+    this.element.querySelector("[data-action='open-recycle']")?.addEventListener("click", () => {
+      if (!recycleModal) return;
+      recycleModal.hidden = false;
+      clearRecycleSelection();
+      applyRecycleFilters();
+      recycleModal.querySelector("[name='recycle-search']")?.focus({ preventScroll: true });
+    });
+    recycleModal?.querySelectorAll("[data-action='close-recycle']").forEach((button) => button.addEventListener("click", closeRecycleModal));
+    recycleModal?.addEventListener("click", (event) => {
+      if (event.target === recycleModal) closeRecycleModal();
+    });
+    recycleModal?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeRecycleModal();
+    });
+    recycleModal?.querySelectorAll("[name='recycle-search'], [name='recycle-faction'], [name='recycle-rarity']").forEach((control) => {
+      control.addEventListener(control.tagName === "INPUT" ? "input" : "change", applyRecycleFilters);
+    });
+    recycleModal?.querySelectorAll("[data-recycle-step]").forEach((button) => button.addEventListener("click", () => {
+      const input = button.closest("[data-recycle-card]")?.querySelector("[data-recycle-count]");
+      if (!input) return;
+      const delta = Number.parseInt(button.dataset.recycleStep, 10) || 0;
+      const maximum = Math.max(0, Number.parseInt(input.max, 10) || 0);
+      const current = Math.max(0, Number.parseInt(input.value, 10) || 0);
+      if (delta > 0 && getRecycleTotal() >= 10) return;
+      input.value = String(Math.max(0, Math.min(maximum, current + delta)));
+      updateRecycleSelection(input);
+    }));
+    recycleInputs().forEach((input) => input.addEventListener("input", () => updateRecycleSelection(input)));
+    recycleModal?.querySelector("[data-action='clear-recycle']")?.addEventListener("click", clearRecycleSelection);
+    recycleModal?.querySelector("[data-action='auto-recycle']")?.addEventListener("click", () => {
+      clearRecycleSelection();
+      let remaining = 10;
+      const visibleCards = Array.from(recycleModal.querySelectorAll("[data-recycle-card]:not([hidden])"))
+        .sort((a, b) => (Number(a.dataset.rarityRank) || 99) - (Number(b.dataset.rarityRank) || 99));
+      for (const card of visibleCards) {
+        const input = card.querySelector("[data-recycle-count]");
+        if (!input || remaining <= 0) break;
+        const amount = Math.min(remaining, Math.max(0, Number.parseInt(input.max, 10) || 0));
+        input.value = String(amount);
+        remaining -= amount;
+      }
+      updateRecycleSelection();
+      if (remaining > 0) ui.notifications.warn(`Il manque ${remaining} doublon${remaining > 1 ? "s" : ""} dans la sélection filtrée.`);
+    });
+    recycleAction?.addEventListener("click", async () => {
+      const selected = [];
+      for (const input of recycleInputs()) {
+        for (let index = 0; index < (Number.parseInt(input.value, 10) || 0); index += 1) selected.push(input.dataset.cardId);
+      }
+      try {
+        recycleAction.disabled = true;
+        await recycleCardsForBooster(selected);
+        ui.notifications.info("10 doublons recyclés : 1 ticket de booster classique obtenu.");
+        await this.render({ force: true });
+      } catch (error) {
+        updateRecycleSelection();
+        ui.notifications.warn(error.message);
+      }
     });
 
     const tradeModal = this.element.querySelector("[data-card-trade-modal]");
@@ -424,7 +544,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       if (event.key === "Escape") closeTradeModal();
     });
 
-    tradeForm?.addEventListener("submit", (event) => {
+    tradeForm?.addEventListener("submit", async (event) => {
       event.preventDefault();
       const toUserId = tradeForm.elements.namedItem("trade-user")?.value;
       const offeredId = tradeForm.elements.namedItem("trade-offered-card")?.value;
@@ -446,7 +566,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
         : requestedMode === "rarity"
           ? `n’importe quelle carte ${requestedRarity}`
           : `${requestedCredits} ticket(s) de booster`;
-      const sent = requestTradeCreate({
+      const sent = await requestTradeCreate({
         toUserId,
         offered: { [offeredId]: offeredCount },
         requested: requestedMode === "card" ? { [requestedId]: requestedCount } : {},
@@ -468,13 +588,13 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     tradeForm?.elements.namedItem("trade-request-mode")?.addEventListener("change", updateTradeMode);
     updateTradeMode();
 
-    this.element.querySelectorAll("[data-action='trade-accept']").forEach((button) => button.addEventListener("click", () => {
+    this.element.querySelectorAll("[data-action='trade-accept']").forEach((button) => button.addEventListener("click", async () => {
       const offer = button.closest("[data-trade-offer]");
       const selectedCardId = offer?.querySelector("[name='trade-rarity-card']")?.value ?? null;
-      requestTradeAction("accept", button.dataset.offerId, { selectedCardId });
+      await requestTradeAction("accept", button.dataset.offerId, { selectedCardId });
     }));
-    this.element.querySelectorAll("[data-action='trade-reject']").forEach((button) => button.addEventListener("click", () => requestTradeAction("reject", button.dataset.offerId)));
-    this.element.querySelectorAll("[data-action='trade-cancel']").forEach((button) => button.addEventListener("click", () => requestTradeAction("cancel", button.dataset.offerId)));
+    this.element.querySelectorAll("[data-action='trade-reject']").forEach((button) => button.addEventListener("click", async () => { await requestTradeAction("reject", button.dataset.offerId); }));
+    this.element.querySelectorAll("[data-action='trade-cancel']").forEach((button) => button.addEventListener("click", async () => { await requestTradeAction("cancel", button.dataset.offerId); }));
 
 
     this.element.querySelector("[data-action='open-deck-builder']")?.addEventListener("click", async () => {

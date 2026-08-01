@@ -82,9 +82,10 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
     const isCompleted = currentSummary?.status === "completed";
 
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.12.0",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.14.4",
       userName: game.user.name,
       isGM: game.user.isGM,
+      isHostGm: Boolean(this.dashboard.isHostGm),
       hasHost,
       hostGmName: this.dashboard.hostGmName,
       connectedPlayers,
@@ -125,8 +126,12 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
     await super._onRender(context, options);
 
     this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      void api?.openHome?.();
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        if (typeof api?.openHome !== "function") return;
+        await api.openHome();
+        await this.close();
+      })();
     });
     this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", () => openRulebook());
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());

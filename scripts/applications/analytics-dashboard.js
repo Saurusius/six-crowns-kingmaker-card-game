@@ -28,8 +28,12 @@ export class SixCrownsAnalyticsDashboard extends HandlebarsApplicationMixin(Appl
   async _onRender(context, options) {
     await super._onRender(context, options);
     this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      if (typeof api?.openHome === "function") void api.openHome();
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        if (typeof api?.openHome !== "function") return;
+        await api.openHome();
+        await this.close();
+      })();
     });
     this.element.querySelector("[data-action='export-json']")?.addEventListener("click", () => {
       downloadTextFile("six-crowns-match-analytics.json", JSON.stringify(getMatchAnalytics(), null, 2), "application/json");

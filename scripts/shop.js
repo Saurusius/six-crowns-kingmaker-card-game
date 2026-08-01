@@ -1,6 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { EVENT_BOOSTER_ID } from "./event-spells.js";
 import { SPECIAL_BOOSTERS, openBooster, openSpecialBooster, openEventBooster } from "./boosters.js";
+import { transactUserFlags } from "./transactions.js";
 
 export const CROWNS_FLAG = "crowns";
 export const SHOP_INVENTORY_FLAG = "shopBoosterInventory";
@@ -8,7 +9,7 @@ export const SHOP_HISTORY_FLAG = "shopHistory";
 export const DEFAULT_CROWNS = 350;
 
 export const SHOP_PRODUCTS = Object.freeze([
-  { id: "classic", label: "Booster classique", description: "5 cartes aléatoires, de Communes à Rares.", price: 100, image: `modules/${MODULE_ID}/assets/boosters/booster-classique.webp`, kind: "classic", quantity: 1 },
+  { id: "classic", label: "Booster classique", description: "5 cartes aléatoires, de rareté Commune à Unique.", price: 100, image: `modules/${MODULE_ID}/assets/boosters/booster-classique.webp`, kind: "classic", quantity: 1 },
   { id: "theme-six-crowns", label: "Booster Royaume des Six Couronnes", description: "3 cartes issues du Royaume des Six Couronnes.", price: 175, image: SPECIAL_BOOSTERS["six-crowns"].image, kind: "special", faction: "six-crowns", quantity: 1 },
   { id: "theme-aldori", label: "Booster Maison Aldori", description: "3 cartes issues de la Maison Aldori.", price: 175, image: SPECIAL_BOOSTERS.aldori.image, kind: "special", faction: "aldori", quantity: 1 },
   { id: "theme-khans", label: "Booster Khans de Fer", description: "3 cartes issues des Khans de Fer.", price: 175, image: SPECIAL_BOOSTERS["iron-khans"].image, kind: "special", faction: "iron-khans", quantity: 1 },
@@ -29,18 +30,24 @@ export async function getCrowns(options = {}) {
   const stored = user.getFlag(MODULE_ID, CROWNS_FLAG);
   return stored === undefined || stored === null ? DEFAULT_CROWNS : integer(stored);
 }
-export async function setCrowns(value, options = {}) {
-  const user = resolveUser(options);
-  const crowns = integer(value);
-  await user.setFlag(MODULE_ID, CROWNS_FLAG, crowns);
-  Hooks.callAll(`${MODULE_ID}.crownsUpdated`, crowns, user.id);
-  return crowns;
-}
 export async function grantCrownsToUser({ userId, amount = 1 } = {}) {
   if (!game.user.isGM) throw new Error("Seul un MJ peut distribuer des Couronnes.");
   const user = resolveUser({ userId });
   const delta = Number.parseInt(amount ?? 0, 10) || 0;
-  const crowns = await setCrowns(Math.max(0, (await getCrowns({ user })) + delta), { user });
+  let crowns;
+  await transactUserFlags({
+    user,
+    type: "grant-crowns",
+    flags: [CROWNS_FLAG],
+    metadata: { amount: delta },
+    mutate: (snapshot) => {
+      const stored = snapshot[CROWNS_FLAG];
+      const current = stored === undefined || stored === null ? DEFAULT_CROWNS : integer(stored);
+      crowns = Math.max(0, current + delta);
+      return { [CROWNS_FLAG]: crowns };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.crownsUpdated`, crowns, user.id);
   return { user, amount: delta, crowns };
 }
 export async function getShopInventory(options = {}) {
@@ -48,74 +55,152 @@ export async function getShopInventory(options = {}) {
   const data = foundry.utils.deepClone(user.getFlag(MODULE_ID, SHOP_INVENTORY_FLAG) ?? {});
   return data && typeof data === "object" ? data : {};
 }
-async function setShopInventory(user, inventory) {
-  await user.setFlag(MODULE_ID, SHOP_INVENTORY_FLAG, inventory);
-  Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, inventory, user.id);
-  return inventory;
-}
 export async function getShopHistory(options = {}) {
   const user = resolveUser(options);
   const data = foundry.utils.deepClone(user.getFlag(MODULE_ID, SHOP_HISTORY_FLAG) ?? []);
   return Array.isArray(data) ? data : [];
 }
-async function addHistory(user, entry) {
-  const history = await getShopHistory({ user });
-  history.unshift({ id: foundry.utils.randomID?.() ?? String(Date.now()), at: new Date().toISOString(), ...entry });
-  await user.setFlag(MODULE_ID, SHOP_HISTORY_FLAG, history.slice(0, 50));
+function buildHistory(historyValue, entry) {
+  const history = Array.isArray(historyValue) ? foundry.utils.deepClone(historyValue) : [];
+  history.unshift({ id: globalThis.crypto?.randomUUID?.() ?? foundry.utils.randomID?.() ?? String(Date.now()), at: new Date().toISOString(), ...entry });
+  return history.slice(0, 50);
 }
 
-export async function awardCrowns({ amount = 0, label = "Gain de Couronnes", user = null, userId = null, source = "reward", quantity = 1 } = {}) {
+
+
+export async function awardCrowns({ amount = 0, label = "Gain de Couronnes", user = null, userId = null, source = "reward", quantity = 1, rewardId = null } = {}) {
   const target = resolveUser({ user, userId });
   const delta = Math.max(0, Number.parseInt(amount ?? 0, 10) || 0);
-  if (!delta) return { user: target, amount: 0, crowns: await getCrowns({ user: target }) };
-  const crowns = await setCrowns((await getCrowns({ user: target })) + delta, { user: target });
-  await addHistory(target, { type: source, label, amount: delta, quantity });
-  return { user: target, amount: delta, crowns };
+  const normalizedRewardId = rewardId ? String(rewardId) : null;
+  const isLocalBotReward = source === "bot-victory" && delta === 5 && target.id === game.user.id && normalizedRewardId;
+  if (!game.user.isGM && !isLocalBotReward) throw new Error("Récompense de Couronnes non autorisée.");
+  if (!delta) return { user: target, amount: 0, crowns: await getCrowns({ user: target }), duplicate: false };
+  let crowns;
+  let history;
+  let duplicate = false;
+  await transactUserFlags({
+    user: target,
+    type: "award-crowns",
+    flags: [CROWNS_FLAG, SHOP_HISTORY_FLAG],
+    metadata: { amount: delta, label, source, quantity, rewardId: normalizedRewardId },
+    mutate: (snapshot) => {
+      const stored = snapshot[CROWNS_FLAG];
+      const current = stored === undefined || stored === null ? DEFAULT_CROWNS : integer(stored);
+      const existingHistory = Array.isArray(snapshot[SHOP_HISTORY_FLAG]) ? snapshot[SHOP_HISTORY_FLAG] : [];
+      if (normalizedRewardId && existingHistory.some((entry) => entry.rewardId === normalizedRewardId && entry.type === source)) {
+        duplicate = true;
+        crowns = current;
+        history = foundry.utils.deepClone(existingHistory);
+        return { [CROWNS_FLAG]: crowns, [SHOP_HISTORY_FLAG]: history };
+      }
+      crowns = current + delta;
+      history = buildHistory(existingHistory, { type: source, label, amount: delta, quantity, rewardId: normalizedRewardId });
+      return { [CROWNS_FLAG]: crowns, [SHOP_HISTORY_FLAG]: history };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.crownsUpdated`, crowns, target.id);
+  return { user: target, amount: duplicate ? 0 : delta, crowns, duplicate };
 }
+
 
 export async function purchaseShopProduct(productId) {
   const product = SHOP_PRODUCTS.find((entry) => entry.id === productId);
   if (!product) throw new Error("Article de boutique introuvable.");
   const user = game.user;
-  const crowns = await getCrowns({ user });
-  if (crowns < product.price) throw new Error(`Il vous manque ${product.price - crowns} Couronne(s).`);
-  const inventory = await getShopInventory({ user });
-  inventory[product.id] = integer(inventory[product.id]) + product.quantity;
-  await setCrowns(crowns - product.price, { user });
-  await setShopInventory(user, inventory);
-  await addHistory(user, { type: "purchase", label: product.label, amount: -product.price, quantity: product.quantity });
-  return { product, crowns: crowns - product.price, inventory };
+  let crowns;
+  let inventory;
+  let history;
+  await transactUserFlags({
+    user,
+    type: "shop-purchase",
+    flags: [CROWNS_FLAG, SHOP_INVENTORY_FLAG, SHOP_HISTORY_FLAG],
+    metadata: { productId: product.id, price: product.price, quantity: product.quantity },
+    mutate: (snapshot) => {
+      const storedCrowns = snapshot[CROWNS_FLAG];
+      const currentCrowns = storedCrowns === undefined || storedCrowns === null ? DEFAULT_CROWNS : integer(storedCrowns);
+      if (currentCrowns < product.price) throw new Error(`Il vous manque ${product.price - currentCrowns} Couronne(s).`);
+      crowns = currentCrowns - product.price;
+      inventory = snapshot[SHOP_INVENTORY_FLAG] && typeof snapshot[SHOP_INVENTORY_FLAG] === "object" ? foundry.utils.deepClone(snapshot[SHOP_INVENTORY_FLAG]) : {};
+      inventory[product.id] = integer(inventory[product.id]) + product.quantity;
+      history = buildHistory(snapshot[SHOP_HISTORY_FLAG], { type: "purchase", label: product.label, amount: -product.price, quantity: product.quantity });
+      return { [CROWNS_FLAG]: crowns, [SHOP_INVENTORY_FLAG]: inventory, [SHOP_HISTORY_FLAG]: history };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.crownsUpdated`, crowns, user.id);
+  Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, inventory, user.id);
+  return { product, crowns, inventory };
 }
+
 export async function grantShopProductToUser({ userId, productId, count = 1 } = {}) {
   if (!game.user.isGM) throw new Error("Seul un MJ peut offrir des boosters de boutique.");
   const user = resolveUser({ userId });
   const product = SHOP_PRODUCTS.find((entry) => entry.id === productId);
   if (!product) throw new Error("Article de boutique introuvable.");
   const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
-  const inventory = await getShopInventory({ user });
-  inventory[product.id] = integer(inventory[product.id]) + (product.quantity * quantity);
-  await setShopInventory(user, inventory);
-  await addHistory(user, { type: "gift", label: product.label, amount: 0, quantity: product.quantity * quantity });
+  let inventory;
+  let history;
+  await transactUserFlags({
+    user,
+    type: "shop-gift",
+    flags: [SHOP_INVENTORY_FLAG, SHOP_HISTORY_FLAG],
+    metadata: { productId, quantity },
+    mutate: (snapshot) => {
+      inventory = snapshot[SHOP_INVENTORY_FLAG] && typeof snapshot[SHOP_INVENTORY_FLAG] === "object" ? foundry.utils.deepClone(snapshot[SHOP_INVENTORY_FLAG]) : {};
+      inventory[product.id] = integer(inventory[product.id]) + (product.quantity * quantity);
+      history = buildHistory(snapshot[SHOP_HISTORY_FLAG], { type: "gift", label: product.label, amount: 0, quantity: product.quantity * quantity });
+      return { [SHOP_INVENTORY_FLAG]: inventory, [SHOP_HISTORY_FLAG]: history };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, inventory, user.id);
   return { user, product, quantity, inventory };
 }
+
 export async function openPurchasedBooster(productId) {
   const product = SHOP_PRODUCTS.find((entry) => entry.id === productId);
   if (!product) throw new Error("Booster introuvable.");
   const user = game.user;
-  const inventory = await getShopInventory({ user });
-  if (integer(inventory[product.id]) <= 0) throw new Error("Vous ne possédez pas ce booster.");
-  inventory[product.id] = integer(inventory[product.id]) - 1;
-  await setShopInventory(user, inventory);
+  let reservedInventory;
+  let reservedHistory;
+  let reservationHistoryId = null;
+  await transactUserFlags({
+    user,
+    type: "shop-open-reserve",
+    flags: [SHOP_INVENTORY_FLAG, SHOP_HISTORY_FLAG],
+    metadata: { productId },
+    mutate: (snapshot) => {
+      reservedInventory = snapshot[SHOP_INVENTORY_FLAG] && typeof snapshot[SHOP_INVENTORY_FLAG] === "object" ? foundry.utils.deepClone(snapshot[SHOP_INVENTORY_FLAG]) : {};
+      if (integer(reservedInventory[product.id]) <= 0) throw new Error("Vous ne possédez pas ce booster.");
+      reservedInventory[product.id] = integer(reservedInventory[product.id]) - 1;
+      reservedHistory = buildHistory(snapshot[SHOP_HISTORY_FLAG], { type: "open", label: product.label, amount: 0, quantity: 1 });
+      reservationHistoryId = reservedHistory[0]?.id ?? null;
+      return { [SHOP_INVENTORY_FLAG]: reservedInventory, [SHOP_HISTORY_FLAG]: reservedHistory };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, reservedInventory, user.id);
+
   try {
-    let cards;
-    if (product.kind === "classic") cards = await openBooster({ consumeCredit: false });
-    else if (product.kind === "special") cards = await openSpecialBooster({ faction: product.faction, consumeCredit: false });
-    else cards = await openEventBooster({ boosterId: product.boosterId, consumeCredit: false });
-    await addHistory(user, { type: "open", label: product.label, amount: 0, quantity: 1 });
-    return cards;
+    if (product.kind === "classic") return await openBooster({ consumeCredit: false });
+    if (product.kind === "special") return await openSpecialBooster({ faction: product.faction, consumeCredit: false });
+    return await openEventBooster({ boosterId: product.boosterId, consumeCredit: false });
   } catch (error) {
-    inventory[product.id] = integer(inventory[product.id]) + 1;
-    await setShopInventory(user, inventory);
+    let inventory;
+    let history;
+    await transactUserFlags({
+      user,
+      type: "shop-open-rollback",
+      flags: [SHOP_INVENTORY_FLAG, SHOP_HISTORY_FLAG],
+      metadata: { productId, reason: error.message },
+      mutate: (snapshot) => {
+        inventory = snapshot[SHOP_INVENTORY_FLAG] && typeof snapshot[SHOP_INVENTORY_FLAG] === "object" ? foundry.utils.deepClone(snapshot[SHOP_INVENTORY_FLAG]) : {};
+        inventory[product.id] = integer(inventory[product.id]) + 1;
+        history = Array.isArray(snapshot[SHOP_HISTORY_FLAG]) ? foundry.utils.deepClone(snapshot[SHOP_HISTORY_FLAG]) : [];
+        const index = history.findIndex((entry) => entry.id === reservationHistoryId);
+        if (index >= 0) history.splice(index, 1);
+        return { [SHOP_INVENTORY_FLAG]: inventory, [SHOP_HISTORY_FLAG]: history };
+      }
+    });
+    Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, inventory, user.id);
     throw error;
   }
 }
+

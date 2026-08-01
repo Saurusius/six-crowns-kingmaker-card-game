@@ -3,9 +3,10 @@
     <div class="scg-shop-brand"><i class="fa-solid fa-crown"></i><div><small>Boutique des</small><h1>Six Couronnes</h1></div></div>
     <div class="scg-shop-balance"><span><i class="fa-solid fa-coins"></i></span><div><strong>{{crowns}}</strong><small>Couronnes</small></div></div>
     <nav>
-      <button class="{{#if shopTab}}is-active{{/if}}" data-tab="shop"><i class="fa-solid fa-store"></i> Boutique</button>
-      <button class="{{#if inventoryTab}}is-active{{/if}}" data-tab="inventory"><i class="fa-solid fa-box-open"></i> Mes boosters</button>
-      <button class="{{#if historyTab}}is-active{{/if}}" data-tab="history"><i class="fa-solid fa-scroll"></i> Historique</button>
+      <button type="button" class="scg-shop-home" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
+      <button type="button" class="{{#if shopTab}}is-active{{/if}}" data-tab="shop"><i class="fa-solid fa-store"></i> Boutique</button>
+      <button type="button" class="{{#if inventoryTab}}is-active{{/if}}" data-tab="inventory"><i class="fa-solid fa-box-open"></i> Mes boosters</button>
+      <button type="button" class="{{#if historyTab}}is-active{{/if}}" data-tab="history"><i class="fa-solid fa-scroll"></i> Historique</button>
     </nav>
     <div class="scg-shop-tip"><strong>Comment gagner des Couronnes ?</strong><p><b>+10</b> pour une victoire en duel contre un joueur.<br><b>+5</b> pour une victoire contre l’adversaire automatisé.<br>Le MJ peut également en distribuer.</p></div>
   </aside>
@@ -16,5 +17,5 @@
     {{#if inventoryTab}}<div class="scg-shop-inventory">{{#each products}}{{#if owned}}<article><img src="{{image}}" alt=""><div><h3>{{label}}</h3><p>{{description}}</p><strong>×{{owned}}</strong></div><button data-open-product="{{id}}"><i class="fa-solid fa-box-open"></i> Ouvrir</button></article>{{/if}}{{/each}}{{#unless hasInventory}}<p class="scg-shop-empty">Votre besace est vide. Le Colporteur Gris attend votre retour… avec des Couronnes.</p>{{/unless}}</div>{{/if}}
     {{#if historyTab}}<div class="scg-shop-history">{{#each history}}<article><i class="fa-solid {{#if amount}}fa-coins{{else}}fa-box-open{{/if}}"></i><div><strong>{{label}}</strong><small>{{dateLabel}} · Quantité {{quantity}}</small></div><b>{{#if amount}}{{amount}} Couronnes{{else}}—{{/if}}</b></article>{{else}}<p class="scg-shop-empty">Aucune transaction pour le moment.</p>{{/each}}</div>{{/if}}
   </main>
-  <aside class="scg-shop-merchant"><div class="scg-shop-merchant-art"></div><div class="scg-shop-dialogue"><strong>Le Colporteur Gris</strong><p>Heh heh heh… Cette fois, voyageur, je me suis mis aux jeux de cartes.</p></div></aside>
+  <aside class="scg-shop-merchant"><div class="scg-shop-merchant-art"><img src="modules/six-crowns-kingmaker-card-game/assets/ui/colporteur-gris.webp" alt="Le Colporteur Gris"></div><div class="scg-shop-dialogue"><strong>Le Colporteur Gris</strong><p>Heh heh heh… Cette fois, voyageur, je me suis mis aux jeux de cartes.</p></div></aside>
 </section>

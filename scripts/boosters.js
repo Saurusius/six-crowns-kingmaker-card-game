@@ -2,6 +2,7 @@ import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { withNormalizedCardArt } from "./art.js";
 import { EVENT_BOOSTER_ID, EVENT_BOOSTER_IMAGE, EVENT_CARD_BACK, EVENT_SET_LABEL, EVENT_SPELL_IDS } from "./event-spells.js";
 import { buildModuleMacroCommand, upsertModuleMacro } from "./macros.js";
+import { transactMultipleUsers, transactUserFlags } from "./transactions.js";
 
 export const COLLECTION_FLAG = "cardCollection";
 export const BOOSTER_CREDITS_FLAG = "boosterCredits";
@@ -10,10 +11,10 @@ export const EVENT_BOOSTER_CREDITS_FLAG = "eventBoosterCredits";
 export const BOOSTER_HISTORY_FLAG = "boosterHistory";
 const BOOSTER_MACRO_NAME = "Ouvrir un booster des Six Couronnes";
 export const SPECIAL_BOOSTERS = Object.freeze({
-  "six-crowns": { id: "six-crowns", label: "Royaume des Six Couronnes", image: `modules/${MODULE_ID}/assets/boosters/royaume-six-couronnes.png`, accent: "royal" },
-  aldori: { id: "aldori", label: "Maison Aldori", image: `modules/${MODULE_ID}/assets/boosters/maison-aldori.png`, accent: "aldori" },
-  "iron-khans": { id: "iron-khans", label: "Khans de Fer", image: `modules/${MODULE_ID}/assets/boosters/khans-de-fer.png`, accent: "khans" },
-  "stolen-lands-arcana": { id: "stolen-lands-arcana", label: "Arcanes des Terres Dérobées", image: `modules/${MODULE_ID}/assets/boosters/arcanes-terres-derobees.png`, accent: "arcana" }
+  "six-crowns": { id: "six-crowns", label: "Royaume des Six Couronnes", image: `modules/${MODULE_ID}/assets/boosters/royaume-six-couronnes.webp`, accent: "royal" },
+  aldori: { id: "aldori", label: "Maison Aldori", image: `modules/${MODULE_ID}/assets/boosters/maison-aldori.webp`, accent: "aldori" },
+  "iron-khans": { id: "iron-khans", label: "Khans de Fer", image: `modules/${MODULE_ID}/assets/boosters/khans-de-fer.webp`, accent: "khans" },
+  "stolen-lands-arcana": { id: "stolen-lands-arcana", label: "Arcanes des Terres Dérobées", image: `modules/${MODULE_ID}/assets/boosters/arcanes-terres-derobees.webp`, accent: "arcana" }
 });
 
 const EVENT_BOOSTERS = new Map([[EVENT_BOOSTER_ID, {
@@ -105,23 +106,9 @@ function normalizeBoosterCredits(value) {
   return Math.max(0, Number.parseInt(value ?? 0, 10) || 0);
 }
 
-async function setBoosterCredits(targetUser, value) {
-  const credits = normalizeBoosterCredits(value);
-  await targetUser.setFlag(MODULE_ID, BOOSTER_CREDITS_FLAG, credits);
-  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id);
-  return credits;
-}
-
 async function getTicketCredits(flag, options = {}) {
   const targetUser = resolveUser(options);
   return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, flag));
-}
-
-async function setTicketCredits(targetUser, flag, value) {
-  const credits = normalizeBoosterCredits(value);
-  await targetUser.setFlag(MODULE_ID, flag, credits);
-  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id, flag);
-  return credits;
 }
 
 export function getSpecialBoosterCredits(options = {}) {
@@ -137,8 +124,18 @@ export async function grantTicketCreditsToUser({ userId, count = 1, type = "spec
   const targetUser = resolveUser({ userId });
   const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
   const flag = type === "event" ? EVENT_BOOSTER_CREDITS_FLAG : SPECIAL_BOOSTER_CREDITS_FLAG;
-  const previous = await getTicketCredits(flag, { user: targetUser });
-  const credits = await setTicketCredits(targetUser, flag, previous + quantity);
+  let credits;
+  await transactUserFlags({
+    user: targetUser,
+    type: "grant-ticket",
+    flags: [flag],
+    metadata: { ticketType: type, quantity },
+    mutate: (snapshot) => {
+      credits = normalizeBoosterCredits(snapshot[flag]) + quantity;
+      return { [flag]: credits };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id, flag);
   return { user: targetUser, granted: quantity, credits, type };
 }
 
@@ -162,7 +159,25 @@ export async function loadCardCatalog() {
   return catalogPromise;
 }
 
-export function drawNormalRarity(random = Math.random) {
+export function secureRandom() {
+  if (!globalThis.crypto?.getRandomValues) return Math.random();
+  const values = new Uint32Array(2);
+  globalThis.crypto.getRandomValues(values);
+  const high = values[0] >>> 5;
+  const low = values[1] >>> 6;
+  return (high * 67_108_864 + low) / 9_007_199_254_740_992;
+}
+
+function resolveRandom(random) {
+  if (typeof random !== "function") return secureRandom;
+  if (globalThis.game && random !== Math.random && random !== secureRandom && !game.user?.isGM) {
+    console.warn(`${MODULE_TITLE} | Générateur aléatoire personnalisé ignoré sur un profil joueur.`);
+    return secureRandom;
+  }
+  return random === Math.random ? secureRandom : random;
+}
+
+export function drawNormalRarity(random = secureRandom) {
   const roll = random() * 100;
   if (roll < 65) return "commun";
   if (roll < 90) return "peuCommune";
@@ -170,17 +185,36 @@ export function drawNormalRarity(random = Math.random) {
   return "unique";
 }
 
-export function drawGuaranteedRarity(random = Math.random) {
+export function drawGuaranteedRarity(random = secureRandom) {
   return random() * 100 < 99 ? "rare" : "unique";
 }
 
-function pickCard(cards, rarity, random = Math.random) {
+function pickCard(cards, rarity, random = secureRandom) {
   const pool = cards.filter((card) => card.rarity === rarity);
   if (pool.length === 0) throw new Error(`Aucune carte disponible pour la rareté ${rarity}.`);
   return { ...pool[Math.floor(random() * pool.length)] };
 }
 
-function shuffle(items, random = Math.random) {
+export function pickBalancedCard(cards, rarity, random = secureRandom, { collection = {}, preferUnowned = false } = {}) {
+  let pool = cards.filter((card) => card.rarity === rarity && card.faction !== "event-stolen-lands");
+  if (preferUnowned) {
+    const unowned = pool.filter((card) => Number(collection?.[card.id]?.count ?? 0) <= 0);
+    if (unowned.length > 0) pool = unowned;
+  }
+  const byFaction = new Map();
+  for (const card of pool) {
+    const faction = String(card.faction ?? "unknown");
+    if (!byFaction.has(faction)) byFaction.set(faction, []);
+    byFaction.get(faction).push(card);
+  }
+  const factions = [...byFaction.keys()].sort();
+  if (factions.length === 0) throw new Error(`Aucune carte disponible pour la rareté ${rarity}.`);
+  const faction = factions[Math.floor(random() * factions.length)];
+  const factionPool = byFaction.get(faction);
+  return { ...factionPool[Math.floor(random() * factionPool.length)] };
+}
+
+function shuffle(items, random = secureRandom) {
   const result = [...items];
   for (let index = result.length - 1; index > 0; index -= 1) {
     const target = Math.floor(random() * (index + 1));
@@ -195,10 +229,10 @@ export async function getBoosterHistory(options = {}) {
   return Array.isArray(history) ? history : [];
 }
 
-async function addBoosterToHistory(targetUser, cards, metadata = {}) {
-  const history = await getBoosterHistory({ user: targetUser });
+function buildBoosterHistory(historyValue, cards, metadata = {}) {
+  const history = Array.isArray(historyValue) ? foundry.utils.deepClone(historyValue) : [];
   history.push({
-    id: foundry.utils.randomID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    id: globalThis.crypto?.randomUUID?.() ?? foundry.utils.randomID?.() ?? `${Date.now()}-${secureRandom().toString(36).slice(2, 10)}`,
     openedAt: new Date().toISOString(),
     boosterType: metadata.boosterType ?? "classic",
     boosterLabel: metadata.boosterLabel ?? "Booster classique",
@@ -210,9 +244,28 @@ async function addBoosterToHistory(targetUser, cards, metadata = {}) {
       ownedAfter: Number(card.ownedAfter ?? 0)
     }))
   });
-  await targetUser.setFlag(MODULE_ID, BOOSTER_HISTORY_FLAG, history.slice(-25));
-  Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, history, targetUser.id);
-  return history;
+  return history.slice(-25);
+}
+
+function addCardsToCollectionData(collectionValue, cards) {
+  const collection = collectionValue && typeof collectionValue === "object"
+    ? foundry.utils.deepClone(collectionValue)
+    : {};
+  for (const card of cards) {
+    const current = collection[card.id] ?? {
+      id: card.id,
+      name: card.name,
+      faction: card.faction,
+      rarity: card.rarity,
+      count: 0
+    };
+    current.name = card.name;
+    current.faction = card.faction;
+    current.rarity = card.rarity;
+    current.count = Math.max(0, Number.parseInt(current.count ?? 0, 10) || 0) + 1;
+    collection[card.id] = current;
+  }
+  return collection;
 }
 
 export async function getBoosterCredits(options = {}) {
@@ -224,8 +277,18 @@ export async function grantBoostersToUser({ userId, count = 1 } = {}) {
   if (!game.user.isGM) throw new Error("Seul un MJ peut offrir des boosters.");
   const targetUser = resolveUser({ userId });
   const quantity = Math.max(1, Math.min(100, Number.parseInt(count, 10) || 1));
-  const previous = await getBoosterCredits({ user: targetUser });
-  const credits = await setBoosterCredits(targetUser, previous + quantity);
+  let credits;
+  await transactUserFlags({
+    user: targetUser,
+    type: "grant-classic-ticket",
+    flags: [BOOSTER_CREDITS_FLAG],
+    metadata: { quantity },
+    mutate: (snapshot) => {
+      credits = normalizeBoosterCredits(snapshot[BOOSTER_CREDITS_FLAG]) + quantity;
+      return { [BOOSTER_CREDITS_FLAG]: credits };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id);
   return { user: targetUser, granted: quantity, credits };
 }
 
@@ -247,22 +310,17 @@ export async function getCollection(options = {}) {
 
 async function addCardsToCollection(cards, options = {}) {
   const targetUser = resolveUser(options);
-  const collection = await getCollection({ user: targetUser });
-  for (const card of cards) {
-    const current = collection[card.id] ?? {
-      id: card.id,
-      name: card.name,
-      faction: card.faction,
-      rarity: card.rarity,
-      count: 0
-    };
-    current.name = card.name;
-    current.faction = card.faction;
-    current.rarity = card.rarity;
-    current.count += 1;
-    collection[card.id] = current;
-  }
-  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
+  let collection;
+  await transactUserFlags({
+    user: targetUser,
+    type: "grant-cards",
+    flags: [COLLECTION_FLAG],
+    metadata: { cardIds: cards.map((card) => card.id), count: cards.length },
+    mutate: (snapshot) => {
+      collection = addCardsToCollectionData(snapshot[COLLECTION_FLAG], cards);
+      return { [COLLECTION_FLAG]: collection };
+    }
+  });
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
   return collection;
 }
@@ -278,30 +336,60 @@ export async function grantCardToUser({ userId, cardId, count = 1 } = {}) {
   return { user: targetUser, card, count: quantity };
 }
 
+export async function repairCollectionForUser({ userId } = {}) {
+  if (!game.user.isGM) throw new Error("Seul un MJ peut réparer une collection.");
+  const targetUser = resolveUser({ userId });
+  const catalog = await loadCardCatalog();
+  const cardsById = new Map(catalog.map((card) => [card.id, card]));
+  let repaired = {};
+  let removedEntries = 0;
+  let normalizedEntries = 0;
+  await transactUserFlags({
+    user: targetUser,
+    type: "repair-collection",
+    flags: [COLLECTION_FLAG],
+    metadata: { targetUserId: targetUser.id },
+    mutate: (snapshot) => {
+      const source = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object"
+        ? snapshot[COLLECTION_FLAG]
+        : {};
+      repaired = {};
+      for (const [cardId, entry] of Object.entries(source)) {
+        const card = cardsById.get(cardId);
+        const count = Math.max(0, Math.min(9999, Number.parseInt(entry?.count ?? 0, 10) || 0));
+        if (!card || count <= 0) {
+          removedEntries += 1;
+          continue;
+        }
+        const normalized = { id: card.id, name: card.name, faction: card.faction, rarity: card.rarity, count };
+        if (JSON.stringify(normalized) !== JSON.stringify(entry)) normalizedEntries += 1;
+        repaired[cardId] = normalized;
+      }
+      return { [COLLECTION_FLAG]: repaired };
+    }
+  });
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, repaired, targetUser.id);
+  return { user: targetUser, collection: repaired, removedEntries, normalizedEntries };
+}
+
 export async function resetCollectionForUser({ userId } = {}) {
   if (!game.user.isGM) throw new Error("Seul un MJ peut réinitialiser une collection.");
   const targetUser = resolveUser({ userId });
-  const previousCollection = foundry.utils.deepClone(
-    targetUser.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {}
-  );
+  const previousCollection = foundry.utils.deepClone(targetUser.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {});
   const removedCards = Object.keys(previousCollection).length;
   const removedCopies = Object.values(previousCollection).reduce(
     (total, entry) => total + Math.max(0, Number.parseInt(entry?.count, 10) || 0),
     0
   );
-
-  await targetUser.unsetFlag(MODULE_ID, COLLECTION_FLAG);
-  const remaining = targetUser.getFlag(MODULE_ID, COLLECTION_FLAG);
-  if (remaining && Object.keys(remaining).length > 0) {
-    await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, null);
-  }
-
-  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, {}, targetUser.id);
-  return {
+  await transactUserFlags({
     user: targetUser,
-    removedCards,
-    removedCopies
-  };
+    type: "reset-collection",
+    flags: [COLLECTION_FLAG],
+    metadata: { removedCards, removedCopies },
+    mutate: () => ({ [COLLECTION_FLAG]: {} })
+  });
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, {}, targetUser.id);
+  return { user: targetUser, removedCards, removedCopies };
 }
 
 function boosterChatContent(cards, targetUser, remainingCredits = null) {
@@ -334,54 +422,63 @@ function boosterChatContent(cards, targetUser, remainingCredits = null) {
   `;
 }
 
-export async function openBooster({ random = Math.random, user = null, userId = null, animate = true, notify = true, consumeCredit = true } = {}) {
+export async function openBooster({ random = secureRandom, user = null, userId = null, animate = true, notify = true, consumeCredit = true } = {}) {
   const targetUser = resolveUser({ user, userId });
   const requiresCredit = !game.user.isGM && consumeCredit;
-  let previousCredits = null;
+  if (requiresCredit && targetUser.id !== game.user.id) {
+    throw new Error("Vous ne pouvez ouvrir que les boosters de votre propre profil.");
+  }
+  const randomSource = resolveRandom(random);
+  const catalog = await loadCardCatalog();
+  let annotatedBooster = [];
   let remainingCredits = null;
+  let collection = null;
+  let history = null;
 
-  if (requiresCredit) {
-    if (targetUser.id !== game.user.id) {
-      throw new Error("Vous ne pouvez ouvrir que les boosters de votre propre profil.");
-    }
-    previousCredits = await getBoosterCredits({ user: targetUser });
-    if (previousCredits <= 0) {
-      throw new Error("Vous n’avez aucun booster à ouvrir. Un MJ doit vous en offrir un.");
-    }
-    remainingCredits = await setBoosterCredits(targetUser, previousCredits - 1);
-  }
+  const flags = [COLLECTION_FLAG, BOOSTER_HISTORY_FLAG];
+  if (requiresCredit) flags.push(BOOSTER_CREDITS_FLAG);
+  await transactUserFlags({
+    user: targetUser,
+    type: "open-classic-booster",
+    flags,
+    metadata: { consumeCredit: requiresCredit },
+    mutate: (snapshot) => {
+      const beforeCollection = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object"
+        ? snapshot[COLLECTION_FLAG]
+        : {};
+      if (requiresCredit) {
+        const credits = normalizeBoosterCredits(snapshot[BOOSTER_CREDITS_FLAG]);
+        if (credits <= 0) throw new Error("Vous n’avez aucun booster à ouvrir. Un MJ doit vous en offrir un.");
+        remainingCredits = credits - 1;
+      }
 
-  const [catalog, beforeCollection] = await Promise.all([
-    loadCardCatalog(),
-    getCollection({ user: targetUser })
-  ]);
-  const cards = [];
-  for (let index = 0; index < 4; index += 1) {
-    cards.push(pickCard(catalog, drawNormalRarity(random), random));
-  }
-  cards.push(pickCard(catalog, drawGuaranteedRarity(random), random));
-  const booster = sortCardsByRarity(shuffle(cards, random));
-  const runningCounts = Object.fromEntries(Object.entries(beforeCollection).map(([id, entry]) => [id, entry.count ?? 0]));
-  const annotatedBooster = booster.map((card) => {
-    const previousCount = runningCounts[card.id] ?? 0;
-    runningCounts[card.id] = previousCount + 1;
-    return {
-      ...card,
-      isNew: previousCount === 0,
-      ownedAfter: previousCount + 1,
-      acquisitionLabel: previousCount === 0 ? "Nouvelle carte" : `Nouvel exemplaire · ×${previousCount + 1}`
-    };
+      const cards = [];
+      for (let index = 0; index < 4; index += 1) {
+        const rarity = drawNormalRarity(randomSource);
+        cards.push(pickBalancedCard(catalog, rarity, randomSource, {
+          collection: beforeCollection,
+          preferUnowned: rarity === "unique"
+        }));
+      }
+      const guaranteedRarity = drawGuaranteedRarity(randomSource);
+      cards.push(pickBalancedCard(catalog, guaranteedRarity, randomSource, {
+        collection: beforeCollection,
+        preferUnowned: guaranteedRarity === "unique"
+      }));
+      annotatedBooster = annotateCards(sortCardsByRarity(shuffle(cards, randomSource)), beforeCollection);
+      collection = addCardsToCollectionData(beforeCollection, annotatedBooster);
+      history = buildBoosterHistory(snapshot[BOOSTER_HISTORY_FLAG], annotatedBooster);
+      return {
+        [COLLECTION_FLAG]: collection,
+        [BOOSTER_HISTORY_FLAG]: history,
+        ...(requiresCredit ? { [BOOSTER_CREDITS_FLAG]: remainingCredits } : {})
+      };
+    }
   });
 
-  try {
-    await addCardsToCollection(annotatedBooster, { user: targetUser });
-    await addBoosterToHistory(targetUser, annotatedBooster);
-  } catch (error) {
-    if (requiresCredit && previousCredits !== null) {
-      await setBoosterCredits(targetUser, previousCredits);
-    }
-    throw error;
-  }
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, history, targetUser.id);
+  if (requiresCredit) Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, remainingCredits, targetUser.id);
 
   try {
     await ChatMessage.create({
@@ -410,61 +507,119 @@ function annotateCards(cards, beforeCollection) {
   });
 }
 
-export async function openSpecialBooster({ faction, random = Math.random, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
+export async function openSpecialBooster({ faction, random = secureRandom, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
   const definition = SPECIAL_BOOSTERS[faction];
   if (!definition) throw new Error("Choisissez un booster spécial valide.");
   const targetUser = resolveUser({ user, userId });
   if (targetUser.id !== game.user.id && !game.user.isGM) throw new Error("Vous ne pouvez ouvrir que vos propres boosters.");
   const requiresCredit = !game.user.isGM && consumeCredit;
-  const previousCredits = requiresCredit ? await getSpecialBoosterCredits({ user: targetUser }) : null;
-  if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket spécial.");
-  if (requiresCredit) await setTicketCredits(targetUser, SPECIAL_BOOSTER_CREDITS_FLAG, previousCredits - 1);
-  const [catalog, beforeCollection] = await Promise.all([loadCardCatalog(), getCollection({ user: targetUser })]);
+  const randomSource = resolveRandom(random);
+  const catalog = await loadCardCatalog();
   const pool = catalog.filter((card) => card.faction === faction);
   if (pool.length === 0) throw new Error(`Aucune carte disponible pour ${definition.label}.`);
-  const cards = [
-    pickCard(pool, drawNormalRarity(random), random),
-    pickCard(pool, drawNormalRarity(random), random),
-    pickCard(pool, drawGuaranteedRarity(random), random)
-  ];
-  const annotated = annotateCards(sortCardsByRarity(shuffle(cards, random)), beforeCollection);
+  let annotated = [];
+  let remainingCredits = null;
+  let collection = null;
+  let history = null;
+  const flags = [COLLECTION_FLAG, BOOSTER_HISTORY_FLAG];
+  if (requiresCredit) flags.push(SPECIAL_BOOSTER_CREDITS_FLAG);
+
+  await transactUserFlags({
+    user: targetUser,
+    type: "open-special-booster",
+    flags,
+    metadata: { faction, consumeCredit: requiresCredit },
+    mutate: (snapshot) => {
+      const beforeCollection = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object" ? snapshot[COLLECTION_FLAG] : {};
+      if (requiresCredit) {
+        const credits = normalizeBoosterCredits(snapshot[SPECIAL_BOOSTER_CREDITS_FLAG]);
+        if (credits <= 0) throw new Error("Vous n’avez aucun ticket spécial.");
+        remainingCredits = credits - 1;
+      }
+      const cards = [
+        pickCard(pool, drawNormalRarity(randomSource), randomSource),
+        pickCard(pool, drawNormalRarity(randomSource), randomSource),
+        pickCard(pool, drawGuaranteedRarity(randomSource), randomSource)
+      ];
+      annotated = annotateCards(sortCardsByRarity(shuffle(cards, randomSource)), beforeCollection);
+      collection = addCardsToCollectionData(beforeCollection, annotated);
+      history = buildBoosterHistory(snapshot[BOOSTER_HISTORY_FLAG], annotated, { boosterType: "special", boosterLabel: definition.label });
+      return {
+        [COLLECTION_FLAG]: collection,
+        [BOOSTER_HISTORY_FLAG]: history,
+        ...(requiresCredit ? { [SPECIAL_BOOSTER_CREDITS_FLAG]: remainingCredits } : {})
+      };
+    }
+  });
+
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, history, targetUser.id);
+  if (requiresCredit) Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, remainingCredits, targetUser.id, SPECIAL_BOOSTER_CREDITS_FLAG);
   try {
-    await addCardsToCollection(annotated, { user: targetUser });
-    await addBoosterToHistory(targetUser, annotated, { boosterType: "special", boosterLabel: definition.label });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
+      content: boosterChatContent(annotated, targetUser, remainingCredits).replace("Booster des Six Couronnes", definition.label)
+    });
   } catch (error) {
-    if (requiresCredit) await setTicketCredits(targetUser, SPECIAL_BOOSTER_CREDITS_FLAG, previousCredits);
-    throw error;
+    console.error(`${MODULE_TITLE} | Publication du booster spécial impossible`, error);
   }
-  try { await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ alias: game.user.name }), content: boosterChatContent(annotated, targetUser, requiresCredit ? previousCredits - 1 : null).replace("Booster des Six Couronnes", definition.label) }); } catch (error) { console.error(`${MODULE_TITLE} | Publication du booster spécial impossible`, error); }
-  if (animate && targetUser.id === game.user.id) animateBooster(annotated, { boosterLabel: definition.label, getRemainingCredits: getSpecialBoosterCredits, reopen: () => openSpecialBooster({ faction }) });
+  if (animate && targetUser.id === game.user.id) animateBooster(annotated, {
+    boosterLabel: definition.label,
+    getRemainingCredits: getSpecialBoosterCredits,
+    reopen: () => openSpecialBooster({ faction })
+  });
   ui.notifications.info(`${definition.label} ouvert : 3 cartes thématiques ajoutées.`);
   return annotated;
 }
 
-export async function openEventBooster({ boosterId, random = Math.random, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
+
+export async function openEventBooster({ boosterId, random = secureRandom, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
   const definition = EVENT_BOOSTERS.get(boosterId);
   if (!definition) throw new Error("Ce booster événementiel n’est pas configuré.");
   const targetUser = resolveUser({ user, userId });
   const requiresCredit = !game.user.isGM && consumeCredit;
-  const previousCredits = requiresCredit ? await getEventBoosterCredits({ user: targetUser }) : null;
-  if (requiresCredit && previousCredits <= 0) throw new Error("Vous n’avez aucun ticket événementiel.");
-  if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits - 1);
-  const [catalog, beforeCollection] = await Promise.all([loadCardCatalog(), getCollection({ user: targetUser })]);
+  const randomSource = resolveRandom(random);
+  const catalog = await loadCardCatalog();
   const pool = catalog.filter((card) => definition.cardIds.includes(card.id));
   if (pool.length < 1) throw new Error("La réserve de ce booster événementiel est incomplète.");
-  const selected = [{ ...pool[Math.floor(random() * pool.length)] }];
-  const annotated = annotateCards(selected, beforeCollection);
-  try {
-    await addCardsToCollection(annotated, { user: targetUser });
-    await addBoosterToHistory(targetUser, annotated, { boosterType: "event", boosterLabel: definition.label });
-  } catch (error) {
-    if (requiresCredit) await setTicketCredits(targetUser, EVENT_BOOSTER_CREDITS_FLAG, previousCredits);
-    throw error;
-  }
+  let annotated = [];
+  let remainingCredits = null;
+  let collection = null;
+  let history = null;
+  const flags = [COLLECTION_FLAG, BOOSTER_HISTORY_FLAG];
+  if (requiresCredit) flags.push(EVENT_BOOSTER_CREDITS_FLAG);
+
+  await transactUserFlags({
+    user: targetUser,
+    type: "open-event-booster",
+    flags,
+    metadata: { boosterId, consumeCredit: requiresCredit },
+    mutate: (snapshot) => {
+      const beforeCollection = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object" ? snapshot[COLLECTION_FLAG] : {};
+      if (requiresCredit) {
+        const credits = normalizeBoosterCredits(snapshot[EVENT_BOOSTER_CREDITS_FLAG]);
+        if (credits <= 0) throw new Error("Vous n’avez aucun ticket événementiel.");
+        remainingCredits = credits - 1;
+      }
+      const selected = [{ ...pool[Math.floor(randomSource() * pool.length)] }];
+      annotated = annotateCards(selected, beforeCollection);
+      collection = addCardsToCollectionData(beforeCollection, annotated);
+      history = buildBoosterHistory(snapshot[BOOSTER_HISTORY_FLAG], annotated, { boosterType: "event", boosterLabel: definition.label });
+      return {
+        [COLLECTION_FLAG]: collection,
+        [BOOSTER_HISTORY_FLAG]: history,
+        ...(requiresCredit ? { [EVENT_BOOSTER_CREDITS_FLAG]: remainingCredits } : {})
+      };
+    }
+  });
+
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, history, targetUser.id);
+  if (requiresCredit) Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, remainingCredits, targetUser.id, EVENT_BOOSTER_CREDITS_FLAG);
   try {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
-      content: boosterChatContent(annotated, targetUser, requiresCredit ? previousCredits - 1 : null)
+      content: boosterChatContent(annotated, targetUser, remainingCredits)
         .replace("Booster des Six Couronnes", `Booster événementiel — ${definition.label}`)
         .replace("Les cartes ont été ajoutées", "La carte dorée a été ajoutée")
     });
@@ -483,20 +638,40 @@ export async function openEventBooster({ boosterId, random = Math.random, user =
   return annotated;
 }
 
+
 export function showSpecialBoosterSelector() {
   if (typeof document === "undefined") return;
   document.querySelector(".scg-special-booster-picker")?.remove();
+  const previousFocus = document.activeElement;
   const overlay = document.createElement("div");
   overlay.className = "scg-special-booster-picker";
-  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-label="Choisir un booster spécial"><header><div><small>Ticket spécial</small><h2>Choisissez votre booster</h2><p>Chaque paquet contient 3 cartes exclusivement issues de son thème.</p></div><button type="button" data-action="close-special-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${Object.values(SPECIAL_BOOSTERS).map((entry) => `<button type="button" class="scg-special-booster-option is-${entry.accent}" data-faction="${escapeHtml(entry.id)}"><span class="scg-special-booster-art" aria-hidden="true"><img src="${escapeHtml(entry.image)}" alt="Booster ${escapeHtml(entry.label)}"></span><span class="scg-special-booster-meta"><strong>${escapeHtml(entry.label)}</strong><small>3 cartes thématiques garanties</small></span></button>`).join("")}</div></section>`;
-  const close = () => overlay.remove();
+  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-labelledby="scg-special-picker-title" tabindex="-1"><header><div><small>Ticket spécial</small><h2 id="scg-special-picker-title">Choisissez votre booster</h2><p>Chaque paquet contient 3 cartes exclusivement issues de son thème.</p></div><button type="button" data-action="close-special-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${Object.values(SPECIAL_BOOSTERS).map((entry) => `<button type="button" class="scg-special-booster-option is-${entry.accent}" data-faction="${escapeHtml(entry.id)}"><span class="scg-special-booster-art" aria-hidden="true"><img src="${escapeHtml(entry.image)}" alt="Booster ${escapeHtml(entry.label)}"></span><span class="scg-special-booster-meta"><strong>${escapeHtml(entry.label)}</strong><small>3 cartes thématiques garanties</small></span></button>`).join("")}</div></section>`;
+  const onKeyDown = (event) => {
+    if (event.key === "Escape") close();
+  };
+  const close = () => {
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.remove();
+    previousFocus?.focus?.({ preventScroll: true });
+  };
   overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
   overlay.querySelector("[data-action='close-special-picker']")?.addEventListener("click", close);
-  overlay.querySelectorAll("[data-faction]").forEach((button) => button.addEventListener("click", async () => { const faction = button.dataset.faction; button.disabled = true; try { close(); await openSpecialBooster({ faction }); } catch (error) { ui.notifications.error(error.message); } }));
+  overlay.querySelectorAll("[data-faction]").forEach((button) => button.addEventListener("click", async () => {
+    const faction = button.dataset.faction;
+    button.disabled = true;
+    try {
+      close();
+      await openSpecialBooster({ faction });
+    } catch (error) {
+      ui.notifications.error(error.message);
+    }
+  }));
   document.body.appendChild(overlay);
+  document.addEventListener("keydown", onKeyDown);
+  overlay.querySelector("[data-faction]")?.focus({ preventScroll: true });
 }
 
-export async function openBoosters({ count = 1, random = Math.random } = {}) {
+export async function openBoosters({ count = 1, random = secureRandom } = {}) {
   const requested = Math.max(1, Math.min(10, Number.parseInt(count, 10) || 1));
   const available = game.user.isGM ? requested : Math.min(requested, await getBoosterCredits());
   if (available <= 0) throw new Error("Vous n’avez aucun booster à ouvrir.");
@@ -513,53 +688,104 @@ export async function recycleCardsForBooster(cardIds = []) {
   const targetUser = resolveUser();
   const ids = Array.isArray(cardIds) ? cardIds : [];
   if (ids.length !== 10) throw new Error("Sélectionnez exactement 10 exemplaires à recycler.");
-  const collection = await getCollection({ user: targetUser });
   const requested = {};
   for (const id of ids) requested[id] = (requested[id] ?? 0) + 1;
   const eventSpellIds = new Set(EVENT_SPELL_IDS);
   if (Object.keys(requested).some((id) => eventSpellIds.has(id))) {
     throw new Error("Les cartes événementielles dorées ne peuvent pas être recyclées.");
   }
-  for (const [id, count] of Object.entries(requested)) {
-    if ((collection[id]?.count ?? 0) < count) throw new Error(`Vous ne possédez pas assez d’exemplaires de ${collection[id]?.name ?? id}.`);
-  }
-  for (const [id, count] of Object.entries(requested)) {
-    collection[id].count -= count;
-    if (collection[id].count <= 0) delete collection[id];
-  }
-  await targetUser.setFlag(MODULE_ID, COLLECTION_FLAG, collection);
-  const credits = await setBoosterCredits(targetUser, (await getBoosterCredits({ user: targetUser })) + 1);
+  let collection;
+  let credits;
+  await transactUserFlags({
+    user: targetUser,
+    type: "recycle-cards",
+    flags: [COLLECTION_FLAG, BOOSTER_CREDITS_FLAG],
+    metadata: { requested },
+    mutate: (snapshot) => {
+      collection = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object"
+        ? foundry.utils.deepClone(snapshot[COLLECTION_FLAG])
+        : {};
+      for (const [id, count] of Object.entries(requested)) {
+        const ownedCount = collection[id]?.count ?? 0;
+        if (ownedCount < count) throw new Error(`Vous ne possédez pas assez d’exemplaires de ${collection[id]?.name ?? id}.`);
+        if (ownedCount - count < 1) throw new Error(`Seuls les doublons peuvent être recyclés : conservez au moins un exemplaire de ${collection[id]?.name ?? id}.`);
+      }
+      for (const [id, count] of Object.entries(requested)) {
+        collection[id].count -= count;
+        if (collection[id].count <= 0) delete collection[id];
+      }
+      credits = normalizeBoosterCredits(snapshot[BOOSTER_CREDITS_FLAG]) + 1;
+      return { [COLLECTION_FLAG]: collection, [BOOSTER_CREDITS_FLAG]: credits };
+    }
+  });
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, targetUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, targetUser.id);
   return { credits };
 }
 
-export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {}, offeredCredits = 0, requestedCredits = 0 } = {}) {
+
+export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {}, offeredCredits = 0, requestedCredits = 0, tradeId = null } = {}) {
   if (!game.user.isGM) throw new Error("Un MJ actif doit valider l’échange.");
   const fromUser = game.users.get(fromUserId);
   const toUser = game.users.get(toUserId);
   if (!fromUser || !toUser || fromUser.id === toUser.id) throw new Error("Joueurs invalides.");
-  const fromCollection = await getCollection({ user: fromUser });
-  const toCollection = await getCollection({ user: toUser });
-  const normalize = value => Object.fromEntries(Object.entries(value ?? {}).map(([id,c])=>[id,Math.max(0,parseInt(c,10)||0)]).filter(([,c])=>c>0));
-  const give = normalize(offered), take = normalize(requested);
+  const normalize = (value) => Object.fromEntries(Object.entries(value ?? {})
+    .map(([id, count]) => [id, Math.max(0, Number.parseInt(count, 10) || 0)])
+    .filter(([, count]) => count > 0));
+  const give = normalize(offered);
+  const take = normalize(requested);
   const giveCredits = Math.max(0, Number.parseInt(offeredCredits ?? 0, 10) || 0);
   const takeCredits = Math.max(0, Number.parseInt(requestedCredits ?? 0, 10) || 0);
-  for (const [id,count] of Object.entries(give)) if ((fromCollection[id]?.count ?? 0) < count) throw new Error(`${fromUser.name} ne possède plus assez de ${id}.`);
-  for (const [id,count] of Object.entries(take)) if ((toCollection[id]?.count ?? 0) < count) throw new Error(`${toUser.name} ne possède plus assez de ${id}.`);
-  const fromCredits = await getBoosterCredits({ user: fromUser });
-  const toCredits = await getBoosterCredits({ user: toUser });
-  if (fromCredits < giveCredits) throw new Error(`${fromUser.name} ne possède plus assez de tickets.`);
-  if (toCredits < takeCredits) throw new Error(`${toUser.name} ne possède plus assez de tickets.`);
-  const move=(source,target,items)=>{ for(const [id,count] of Object.entries(items)){ const entry=source[id]; source[id].count-=count; target[id]={...(target[id]??entry),count:(target[id]?.count??0)+count}; if(source[id].count<=0) delete source[id]; }};
-  move(fromCollection,toCollection,give); move(toCollection,fromCollection,take);
-  await fromUser.setFlag(MODULE_ID,COLLECTION_FLAG,fromCollection);
-  await toUser.setFlag(MODULE_ID,COLLECTION_FLAG,toCollection);
-  await setBoosterCredits(fromUser, fromCredits - giveCredits + takeCredits);
-  await setBoosterCredits(toUser, toCredits - takeCredits + giveCredits);
+  let fromCollection;
+  let toCollection;
+  let nextFromCredits;
+  let nextToCredits;
+
+  const move = (source, target, items) => {
+    for (const [id, count] of Object.entries(items)) {
+      const entry = source[id];
+      source[id].count -= count;
+      target[id] = { ...(target[id] ?? entry), count: (target[id]?.count ?? 0) + count };
+      if (source[id].count <= 0) delete source[id];
+    }
+  };
+
+  await transactMultipleUsers({
+    type: "trade",
+    metadata: { tradeId, fromUserId, toUserId, offered: give, requested: take, offeredCredits: giveCredits, requestedCredits: takeCredits },
+    participants: [
+      { user: fromUser, flags: [COLLECTION_FLAG, BOOSTER_CREDITS_FLAG] },
+      { user: toUser, flags: [COLLECTION_FLAG, BOOSTER_CREDITS_FLAG] }
+    ],
+    mutate: (snapshots) => {
+      const fromSnapshot = snapshots[fromUser.id] ?? {};
+      const toSnapshot = snapshots[toUser.id] ?? {};
+      fromCollection = fromSnapshot[COLLECTION_FLAG] && typeof fromSnapshot[COLLECTION_FLAG] === "object" ? foundry.utils.deepClone(fromSnapshot[COLLECTION_FLAG]) : {};
+      toCollection = toSnapshot[COLLECTION_FLAG] && typeof toSnapshot[COLLECTION_FLAG] === "object" ? foundry.utils.deepClone(toSnapshot[COLLECTION_FLAG]) : {};
+      for (const [id, count] of Object.entries(give)) if ((fromCollection[id]?.count ?? 0) < count) throw new Error(`${fromUser.name} ne possède plus assez de ${fromCollection[id]?.name ?? id}.`);
+      for (const [id, count] of Object.entries(take)) if ((toCollection[id]?.count ?? 0) < count) throw new Error(`${toUser.name} ne possède plus assez de ${toCollection[id]?.name ?? id}.`);
+      const fromCredits = normalizeBoosterCredits(fromSnapshot[BOOSTER_CREDITS_FLAG]);
+      const toCredits = normalizeBoosterCredits(toSnapshot[BOOSTER_CREDITS_FLAG]);
+      if (fromCredits < giveCredits) throw new Error(`${fromUser.name} ne possède plus assez de tickets.`);
+      if (toCredits < takeCredits) throw new Error(`${toUser.name} ne possède plus assez de tickets.`);
+      move(fromCollection, toCollection, give);
+      move(toCollection, fromCollection, take);
+      nextFromCredits = fromCredits - giveCredits + takeCredits;
+      nextToCredits = toCredits - takeCredits + giveCredits;
+      return {
+        [fromUser.id]: { [COLLECTION_FLAG]: fromCollection, [BOOSTER_CREDITS_FLAG]: nextFromCredits },
+        [toUser.id]: { [COLLECTION_FLAG]: toCollection, [BOOSTER_CREDITS_FLAG]: nextToCredits }
+      };
+    }
+  });
+
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, fromCollection, fromUser.id);
   Hooks.callAll(`${MODULE_ID}.collectionUpdated`, toCollection, toUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, nextFromCredits, fromUser.id);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, nextToCredits, toUser.id);
   return true;
 }
+
 
 function boosterRevealCardMarkup(card, index, { featured = false, cardBack = null } = {}) {
   const art = card.artMedium ?? card.artFull ?? "";
@@ -594,6 +820,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   const hasUnique = highestRarity === "unique";
   const hasGolden = eventMode || highestRarity === "doree";
   const themeRarity = hasGolden ? "golden" : hasUnique ? "unique" : highestRarity === "rare" ? "rare" : "neutral";
+  const previousFocus = document.activeElement;
   const overlay = document.createElement("div");
   overlay.className = `scg-booster-opening scg-booster-theme-${themeRarity}${hasUnique ? " has-unique" : ""}${hasGolden ? " has-golden" : ""}${eventMode ? " is-event-booster" : ""}`;
   overlay.dataset.highestRarity = highestRarity;
@@ -648,6 +875,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   let revealIndex = 0;
   let resultsShown = false;
   let sequenceFinished = false;
+  let closed = false;
 
   const schedule = (callback, delay) => {
     const timer = globalThis.setTimeout(() => {

@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.14.4
+
+- Réorganise les actions de la collection en trois groupes lisibles : boosters, gestion et affichage.
+- Remplace l’ancien panneau de recyclage par un atelier intégré avec recherche, filtres, compteurs, sélection automatique et progression en temps réel.
+- Ne propose au recyclage que les exemplaires réellement en doublon, tout en protégeant le premier exemplaire et les cartes réservées dans un échange.
+- Empêche également côté transaction de recycler le dernier exemplaire d’une carte.
+- Corrige le mode « Réduire les options » afin qu’il masque réellement les panneaux secondaires et la nouvelle barre d’actions.
+
+## 0.14.3
+
+- Ajoute un bouton « Accueil » dans la boutique et dans l’espace MJ.
+- Ferme automatiquement ces fenêtres après l’ouverture du hub central.
+
+## 0.14.2
+
+- Corrige la description du booster classique afin d’indiquer que les cartes Uniques peuvent également être obtenues.
+- Ferme automatiquement la fenêtre active après l’utilisation d’un bouton « Accueil », une fois le hub central ouvert.
+
+## 0.14.1
+
+- Corrige le recyclage de 10 cartes : les exemplaires tombant à zéro sont désormais explicitement supprimés du flag Foundry au lieu d’être conservés par la fusion des objets imbriqués.
+- Généralise les suppressions exactes à tous les objets transactionnels, notamment les collections, decks et historiques.
+- Vérifie après chaque écriture que les flags enregistrés correspondent exactement au résultat attendu et restaure automatiquement le snapshot précédent en cas d’écriture partielle.
+- Ajoute deux tests de régression couvrant la suppression réelle d’une carte et la restauration après une erreur post-écriture.
+
+## 0.14.0
+
+- Migre l’état complet des duels PvP dans un journal Foundry réservé au MJ et vide les anciens réglages monde après migration.
+- Désactive les commandes administratives PvP distantes ; elles sont désormais exécutées uniquement dans la session du MJ hôte.
+- Ajoute une identité ECDSA P-256 par profil et signe les requêtes PvP, d’échange et d’analytics ainsi que les réponses du MJ hôte.
+- Ajoute la déduplication, la limitation de débit et la validation de taille des requêtes PvP et d’échange.
+- Ajoute un état `processing` aux échanges afin de verrouiller une offre avant le déplacement des cartes et tickets.
+- Regroupe les mutations de collection, tickets, Couronnes, boutique, decks et historiques dans des transactions révisées avec snapshots et restauration de secours.
+- Ajoute un journal d’audit local aux profils concernés, une remontée signée vers le journal central du MJ et un export JSON depuis l’espace MJ.
+- Équilibre les factions dans le booster classique à rareté identique et préfère une carte Unique non possédée lorsque possible.
+- Remplace l’aléatoire standard des ouvertures par `crypto.getRandomValues` lorsqu’il est disponible et ignore les générateurs injectés par un profil joueur.
+- Réduit l’API globale aux actions publiques et retire les mutations administratives des clients joueurs.
+- Nettoie les instances de plateaux PvP fermées et améliore le clavier, le focus et la fermeture des principales modales.
+- Ajoute la réparation des collections et la récupération automatique ou manuelle des échanges interrompus.
+- Remplace la map générale d’illustrations par une map minimale réservée aux decks de démonstration.
+- Convertit quatre illustrations de boosters en WebP et retire les PNG redondants.
+- Découpe la feuille CSS historique en cinq parties chargées dans le même ordre de cascade.
+- Assume temporairement une distribution française uniquement, tant que l’ensemble de l’interface n’est pas localisé.
+- Ajoute `npm run check`, les tests statistiques de boosters et de signatures socket, la validation des 495 illustrations, la création native du ZIP et les workflows GitHub.
+
 ## 0.13.1
 
 - Ajout des récompenses automatiques : 10 Couronnes pour une victoire PvP et 5 Couronnes contre le bot.

@@ -17,6 +17,7 @@ import {
   showSpecialBoosterSelector,
   executeTrade,
   recycleCardsForBooster,
+  repairCollectionForUser,
   resetCollectionForUser
 } from "./boosters.js";
 import {
@@ -80,6 +81,9 @@ export async function openPvpBoard(matchId) {
   let app = pvpBoards.get(matchId);
   if (!app || !app.rendered) {
     app = new SixCrownsPvpBoard(matchId);
+    app._onSixCrownsClose = () => {
+      if (pvpBoards.get(matchId) === app) pvpBoards.delete(matchId);
+    };
     pvpBoards.set(matchId, app);
   }
   await app.render({ force: true });
@@ -132,6 +136,7 @@ export {
   openCollection,
   openDeckBuilder,
   renameCustomDeck,
+  repairCollectionForUser,
   resetCollectionForUser,
   syncCustomDeckRegistry
 };

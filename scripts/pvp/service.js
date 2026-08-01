@@ -1,10 +1,13 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
-import { getCollection, loadCardCatalog } from "../boosters.js";
+import { getCollection, loadCardCatalog, secureRandom } from "../boosters.js";
 import { expandCustomDeckCards, validateCustomDeck } from "../collection-rules.js";
 import { cloneDeck, getDeckDefinition } from "../rules/decks.js";
 import { PHASES } from "../rules/state.js";
 import { getEventSpellDefinition } from "../event-spells.js";
 import { awardCrowns } from "../shop.js";
+import { formatDateTime } from "../i18n.js";
+import { signSocketEnvelope, verifySocketEnvelope } from "../socket-auth.js";
+import { initializePvpRepository, persistPvpHistory, persistPvpMatches, readPvpHistory, readPvpMatches, refreshPvpRepository } from "./repository.js";
 import {
   activatePvpSpell,
   appendPvpLog,
@@ -47,7 +50,16 @@ const clientCache = {
   matches: new Map()
 };
 const pendingRequests = new Map();
+const processedRequests = new Map();
+const requestWindows = new Map();
 let hostRequestQueue = Promise.resolve();
+let outboundMessageQueue = Promise.resolve();
+let outboundSequence = 0;
+const serverSessionId = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+const inboundSequences = new Map();
+const MAX_REQUESTS_PER_WINDOW = 80;
+const REQUEST_WINDOW_MS = 10_000;
+const MAX_PROCESSED_REQUESTS = 500;
 
 function clone(value) {
   if (globalThis.foundry?.utils?.deepClone) return foundry.utils.deepClone(value ?? {});
@@ -77,12 +89,23 @@ export function isPrimaryPvpGm() {
 }
 
 function emit(message) {
-  const packet = { ...message };
-  if (packet.targetUserId === game.user?.id) {
-    packet.localDeliveredTo = game.user.id;
-    handlePvpClientMessage(packet);
-  }
-  game.socket.emit(`module.${MODULE_ID}`, packet);
+  const packet = {
+    ...message,
+    serverUserId: game.user?.id ?? null,
+    serverSessionId,
+    serverSequence: ++outboundSequence
+  };
+  if (packet.targetUserId === game.user?.id) packet.localDeliveredTo = game.user.id;
+  const task = outboundMessageQueue.then(async () => {
+    const signedPacket = await signSocketEnvelope(packet);
+    if (signedPacket.targetUserId === game.user?.id) {
+      await handlePvpClientMessage(signedPacket, { trustedLocal: true });
+    }
+    game.socket.emit(`module.${MODULE_ID}`, signedPacket);
+  });
+  outboundMessageQueue = task.catch((error) => {
+    console.error(`${MODULE_TITLE} | Envoi PvP signé impossible`, error);
+  });
 }
 
 export function registerPvpSettings() {
@@ -100,14 +123,16 @@ export function registerPvpSettings() {
   });
 }
 
+export async function initializePvpStorage() {
+  return initializePvpRepository({ matchesSetting: PVP_MATCHES_SETTING, historySetting: PVP_HISTORY_SETTING });
+}
+
 export function getPvpMatches() {
-  const value = clone(game.settings.get(MODULE_ID, PVP_MATCHES_SETTING) ?? []);
-  return Array.isArray(value) ? value : [];
+  return readPvpMatches();
 }
 
 export function getPvpHistory() {
-  const value = clone(game.settings.get(MODULE_ID, PVP_HISTORY_SETTING) ?? []);
-  return Array.isArray(value) ? value : [];
+  return readPvpHistory();
 }
 
 async function saveMatches(matches) {
@@ -122,11 +147,11 @@ async function saveMatches(matches) {
       return timestamp - updatedAt < retention;
     })
     .slice(-24);
-  await game.settings.set(MODULE_ID, PVP_MATCHES_SETTING, retained);
+  await persistPvpMatches(retained);
 }
 
 async function saveHistory(history) {
-  await game.settings.set(MODULE_ID, PVP_HISTORY_SETTING, history.slice(-250));
+  await persistPvpHistory(history.slice(-250));
 }
 
 function participantView(participant, { revealSpell = false } = {}) {
@@ -214,14 +239,17 @@ function dashboardForUser(userId) {
     .map((entry) => ({
       ...entry,
       resultLabel: entry.winnerUserId === null ? "Égalité" : entry.winnerUserId === userId ? "Victoire" : "Défaite",
-      dateLabel: new Date(entry.completedAt).toLocaleString("fr-FR")
+      dateLabel: formatDateTime(entry.completedAt)
     }));
-  const adminMatches = game.users.get(userId)?.isGM
+  const hostGm = primaryActivePvpGm();
+  const isHostGm = Boolean(game.users.get(userId)?.isGM && hostGm?.id === userId);
+  const adminMatches = isHostGm
     ? matches.filter((match) => [PVP_STATUS.INVITED, PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(match.status)).map((match) => publicMatchSummary(match, userId))
     : [];
   return {
-    hostGmId: primaryActivePvpGm()?.id ?? null,
-    hostGmName: primaryActivePvpGm()?.name ?? null,
+    hostGmId: hostGm?.id ?? null,
+    hostGmName: hostGm?.name ?? null,
+    isHostGm,
     current: current.map((match) => publicMatchSummary(match, userId)),
     invitations: invitations.map((match) => publicMatchSummary(match, userId)),
     spectatable: spectatable.map((match) => publicMatchSummary(match, userId)),
@@ -349,7 +377,7 @@ async function archiveIfFinished(match) {
   if (winnerSide && winnerSide !== "tie" && !match.crownsRewarded) {
     const winnerUserId = match.participants?.[winnerSide]?.userId;
     if (winnerUserId) {
-      await awardCrowns({ userId: winnerUserId, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory" });
+      await awardCrowns({ userId: winnerUserId, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory", rewardId: match.id });
       match.crownsRewarded = true;
       notifyUser(winnerUserId, "info", "Victoire ! Vous gagnez 10 Couronnes.", true);
     }
@@ -499,7 +527,8 @@ async function startMatchIfReady(match) {
     spellIds: {
       player: match.participants.player.spellId,
       opponent: match.participants.opponent.spellId
-    }
+    },
+    random: secureRandom
   });
   match.status = PVP_STATUS.ACTIVE;
   match.updatedAt = now();
@@ -642,8 +671,8 @@ async function processGameAction(matches, userId, action, payload) {
   return { matchId: match.id, result };
 }
 
-async function processAdmin(matches, userId, action, payload) {
-  if (!game.users.get(userId)?.isGM) throw new Error("Action réservée au MJ.");
+async function processAdmin(matches, userId, action, payload, { local = false } = {}) {
+  if (!local || !isPrimaryPvpGm() || userId !== game.user.id) throw new Error("Les commandes MJ doivent être exécutées depuis la session du MJ hôte.");
   const match = getMatchOrThrow(matches, payload.matchId);
   if (action === "admin-cancel") {
     ensureMatchAction(match, [PVP_STATUS.INVITED, PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE]);
@@ -673,7 +702,7 @@ async function processAdmin(matches, userId, action, payload) {
   return {};
 }
 
-async function processRequest(data) {
+async function processRequest(data, { local = false } = {}) {
   const userId = String(data.userId ?? "");
   const action = String(data.action ?? "");
   const payload = data.payload ?? {};
@@ -690,7 +719,7 @@ async function processRequest(data) {
   if (["continue-coin", "toggle-mulligan", "confirm-mulligan", "play-card", "pass", "next-round", "spell-options", "activate-spell", "resolve-pending", "surrender", "rematch-vote"].includes(action)) {
     return processGameAction(matches, userId, action, payload);
   }
-  if (action.startsWith("admin-")) return processAdmin(matches, userId, action, payload);
+  if (action.startsWith("admin-")) return processAdmin(matches, userId, action, payload, { local });
   if (action === "open-match") {
     const match = getMatchOrThrow(matches, payload.matchId);
     if (!userInMatch(match, userId)) throw new Error("Vous n’avez pas accès à ce duel.");
@@ -701,22 +730,28 @@ async function processRequest(data) {
   throw new Error("Requête PvP inconnue.");
 }
 
-function queueHostRequest(data) {
-  const task = hostRequestQueue.then(() => processRequest(data));
+function queueHostRequest(data, options = {}) {
+  const task = hostRequestQueue.then(async () => {
+    // Plusieurs MJ peuvent être connectés. Le MJ hôte relit le dépôt avant
+    // chaque commande afin de reprendre un duel sans cache périmé après un basculement.
+    await refreshPvpRepository();
+    return processRequest(data, options);
+  });
   hostRequestQueue = task.catch(() => undefined);
   return task;
 }
 
-export function pvpRequest(action, payload = {}, { timeout = 12_000 } = {}) {
+export async function pvpRequest(action, payload = {}, { timeout = 12_000 } = {}) {
   const gm = primaryActivePvpGm();
   if (!gm) return Promise.reject(new Error("Un MJ doit être connecté pour héberger les duels PvP."));
   const requestId = makeId();
-  const request = { type: "pvp-request", requestId, userId: game.user.id, action, payload };
+  const unsignedRequest = { type: "pvp-request", requestId, userId: game.user.id, action, payload };
 
   // Un MJ peut aussi être joueur. Dans ce cas, traiter la requête localement évite
   // de dépendre du fait que le transport Socket.IO renvoie ou non l’événement à son émetteur.
-  if (isPrimaryPvpGm()) return queueHostRequest(request);
+  if (isPrimaryPvpGm()) return queueHostRequest(unsignedRequest, { local: true });
 
+  const request = await signSocketEnvelope(unsignedRequest);
   return new Promise((resolve, reject) => {
     const timer = globalThis.setTimeout(() => {
       pendingRequests.delete(requestId);
@@ -759,8 +794,20 @@ export async function resumePvpSession() {
   }
 }
 
-function handlePvpClientMessage(data) {
+async function handlePvpClientMessage(data, { trustedLocal = false } = {}) {
   if (data.targetUserId && data.targetUserId !== game.user.id) return true;
+  if (!trustedLocal) {
+    const host = primaryActivePvpGm();
+    if (!data.serverUserId || data.serverUserId !== host?.id) throw new Error("Réponse PvP émise par un hôte non autorisé.");
+    await verifySocketEnvelope(data, data.serverUserId);
+  }
+  if (typeof data.serverSessionId !== "string" || !Number.isSafeInteger(data.serverSequence) || data.serverSequence <= 0) {
+    throw new Error("Séquence de réponse PvP invalide.");
+  }
+  const sequenceKey = `${data.serverUserId}:${data.serverSessionId}`;
+  const previousSequence = inboundSequences.get(sequenceKey) ?? 0;
+  if (data.serverSequence <= previousSequence) throw new Error("Réponse PvP rejouée ou reçue hors ordre.");
+  inboundSequences.set(sequenceKey, data.serverSequence);
 
   if (data.type === "pvp-response") {
     const pending = pendingRequests.get(data.requestId);
@@ -814,6 +861,32 @@ function handlePvpClientMessage(data) {
   return true;
 }
 
+function pruneProcessedRequests() {
+  while (processedRequests.size > MAX_PROCESSED_REQUESTS) {
+    processedRequests.delete(processedRequests.keys().next().value);
+  }
+}
+
+function enforceRequestWindow(userId) {
+  const timestamp = Date.now();
+  const current = requestWindows.get(userId) ?? { startedAt: timestamp, count: 0 };
+  if (timestamp - current.startedAt >= REQUEST_WINDOW_MS) {
+    current.startedAt = timestamp;
+    current.count = 0;
+  }
+  current.count += 1;
+  requestWindows.set(userId, current);
+  if (current.count > MAX_REQUESTS_PER_WINDOW) throw new Error("Trop de requêtes PvP ont été envoyées. Patientez quelques secondes.");
+}
+
+function validateRequestEnvelope(data) {
+  if (!data.requestId || typeof data.requestId !== "string" || data.requestId.length > 128) throw new Error("Identifiant de requête PvP invalide.");
+  if (!data.userId || typeof data.userId !== "string" || !game.users.get(data.userId)) throw new Error("Utilisateur PvP inconnu.");
+  if (!data.action || typeof data.action !== "string" || data.action.length > 64) throw new Error("Action PvP invalide.");
+  if (JSON.stringify(data.payload ?? {}).length > 75_000) throw new Error("La requête PvP est trop volumineuse.");
+  enforceRequestWindow(data.userId);
+}
+
 export async function handlePvpSocket(data) {
   if (!data?.type?.startsWith?.("pvp-")) return false;
 
@@ -824,14 +897,37 @@ export async function handlePvpSocket(data) {
   if (data.type === "pvp-request") {
     if (!isPrimaryPvpGm()) return true;
     try {
-      const result = await queueHostRequest(data);
-      sendResponse(data.userId, data.requestId, true, result ?? null);
+      await verifySocketEnvelope(data, data.userId);
+      validateRequestEnvelope(data);
+      if (String(data.action).startsWith("admin-")) {
+        throw new Error("Les commandes MJ distantes sont désactivées.");
+      }
+      if (processedRequests.has(data.requestId)) {
+        const cached = processedRequests.get(data.requestId);
+        sendResponse(data.userId, data.requestId, cached.ok, cached.data, cached.error);
+        return true;
+      }
+      const result = await queueHostRequest(data, { local: false });
+      const cached = { ok: true, data: result ?? null, error: null };
+      processedRequests.set(data.requestId, cached);
+      pruneProcessedRequests();
+      sendResponse(data.userId, data.requestId, true, cached.data);
     } catch (error) {
       console.error(`${MODULE_TITLE} | Requête PvP refusée`, error);
+      const cached = { ok: false, data: null, error: error.message };
+      if (data.requestId) {
+        processedRequests.set(data.requestId, cached);
+        pruneProcessedRequests();
+      }
       sendResponse(data.userId, data.requestId, false, null, error.message);
     }
     return true;
   }
 
-  return handlePvpClientMessage(data);
+  try {
+    return await handlePvpClientMessage(data);
+  } catch (error) {
+    console.warn(`${MODULE_TITLE} | Message PvP client refusé`, error);
+    return true;
+  }
 }

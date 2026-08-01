@@ -1,22 +1,43 @@
 <section class="scg-profile-shell scg-collection-shell {{#if compactOptions}}is-options-compact{{/if}} {{#if compactCards}}is-card-view-compact{{/if}}">
-  <header class="scg-profile-toolbar">
+  <header class="scg-profile-toolbar scg-collection-heading">
     <div>
       <h1>Collection de {{userName}}</h1>
       <p>Les cartes non obtenues restent masquées : leur nom, leur rareté, leur ligne et leurs effets ne sont pas révélés.</p>
     </div>
-    <div class="scg-profile-actions">
-      <button type="button" class="scg-option-control" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
-      <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
-      <button type="button" class="scg-option-control" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
-      <button type="button" class="scg-option-control" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Choisir un booster spécial</button>
-      <button type="button" class="scg-option-control" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
-      <button type="button" class="scg-option-control" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
-      <button type="button" class="scg-option-control" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
-      <button type="button" class="scg-option-control" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
-      <button type="button" class="scg-option-control scg-card-view-toggle" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
+    <div class="scg-profile-actions scg-collection-heading-actions">
+      <button type="button" class="scg-collection-home" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
       <button type="button" data-action="toggle-options-size" aria-pressed="{{compactOptions}}"><i class="{{optionsToggleIcon}}"></i> {{optionsToggleLabel}}</button>
     </div>
   </header>
+
+  <nav class="scg-collection-command-bar" aria-label="Actions de la collection">
+    <section class="scg-collection-command-group is-boosters" aria-label="Boosters">
+      <header><i class="fa-solid fa-box-open"></i><span>Boosters</span></header>
+      <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
+      <div class="scg-collection-command-buttons">
+        <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
+        <button type="button" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
+        <button type="button" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Booster spécial</button>
+        <button type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
+      </div>
+    </section>
+
+    <section class="scg-collection-command-group is-management" aria-label="Gestion de la collection">
+      <header><i class="fa-solid fa-layer-group"></i><span>Gestion</span></header>
+      <div class="scg-collection-command-buttons">
+        <button type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Construire un deck</button>
+        <button type="button" class="scg-recycle-open-button" data-action="open-recycle" {{#unless hasRecyclableCards}}disabled{{/unless}}><i class="fa-solid fa-recycle"></i> Recycler les doublons <b>{{recyclableCopies}}</b></button>
+        <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      </div>
+    </section>
+
+    <section class="scg-collection-command-group is-display" aria-label="Affichage">
+      <header><i class="fa-solid fa-sliders"></i><span>Affichage</span></header>
+      <div class="scg-collection-command-buttons">
+        <button type="button" class="scg-card-view-toggle" data-action="toggle-card-view" aria-pressed="{{compactCards}}"><i class="{{cardViewToggleIcon}}"></i> {{cardViewToggleLabel}}</button>
+      </div>
+    </section>
+  </nav>
 
   <section class="scg-collection-summary">
     <strong>{{discovered}} / {{total}} cartes découvertes</strong>
@@ -112,15 +133,6 @@
     <details class="scg-collapsible-panel scg-booster-history" open><summary><span><i class="fa-solid fa-clock-rotate-left"></i><b>Derniers boosters</b><small>Vos tirages récents et nouvelles cartes.</small></span><em>{{boosterHistory.length}} ouverture(s)</em><i class="fa-solid fa-chevron-down"></i></summary><div class="scg-collapsible-content"><div>{{#each boosterHistory}}<article class="scg-rarity-{{highestRarity}}"><header><strong>{{dateLabel}}</strong><span>{{newCount}} nouvelle(s)</span></header><p>{{#each cards}}{{name}}{{#unless @last}} · {{/unless}}{{/each}}</p></article>{{/each}}</div></div></details>
   {{/if}}
 
-  <details class="scg-collapsible-panel scg-exchange-tools" open>
-    <summary><span><i class="fa-solid fa-recycle"></i><b>Recyclage des doublons</b><small>Échangez exactement 10 exemplaires contre un ticket.</small></span><em>{{ownedCards.length}} carte(s) disponible(s)</em><i class="fa-solid fa-chevron-down"></i></summary>
-    <div class="scg-collapsible-content"><div class="scg-recycle-grid">
-      {{#each ownedCards}}<label><span>{{name}} (×{{count}})</span><input type="number" min="0" max="{{count}}" value="0" data-recycle-count data-card-id="{{id}}"></label>{{/each}}
-    </div>
-    <button type="button" data-action="recycle-cards"><i class="fa-solid fa-ticket"></i> Recycler 10 cartes contre 1 ticket</button></div>
-  </details>
-
-
   <div class="scg-collection-scroll">
     {{#each groups}}
       <section class="scg-collection-group scg-collection-theme-{{id}} {{#if isEventGroup}}is-event-group{{/if}}" data-collection-group="{{id}}">
@@ -193,6 +205,59 @@
       </section>
     {{/each}}
   </div>
+  <div class="scg-recycle-modal" data-recycle-modal hidden>
+    <section class="scg-recycle-workshop" role="dialog" aria-modal="true" aria-labelledby="scg-recycle-title">
+      <header class="scg-recycle-workshop-header">
+        <div>
+          <small>Atelier intégré à la collection</small>
+          <h2 id="scg-recycle-title"><i class="fa-solid fa-recycle"></i> Recyclage des doublons</h2>
+          <p>Choisissez exactement 10 exemplaires supplémentaires. Votre premier exemplaire et les cartes réservées dans un échange restent protégés.</p>
+        </div>
+        <button type="button" data-action="close-recycle" aria-label="Fermer l’atelier">×</button>
+      </header>
+
+      <div class="scg-recycle-overview">
+        <article><span>Doublons recyclables</span><strong>{{recyclableCopies}}</strong></article>
+        <article><span>Cartes différentes</span><strong>{{recyclableCards.length}}</strong></article>
+        <article><span>Récompense</span><strong><i class="fa-solid fa-ticket"></i> 1 ticket classique</strong></article>
+      </div>
+
+      <div class="scg-recycle-tools">
+        <label class="scg-recycle-search"><span>Rechercher</span><input type="search" name="recycle-search" placeholder="Nom d’une carte…"></label>
+        <label><span>Collection</span><select name="recycle-faction"><option value="all">Toutes</option>{{#each recycleFactionOptions}}<option value="{{id}}">{{label}}</option>{{/each}}</select></label>
+        <label><span>Rareté</span><select name="recycle-rarity"><option value="all">Toutes</option>{{#each recycleRarityOptions}}<option value="{{id}}">{{label}}</option>{{/each}}</select></label>
+        <button type="button" data-action="auto-recycle"><i class="fa-solid fa-wand-magic-sparkles"></i> Sélection auto</button>
+        <button type="button" data-action="clear-recycle"><i class="fa-solid fa-eraser"></i> Effacer</button>
+      </div>
+
+      <div class="scg-recycle-list" data-recycle-list>
+        {{#each recyclableCards}}
+          <article class="scg-recycle-card scg-rarity-{{rarity}}" data-recycle-card data-search="{{searchText}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-rarity-rank="{{rarityRank}}">
+            <div class="scg-recycle-card-art">{{#if artThumb}}<img src="{{artThumb}}" alt="Illustration de {{name}}" loading="lazy">{{else}}<i class="fa-solid fa-clone"></i>{{/if}}</div>
+            <div class="scg-recycle-card-copy">
+              <strong>{{name}}</strong>
+              <small>{{factionLabel}} · {{rarityLabel}}</small>
+              <span>Possédée ×{{count}} · Recyclable ×{{recyclableCount}}{{#if reservedForTrade}} · {{reservedForTrade}} réservée(s){{/if}}</span>
+            </div>
+            <div class="scg-recycle-stepper">
+              <button type="button" data-recycle-step="-1" aria-label="Retirer un exemplaire">−</button>
+              <input type="number" min="0" max="{{recyclableCount}}" value="0" data-recycle-count data-card-id="{{id}}" aria-label="Nombre d’exemplaires de {{name}} à recycler">
+              <button type="button" data-recycle-step="1" aria-label="Ajouter un exemplaire">+</button>
+            </div>
+          </article>
+        {{else}}
+          <div class="scg-recycle-empty"><i class="fa-solid fa-shield-heart"></i><strong>Aucun doublon recyclable</strong><p>Ouvrez quelques boosters : dès qu’une carte dépasse un exemplaire, elle apparaîtra ici.</p></div>
+        {{/each}}
+      </div>
+
+      <footer class="scg-recycle-footer">
+        <div class="scg-recycle-progress-copy"><strong><span data-recycle-selected>0</span> / 10 exemplaires</strong><small data-recycle-hint>Sélectionnez vos doublons.</small></div>
+        <div class="scg-recycle-progress" aria-hidden="true"><span data-recycle-progress></span></div>
+        <button type="button" data-action="recycle-cards" disabled><i class="fa-solid fa-ticket"></i> Recycler et obtenir 1 ticket</button>
+      </footer>
+    </section>
+  </div>
+
   <div class="scg-card-preview" data-card-preview hidden><button type="button" data-action="close-preview" aria-label="Fermer">×</button><div><img src="" alt=""><h2></h2><p></p><button type="button" data-action="preview-trade"><i class="fa-solid fa-handshake"></i> Proposer cette carte</button></div></div>
 
   <div class="scg-card-trade-modal" data-card-trade-modal hidden>

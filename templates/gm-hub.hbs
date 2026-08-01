@@ -1,11 +1,60 @@
 <section class="scg-gm-hub-shell">
-<header><div><small>Administration du module</small><h1><i class="fa-solid fa-user-shield"></i> Espace MJ</h1><p>Toutes les distributions et opérations sensibles sont regroupées ici.</p></div><button data-action="analytics"><i class="fa-solid fa-chart-line"></i> Équilibrage</button></header>
-<label class="scg-gm-hub-target"><span>Profil ciblé</span><select name="gm-user">{{#each users}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{crowns}} Couronnes — {{inventoryCount}} booster(s)</option>{{/each}}</select></label>
-<div class="scg-gm-hub-grid">
-<section><h2><i class="fa-solid fa-coins"></i> Couronnes</h2><p>Ajoutez une valeur positive ou retirez-en avec une valeur négative.</p><div><input name="crowns-amount" type="number" value="100"><button data-action="grant-crowns">Appliquer</button></div></section>
-<section><h2><i class="fa-solid fa-store"></i> Boosters de boutique</h2><p>Ajoutez directement un article à la réserve du joueur.</p><select name="shop-product">{{#each products}}<option value="{{id}}">{{label}}</option>{{/each}}</select><div><input name="shop-product-count" type="number" min="1" max="100" value="1"><button data-action="grant-shop-product">Offrir</button></div></section>
-<section><h2><i class="fa-solid fa-ticket"></i> Tickets historiques</h2><p>Conservez les récompenses de campagne existantes.</p><div class="scg-gm-ticket-row"><input name="classic-ticket-count" type="number" value="1" min="1"><button data-action="grant-classic-ticket">Classiques</button></div><div class="scg-gm-ticket-row"><input name="special-ticket-count" type="number" value="1" min="1"><button data-action="grant-special-ticket">Spéciaux</button></div><div class="scg-gm-ticket-row"><input name="event-ticket-count" type="number" value="1" min="1"><button data-action="grant-event-ticket">Événementiels</button></div></section>
-<section><h2><i class="fa-solid fa-cards"></i> Cartes</h2><p>Donnez une carte précise et le nombre d’exemplaires voulu.</p><select name="gm-card">{{#each cards}}<option value="{{id}}">{{name}}</option>{{/each}}</select><div><input name="gm-card-count" type="number" value="1" min="1"><button data-action="grant-card">Donner</button></div></section>
-</div>
-<footer><button class="is-danger" data-action="reset-collection"><i class="fa-solid fa-trash"></i> Réinitialiser la collection ciblée</button></footer>
+  <header>
+    <div>
+      <small>Administration du module</small>
+      <h1><i class="fa-solid fa-user-shield"></i> Espace MJ</h1>
+      <p>Toutes les distributions, réparations et opérations sensibles sont regroupées ici.</p>
+    </div>
+    <div class="scg-gm-hub-header-actions">
+      <button type="button" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
+      <button type="button" data-action="analytics"><i class="fa-solid fa-chart-line"></i> Équilibrage</button>
+    </div>
+  </header>
+
+  <label class="scg-gm-hub-target">
+    <span>Profil ciblé</span>
+    <select name="gm-user">
+      {{#each users}}
+        <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} — {{crowns}} Couronnes — {{inventoryCount}} booster(s)</option>
+      {{/each}}
+    </select>
+  </label>
+
+  <div class="scg-gm-hub-grid">
+    <section>
+      <h2><i class="fa-solid fa-coins"></i> Couronnes</h2>
+      <p>Ajoutez une valeur positive ou retirez-en avec une valeur négative.</p>
+      <div><input name="crowns-amount" type="number" value="100"><button type="button" data-action="grant-crowns">Appliquer</button></div>
+    </section>
+    <section>
+      <h2><i class="fa-solid fa-store"></i> Boosters de boutique</h2>
+      <p>Ajoutez directement un article à la réserve du joueur.</p>
+      <select name="shop-product">{{#each products}}<option value="{{id}}">{{label}}</option>{{/each}}</select>
+      <div><input name="shop-product-count" type="number" min="1" max="100" value="1"><button type="button" data-action="grant-shop-product">Offrir</button></div>
+    </section>
+    <section>
+      <h2><i class="fa-solid fa-ticket"></i> Tickets historiques</h2>
+      <p>Conservez les récompenses de campagne existantes.</p>
+      <div class="scg-gm-ticket-row"><input name="classic-ticket-count" type="number" value="1" min="1"><button type="button" data-action="grant-classic-ticket">Classiques</button></div>
+      <div class="scg-gm-ticket-row"><input name="special-ticket-count" type="number" value="1" min="1"><button type="button" data-action="grant-special-ticket">Spéciaux</button></div>
+      <div class="scg-gm-ticket-row"><input name="event-ticket-count" type="number" value="1" min="1"><button type="button" data-action="grant-event-ticket">Événementiels</button></div>
+    </section>
+    <section>
+      <h2><i class="fa-solid fa-cards"></i> Cartes</h2>
+      <p>Donnez une carte précise et le nombre d’exemplaires voulu.</p>
+      <select name="gm-card">{{#each cards}}<option value="{{id}}">{{name}}</option>{{/each}}</select>
+      <div><input name="gm-card-count" type="number" value="1" min="1"><button type="button" data-action="grant-card">Donner</button></div>
+    </section>
+  </div>
+
+  <footer class="scg-gm-maintenance">
+    <div>
+      <strong>Maintenance</strong>
+      <small>{{auditCount}} événement(s) dans le journal d’audit MJ.</small>
+    </div>
+    <button type="button" data-action="repair-collection"><i class="fa-solid fa-screwdriver-wrench"></i> Réparer la collection</button>
+    <button type="button" data-action="recover-trades"><i class="fa-solid fa-unlock-keyhole"></i> Libérer les échanges bloqués</button>
+    <button type="button" data-action="export-audit"><i class="fa-solid fa-file-export"></i> Exporter l’audit</button>
+    <button type="button" class="is-danger" data-action="reset-collection"><i class="fa-solid fa-trash"></i> Réinitialiser la collection</button>
+  </footer>
 </section>

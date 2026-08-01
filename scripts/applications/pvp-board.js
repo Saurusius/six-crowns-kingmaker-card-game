@@ -124,9 +124,21 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       const overlay = document.createElement("div");
       overlay.className = "scg-spell-target-overlay";
       overlay.dataset.scgPvpOverlayOwner = this.id;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", `Ciblage du sortilège ${options.spell.name}`);
       overlay.innerHTML = `<form class="scg-spell-target-dialog"><header><div><small>Sortilège emblématique</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header><div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""}">${content}</div>${options.mode === "multi-own-card" ? `<p class="scg-spell-target-help">Choisissez entre 1 et ${escape(options.maxTargets ?? 3)} cartes.</p>` : ""}<footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer></form>`;
       document.body.append(overlay);
-      const finish = (value) => { overlay.remove(); resolve(value); };
+      const previousFocus = document.activeElement;
+      const onKeyDown = (event) => { if (event.key === "Escape") finish(null); };
+      const finish = (value) => {
+        document.removeEventListener("keydown", onKeyDown);
+        overlay.remove();
+        previousFocus?.focus?.({ preventScroll: true });
+        resolve(value);
+      };
+      document.addEventListener("keydown", onKeyDown);
+      overlay.addEventListener("click", (event) => { if (event.target === overlay) finish(null); });
       overlay.querySelectorAll("[data-spell-cancel]").forEach((button) => button.addEventListener("click", () => finish(null)));
       if (options.mode === "multi-own-card") {
         overlay.querySelectorAll('input[name="spell-card"]').forEach((input) => input.addEventListener("change", () => {
@@ -140,6 +152,7 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
         if (options.mode === "multi-own-card") return finish({ cardIds: [...overlay.querySelectorAll('input[name="spell-card"]:checked')].map((input) => input.value) });
         return finish({ cardId: overlay.querySelector('input[name="spell-card"]:checked')?.value });
       });
+      overlay.querySelector("input, button")?.focus({ preventScroll: true });
     });
   }
 
@@ -150,11 +163,28 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       const overlay = document.createElement("div");
       overlay.className = `scg-spell-reveal-overlay is-${side}`;
       overlay.dataset.scgPvpOverlayOwner = this.id;
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute("aria-label", result.spell.name);
+      overlay.tabIndex = -1;
       overlay.innerHTML = `<span class="scg-spell-reveal-aura" aria-hidden="true"></span><span class="scg-spell-reveal-runes" aria-hidden="true"><i></i><i></i><i></i></span><article class="scg-spell-reveal-card"><small>${side === "player" ? "Votre sortilège" : "Sortilège adverse révélé"}</small><div class="scg-spell-reveal-art"><img src="${escape(result.spell.art.full)}" alt="Illustration de ${escape(result.spell.name)}"><span aria-hidden="true"></span></div><div class="scg-spell-reveal-copy"><i class="${escape(result.spell.icon)}"></i><h2>${escape(result.spell.name)}</h2><p>${escape(result.message)}</p><em>Cliquez pour fermer</em></div></article>`;
       document.body.append(overlay);
-      const close = () => { overlay.remove(); resolve(); };
+      let closed = false;
+      const previousFocus = document.activeElement;
+      const onKeyDown = (event) => { if (event.key === "Escape") close(); };
+      const timer = globalThis.setTimeout(() => close(), 10_000);
+      const close = () => {
+        if (closed) return;
+        closed = true;
+        globalThis.clearTimeout(timer);
+        document.removeEventListener("keydown", onKeyDown);
+        overlay.remove();
+        previousFocus?.focus?.({ preventScroll: true });
+        resolve();
+      };
       overlay.addEventListener("click", close);
-      globalThis.setTimeout(close, 10_000);
+      document.addEventListener("keydown", onKeyDown);
+      overlay.focus({ preventScroll: true });
     });
   }
 
@@ -176,8 +206,12 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
     const overlay = document.createElement("div");
     overlay.className = "scg-spell-target-overlay";
     overlay.dataset.scgPvpOverlayOwner = this.id;
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Choisir une victime pour l’Hydre vorace");
     overlay.innerHTML = `<form class="scg-spell-target-dialog"><header><div><small>Hydre vorace</small><h2>Choisissez votre victime</h2><p>Plusieurs de vos cartes partagent la plus faible puissance. À vous de décider laquelle sera dévorée.</p></div></header><div class="scg-spell-target-list">${(pending.options ?? []).map((target, index) => `<label class="scg-spell-target-card"><input type="radio" name="hydra-card" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}>${target.artThumb ? `<img src="${escape(target.artThumb)}" alt="">` : ""}<span><strong>${escape(target.name)}</strong><small>${escape(target.rowLabel)} · Puissance ${escape(target.strength)}</small></span></label>`).join("")}</div><footer><button type="submit" class="scg-primary-button"><i class="fa-solid fa-dragon"></i> Livrer cette carte</button></footer></form>`;
     document.body.append(overlay);
+    overlay.querySelector("input, button")?.focus({ preventScroll: true });
     overlay.querySelector("form").addEventListener("submit", async (event) => {
       event.preventDefault();
       const cardId = overlay.querySelector('input[name="hydra-card"]:checked')?.value;
@@ -276,6 +310,7 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
     this._removeOverlays();
     if (this._matchHook !== null) Hooks.off(`${MODULE_ID}.pvpMatchUpdated`, this._matchHook);
     if (this._accessHook !== null) Hooks.off(`${MODULE_ID}.pvpAccessRevoked`, this._accessHook);
+    this._onSixCrownsClose?.(this);
     return super.close(options);
   }
 }
