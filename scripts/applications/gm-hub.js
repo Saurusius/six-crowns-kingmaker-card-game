@@ -4,8 +4,7 @@ import {
   grantCardToUser,
   grantTicketCreditsToUser,
   loadCardCatalog,
-  repairCollectionForUser,
-  resetCollectionForUser
+  repairCollectionForUser
 } from "../boosters.js";
 import {
   SHOP_PRODUCTS,
@@ -17,8 +16,9 @@ import {
 import { downloadTextFile } from "../analytics.js";
 import { readSecureData } from "../secure-store.js";
 import { recoverStaleTrades } from "../trades.js";
+import { resetPlayerProfileForUser } from "../player-profile-reset.js";
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class SixCrownsGmHub extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
@@ -142,18 +142,33 @@ export class SixCrownsGmHub extends HandlebarsApplicationMixin(ApplicationV2) {
         ui.notifications.error(error.message);
       }
     });
-    query('[data-action="reset-collection"]')?.addEventListener("click", async () => {
+    query('[data-action="reset-profile"]')?.addEventListener("click", async () => {
       const user = game.users.get(this.targetUserId);
       if (!user) return;
       const confirmed = await DialogV2.confirm({
-        window: { title: "Réinitialiser la collection" },
-        content: `<p>Supprimer toute la collection de <strong>${foundry.utils.escapeHTML(user.name)}</strong> ?</p>`,
+        window: { title: "Réinitialiser entièrement le profil" },
+        content: `
+          <section class="scg-reset-profile-confirmation">
+            <p>Remettre le profil de <strong>${foundry.utils.escapeHTML(user.name)}</strong> à son état initial ?</p>
+            <ul>
+              <li>collection de cartes et decks personnalisés supprimés ;</li>
+              <li>tickets, boosters en réserve et historiques effacés ;</li>
+              <li>partie solo sauvegardée abandonnée ;</li>
+              <li>solde restauré à <strong>350 Couronnes</strong>.</li>
+            </ul>
+            <p><strong>Cette action est irréversible.</strong></p>
+          </section>
+        `,
         modal: true,
         rejectClose: false
       });
-      if (confirmed) {
-        await run(() => resetCollectionForUser({ userId: user.id }), "Collection réinitialisée.");
-      }
+      if (!confirmed) return;
+      await run(
+        () => resetPlayerProfileForUser({ userId: user.id }),
+        (result) => result
+          ? `Profil de ${result.user.name} réinitialisé : ${result.removedCopies} carte(s) et ${result.removedDecks} deck(s) supprimés.`
+          : null
+      );
     });
     query('[data-action="analytics"]')?.addEventListener("click", () => {
       game.modules.get(MODULE_ID)?.api?.openAnalyticsDashboard();

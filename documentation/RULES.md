@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du module **0.14.4**.
+Cette page décrit les règles du module **0.14.5**.
 
 ## But de la partie
 

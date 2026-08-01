@@ -32,6 +32,7 @@ import {
   renameCustomDeck,
   repairCollectionForUser,
   resetCollectionForUser,
+  resetPlayerProfileForUser,
   syncCustomDeckRegistry
 } from "./api.js";
 import { handleTradeSocket, recoverStaleTrades, registerTradeSettings } from "./trades.js";
@@ -76,7 +77,8 @@ const gmApi = Object.freeze({
   grantBoostersToUser,
   grantCardToUser,
   repairCollectionForUser,
-  resetCollectionForUser
+  resetCollectionForUser,
+  resetPlayerProfileForUser
 });
 
 function exposeApi() {
@@ -106,6 +108,56 @@ Hooks.on(`${MODULE_ID}.collectionUpdated`, async (_collection, userId) => {
     Hooks.callAll(`${MODULE_ID}.decksUpdated`, decks);
   } catch (error) {
     console.error(`${MODULE_TITLE} | Mise à jour des decks après modification de collection impossible`, error);
+  }
+});
+
+function changedModuleFlags(changes = {}) {
+  const flags = new Set();
+  const nested = changes?.flags?.[MODULE_ID];
+  if (nested && typeof nested === "object") {
+    for (const key of Object.keys(nested)) flags.add(key.replace(/^-=/, ""));
+  }
+  for (const key of Object.keys(changes ?? {})) {
+    const prefix = `flags.${MODULE_ID}.`;
+    if (key.startsWith(prefix)) flags.add(key.slice(prefix.length).replace(/^-=/, ""));
+  }
+  return flags;
+}
+
+// Les mises à jour faites par le MJ arrivent bien sur le document User du joueur,
+// mais les applications du module utilisent des hooks dédiés. On les relaie ici
+// afin que les fenêtres déjà ouvertes se rafraîchissent sans reconnexion.
+Hooks.on("updateUser", (user, changes, _options, authorUserId) => {
+  if (user.id !== game.user.id || authorUserId === game.user.id) return;
+  const flags = changedModuleFlags(changes);
+  if (flags.size === 0) return;
+
+  if (flags.has("cardCollection")) {
+    Hooks.callAll(`${MODULE_ID}.collectionUpdated`, user.getFlag(MODULE_ID, "cardCollection") ?? {}, user.id);
+  }
+  if (flags.has("customDecks")) {
+    Hooks.callAll(`${MODULE_ID}.decksUpdated`, user.getFlag(MODULE_ID, "customDecks") ?? [], user.id);
+  }
+  if (flags.has("boosterCredits") || flags.has("specialBoosterCredits") || flags.has("eventBoosterCredits")) {
+    Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, null, user.id);
+  }
+  if (flags.has("boosterHistory")) {
+    Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, user.getFlag(MODULE_ID, "boosterHistory") ?? [], user.id);
+  }
+  if (flags.has("crowns")) {
+    Hooks.callAll(`${MODULE_ID}.crownsUpdated`, user.getFlag(MODULE_ID, "crowns"), user.id);
+  }
+  if (flags.has("shopBoosterInventory")) {
+    Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, user.getFlag(MODULE_ID, "shopBoosterInventory") ?? {}, user.id);
+  }
+
+  const resetFlags = [
+    "cardCollection", "customDecks", "boosterCredits", "specialBoosterCredits",
+    "eventBoosterCredits", "boosterHistory", "crowns", "shopBoosterInventory", "shopHistory"
+  ];
+  if (resetFlags.every((flag) => flags.has(flag))) {
+    ui.notifications.warn("Votre profil du Jeu des Six Couronnes a été réinitialisé par le MJ.");
+    Hooks.callAll(`${MODULE_ID}.profileReset`, user.id);
   }
 });
 

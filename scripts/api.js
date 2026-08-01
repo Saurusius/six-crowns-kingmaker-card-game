@@ -20,6 +20,7 @@ import {
   repairCollectionForUser,
   resetCollectionForUser
 } from "./boosters.js";
+import { resetPlayerProfileForUser } from "./player-profile-reset.js";
 import {
   duplicateCustomDeck,
   getCustomDecks,
@@ -138,5 +139,6 @@ export {
   renameCustomDeck,
   repairCollectionForUser,
   resetCollectionForUser,
+  resetPlayerProfileForUser,
   syncCustomDeckRegistry
 };

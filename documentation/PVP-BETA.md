@@ -1,4 +1,4 @@
-# Bêta PvP — version 0.14.4
+# Bêta PvP — version 0.14.5
 
 Le mode PvP propose des duels persistants et synchronisés entre deux profils Foundry. Il reste identifié comme une bêta jusqu’à validation sur plusieurs mondes et plusieurs configurations réseau.
 

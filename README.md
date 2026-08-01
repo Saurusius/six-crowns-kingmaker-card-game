@@ -2,7 +2,7 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.14.4-c9a44d)
+![Version](https://img.shields.io/badge/version-0.14.5-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
@@ -131,7 +131,7 @@ Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvega
 
 - distribution de tickets classiques, spéciaux et événementiels ;
 - attribution directe de cartes ;
-- réinitialisation d’une collection ;
+- réinitialisation complète d’un profil joueur ;
 - tableau d’équilibrage avec taux d’utilisation, résultats par deck et cartes jamais jouées ;
 - export des données en JSON et CSV ;
 - réparation des collections, libération des échanges interrompus et export du journal d’audit transactionnel.
@@ -144,7 +144,7 @@ Une manche est gagnée d’abord au nombre de lignes contrôlées, puis à la Pu
 
 Les règles détaillées sont disponibles dans le module et dans [`documentation/RULES.md`](documentation/RULES.md).
 
-## Version 0.14.4
+## Version 0.14.5
 
 Cette version consolide le module avant l’élargissement du PvP :
 
@@ -181,7 +181,7 @@ La commande contrôle notamment les 165 cartes, les 495 illustrations, la syntax
 Préparer l’archive courante :
 
 ```bash
-npm run prepare-release -- 0.14.4
+npm run prepare-release -- 0.14.5
 ```
 
 Le ZIP est produit dans `dist/`. Les workflows GitHub vérifient chaque push et publient automatiquement l’archive lors d’un tag `vX.Y.Z`.

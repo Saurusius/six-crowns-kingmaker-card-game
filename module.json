@@ -1,41 +1,41 @@
 {
-  "id": "six-crowns-kingmaker-card-game",
-  "title": "Le Jeu des Six Couronnes",
-  "description": "Jeu de cartes tactique solo et PvP en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.",
-  "version": "0.14.4",
-  "authors": [
-    {
-      "name": "Saurusius",
-      "url": "https://github.com/Saurusius"
-    }
-  ],
-  "compatibility": {
-    "minimum": "14",
-    "verified": "14.365"
-  },
-  "esmodules": [
-    "scripts/main.js"
-  ],
-  "styles": [
-    "styles/parts/core-and-board.css",
-    "styles/parts/collection-boosters-trades.css",
-    "styles/parts/decks-and-gameplay.css",
-    "styles/parts/event-content.css",
-    "styles/parts/home-pvp-shop.css"
-  ],
-  "socket": true,
-  "languages": [
-    {
-      "lang": "fr",
-      "name": "Français",
-      "path": "lang/fr.json"
-    }
-  ],
-  "url": "https://github.com/Saurusius/six-crowns-kingmaker-card-game",
-  "license": "LICENSE",
-  "manifest": "https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json",
-  "download": "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.14.4/six-crowns-kingmaker-card-game-v0.14.4.zip",
-  "readme": "https://github.com/Saurusius/six-crowns-kingmaker-card-game/blob/main/README.md",
-  "changelog": "https://github.com/Saurusius/six-crowns-kingmaker-card-game/blob/main/CHANGELOG.md",
-  "bugs": "https://github.com/Saurusius/six-crowns-kingmaker-card-game/issues"
+    "id":  "six-crowns-kingmaker-card-game",
+    "title":  "Le Jeu des Six Couronnes",
+    "description":  "Jeu de cartes tactique solo et PvP en trois lignes pour Foundry Virtual Tabletop, inspirÃ© des Terres DÃ©robÃ©es.",
+    "version":  "0.14.5",
+    "authors":  [
+                    {
+                        "name":  "Saurusius",
+                        "url":  "https://github.com/Saurusius"
+                    }
+                ],
+    "compatibility":  {
+                          "minimum":  "14",
+                          "verified":  "14.365"
+                      },
+    "esmodules":  [
+                      "scripts/main.js"
+                  ],
+    "styles":  [
+                   "styles/parts/core-and-board.css",
+                   "styles/parts/collection-boosters-trades.css",
+                   "styles/parts/decks-and-gameplay.css",
+                   "styles/parts/event-content.css",
+                   "styles/parts/home-pvp-shop.css"
+               ],
+    "socket":  true,
+    "languages":  [
+                      {
+                          "lang":  "fr",
+                          "name":  "FranÃ§ais",
+                          "path":  "lang/fr.json"
+                      }
+                  ],
+    "url":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game",
+    "license":  "LICENSE",
+    "manifest":  "https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json",
+    "download":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/download/v0.14.5/six-crowns-kingmaker-card-game-v0.14.5.zip",
+    "readme":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/blob/main/README.md",
+    "changelog":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/blob/main/CHANGELOG.md",
+    "bugs":  "https://github.com/Saurusius/six-crowns-kingmaker-card-game/issues"
 }

@@ -82,7 +82,7 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
     const isCompleted = currentSummary?.status === "completed";
 
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.14.4",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.14.5",
       userName: game.user.name,
       isGM: game.user.isGM,
       isHostGm: Boolean(this.dashboard.isHostGm),

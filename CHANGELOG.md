@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.14.5
+
+- Corrige le bouton de réinitialisation de l’espace MJ, qui échouait car `DialogV2` n’était pas chargé dans l’application.
+- Remplace la simple remise à zéro des cartes par une réinitialisation complète du profil joueur.
+- Efface en une transaction la collection, les decks, les tickets, les historiques, la réserve de boutique et la partie solo sauvegardée.
+- Restaure le solde initial de 350 Couronnes tout en conservant l’identité de sécurité et les journaux d’audit.
+- Rafraîchit automatiquement les fenêtres déjà ouvertes sur le client du joueur après une modification distante du MJ.
+- Ajoute des tests de régression sur l’état initial et le résumé des données supprimées.
+
 ## 0.14.4
 
 - Réorganise les actions de la collection en trois groupes lisibles : boosters, gestion et affichage.
