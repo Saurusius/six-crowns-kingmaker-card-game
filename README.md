@@ -2,7 +2,7 @@
 
 Module Foundry VTT d’un jeu de cartes tactique inspiré des Terres Dérobées.
 
-## Règles du prototype 0.10.1
+## Règles du prototype 0.10.21
 
 Chaque joueur choisit d’abord un deck de démonstration d’exactement 20 cartes, un deck personnalisé enregistré sur son profil, ou sélectionne **Deck aléatoire**. Les decks de démonstration sont indépendants des collections personnelles et servent uniquement à tester le jeu.
 
@@ -52,6 +52,25 @@ Le catalogue comprend désormais **165 cartes collectionnables** : 160 cartes de
 - **Dorée** — finition réservée aux 5 sortilèges événementiels.
 
 La rareté Dorée n’est pas une rareté de construction de deck : les sortilèges disposent de leur propre emplacement avant la partie. Les probabilités des boosters classiques restent indépendantes de la répartition du catalogue.
+
+## Correctif v0.10.21
+
+- corrige le chargement des fenêtres du module après la v0.10.2 ;
+- rétablit le plateau, la collection et le constructeur de deck ;
+- répare automatiquement les macros existantes au démarrage du monde ;
+- ajoute une macro dédiée **Jouer au Jeu des Six Couronnes** ;
+- conserve toutes les améliorations d’ergonomie de la v0.10.2.
+
+## Nouveautés de la v0.10.2
+
+- meilleure lisibilité des traits et des lignes pendant le choix de la main de départ ;
+- survol du sortilège équipé pendant les parties ;
+- distinction claire entre Unités, Sortilèges et Invocations dans le glossaire ;
+- règlement toujours ouvert dans une fenêtre séparée ;
+- vue carrousel dans le constructeur de deck ;
+- options essentielles de collection maintenues visibles ;
+- suppression de la prévisualisation au survol dans la collection ;
+- bordures de cartes adaptées à leur collection et à leur rareté.
 
 ## Nouveautés de la v0.10.1
 

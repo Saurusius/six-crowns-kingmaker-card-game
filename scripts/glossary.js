@@ -1,7 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { TRAIT_DETAILS } from "./traits.js";
 import { CARD_TYPE_DETAILS, RARITY_DETAILS, ROW_DETAILS } from "./collection-rules.js";
-import { RULEBOOK } from "./rules/state.js";
+import { RULEBOOK } from "./rulebook.js";
 
 export const GLOSSARY_ENTRIES = Object.freeze([
   ...Object.entries(TRAIT_DETAILS).map(([id, entry]) => Object.freeze({

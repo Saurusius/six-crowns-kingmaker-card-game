@@ -92,12 +92,17 @@ Hooks.once("init", () => {
 
 Hooks.once("ready", async () => {
   exposeApi();
-  try {
-    await syncCustomDeckRegistry();
-    await createBoosterMacro();
-    await createProfileMacros();
-  } catch (error) {
-    console.error(`${MODULE_TITLE} | Initialisation des collections impossible`, error);
+  const startupTasks = [
+    ["synchronisation des decks", () => syncCustomDeckRegistry()],
+    ["réparation de la macro de booster", () => createBoosterMacro()],
+    ["réparation des macros du module", () => createProfileMacros()]
+  ];
+  for (const [label, task] of startupTasks) {
+    try {
+      await task();
+    } catch (error) {
+      console.error(`${MODULE_TITLE} | Échec pendant la ${label}`, error);
+    }
   }
   console.log(`${MODULE_TITLE} | Prêt. Commandes : /sixcouronnes, /sixcollection, /sixdecks`);
 });

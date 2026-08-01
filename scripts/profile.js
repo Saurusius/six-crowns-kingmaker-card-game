@@ -153,30 +153,46 @@ export async function openDeckBuilder({ onDecksChanged = null, deckId = null } =
   return deckBuilderApp;
 }
 
+function buildModuleMacroCommand(method, label) {
+  return `const module = game.modules.get("${MODULE_ID}");\nif (!module?.active || typeof module.api?.${method} !== "function") {\n  return ui.notifications.error("Le module « Le Jeu des Six Couronnes » n’est pas chargé. Activez-le puis rechargez le monde.");\n}\nawait module.api.${method}();`;
+}
+
+async function upsertModuleMacro(definition) {
+  const existing = game.macros.getName(definition.name);
+  const data = {
+    name: definition.name,
+    type: "script",
+    scope: "global",
+    img: definition.img,
+    command: definition.command
+  };
+  if (existing) {
+    await existing.update(data);
+    return existing;
+  }
+  return Macro.create(data);
+}
+
 export async function createProfileMacros() {
   if (!game.user.isGM) return [];
   const definitions = [
     {
+      name: "Jouer au Jeu des Six Couronnes",
+      img: "icons/sundries/gaming/playing-cards-black.webp",
+      command: buildModuleMacroCommand("openBoard", "plateau")
+    },
+    {
       name: "Ma collection des Six Couronnes",
       img: "icons/containers/chest/chest-reinforced-brown.webp",
-      command: `game.modules.get("${MODULE_ID}").api.openCollection();`
+      command: buildModuleMacroCommand("openCollection", "collection")
     },
     {
       name: "Construire un deck des Six Couronnes",
       img: "icons/tools/hand/hammer-and-nail.webp",
-      command: `game.modules.get("${MODULE_ID}").api.openDeckBuilder();`
+      command: buildModuleMacroCommand("openDeckBuilder", "constructeur de deck")
     }
   ];
-  const created = [];
-  for (const definition of definitions) {
-    if (game.macros.getName(definition.name)) continue;
-    created.push(await Macro.create({
-      name: definition.name,
-      type: "script",
-      scope: "global",
-      img: definition.img,
-      command: definition.command
-    }));
-  }
-  return created;
+  const macros = [];
+  for (const definition of definitions) macros.push(await upsertModuleMacro(definition));
+  return macros;
 }

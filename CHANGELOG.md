@@ -1,3 +1,13 @@
+## 0.10.21 — Correctif de chargement et réparation des macros
+
+- Corrige l’import invalide du règlement qui empêchait l’ouverture du plateau, de la collection et du constructeur de deck.
+- Isole les données du règlement dans un module indépendant afin d’éviter les dépendances fragiles au chargement.
+- Répare et met à jour automatiquement les macros existantes à chaque démarrage du monde.
+- Ajoute une macro « Jouer au Jeu des Six Couronnes » pour ouvrir directement le plateau.
+- Affiche un message explicite dans les macros lorsque le module n’est pas activé ou que son API n’est pas disponible.
+- Sépare les étapes d’initialisation afin qu’une erreur sur une macro n’empêche plus les autres outils de se charger.
+- Conserve toutes les améliorations ergonomiques et visuelles de la version 0.10.2.
+
 ## 0.10.1 — Confort et mise en scène des sortilèges
 
 - Place le choix du sortilège après la sélection des decks et avant le lancer de pièce.

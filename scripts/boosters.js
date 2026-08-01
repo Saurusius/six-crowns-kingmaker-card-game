@@ -837,15 +837,19 @@ function animateBoosterQueue(boosters = []) {
 
 export async function createBoosterMacro() {
   if (!game.user.isGM) return null;
-  if (game.macros.getName(BOOSTER_MACRO_NAME)) return null;
-
-  return Macro.create({
+  const data = {
     name: BOOSTER_MACRO_NAME,
     type: "script",
     scope: "global",
     img: "icons/containers/bags/pack-leather-white-tan.webp",
-    command: `game.modules.get("${MODULE_ID}").api.openBooster();`
-  });
+    command: `const module = game.modules.get("${MODULE_ID}");\nif (!module?.active || typeof module.api?.openBooster !== "function") {\n  return ui.notifications.error("Le module « Le Jeu des Six Couronnes » n’est pas chargé. Activez-le puis rechargez le monde.");\n}\nawait module.api.openBooster();`
+  };
+  const existing = game.macros.getName(BOOSTER_MACRO_NAME);
+  if (existing) {
+    await existing.update(data);
+    return existing;
+  }
+  return Macro.create(data);
 }
 
 export const BOOSTER_RULES = Object.freeze({
