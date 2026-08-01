@@ -1,0 +1,19 @@
+# Dépendances et sorties de build
+node_modules/
+dist/
+
+# Archives générées localement
+*.zip
+
+# Journaux et fichiers temporaires
+*.log
+*.tmp
+*.bak
+*~
+
+# Éditeurs et systèmes
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
