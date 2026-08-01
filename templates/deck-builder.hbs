@@ -6,6 +6,7 @@
     </div>
     <div class="scg-builder-header-actions">
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
+      <button type="button" data-action="toggle-library-view"><i class="{{libraryViewIcon}}"></i> {{libraryViewLabel}}</button>
       <button type="button" data-action="open-deck-analysis"><i class="fa-solid fa-chart-column"></i> Analyser le deck</button>
       <div class="scg-builder-total {{#if complete}}is-complete{{/if}} {{#if overLimit}}is-over{{/if}}">
         <strong>{{total}} / {{requiredTotal}}</strong>
@@ -15,13 +16,13 @@
   </header>
 
   <div class="scg-builder-layout" data-preserve-scroll="layout">
-    <section class="scg-builder-library">
+    <section class="scg-builder-library {{#if isCarouselView}}is-carousel-view{{/if}}">
       <header class="scg-builder-library-heading">
         <div>
           <h2>Cartes disponibles</h2>
           <p>Cliquez sur une carte pour l’ajouter. Clic droit pour retirer un exemplaire.</p>
         </div>
-        <span class="scg-builder-library-hint"><i class="fa-solid fa-table-cells-large"></i> Vue mosaïque</span>
+        <span class="scg-builder-library-hint"><i class="{{libraryViewIcon}}"></i> {{#if isCarouselView}}Vue carrousel{{else}}Vue mosaïque{{/if}}</span>
       </header>
 
       <div class="scg-builder-filter-panel" aria-label="Filtres du constructeur de deck">
@@ -39,7 +40,7 @@
         </div>
       </div>
 
-      <div class="scg-builder-card-list scg-builder-card-grid" data-preserve-scroll="library">
+      <div class="scg-builder-card-list scg-builder-card-grid {{#if isCarouselView}}is-carousel{{/if}}" data-preserve-scroll="library">
         {{#each cards}}
           <article class="scg-builder-card scg-builder-tile scg-rarity-{{rarity}} {{#unless canAdd}}is-add-blocked{{/unless}}" data-builder-card data-action="quick-add-card" data-card-id="{{id}}" data-faction="{{faction}}" data-rarity="{{rarity}}" data-type="{{type}}" data-rows="{{#each rows}}{{this}} {{/each}}" data-traits="{{filterTraits}}" data-search="{{name}} {{factionLabel}} {{rarityLabel}} {{typeLabel}} {{traitSummary}}" title="Clic : ajouter · clic droit : retirer{{#if addDisabledReason}} · {{addDisabledReason}}{{/if}}">
             <div class="scg-builder-card-art {{#if hasArt}}has-art{{/if}}">

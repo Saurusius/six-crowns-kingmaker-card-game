@@ -218,6 +218,8 @@
               </span>
               <span class="scg-card-body">
                 <strong class="scg-card-name">{{name}}</strong>
+                <span class="scg-mulligan-meta-line"><span class="scg-rarity-line {{rarityClass}}"><i class="{{rarityIcon}}"></i> {{rarityLabel}}</span><span class="scg-mulligan-strength-inline"><i class="fa-solid fa-bolt"></i> Force {{strength}}</span></span>
+                <span class="scg-mulligan-rows" aria-label="Lignes jouables">{{#each rowChoices}}<span class="scg-mulligan-row-chip" title="Peut être jouée sur {{label}}"><i class="{{icon}}"></i> {{label}}</span>{{/each}}</span>
                 <span class="scg-effect-icons">
                   {{#each traitBadges}}<span class="scg-trait-icon" data-scg-trait-icon tabindex="0" aria-label="{{label}} — {{description}}"><img src="{{iconUrl}}" alt=""><span class="scg-trait-tooltip"><strong>{{label}}</strong><small>{{description}}</small></span></span>{{/each}}
                 </span>
@@ -468,9 +470,10 @@
             <img src="{{opponentProfile.image}}" alt="Portrait de {{opponentProfile.name}}">
             <div><small>Adversaire</small><strong>{{opponentProfile.name}}</strong></div>
           </article>
-          <article class="scg-equipped-spell is-opponent {{#if opponentSpell.used}}is-used{{/if}} {{#if opponentSpell.hidden}}is-hidden{{/if}}">
+          <article class="scg-equipped-spell is-opponent {{#if opponentSpell.used}}is-used{{/if}} {{#if opponentSpell.hidden}}is-hidden{{/if}}" data-scg-card-popup>
             <img src="{{opponentSpell.artThumb}}" alt="{{opponentSpell.name}}">
             <div><small>Sortilège adverse</small><strong>{{opponentSpell.name}}</strong><span>{{#if opponentSpell.used}}UTILISÉ{{else}}{{#if opponentSpell.hidden}}SECRET{{else}}PRÊT{{/if}}{{/if}}</span></div>
+                      <div class="scg-card-popover scg-spell-popover"><strong>{{opponentSpell.name}}</strong><span>{{#if opponentSpell.hidden}}Choix secret{{else}}{{opponentSpell.activation}}{{/if}}</span><p>{{opponentSpell.text}}</p></div>
           </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>
@@ -500,10 +503,11 @@
             <img src="{{playerProfile.image}}" alt="Portrait de {{playerProfile.name}}">
             <div><small>Votre personnage</small><strong>{{playerProfile.name}}</strong></div>
           </article>
-          <article class="scg-equipped-spell is-player {{#if playerSpell.used}}is-used{{/if}}">
+          <article class="scg-equipped-spell is-player {{#if playerSpell.used}}is-used{{/if}}" data-scg-card-popup>
             {{#if playerSpell.equipped}}<img src="{{playerSpell.artThumb}}" alt="{{playerSpell.name}}">{{else}}<span class="scg-equipped-spell-empty"><i class="fa-solid fa-ban"></i></span>{{/if}}
             <div><small>Votre sortilège</small><strong>{{playerSpell.name}}</strong><span>{{#if playerSpell.used}}UTILISÉ{{else}}{{#if playerSpell.equipped}}PRÊT{{else}}AUCUN{{/if}}{{/if}}</span></div>
             {{#if playerSpell.equipped}}<button type="button" data-action="activate-event-spell" {{#unless playerSpell.canActivate}}disabled title="{{playerSpell.reason}}"{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Activer</button>{{/if}}
+            <div class="scg-card-popover scg-spell-popover"><strong>{{playerSpell.name}}</strong><span>{{#if playerSpell.used}}Utilisé{{else}}{{playerSpell.activation}}{{/if}}</span><p>{{playerSpell.text}}</p></div>
           </article>
           <article class="scg-zone-card scg-zone-card-deck">
             <div class="scg-zone-visual"><span><i class="fa-solid fa-layer-group"></i></span></div>

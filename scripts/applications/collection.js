@@ -362,6 +362,12 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       modal.querySelector("h2").textContent = card.dataset.name || "Carte";
       modal.querySelector("p").innerHTML = card.querySelector(".scg-card-rules-text")?.innerHTML ?? card.dataset.text ?? "";
       modal.dataset.cardId = card.dataset.cardId ?? "";
+      modal.dataset.cardTheme = card.dataset.cardTheme ?? "";
+      modal.className = "scg-card-preview";
+      for (const cls of Array.from(card.classList)) {
+        if (cls.startsWith("scg-rarity-")) modal.classList.add(cls);
+      }
+      if (card.dataset.cardTheme) modal.classList.add(`scg-preview-theme-${card.dataset.cardTheme}`);
       modal.hidden = false;
     }));
     this.element.querySelectorAll("[data-action='close-preview']").forEach((button)=>button.addEventListener("click",()=>{ this.element.querySelector("[data-card-preview]").hidden=true; }));

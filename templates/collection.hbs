@@ -178,12 +178,12 @@
         <div class="scg-collection-grid">
           {{#each cards}}
             <article class="scg-collection-card {{#if isEventSpell}}scg-event-spell-card{{/if}} {{#if discovered}}scg-rarity-{{rarity}}{{else}}is-hidden-card{{/if}}"
-              data-collection-card data-scg-card-popup
+              data-collection-card
               data-rarity="{{filterRarity}}"
               data-rows="{{filterRows}}"
               data-ownership="{{ownershipState}}"
               data-search="{{#if discovered}}{{displayName}} {{id}} {{factionLabel}} {{rarityLabel}} {{typeLabel}}{{else}}Carte inconnue {{id}}{{/if}}"
-              data-card-id="{{id}}" data-owned-count="{{ownedCount}}" data-trade-available-count="{{tradeAvailableCount}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}">
+              data-card-id="{{id}}" data-owned-count="{{ownedCount}}" data-trade-available-count="{{tradeAvailableCount}}" data-name="{{name}}" data-art="{{artFull}}" data-text="{{text}}" data-card-theme="{{../id}}">
               {{#if discovered}}
                 <div class="scg-collection-card-art {{#if hasArt}}has-art{{/if}}">
                   {{#if hasArt}}
@@ -218,12 +218,6 @@
                     <span>Possédée ×{{ownedCount}}{{#if reservedForTrade}} · {{reservedForTrade}} réservée(s){{/if}}</span>
                     {{#if isEventSpell}}<span><i class="fa-solid fa-bolt"></i> Une utilisation par partie</span>{{else}}<span>Maximum par deck : {{maxCopies}}</span>{{/if}}
                   </footer>
-                </div>
-                <div class="scg-card-popover scg-collection-art-popover">
-                  {{#if hasArt}}<img src="{{artFull}}" alt="Illustration de {{name}}" loading="lazy" data-scg-art-fallback data-fallback-symbol="{{factionSymbol}}">{{/if}}
-                  <strong>{{name}}</strong>
-                  {{#if isEventSpell}}<span>{{rarityLabel}} · {{typeLabel}} · {{setLabel}}</span>{{else}}<span>{{rarityLabel}} · {{typeLabel}} · {{factionLabel}} · Force {{strength}}</span>{{/if}}
-                  {{#if text}}<p class="scg-card-rules-text" tabindex="0" aria-label="Effet de {{name}} : {{text}}">{{{textHtml}}}</p>{{/if}}
                 </div>
               {{else}}
                 <div class="scg-hidden-card-back {{#if isEventSpell}}is-event-card-back{{/if}}">

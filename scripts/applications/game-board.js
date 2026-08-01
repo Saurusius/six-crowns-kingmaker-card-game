@@ -172,6 +172,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       selectedPlayerDeckLabel: this.matchState.selectedPlayerDeck === "random" ? "Deck aléatoire" : selectedPlayerDeckDefinition?.name ?? "Deck joueur",
       selectedOpponentDeckLabel: this.matchState.selectedOpponentDeck === "random" ? "Deck aléatoire" : selectedOpponentDeckDefinition?.name ?? "Deck adverse",
       noSpellSelected: !this.matchState.spells?.player?.id,
+      rulesOpen: false,
       selectedSpellLockedLabel: view.playerSpell?.equipped ? view.playerSpell.name : "Sans sortilège",
       canOpenEventBooster: game.user.isGM || eventBoosterCredits > 0,
       eventBoosterButtonLabel: game.user.isGM
@@ -447,9 +448,9 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
 
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
     this.element.querySelectorAll("[data-action='toggle-rules']").forEach((button) => {
-      button.addEventListener("click", async () => {
-        toggleRules(this.matchState);
-        await this._renderState();
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        openRulebook();
       });
     });
 

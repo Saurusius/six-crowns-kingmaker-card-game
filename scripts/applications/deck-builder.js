@@ -63,6 +63,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     this.rowFilter = "all";
     this.traitFilter = "all";
     this.sortBy = "name";
+    this.libraryView = "mosaic";
     this._analysisApp = null;
   }
 
@@ -139,6 +140,10 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       rowFilter: this.rowFilter,
       traitFilter: this.traitFilter,
       sortBy: this.sortBy,
+      libraryView: this.libraryView,
+      isCarouselView: this.libraryView === "carousel",
+      libraryViewLabel: this.libraryView === "carousel" ? "Vue mosaïque" : "Vue carrousel",
+      libraryViewIcon: this.libraryView === "carousel" ? "fa-solid fa-table-cells-large" : "fa-solid fa-panorama",
       sortOptions: [
         { id: "name", label: "Nom", selected: this.sortBy === "name" },
         { id: "strength", label: "Force décroissante", selected: this.sortBy === "strength" },
@@ -271,6 +276,11 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
     });
 
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
+
+    this.element.querySelector("[data-action='toggle-library-view']")?.addEventListener("click", async () => {
+      this.libraryView = this.libraryView === "carousel" ? "mosaic" : "carousel";
+      await this.render({ force: true });
+    });
 
     this.element.querySelectorAll("[data-action='open-deck-analysis']").forEach((button) => {
       button.addEventListener("click", async () => {

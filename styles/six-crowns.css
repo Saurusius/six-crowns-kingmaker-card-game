@@ -8539,7 +8539,7 @@ body.scg-booster-open {
   .scg-spell-reveal-card > small { position:static; transform:none; text-align:center; }
 }
 
-/* v0.10.1 — options de collection et préparation deck → sortilège */
+/* v0.10.2 — options de collection, ergonomie et préparation deck → sortilège */
 .scg-collection-shell.is-options-compact .scg-profile-actions .scg-card-view-toggle {
   display: inline-flex !important;
 }
@@ -9046,3 +9046,68 @@ body.scg-booster-open {
   .scg-booster-opening.is-event-booster .scg-reveal-card { width: min(290px, 78vw); }
   .scg-booster-opening.is-event-booster .scg-reveal-card-art { height: min(410px, 52vh); }
 }
+
+
+/* v0.10.2 — lisibilité de la main de départ, règles en fenêtre et collection stylisée */
+.scg-mulligan-card .scg-card-body { gap: 7px; }
+.scg-mulligan-meta-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:.72rem; color:#e8dbb8; }
+.scg-mulligan-strength-inline { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border-radius:999px; background:rgba(216,183,93,.16); border:1px solid rgba(216,183,93,.32); }
+.scg-mulligan-rows { display:flex; flex-wrap:wrap; gap:6px; }
+.scg-mulligan-row-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(240,207,106,.28); color:#f6e6b2; font-size:.72rem; font-weight:700; }
+.scg-mulligan-card .scg-rarity-badge, .scg-mulligan-card .scg-row-emblem, .scg-mulligan-card .scg-mulligan-choice { box-shadow:0 0 0 2px rgba(8,8,8,.4), 0 6px 14px rgba(0,0,0,.35); }
+
+.scg-equipped-spell[data-scg-card-popup] { position:relative; cursor:help; }
+.scg-spell-popover p { margin: 8px 0 0; }
+
+.scg-rulebook-dialog { max-width:min(1100px, 92vw); }
+.scg-rulebook-groups > section > div { display:grid; gap:12px; }
+.scg-rulebook-groups article { align-items:flex-start; }
+
+.scg-collection-shell.is-options-compact .scg-profile-actions .scg-ticket-wallet,
+.scg-collection-shell.is-options-compact .scg-profile-actions .scg-option-control,
+.scg-collection-shell.is-options-compact .scg-collection-summary,
+.scg-collection-shell.is-options-compact .scg-faction-counters,
+.scg-collection-shell.is-options-compact .scg-collection-filters {
+  display:flex !important;
+}
+.scg-collection-shell.is-options-compact .scg-collection-summary { display:grid !important; }
+.scg-collection-shell.is-options-compact .scg-faction-counters { display:grid !important; }
+.scg-collection-shell.is-options-compact .scg-collection-filters { display:grid !important; }
+.scg-collection-shell.is-options-compact .scg-card-comparison,
+.scg-collection-shell.is-options-compact > .scg-collapsible-panel,
+.scg-collection-shell.is-options-compact > .scg-gm-tools { display:none !important; }
+.scg-collection-shell.is-options-compact [data-action="toggle-options-size"],
+.scg-collection-shell.is-options-compact .scg-profile-actions .scg-card-view-toggle { display:inline-flex !important; }
+
+.scg-collection-card { position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 18px 34px rgba(0,0,0,.26); }
+.scg-collection-card::before { content:""; position:absolute; inset:0; pointer-events:none; border-radius:18px; padding:2px; background:linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,.02) 42%, rgba(255,255,255,.18)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:.55; }
+.scg-collection-card::after { content:""; position:absolute; inset:10px; pointer-events:none; border-radius:13px; border:1px solid rgba(255,255,255,.08); opacity:.5; }
+.scg-collection-card.scg-rarity-commun { --scg-rare-glow: rgba(214,214,214,.22); }
+.scg-collection-card.scg-rarity-peuCommune { --scg-rare-glow: rgba(236,162,73,.28); }
+.scg-collection-card.scg-rarity-rare { --scg-rare-glow: rgba(88,143,255,.32); }
+.scg-collection-card.scg-rarity-unique { --scg-rare-glow: rgba(168,111,255,.32); }
+.scg-collection-card.scg-rarity-doree { --scg-rare-glow: rgba(255,210,92,.34); }
+.scg-collection-card { box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 18px 34px rgba(0,0,0,.26), 0 0 0 1px var(--scg-rare-glow, rgba(255,255,255,.08)); }
+.scg-collection-group[data-collection-group="six-crowns"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(235,202,107,.95), rgba(145,108,39,.18) 42%, rgba(255,239,179,.58)); }
+.scg-collection-group[data-collection-group="aldori"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(228,123,148,.88), rgba(131,57,72,.18) 42%, rgba(255,205,220,.48)); }
+.scg-collection-group[data-collection-group="iron-khans"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(227,145,78,.9), rgba(120,69,25,.18) 42%, rgba(255,209,171,.48)); }
+.scg-collection-group[data-collection-group="stolen-lands-arcana"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(111,223,162,.9), rgba(33,96,62,.18) 42%, rgba(201,255,229,.45)); }
+.scg-collection-group[data-collection-group="event-stolen-lands"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(255,232,126,.95), rgba(130,83,29,.18) 42%, rgba(255,242,189,.6)); }
+
+.scg-card-preview > div { border-radius:24px; padding:18px; background:linear-gradient(180deg, rgba(26,20,14,.96), rgba(15,11,8,.98)); border:2px solid rgba(255,255,255,.12); box-shadow:0 30px 70px rgba(0,0,0,.45); }
+.scg-card-preview img { border-radius:18px; box-shadow:0 0 0 2px rgba(255,255,255,.08), 0 0 0 6px var(--scg-preview-glow, rgba(255,255,255,.08)); }
+.scg-card-preview.scg-rarity-commun { --scg-preview-glow: rgba(214,214,214,.16); }
+.scg-card-preview.scg-rarity-peuCommune { --scg-preview-glow: rgba(236,162,73,.22); }
+.scg-card-preview.scg-rarity-rare { --scg-preview-glow: rgba(88,143,255,.28); }
+.scg-card-preview.scg-rarity-unique { --scg-preview-glow: rgba(168,111,255,.28); }
+.scg-card-preview.scg-rarity-doree { --scg-preview-glow: rgba(255,210,92,.32); }
+
+.scg-builder-library.is-carousel-view .scg-builder-card-list.is-carousel { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(260px, 300px); grid-template-columns:none; overflow-x:auto; overflow-y:hidden; align-items:start; padding-bottom:12px; }
+.scg-builder-library.is-carousel-view .scg-builder-card { min-height:100%; }
+.scg-builder-library.is-carousel-view .scg-builder-card-info strong { min-height:auto; }
+
+.scg-card-preview.scg-preview-theme-six-crowns > div { border-color: rgba(235,202,107,.6); }
+.scg-card-preview.scg-preview-theme-aldori > div { border-color: rgba(228,123,148,.55); }
+.scg-card-preview.scg-preview-theme-iron-khans > div { border-color: rgba(227,145,78,.55); }
+.scg-card-preview.scg-preview-theme-stolen-lands-arcana > div { border-color: rgba(111,223,162,.55); }
+.scg-card-preview.scg-preview-theme-event-stolen-lands > div { border-color: rgba(255,232,126,.62); }

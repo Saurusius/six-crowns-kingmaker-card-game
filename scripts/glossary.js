@@ -1,6 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { TRAIT_DETAILS } from "./traits.js";
 import { CARD_TYPE_DETAILS, RARITY_DETAILS, ROW_DETAILS } from "./collection-rules.js";
+import { RULEBOOK } from "./rules/state.js";
 
 export const GLOSSARY_ENTRIES = Object.freeze([
   ...Object.entries(TRAIT_DETAILS).map(([id, entry]) => Object.freeze({
@@ -18,8 +19,14 @@ export const GLOSSARY_ENTRIES = Object.freeze([
     description: id === "personnage"
       ? "Personnage nommé du royaume ou des Terres Dérobées. Ces cartes sont au minimum Rares."
       : id === "tactique"
-        ? "Carte jouable représentant une manœuvre, un événement ou un avantage stratégique."
-        : "Formation militaire, créature ou groupe combattant déployé sur une ligne.",
+        ? "Carte d’action ou de stratégie qui modifie la manche par son effet immédiat ou persistant."
+        : id === "unite"
+          ? "Carte déployable sur une ou plusieurs lignes du champ de bataille. Elle apporte une valeur de Force et peut posséder des capacités."
+          : id === "sortilege"
+            ? "Carte dorée événementielle, choisie avant la partie puis activable une seule fois pendant une manche. Elle ne rejoint jamais un deck classique."
+            : id === "invocation"
+              ? "Créature ou renfort temporaire invoqué par un effet. Une invocation apparaît généralement en jeu sans passer par la main de départ."
+              : "Formation militaire, créature ou groupe combattant déployé sur une ligne.",
     iconClass: entry.icon,
     visualClass: "is-type"
   })),
@@ -78,6 +85,29 @@ export function formatCardRulesText(text = "") {
     html = html.replace(expression, `<span class="scg-rule-keyword" title="${escapeHtml(entry.description)}">$1</span>`);
   }
   return html;
+}
+
+export function openRulebook() {
+  if (typeof document === "undefined") return null;
+  document.querySelector(".scg-rulebook-overlay")?.remove();
+  const overlay = document.createElement("div");
+  overlay.className = "scg-glossary-overlay scg-rulebook-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.innerHTML = `
+    <section class="scg-glossary-dialog scg-rulebook-dialog">
+      <header><div><small>Jeu des Six Couronnes</small><h2>Règlement</h2><p>Déroulement d’une partie, préparation, résolution et victoire.</p></div><button type="button" data-action="close-rulebook" aria-label="Fermer">×</button></header>
+      <div class="scg-glossary-groups scg-rulebook-groups">
+        ${RULEBOOK.map((group) => `<section><h3>${escapeHtml(group.title)}</h3><div>${group.items.map((entry) => `<article><span class="scg-glossary-icon is-type"><i class="fa-solid fa-scroll"></i></span><span><strong>${escapeHtml(group.title)}</strong><small>${escapeHtml(entry)}</small></span></article>`).join("")}</div></section>`).join("")}
+      </div>
+    </section>`;
+  const close = () => overlay.remove();
+  overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
+  overlay.querySelector("[data-action='close-rulebook']")?.addEventListener("click", close);
+  overlay.addEventListener("keydown", (event) => { if (event.key === "Escape") close(); });
+  document.body.appendChild(overlay);
+  overlay.querySelector("[data-action='close-rulebook']")?.focus();
+  return overlay;
 }
 
 export function openGlossary() {

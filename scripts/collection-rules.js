@@ -21,7 +21,7 @@ export const CARD_TYPE_DETAILS = Object.freeze({
   personnage: Object.freeze({ label: "Personnage", order: 1, icon: "fa-solid fa-user" }),
   unite: Object.freeze({ label: "Unité", order: 2, icon: "fa-solid fa-shield-halved" }),
   tactique: Object.freeze({ label: "Tactique", order: 3, icon: "fa-solid fa-chess-knight" }),
-  sortilege: Object.freeze({ label: "Sortilège événementiel", order: 4, icon: "fa-solid fa-wand-sparkles" }),
+  sortilege: Object.freeze({ label: "Sortilège", order: 4, icon: "fa-solid fa-wand-sparkles" }),
   invocation: Object.freeze({ label: "Invocation", order: 5, icon: "fa-solid fa-paw" })
 });
 
