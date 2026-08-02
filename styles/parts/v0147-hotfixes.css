@@ -31,3 +31,8 @@
     filter: brightness(1) drop-shadow(0 16px 12px rgba(0, 0, 0, .5));
   }
 }
+
+/* v0.14.9 — en mode réduit, les filtres restent accessibles au-dessus du listing. */
+.scg-collection-shell.is-options-compact > .scg-collection-filters {
+  display: grid !important;
+}

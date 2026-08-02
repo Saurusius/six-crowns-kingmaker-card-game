@@ -8,7 +8,7 @@ export class SixCrownsShop extends HandlebarsApplicationMixin(ApplicationV2) {
   constructor(options={}) { super(options); this.tab="shop"; this._hooks=[Hooks.on(`${MODULE_ID}.crownsUpdated`,()=>this.rendered&&this.render({force:true})),Hooks.on(`${MODULE_ID}.shopInventoryUpdated`,()=>this.rendered&&this.render({force:true}))]; }
   async _prepareContext(){
     const [crowns, inventory, history]=await Promise.all([getCrowns(),getShopInventory(),getShopHistory()]);
-    const products=SHOP_PRODUCTS.map(p=>({...p,owned:Number(inventory[p.id]??0),canBuy:crowns>=p.price}));
+    const products=SHOP_PRODUCTS.map(p=>({...p,owned:Number(inventory[p.id]??0),canBuy:crowns>=p.price,isEvent:p.kind==="event"}));
     return { crowns, products, pageTitle: this.tab === "inventory" ? "Votre réserve" : this.tab === "history" ? "Le registre" : "Ses nouvelles marchandises", shopTab:this.tab==="shop", inventoryTab:this.tab==="inventory", historyTab:this.tab==="history", history:history.map(e=>({...e,dateLabel:formatDateTime(e.at)})), hasInventory:products.some(p=>p.owned>0) };
   }
   async _onRender(c,o){ await super._onRender(c,o);

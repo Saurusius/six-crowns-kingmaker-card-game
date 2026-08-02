@@ -195,7 +195,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
@@ -390,7 +390,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne. Mobile : peut être jouée sur les lignes Avant-garde ou Escarmouche.",
     "rarity": "peuCommune",
     "isCharacter": false,
     "art": {
@@ -458,7 +458,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
@@ -572,7 +572,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
@@ -817,7 +817,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {

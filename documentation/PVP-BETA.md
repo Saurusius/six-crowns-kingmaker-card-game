@@ -1,6 +1,6 @@
-# Bêta PvP — version 0.14.8
+# Bêta PvP — version 0.14.9
 
-Le mode PvP propose des duels synchronisés entre deux profils Foundry. Depuis la version 0.14.8, aucun MJ n’a besoin d’être connecté : un profil joueur actif est élu automatiquement comme coordinateur technique.
+Le mode PvP propose des duels synchronisés entre deux profils Foundry. Aucun MJ n’a besoin d’être connecté : un profil joueur actif est élu automatiquement comme coordinateur technique. Depuis la version 0.14.9, un changement de coordinateur récupère automatiquement la révision de dépôt la plus récente disponible.
 
 ## Prérequis
 
@@ -12,7 +12,7 @@ Le premier profil joueur actif, déterminé de manière stable par son identifia
 
 ## Stockage et confidentialité
 
-L’état canonique des duels est conservé dans un flag privé au module sur le profil du coordinateur actif, plutôt que dans un réglage monde nécessitant les droits d’un MJ. Les anciens dépôts sécurisés peuvent encore être importés lorsqu’un ancien hôte MJ lance le module.
+L’état canonique des duels est conservé dans un flag du module sur le profil du coordinateur actif, plutôt que dans un réglage monde nécessitant les droits d’un MJ. À chaque prise de rôle, le coordinateur compare les dépôts visibles sur les profils, sélectionne la révision la plus récente et la recopie localement. Les anciens dépôts sécurisés peuvent encore être importés lorsqu’un ancien hôte MJ lance le module.
 
 Les instantanés transmis à chaque client restent adaptés à leur destinataire :
 
@@ -40,10 +40,11 @@ Foundry reste toutefois une application exécutée dans le navigateur. Un joueur
 7. Chacun remplace éventuellement jusqu’à deux cartes.
 8. La partie suit les règles normales jusqu’à la victoire ou l’abandon.
 9. Les deux joueurs peuvent demander une revanche.
+10. Après le résultat, le retour à l’arène libère immédiatement la liste des adversaires pour démarrer un autre duel.
 
 ## Protections techniques
 
-- coordination automatique par un profil joueur actif ;
+- coordination automatique par un profil joueur actif et reprise de la révision la plus récente ;
 - signature ECDSA des requêtes et réponses ;
 - identifiant unique pour chaque requête ;
 - mémorisation des requêtes déjà traitées ;

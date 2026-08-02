@@ -33,7 +33,7 @@ export const RULEBOOK = Object.freeze([
       { title: "Héros", icon: "fa-solid fa-crown", text: "Carte prestigieuse qui contribue aux départages de ligne et possède généralement une forte Puissance." },
       { title: "Soutien", icon: "fa-solid fa-people-group", text: "Donne +1 Puissance à toutes les autres cartes de sa ligne." },
       { title: "Formation", icon: "fa-solid fa-clone", text: "Gagne +2 Puissance par autre copie identique présente sur la même ligne." },
-      { title: "Renfort", icon: "fa-solid fa-person-running", text: "Déploie depuis la pioche toutes les autres copies disponibles de cette carte." },
+      { title: "Renfort", icon: "fa-solid fa-person-running", text: "Déploie depuis la main et la pioche toutes les autres copies disponibles de cette carte." },
       { title: "Bastion", icon: "fa-solid fa-chess-rook", text: "La meilleure carte Bastion peut rester pour la manche suivante avec une Puissance réduite de moitié." },
       { title: "Mobile", icon: "fa-solid fa-arrows-left-right", text: "Peut être jouée sur plusieurs lignes indiquées par la carte." },
       { title: "Raretés", icon: "fa-solid fa-gem", text: "Les cartes sont Communes, Peu communes, Rares, Uniques ou Dorées pour les suites événementielles." }

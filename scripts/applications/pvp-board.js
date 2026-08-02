@@ -235,14 +235,15 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       }
     };
 
-    this.element.querySelector("[data-action='open-home']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      void api?.openPvp?.();
-    });
-    this.element.querySelector("[data-action='return-lobby']")?.addEventListener("click", () => {
-      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      void api?.openPvp?.();
-    });
+    const returnToArena = () => {
+      void (async () => {
+        const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+        await api?.openPvp?.();
+        await this.close();
+      })();
+    };
+    this.element.querySelector("[data-action='open-home']")?.addEventListener("click", returnToArena);
+    this.element.querySelector("[data-action='return-lobby']")?.addEventListener("click", returnToArena);
     this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", () => openRulebook());
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
     this.element.querySelector("[data-action='continue-after-coin']")?.addEventListener("click", () => void send("continue-coin"));

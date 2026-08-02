@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.14.9
+
+- Enregistre désormais les statistiques de partie directement sur le profil du joueur, même lorsqu’aucun MJ n’est connecté, puis les agrège automatiquement dans le tableau d’analyse.
+- Conserve les filtres de cartes visibles lorsque les options de la collection sont réduites, tout en masquant les panneaux secondaires.
+- Corrige le mulligan en solo et en PvP : les cartes remplacées sont désormais remélangées dans la pioche au lieu d’être envoyées dans la défausse.
+- Permet au trait **Renfort** de déployer toutes les autres copies depuis la main et la pioche, avec une simulation IA alignée sur cette règle.
+- Libère immédiatement l’arène après un duel PvP terminé afin de pouvoir défier un nouvel adversaire sans rester bloqué sur le résultat précédent.
+- Ferme proprement le plateau PvP lors du retour à l’arène.
+- Renomme la carte `SC-18` en **Archers de Brumelande** sans modifier son identifiant ni ses chemins d’illustration, afin de préserver les collections et decks existants.
+- Agrandit le paquet événementiel dans la boutique, son animation d’ouverture et la carte dorée révélée.
+- Conserve les correctifs de stabilisation : Héros, Bastion, basculement du coordinateur PvP, reconnexion, reset sécurisé et transactions d’échange renforcées.
+- Porte la couverture automatisée à 56 tests.
+
 ## 0.14.8
 
 - Supprime la nécessité de garder un MJ connecté pour les échanges entre joueurs.

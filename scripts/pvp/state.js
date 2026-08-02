@@ -7,6 +7,7 @@ import {
   drawCards,
   getEventSpellActivationOptions,
   passSide,
+  performMulligan,
   playCard,
   shuffleCards,
   startNextRound
@@ -150,27 +151,12 @@ export function togglePvpMulligan(match, side, cardId) {
   return match;
 }
 
-function performSideMulligan(sideState, selectedIds) {
-  const ids = uniqueIds(selectedIds);
-  const replaced = [];
-  for (const cardId of ids) {
-    const index = sideState.hand.findIndex((card) => card.id === cardId);
-    if (index < 0) continue;
-    const [card] = sideState.hand.splice(index, 1);
-    replaced.push(card);
-  }
-  sideState.discard.push(...replaced);
-  drawCards(sideState, replaced.length);
-  sideState.mulliganUsed = true;
-  return replaced;
-}
-
 export function confirmPvpMulligan(match, side) {
   const state = match.state;
   if (state.phase !== PHASES.MULLIGAN) throw new Error("Le remplacement initial n’est plus disponible.");
   match.mulligan ??= { selections: { player: [], opponent: [] }, confirmed: { player: false, opponent: false } };
   if (match.mulligan.confirmed[side]) throw new Error("Votre main est déjà confirmée.");
-  const replaced = performSideMulligan(state[side], match.mulligan.selections[side]);
+  const replaced = performMulligan(state[side], uniqueIds(match.mulligan.selections[side]));
   match.mulligan.confirmed[side] = true;
   appendPvpLog(state, "mulligan", `${state[side].name} confirme sa main${replaced.length ? ` après ${replaced.length} remplacement(s)` : ""}.`, { side, replaced: replaced.length });
   if (match.mulligan.confirmed.player && match.mulligan.confirmed.opponent) {

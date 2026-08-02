@@ -142,3 +142,23 @@ test("une transaction multi-utilisateurs restaure tous les profils si une mise �
   assert.equal(first.flags.transactionRevision, undefined);
   assert.equal(second.flags.transactionRevision, undefined);
 });
+
+test("les opérations économiques sont verrouillées pendant un échange préparé", async () => {
+  const user = mockUser("u-locked", {
+    cardCollection: { alpha: { id: "alpha", count: 2 } },
+    preparedTradeTransactions: { trade1: { state: "applied" } }
+  });
+  await assert.rejects(() => transactUserFlags({
+    user,
+    type: "recycle-cards",
+    flags: ["cardCollection"],
+    mutate: () => ({ cardCollection: {} })
+  }), /échange est en cours de finalisation/i);
+  assert.equal(user.flags.cardCollection.alpha.count, 2);
+  await assert.rejects(() => transactUserFlags({
+    user,
+    type: "reset-player-profile",
+    flags: ["cardCollection", "preparedTradeTransactions"],
+    mutate: () => ({ cardCollection: {}, preparedTradeTransactions: {} })
+  }), /échange est en cours de finalisation/i);
+});

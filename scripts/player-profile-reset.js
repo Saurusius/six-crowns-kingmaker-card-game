@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { PERSONAL_ANALYTICS_FLAG } from "./analytics.js";
 import {
   BOOSTER_CREDITS_FLAG,
   BOOSTER_HISTORY_FLAG,
@@ -33,11 +34,11 @@ export const PLAYER_PROFILE_FLAGS = Object.freeze([
   SHOP_INVENTORY_FLAG,
   SHOP_HISTORY_FLAG,
   SOLO_MATCH_HISTORY_FLAG,
+  PERSONAL_ANALYTICS_FLAG,
   ACTIVE_MATCH_STATE_FLAG,
   PLAYER_TRADE_LEDGER_FLAG,
   PREPARED_TRADE_TRANSACTIONS_FLAG,
-  PVP_PERSONAL_HISTORY_FLAG,
-  PVP_PEER_REPOSITORY_FLAG
+  PVP_PERSONAL_HISTORY_FLAG
 ]);
 
 function clone(value) {
@@ -67,11 +68,11 @@ export function buildFreshPlayerProfile() {
     [SHOP_INVENTORY_FLAG]: {},
     [SHOP_HISTORY_FLAG]: [],
     [SOLO_MATCH_HISTORY_FLAG]: [],
+    [PERSONAL_ANALYTICS_FLAG]: [],
     [ACTIVE_MATCH_STATE_FLAG]: null,
     [PLAYER_TRADE_LEDGER_FLAG]: { offers: [], history: [], revision: 0 },
     [PREPARED_TRADE_TRANSACTIONS_FLAG]: {},
-    [PVP_PERSONAL_HISTORY_FLAG]: [],
-    [PVP_PEER_REPOSITORY_FLAG]: { matches: [], history: [], revision: 0, updatedAt: null }
+    [PVP_PERSONAL_HISTORY_FLAG]: []
   };
 }
 
@@ -83,6 +84,7 @@ export function summarizePlayerProfile(snapshot = {}) {
   const boosterHistory = Array.isArray(snapshot[BOOSTER_HISTORY_FLAG]) ? snapshot[BOOSTER_HISTORY_FLAG] : [];
   const shopHistory = Array.isArray(snapshot[SHOP_HISTORY_FLAG]) ? snapshot[SHOP_HISTORY_FLAG] : [];
   const soloHistory = Array.isArray(snapshot[SOLO_MATCH_HISTORY_FLAG]) ? snapshot[SOLO_MATCH_HISTORY_FLAG] : [];
+  const analyticsHistory = Array.isArray(snapshot[PERSONAL_ANALYTICS_FLAG]) ? snapshot[PERSONAL_ANALYTICS_FLAG] : [];
   const pvpHistory = Array.isArray(snapshot[PVP_PERSONAL_HISTORY_FLAG]) ? snapshot[PVP_PERSONAL_HISTORY_FLAG] : [];
   const tradeLedger = snapshot[PLAYER_TRADE_LEDGER_FLAG] && typeof snapshot[PLAYER_TRADE_LEDGER_FLAG] === "object"
     ? snapshot[PLAYER_TRADE_LEDGER_FLAG]
@@ -107,7 +109,7 @@ export function summarizePlayerProfile(snapshot = {}) {
       (total, count) => total + positiveInteger(count),
       0
     ),
-    removedHistoryEntries: boosterHistory.length + shopHistory.length + soloHistory.length + pvpHistory.length + tradeHistory.length,
+    removedHistoryEntries: boosterHistory.length + shopHistory.length + soloHistory.length + analyticsHistory.length + pvpHistory.length + tradeHistory.length,
     previousCrowns: snapshot[CROWNS_FLAG] === undefined || snapshot[CROWNS_FLAG] === null
       ? DEFAULT_CROWNS
       : positiveInteger(snapshot[CROWNS_FLAG]),

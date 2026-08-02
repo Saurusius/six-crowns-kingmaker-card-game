@@ -4,9 +4,38 @@ import { formatDateTime } from "./i18n.js";
 import { signSocketEnvelope, verifySocketEnvelope } from "./socket-auth.js";
 
 export const ANALYTICS_SETTING = "matchAnalytics";
+export const PERSONAL_ANALYTICS_FLAG = "personalMatchAnalytics";
+const MAX_PERSONAL_ANALYTICS = 250;
+const MAX_WORLD_ANALYTICS = 500;
 
 function clone(value) {
   return globalThis.foundry?.utils?.deepClone ? foundry.utils.deepClone(value ?? []) : structuredClone(value ?? []);
+}
+
+function usersArray() {
+  return Array.from(game.users?.contents ?? game.users ?? []);
+}
+
+function recordKey(record = {}) {
+  return `${String(record.userId ?? "unknown")}:${String(record.id ?? "unknown")}`;
+}
+
+export function mergeAnalyticsRecords(...sources) {
+  const entries = new Map();
+  for (const source of sources) {
+    if (!Array.isArray(source)) continue;
+    for (const raw of source) {
+      if (!raw || typeof raw !== "object") continue;
+      const record = sanitizeMatchRecord(raw);
+      entries.set(recordKey(record), record);
+    }
+  }
+  return [...entries.values()].sort((left, right) => {
+    const leftTime = Date.parse(left.completedAt ?? 0);
+    const rightTime = Date.parse(right.completedAt ?? 0);
+    return (Number.isFinite(leftTime) ? leftTime : 0) - (Number.isFinite(rightTime) ? rightTime : 0)
+      || recordKey(left).localeCompare(recordKey(right));
+  });
 }
 
 export function registerAnalyticsSetting() {
@@ -15,17 +44,43 @@ export function registerAnalyticsSetting() {
   });
 }
 
+export function getPersonalMatchAnalytics({ user = game.user } = {}) {
+  const stored = user?.getFlag?.(MODULE_ID, PERSONAL_ANALYTICS_FLAG) ?? [];
+  return Array.isArray(stored) ? clone(stored) : [];
+}
+
 export function getMatchAnalytics() {
-  return clone(game.settings.get(MODULE_ID, ANALYTICS_SETTING) ?? []);
+  const worldEntries = clone(game.settings.get(MODULE_ID, ANALYTICS_SETTING) ?? []);
+  const personalEntries = usersArray().flatMap((user) => getPersonalMatchAnalytics({ user }));
+  return mergeAnalyticsRecords(worldEntries, personalEntries);
 }
 
 function primaryActiveGm() {
-  return Array.from(game.users?.contents ?? game.users ?? [])
+  return usersArray()
     .filter((user) => user.isGM && user.active)
     .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0] ?? null;
 }
 
+export async function persistPersonalAnalyticsRecord(record, { user = game.user } = {}) {
+  if (!user?.setFlag) throw new Error("Profil joueur introuvable pour enregistrer les statistiques.");
+  const source = sanitizeMatchRecord(record);
+  const entry = {
+    ...source,
+    userId: String(user.id ?? source.userId),
+    userName: String(user.name ?? source.userName)
+  };
+  const current = getPersonalMatchAnalytics({ user });
+  const key = recordKey(entry);
+  if (!current.some((item) => recordKey(item) === key)) {
+    const next = mergeAnalyticsRecords(current, [entry]).slice(-MAX_PERSONAL_ANALYTICS);
+    await user.setFlag(MODULE_ID, PERSONAL_ANALYTICS_FLAG, next);
+    Hooks.callAll(`${MODULE_ID}.analyticsUpdated`, clone(next), user.id);
+  }
+  return entry;
+}
+
 async function storeAnalyticsRecord(data, { local = false } = {}) {
+  if (!game.user?.isGM) throw new Error("Seul un MJ peut consolider les statistiques mondiales.");
   if (!local) await verifySocketEnvelope(data, data.actorUserId);
   const source = sanitizeMatchRecord(data.record);
   const actor = game.users.get(data.actorUserId);
@@ -34,10 +89,10 @@ async function storeAnalyticsRecord(data, { local = false } = {}) {
     userId: actor?.id ?? source.userId,
     userName: actor?.name ?? source.userName
   };
-  const entries = getMatchAnalytics();
-  if (!entries.some((entry) => entry.id === record.id)) {
-    entries.push(record);
-    await game.settings.set(MODULE_ID, ANALYTICS_SETTING, entries.slice(-500));
+  const entries = clone(game.settings.get(MODULE_ID, ANALYTICS_SETTING) ?? []);
+  if (!entries.some((entry) => recordKey(entry) === recordKey(record))) {
+    const next = mergeAnalyticsRecords(entries, [record]).slice(-MAX_WORLD_ANALYTICS);
+    await game.settings.set(MODULE_ID, ANALYTICS_SETTING, next);
     const sync = await signSocketEnvelope({ type: "analytics-sync", serverUserId: game.user.id });
     game.socket.emit(`module.${MODULE_ID}`, sync);
     Hooks.callAll(`${MODULE_ID}.analyticsUpdated`);
@@ -46,24 +101,32 @@ async function storeAnalyticsRecord(data, { local = false } = {}) {
 }
 
 export async function requestAnalyticsRecord(record) {
-  const gm = primaryActiveGm();
-  if (!gm) {
-    globalThis.ui?.notifications?.warn?.("Aucun MJ actif : les statistiques de cette partie ne peuvent pas être enregistrées.");
-    return false;
+  let localRecord;
+  try {
+    // La copie personnelle est la source de vérité : elle fonctionne même sans MJ
+    // et sera agrégée automatiquement lorsque le tableau d’analyse sera ouvert.
+    localRecord = await persistPersonalAnalyticsRecord(record, { user: game.user });
+  } catch (error) {
+    console.error("Six Crowns | Enregistrement analytique local impossible", error);
   }
+
+  const gm = primaryActiveGm();
+  if (!gm) return Boolean(localRecord);
+
   try {
     const request = {
       type: "analytics-record",
       requestId: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       actorUserId: game.user.id,
-      record
+      record: localRecord ?? sanitizeMatchRecord(record)
     };
     if (gm.id === game.user.id) await storeAnalyticsRecord(request, { local: true });
     else game.socket.emit(`module.${MODULE_ID}`, await signSocketEnvelope(request));
     return true;
   } catch (error) {
-    console.error("Six Crowns | Enregistrement analytique impossible", error);
-    return false;
+    // La consolidation monde est un bonus. La statistique personnelle reste sauvée.
+    console.warn("Six Crowns | Consolidation analytique auprès du MJ impossible", error);
+    return Boolean(localRecord);
   }
 }
 

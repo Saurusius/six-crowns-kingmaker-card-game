@@ -138,7 +138,7 @@ Les 160 cartes ont été contrôlées. Chaque carte possède désormais un type 
 - `SP-02` **Étendard des Marches** — Force None → 5 ; type tactique ; lignes avant-garde ; capacités support.
 - `SP-05` **Diversion diplomatique** — Force None → 6 ; type tactique ; lignes escarmouche ; capacités resilient.
 - `SP-07` **Bannière des Frontières** — Force None → 4 ; type tactique ; lignes avant-garde, domaine ; capacités support.
-- `SC-18` **Arbalétriers de la Couronne** — Force 4 → 4 ; type unite ; lignes escarmouche ; capacités aucune.
+- `SC-18` **Archers de Brumelande** — Force 4 → 4 ; type unite ; lignes escarmouche ; capacités aucune.
 - `SC-19` **Gardiens des Béliers Noirs** — Force 5 → 4 ; type unite ; lignes avant-garde ; capacités bond.
 - `SC-20` **Meuniers de Brumelande** — Force 3 → 3 ; type unite ; lignes domaine ; capacités support.
 - `SC-21` **Chasseurs d’Erastil** — Force 4 → 4 ; type unite ; lignes escarmouche, domaine ; capacités aucune.

@@ -7,6 +7,15 @@ export const TRANSACTION_REVISION_FLAG = "transactionRevision";
 
 const lockTails = new Map();
 
+const PREPARED_TRADE_FLAG = "preparedTradeTransactions";
+const TRADE_SENSITIVE_FLAGS = new Set(["cardCollection", "boosterCredits"]);
+const TRADE_INTERNAL_TRANSACTION_TYPES = new Set([
+  "peer-trade-side",
+  "peer-trade-rollback",
+  "peer-trade-finalize",
+  "peer-trade-reserve"
+]);
+
 function clone(value) {
   if (globalThis.foundry?.utils?.deepClone) return foundry.utils.deepClone(value);
   return structuredClone(value);
@@ -36,6 +45,19 @@ function equal(left, right) {
 
 function readFlag(user, flag) {
   return clone(user.getFlag(MODULE_ID, flag));
+}
+
+function hasPreparedTrade(user) {
+  const prepared = user?.getFlag?.(MODULE_ID, PREPARED_TRADE_FLAG);
+  return Boolean(prepared && typeof prepared === "object" && !Array.isArray(prepared) && Object.keys(prepared).length > 0);
+}
+
+function assertTradeEconomyUnlocked(user, flags, type) {
+  if (TRADE_INTERNAL_TRANSACTION_TYPES.has(type)) return;
+  if (!(flags ?? []).some((flag) => TRADE_SENSITIVE_FLAGS.has(flag))) return;
+  if (hasPreparedTrade(user)) {
+    throw new Error("Un échange est en cours de finalisation. Les cartes et tickets sont temporairement verrouillés.");
+  }
 }
 
 function isPlainObject(value) {
@@ -179,6 +201,7 @@ export async function transactUserFlags({ user, type, flags, metadata = {}, muta
   if (!user || typeof mutate !== "function") throw new Error("Transaction utilisateur invalide.");
   const requestedFlags = [...new Set([...(flags ?? []), TRANSACTION_REVISION_FLAG])];
   return withLocks([`user:${user.id}`], async () => {
+    assertTradeEconomyUnlocked(user, requestedFlags, type);
     const id = makeId();
     const before = Object.fromEntries(requestedFlags.map((flag) => [flag, readFlag(user, flag)]));
     const revision = Math.max(0, Number.parseInt(before[TRANSACTION_REVISION_FLAG] ?? 0, 10) || 0);
@@ -243,6 +266,7 @@ export async function transactMultipleUsers({ participants = [], type, metadata 
   if (normalized.some((participant) => !participant.user)) throw new Error("Participant de transaction introuvable.");
 
   return withLocks(normalized.map((participant) => `user:${participant.user.id}`), async () => {
+    for (const participant of normalized) assertTradeEconomyUnlocked(participant.user, participant.flags, type);
     const id = makeId();
     const snapshots = new Map(normalized.map((participant) => [participant.user.id, Object.fromEntries(
       participant.flags.map((flag) => [flag, readFlag(participant.user, flag)])

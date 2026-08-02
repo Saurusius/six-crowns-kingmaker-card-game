@@ -33,121 +33,6 @@
     </details>
   {{/if}}
 
-  {{#if isSpellSelection}}
-    <section class="scg-setup-panel scg-spell-selection-panel">
-      <div class="scg-setup-heading scg-spell-selection-heading">
-        <div>
-          <small>Après les decks · avant le lancer de pièce</small>
-          <h2>Choisissez votre sortilège</h2>
-          <p>Les decks sont maintenant sélectionnés. Choisissez secrètement un sortilège de votre collection ; une seule activation sera possible pendant toute la partie.</p>
-        </div>
-        <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> Terres Dérobées · 5 cartes dorées</span>
-      </div>
-
-      <div class="scg-selected-decks-summary">
-        <article><i class="fa-solid fa-crown"></i><span><small>Votre deck</small><strong>{{selectedPlayerDeckLabel}}</strong></span></article>
-        <i class="fa-solid fa-arrow-right"></i>
-        <article><i class="fa-solid fa-chess-knight"></i><span><small>Deck adverse</small><strong>{{selectedOpponentDeckLabel}}</strong></span></article>
-      </div>
-
-      <div class="scg-spell-carousel-block {{#if hasMultipleEventSpells}}is-scrollable{{/if}}">
-        <div class="scg-spell-carousel-heading">
-          <span><i class="fa-solid fa-images"></i> Sélection de sortilèges</span>
-          {{#if hasMultipleEventSpells}}<small>{{eventSpellChoiceCount}} cartes disponibles · faites défiler horizontalement</small>{{/if}}
-        </div>
-        <div class="scg-spell-choice-carousel" role="list" tabindex="0" aria-label="Sortilèges événementiels disponibles">
-          <button type="button" role="listitem" class="scg-spell-choice-card is-no-spell {{#if noSpellSelected}}is-selected{{/if}}" data-action="select-no-spell">
-            <span class="scg-spell-choice-art"><i class="fa-solid fa-ban"></i></span>
-            <span><small>Option libre</small><strong>Sans sortilège</strong><p>Entrez dans la partie sans pouvoir événementiel.</p></span>
-            <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
-          </button>
-          {{#each eventSpellChoices}}
-            <button type="button" role="listitem" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}}" data-action="select-event-spell" data-spell-id="{{id}}">
-              <span class="scg-spell-choice-art"><img src="{{artMedium}}" alt="Illustration de {{name}}"></span>
-              <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p>{{text}}</p></span>
-              <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
-            </button>
-          {{/each}}
-        </div>
-      </div>
-
-      {{#unless hasOwnedEventSpells}}
-        <div class="scg-spell-empty-state"><i class="fa-solid fa-lock"></i><div><strong>Aucun sortilège possédé</strong><p>Les cartes non obtenues restent entièrement secrètes. Ouvrez un booster événementiel ou consultez votre collection pour en débloquer.</p></div></div>
-      {{/unless}}
-
-      <div class="scg-spell-selection-note">
-        <i class="fa-solid fa-user-secret"></i>
-        <span><strong>Choix secret</strong> Le sortilège adverse sera lui aussi verrouillé maintenant, puis restera face cachée jusqu’à son activation.</span>
-      </div>
-      <div class="scg-setup-actions">
-        <button class="scg-secondary-button" type="button" data-action="back-to-decks"><i class="fa-solid fa-arrow-left"></i> Modifier les decks</button>
-        <button class="scg-secondary-button" type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{eventBoosterButtonLabel}}</button>
-        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Voir la collection</button>
-        <button class="scg-primary-button" type="button" data-action="lock-event-spell"><i class="fa-solid fa-coins"></i> Verrouiller et passer au lancer de pièce</button>
-      </div>
-    </section>
-  {{/if}}
-
-  {{#if isDeckSelection}}
-    <section class="scg-setup-panel scg-deck-preparation">
-      <div class="scg-setup-heading scg-deck-preparation-heading">
-        <div>
-          <small>Préparation de la confrontation</small>
-          <h2>Choisissez vos deux armées</h2>
-          <p>Sélectionnez directement les decks dans les galeries ci-dessous. Les decks de démonstration sont indépendants de votre collection ; vos decks personnalisés restent soumis aux limites de construction.</p>
-        </div>
-        <span class="scg-deck-rule-chip"><i class="fa-solid fa-layer-group"></i> 20 cartes par deck</span>
-      </div>
-
-      <div class="scg-setup-sequence" aria-label="Étapes de préparation">
-        <span class="is-current"><i class="fa-solid fa-layer-group"></i> 1. Decks</span>
-        <i class="fa-solid fa-chevron-right"></i>
-        <span><i class="fa-solid fa-wand-sparkles"></i> 2. Sortilège</span>
-        <i class="fa-solid fa-chevron-right"></i>
-        <span><i class="fa-solid fa-coins"></i> 3. Lancer de pièce</span>
-      </div>
-
-      <div class="scg-deck-choice-columns">
-        <section class="scg-deck-choice-panel is-player">
-          <header><span><i class="fa-solid fa-crown"></i></span><div><small>Votre camp</small><h3>Votre deck</h3></div></header>
-          <input type="hidden" name="player-deck" value="{{selectedPlayerDeck}}">
-          <div class="scg-deck-choice-grid">
-            <button type="button" class="scg-deck-choice-card is-random {{#if playerDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="random">
-              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Le destin choisit votre armée.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
-            </button>
-            {{#each decks}}
-              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if playerSelected}}is-selected{{/if}}" data-action="select-deck" data-side="player" data-deck-id="{{id}}">
-                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
-              </button>
-            {{/each}}
-          </div>
-        </section>
-
-        <section class="scg-deck-choice-panel is-opponent">
-          <header><span><i class="fa-solid fa-chess-knight"></i></span><div><small>Camp adverse</small><h3>Deck adverse</h3></div></header>
-          <input type="hidden" name="opponent-deck" value="{{selectedOpponentDeck}}">
-          <div class="scg-deck-choice-grid">
-            <button type="button" class="scg-deck-choice-card is-random {{#if opponentDeckIsRandom}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="random">
-              <span class="scg-deck-choice-symbol"><i class="fa-solid fa-dice"></i></span><strong>Deck aléatoire</strong><small>Un adversaire imprévisible.</small><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
-            </button>
-            {{#each decks}}
-              <button type="button" class="scg-deck-choice-card {{#if custom}}is-custom scg-deck-custom{{else}}scg-deck-{{id}}{{/if}} {{#if opponentSelected}}is-selected{{/if}}" data-action="select-deck" data-side="opponent" data-deck-id="{{id}}">
-                <span class="scg-deck-choice-symbol">{{symbol}}</span><span class="scg-deck-choice-copy"><strong>{{name}}</strong><small>{{cardCount}} cartes{{#if demo}} · Démonstration{{else}} · Personnalisé{{/if}}</small><span>{{description}}</span></span><i class="fa-solid fa-circle-check scg-deck-selected-mark"></i>
-              </button>
-            {{/each}}
-          </div>
-        </section>
-      </div>
-
-      <div class="scg-setup-actions">
-        <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
-        <button class="scg-secondary-button" type="button" data-action="open-collection"><i class="fa-solid fa-table-cells-large"></i> Ma collection</button>
-        <button class="scg-secondary-button" type="button" data-action="open-deck-builder"><i class="fa-solid fa-hammer"></i> Mes decks</button>
-        <button class="scg-primary-button" type="button" data-action="start-game"><i class="fa-solid fa-wand-sparkles"></i> Valider les decks et choisir un sortilège</button>
-      </div>
-    </section>
-  {{/if}}
-
   {{#if isCoinToss}}
     <section class="scg-coin-panel">
       <div class="scg-coin-ambience" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -177,19 +62,7 @@
         </div>
         <button class="scg-primary-button" type="button" data-action="continue-after-coin" {{#unless canContinueCoin}}disabled{{/unless}}>Préparer les mains</button>
       {{else}}
-        {{#if coin.flipping}}
-          <div class="scg-coin-summary">Votre choix : <strong><i class="{{coinChoiceIcon}}"></i> {{coinChoiceLabel}}</strong></div>
-          <button class="scg-primary-button" type="button" disabled><i class="fa-solid fa-coins"></i> La pièce tourne…</button>
-        {{else}}
-          <div class="scg-coin-choice" role="group" aria-label="Choisissez Bouclier ou Épée">
-            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="shield">
-              <span class="scg-choice-symbol"><i class="fa-solid fa-shield-halved"></i></span><strong>Bouclier</strong>
-            </button>
-            <button class="scg-choice-button" type="button" data-action="flip-coin" data-choice="sword">
-              <span class="scg-choice-symbol"><i class="fa-solid fa-sword"></i></span><strong>Épée</strong>
-            </button>
-          </div>
-        {{/if}}
+        <div class="scg-coin-summary"><i class="fa-solid fa-arrows-rotate fa-spin"></i> Synchronisation du tirage au sort…</div>
       {{/if}}
     </section>
   {{/if}}

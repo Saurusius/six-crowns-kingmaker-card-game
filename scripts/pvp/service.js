@@ -155,10 +155,14 @@ function getDistributedPvpHistory() {
   return [...byId.values()].sort((a, b) => Date.parse(a.completedAt ?? 0) - Date.parse(b.completedAt ?? 0));
 }
 
+export function getPersonalPvpHistory({ user = game.user } = {}) {
+  const current = user?.getFlag?.(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG);
+  return Array.isArray(current) ? clone(current) : [];
+}
+
 async function persistPersonalPvpHistory(record) {
   if (!record?.id) return false;
-  const current = game.user.getFlag(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG);
-  const history = Array.isArray(current) ? clone(current) : [];
+  const history = getPersonalPvpHistory();
   if (history.some((entry) => entry.id === record.id)) return false;
   history.push(clone(record));
   await game.user.setFlag(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG, history.slice(-250));
@@ -246,7 +250,7 @@ function publicMatchSummary(match, viewerId) {
   };
 }
 
-function computeHistoryStats(history, userId) {
+export function computePvpHistoryStats(history, userId) {
   const entries = history.filter((entry) => entry.playerUserId === userId || entry.opponentUserId === userId);
   let wins = 0;
   let losses = 0;
@@ -327,7 +331,7 @@ function dashboardForUser(userId) {
     current: current.map((match) => publicMatchSummary(match, userId)),
     invitations: invitations.map((match) => publicMatchSummary(match, userId)),
     recent,
-    stats: computeHistoryStats(history, userId),
+    stats: computePvpHistoryStats(history, userId),
     ladder: buildPvpLadder(history, userId)
   };
 }
@@ -790,17 +794,18 @@ export function getCachedPvpMatch(matchId) {
 export async function resumePvpSession() {
   try {
     const dashboard = await refreshPvpDashboard();
-    const resumable = dashboard.current?.find((match) => [PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(match.status));
-    const incoming = dashboard.invitations?.find((match) => match.isIncoming);
-    if (resumable?.status === PVP_STATUS.LOBBY || incoming) {
+    const resumable = dashboard.current?.find((match) => [PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE].includes(match.status));
+    if (resumable?.status === PVP_STATUS.LOBBY) {
       const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
-      if (typeof api?.openPvp === "function") void api.openPvp();
-      if (resumable) await pvpRequest("open-match", { matchId: resumable.id });
-    } else if (resumable) await pvpRequest("open-match", { matchId: resumable.id });
-    return dashboard;
+      if (typeof api?.openPvp === "function") await api.openPvp();
+      await pvpRequest("open-match", { matchId: resumable.id });
+    } else if (resumable?.status === PVP_STATUS.ACTIVE) {
+      await pvpRequest("open-match", { matchId: resumable.id });
+    }
+    return { dashboard, resumed: Boolean(resumable), matchId: resumable?.id ?? null };
   } catch (error) {
     console.warn(`${MODULE_TITLE} | Reprise PvP indisponible`, error);
-    return null;
+    return { dashboard: null, resumed: false, matchId: null };
   }
 }
 

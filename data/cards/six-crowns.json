@@ -334,7 +334,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
@@ -578,7 +578,7 @@
   },
   {
     "id": "SC-18",
-    "name": "Arbalétriers de la Couronne",
+    "name": "Archers de Brumelande",
     "faction": "six-crowns",
     "kind": "unit",
     "rows": [
@@ -678,7 +678,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {
@@ -856,7 +856,7 @@
     "abilities": [
       "rally"
     ],
-    "text": "Renfort : déploie automatiquement depuis la pioche toutes les autres copies de cette carte sur la même ligne.",
+    "text": "Renfort : déploie automatiquement depuis la main et la pioche toutes les autres copies de cette carte sur la même ligne.",
     "rarity": "commun",
     "isCharacter": false,
     "art": {

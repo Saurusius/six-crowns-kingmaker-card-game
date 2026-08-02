@@ -11,7 +11,12 @@ import { getCustomDecks } from "../profile.js";
 import { getSoloMatchHistory, buildSoloStats } from "../player-stats.js";
 import { getCrowns, getShopInventory } from "../shop.js";
 import { formatDateTime } from "../i18n.js";
-import { getCachedPvpDashboard, refreshPvpDashboard } from "../pvp/service.js";
+import {
+  computePvpHistoryStats,
+  getCachedPvpDashboard,
+  getPersonalPvpHistory,
+  refreshPvpDashboard
+} from "../pvp/service.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -95,8 +100,9 @@ export class SixCrownsPlayerProfile extends HandlebarsApplicationMixin(Applicati
     }
 
     const soloHistory = getSoloMatchHistory();
+    const personalPvpHistory = getPersonalPvpHistory();
     const solo = buildSoloStats(soloHistory);
-    const pvp = pvpDashboard?.stats ?? { played: 0, wins: 0, losses: 0, ties: 0, abandons: 0, winRate: 0 };
+    const pvp = pvpDashboard?.stats ?? computePvpHistoryStats(personalPvpHistory, game.user.id);
     const total = {
       played: solo.played + positiveInteger(pvp.played),
       wins: solo.wins + positiveInteger(pvp.wins),
@@ -125,7 +131,12 @@ export class SixCrownsPlayerProfile extends HandlebarsApplicationMixin(Applicati
         dateLabel: formatDateTime(entry.completedAt)
       };
     });
-    const recentPvp = (pvpDashboard?.recent ?? []).slice(0, 8).map((entry) => ({
+    const pvpRecentSource = pvpDashboard?.recent ?? personalPvpHistory.slice(-12).reverse().map((entry) => ({
+      ...entry,
+      resultLabel: entry.winnerUserId === null ? "Égalité" : entry.winnerUserId === game.user.id ? "Victoire" : "Défaite",
+      dateLabel: formatDateTime(entry.completedAt)
+    }));
+    const recentPvp = pvpRecentSource.slice(0, 8).map((entry) => ({
       id: entry.id,
       mode: "PvP",
       opponent: entry.playerUserId === game.user.id ? entry.opponentName : entry.playerName,
@@ -143,7 +154,7 @@ export class SixCrownsPlayerProfile extends HandlebarsApplicationMixin(Applicati
     return {
       userName: game.user?.name ?? "Joueur",
       avatar: game.user?.avatar ?? "icons/svg/mystery-man.svg",
-      version: game.modules.get(MODULE_ID)?.version ?? "0.14.8",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.14.9",
       crowns,
       decks: decks.length,
       discovered,

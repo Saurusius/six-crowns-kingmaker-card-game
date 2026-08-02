@@ -58,7 +58,10 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
       }
     }
 
-    const currentSummary = this.dashboard.current?.find((match) => ["lobby", "active", "completed"].includes(match.status)) ?? null;
+    // Un duel terminé appartient désormais à l’historique et ne bloque plus
+    // l’écran de création d’un nouveau défi. Son résultat reste consultable
+    // depuis le plateau déjà ouvert et dans l’historique de l’arène.
+    const currentSummary = this.dashboard.current?.find((match) => ["lobby", "active"].includes(match.status)) ?? null;
     let currentLobby = currentSummary ? getCachedPvpMatch(currentSummary.id) : null;
     if (currentSummary?.status === "lobby" && !currentLobby) {
       try {
@@ -79,10 +82,9 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
     const hasHost = Boolean(this.dashboard.hostUserId ?? this.dashboard.hostGmId);
     const isLobby = currentSummary?.status === "lobby";
     const isActive = currentSummary?.status === "active";
-    const isCompleted = currentSummary?.status === "completed";
 
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.14.8",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.14.9",
       userName: game.user.name,
       isGM: game.user.isGM,
       hasHost,
@@ -96,7 +98,6 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
       hasCurrent: Boolean(currentSummary),
       isLobby,
       isActive,
-      isCompleted,
       deckOptions,
       spellOptions,
       stats: this.dashboard.stats ?? { played: 0, wins: 0, losses: 0, ties: 0, abandons: 0, winRate: 0 },

@@ -204,7 +204,13 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     if (this.matchState.phase === PHASES.GAME_OVER && !this.matchState.analyticsRecorded) {
       this.matchState.analyticsRecorded = true;
-      requestAnalyticsRecord(buildMatchAnalyticsRecord(this.matchState, { userId: game.user.id, userName: game.user.name }));
+      try {
+        const recorded = await requestAnalyticsRecord(buildMatchAnalyticsRecord(this.matchState, { userId: game.user.id, userName: game.user.name }));
+        if (!recorded) this.matchState.analyticsRecorded = false;
+      } catch (error) {
+        this.matchState.analyticsRecorded = false;
+        console.error(`${MODULE_TITLE} | Enregistrement analytique impossible`, error);
+      }
     }
     if (this.matchState.phase === PHASES.GAME_OVER && this.matchState.gameWinner === "player" && !this.matchState.crownsRewarded) {
       this.matchState.crownsRewarded = true;

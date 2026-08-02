@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du module **0.14.8**.
+Cette page décrit les règles du module **0.14.9**.
 
 ## But de la partie
 
@@ -51,8 +51,8 @@ Une manche se termine lorsque les deux joueurs ont passé ou lorsqu’aucun camp
 - **Héros** : départage les égalités de ligne en faveur du camp qui contrôle le plus de Héros.
 - **Soutien** : donne +1 Puissance aux autres cartes de sa ligne.
 - **Formation** : donne +2 Puissance par autre copie identique sur la ligne.
-- **Renfort** : déploie les copies restantes depuis la pioche.
-- **Bastion** : reste entre deux manches à demi-Puissance.
+- **Renfort** : déploie les copies restantes depuis la main et la pioche.
+- **Bastion** : parmi les Bastions en jeu, celui qui possède la plus grande Puissance effective reste pour la manche suivante avec sa Force imprimée réduite de moitié.
 - **Mobile** : peut être jouée sur plusieurs lignes.
 
 Les traits sont représentés par des pictogrammes. Leur description complète apparaît au survol ou dans le glossaire.

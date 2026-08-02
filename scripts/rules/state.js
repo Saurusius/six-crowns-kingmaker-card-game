@@ -1,7 +1,7 @@
 import { ROWS } from "../constants.js";
 import { RULEBOOK } from "../rulebook.js";
 import { buildTraitBadges, describeTraits } from "../traits.js";
-import { calculateSideScores, hasAbility } from "./scoring.js";
+import { calculateCardStrength, calculateSideScores, hasAbility } from "./scoring.js";
 import { cloneDeck, getDeckDefinition, listDecks } from "./decks.js";
 import { normalizeCardArt } from "../art.js";
 import {
@@ -188,12 +188,19 @@ function evaluateScores(scores) {
   const rowControl = Object.fromEntries(ROWS.map((row) => {
     const playerScore = scores.player.rows[row];
     const opponentScore = scores.opponent.rows[row];
+    const playerHeroes = Math.max(0, Number(scores.player.rowDetails?.[row]?.heroCount ?? 0));
+    const opponentHeroes = Math.max(0, Number(scores.opponent.rowDetails?.[row]?.heroCount ?? 0));
     const winner = playerScore > opponentScore
       ? "player"
       : opponentScore > playerScore
         ? "opponent"
-        : "tie";
-    return [row, { winner, playerScore, opponentScore }];
+        : playerHeroes > opponentHeroes
+          ? "player"
+          : opponentHeroes > playerHeroes
+            ? "opponent"
+            : "tie";
+    const decidedBy = playerScore !== opponentScore ? "power" : winner === "tie" ? "tie" : "heroes";
+    return [row, { winner, playerScore, opponentScore, playerHeroes, opponentHeroes, decidedBy }];
   }));
 
   const controlledLines = {
@@ -425,7 +432,7 @@ export function toggleMulliganCard(state, cardId) {
   return state;
 }
 
-function performMulligan(side, selectedIds) {
+export function performMulligan(side, selectedIds, random = Math.random) {
   if (side.mulliganUsed) throw new Error("Ce camp a déjà utilisé son mulligan.");
   const ids = [...new Set(selectedIds)].slice(0, 2);
   const selected = [];
@@ -437,8 +444,13 @@ function performMulligan(side, selectedIds) {
     selected.push(card);
   }
 
-  side.discard.push(...selected);
-  drawCards(side, selected.length);
+  // Les cartes remplacées ne sont pas défaussées : on pioche d’abord leurs
+  // remplaçantes afin d’éviter de reprendre immédiatement la même carte, puis
+  // on les remélange dans la pioche. Le second tirage ne sert que de garde-fou
+  // si un état ancien ou incomplet contient une pioche trop courte.
+  const drawn = drawCards(side, selected.length);
+  side.deck = shuffleCards([...side.deck, ...selected], random);
+  if (drawn.length < selected.length) drawCards(side, selected.length - drawn.length);
   side.mulliganUsed = true;
   return selected;
 }
@@ -541,15 +553,29 @@ function advanceAfterAction(state, actingSide) {
   return state;
 }
 
+function extractMatchingCopies(cards, key) {
+  const matches = [];
+  for (let index = cards.length - 1; index >= 0; index -= 1) {
+    if (cards[index].key !== key) continue;
+    matches.unshift(...cards.splice(index, 1));
+  }
+  return matches;
+}
+
+function rallyCopiesAvailable(side, card) {
+  return [
+    ...side.hand.filter((candidate) => candidate !== card && candidate.key === card.key),
+    ...side.deck.filter((candidate) => candidate.key === card.key)
+  ];
+}
+
 function deployRallyCopies(side, card, row) {
   if (!hasAbility(card, "rally")) return [];
-  const deployed = [];
-  for (let index = side.deck.length - 1; index >= 0; index -= 1) {
-    if (side.deck[index].key !== card.key) continue;
-    const [reinforcement] = side.deck.splice(index, 1);
-    side.rows[row].push(reinforcement);
-    deployed.push(reinforcement);
-  }
+  const deployed = [
+    ...extractMatchingCopies(side.hand, card.key),
+    ...extractMatchingCopies(side.deck, card.key)
+  ];
+  side.rows[row].push(...deployed);
   return deployed;
 }
 
@@ -590,7 +616,7 @@ export function passSide(state, side) {
 function simulateOpponentMove(state, card, row) {
   const cards = [...state.opponent.rows[row], card];
   if (hasAbility(card, "rally")) {
-    cards.push(...state.opponent.deck.filter((candidate) => candidate.key === card.key));
+    cards.push(...rallyCopiesAvailable(state.opponent, card));
   }
   const simulatedRows = { ...state.opponent.rows, [row]: cards };
   const scores = {
@@ -608,7 +634,7 @@ function applySimulatedOpponentCard(state, rows, card, row) {
   const nextRows = cloneRows(rows);
   nextRows[row].push(card);
   if (hasAbility(card, "rally")) {
-    nextRows[row].push(...state.opponent.deck.filter((candidate) => candidate.key === card.key));
+    nextRows[row].push(...rallyCopiesAvailable(state.opponent, card));
   }
   return nextRows;
 }
@@ -721,8 +747,16 @@ function cleanTemporarySpellState(card) {
 function moveRowsToDiscardWithResilience(side) {
   const resilientCards = ROWS.flatMap((row) => side.rows[row]
     .filter((card) => !card.summoned && hasAbility(card, "resilient"))
-    .map((card) => ({ card, row })));
-  const survivor = resilientCards.sort((a, b) => Number(b.card.strength ?? 0) - Number(a.card.strength ?? 0))[0] ?? null;
+    .map((card) => ({
+      card,
+      row,
+      effectiveStrength: calculateCardStrength(card, side.rows[row])
+    })));
+  const survivor = resilientCards.sort((a, b) =>
+    b.effectiveStrength - a.effectiveStrength
+    || Number(b.card.strength ?? 0) - Number(a.card.strength ?? 0)
+    || String(a.card.id ?? "").localeCompare(String(b.card.id ?? ""))
+  )[0] ?? null;
   const nextRows = emptyRows();
 
   for (const row of ROWS) {

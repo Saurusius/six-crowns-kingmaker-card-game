@@ -798,8 +798,8 @@
     linear-gradient(145deg, rgba(46,31,8,.96), rgba(5,6,9,.99));
 }
 .scg-booster-theme-golden .scg-booster-pack.has-pack-image {
-  width:min(330px,48vw);
-  height:min(495px,70vh);
+  width:min(380px,54vw);
+  height:min(570px,76vh);
   padding:0;
   border:0;
   background:transparent;
@@ -1187,7 +1187,7 @@
   position: relative;
   z-index: 4;
   display: grid;
-  grid-template-columns: minmax(250px, 330px);
+  grid-template-columns: minmax(270px, 360px);
   width: auto;
   min-height: 470px;
   align-items: center;
@@ -1196,7 +1196,7 @@
 }
 
 .scg-booster-opening.is-event-booster .scg-reveal-card {
-  width: min(330px, 72vw);
+  width: min(360px, 76vw);
   padding: 11px;
   gap: 8px;
   border-width: 2px;
@@ -1212,7 +1212,7 @@
 }
 
 .scg-booster-opening.is-event-booster .scg-reveal-card-art {
-  height: min(470px, 56vh);
+  height: min(510px, 60vh);
   border: 1px solid rgba(255, 222, 119, .72);
   border-radius: 10px;
   box-shadow: inset 0 0 22px rgba(255,218,104,.12);
@@ -1828,14 +1828,17 @@
   }
 }
 
-/* Le mode réduit conserve uniquement le titre, Accueil, le contrôle d'affichage et les cartes. */
+/* Le mode réduit conserve le titre, les actions essentielles, les filtres et les cartes. */
 .scg-collection-shell.is-options-compact > .scg-collection-summary,
 .scg-collection-shell.is-options-compact > .scg-faction-counters,
-.scg-collection-shell.is-options-compact > .scg-collection-filters,
 .scg-collection-shell.is-options-compact > .scg-card-comparison,
 .scg-collection-shell.is-options-compact > .scg-collapsible-panel,
 .scg-collection-shell.is-options-compact > .scg-gm-tools {
   display: none !important;
+}
+
+.scg-collection-shell.is-options-compact > .scg-collection-filters {
+  display: grid !important;
 }
 
 /* v0.14.6 — sélection des sortilèges utilisable sans redimensionner la fenêtre */

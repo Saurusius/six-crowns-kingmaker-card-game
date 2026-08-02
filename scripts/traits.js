@@ -18,12 +18,12 @@ export const TRAIT_DETAILS = Object.freeze({
   }),
   rally: Object.freeze({
     label: "Renfort",
-    description: "Déploie automatiquement sur la même ligne toutes les autres copies présentes dans la pioche.",
+    description: "Déploie automatiquement sur la même ligne toutes les autres copies présentes dans la main et la pioche.",
     iconUrl: `modules/${MODULE_ID}/assets/traits/rally.svg`
   }),
   resilient: Object.freeze({
     label: "Bastion",
-    description: "La carte Bastion la plus forte peut rester pour la manche suivante avec sa Force réduite de moitié.",
+    description: "La carte Bastion ayant la plus grande Puissance effective peut rester pour la manche suivante avec sa Force imprimée réduite de moitié.",
     iconUrl: `modules/${MODULE_ID}/assets/traits/resilient.svg`
   }),
   mobile: Object.freeze({

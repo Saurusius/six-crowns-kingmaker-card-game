@@ -1116,3 +1116,13 @@
   .scg-profile-history article { grid-template-columns: 1fr; }
   .scg-ladder-own { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* v0.14.9 — le paquet événementiel occupe la même présence visuelle que les autres. */
+.scg-shop-products article.is-event-booster img,
+.scg-shop-inventory article.is-event-booster img {
+  width: 84px;
+  height: 112px;
+  margin: -3px -4px;
+  object-fit: cover;
+  object-position: center;
+}

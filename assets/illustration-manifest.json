@@ -1,5 +1,5 @@
 {
-  "version": "0.14.8",
+  "version": "0.14.9",
   "integratedCardArtCount": 165,
   "integratedCardArt": [
     {
@@ -3304,7 +3304,7 @@
     },
     {
       "id": "SC-18",
-      "name": "Arbalétriers de la Couronne",
+      "name": "Archers de Brumelande",
       "faction": "six-crowns",
       "source": "portraits/six-crowns/arbaletriers-de-la-couronne.webp",
       "base": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne",

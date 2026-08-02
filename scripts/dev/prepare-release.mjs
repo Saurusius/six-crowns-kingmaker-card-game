@@ -8,11 +8,30 @@ const manifest = JSON.parse(fs.readFileSync(path.join(root, "module.json"), "utf
 const requested = process.argv[2] ?? manifest.version;
 if (requested !== manifest.version) throw new Error(`La version demandée (${requested}) diffère de module.json (${manifest.version}).`);
 
-const excluded = new Set([".git", "node_modules", "dist"]);
+// Le ZIP Foundry ne contient que le module exécutable et sa documentation utile.
+// Les tests, workflows et outils Node restent dans l'archive source du dépôt.
+const excludedDirectories = new Set([".git", ".github", "node_modules", "dist", "tests"]);
+const excludedRootFiles = new Set([
+  "CARD_BALANCE.md",
+  "CONTRIBUTING.md",
+  "DEVELOPMENT.md",
+  "RELEASING.md",
+  "package.json",
+  "package-lock.json"
+]);
+const excludedPrefixes = ["scripts/dev/"];
+
+function isExcluded(full, entry) {
+  const relative = path.relative(root, full).split(path.sep).join("/");
+  if (entry.isDirectory() && excludedDirectories.has(entry.name)) return true;
+  if (!entry.isDirectory() && !relative.includes("/") && excludedRootFiles.has(entry.name)) return true;
+  return excludedPrefixes.some((prefix) => relative === prefix.slice(0, -1) || relative.startsWith(prefix));
+}
+
 function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    if (excluded.has(entry.name)) return [];
     const full = path.join(directory, entry.name);
+    if (isExcluded(full, entry)) return [];
     return entry.isDirectory() ? walk(full) : [full];
   });
 }
@@ -35,7 +54,7 @@ function dosDateTime(date) {
   };
 }
 
-const files = walk(root).filter((file) => !file.includes(`${path.sep}dist${path.sep}`));
+const files = walk(root);
 const localParts = [];
 const centralParts = [];
 let offset = 0;
@@ -53,8 +72,7 @@ for (const file of files) {
   local.writeUInt32LE(compressed.length, 18); local.writeUInt32LE(raw.length, 22); local.writeUInt16LE(nameBuffer.length, 26);
   localParts.push(local, nameBuffer, compressed);
   const central = Buffer.alloc(46);
-  central.writeUInt32LE(0x02014b50, 0); central.writeUInt16LE(20, 4); central.writeUInt16LE(20, 6); central.writeUInt16LE(0x0800, 8); central.writeUInt16LE(8, 10);
-  central.writeUInt16LE(stamp.time, 12); central.writeUInt16LE(stamp.date, 14); central.writeUInt32LE(crc, 16);
+  central.writeUInt32LE(0x02014b50, 0); central.writeUInt16LE(20, 4); central.writeUInt16LE(20, 6); central.writeUInt16LE(0x0800, 8); central.writeUInt16LE(8, 10); central.writeUInt16LE(stamp.time, 12); central.writeUInt16LE(stamp.date, 14); central.writeUInt32LE(crc, 16);
   central.writeUInt32LE(compressed.length, 20); central.writeUInt32LE(raw.length, 24); central.writeUInt16LE(nameBuffer.length, 28);
   central.writeUInt32LE(offset, 42);
   centralParts.push(central, nameBuffer);
@@ -68,4 +86,4 @@ const dist = path.join(root, "dist");
 fs.mkdirSync(dist, { recursive: true });
 const destination = path.join(dist, `${manifest.id}-v${manifest.version}.zip`);
 fs.writeFileSync(destination, Buffer.concat([...localParts, centralDirectory, end]));
-console.log(destination);
+console.log(`${destination} (${files.length} fichiers)`);

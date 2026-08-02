@@ -37,7 +37,7 @@ import {
   resetPlayerProfileForUser,
   syncCustomDeckRegistry
 } from "./api.js";
-import { handleTradeSocket, recoverStaleTrades, registerTradeSettings } from "./trades.js";
+import { handleTradeSocket, recoverStaleTrades, registerTradeSettings, startTradeRecoveryLoop } from "./trades.js";
 import { handleAnalyticsSocket, registerAnalyticsSetting } from "./analytics.js";
 import { handlePvpSocket, initializePvpStorage, isPrimaryPvpGm, registerPvpSettings, resumePvpSession } from "./pvp/service.js";
 import { initializeSocketIdentity } from "./socket-auth.js";
@@ -131,9 +131,16 @@ function changedModuleFlags(changes = {}) {
 // mais les applications du module utilisent des hooks dédiés. On les relaie ici
 // afin que les fenêtres déjà ouvertes se rafraîchissent sans reconnexion.
 Hooks.on("updateUser", (user, changes, _options, authorUserId) => {
-  if (user.id !== game.user.id || authorUserId === game.user.id) return;
   const flags = changedModuleFlags(changes);
   if (flags.size === 0) return;
+
+  // Un MJ qui ouvre le tableau d’équilibrage doit voir immédiatement les
+  // statistiques personnelles enregistrées par les joueurs, même hors session MJ.
+  if (flags.has("personalMatchAnalytics") && game.user?.isGM) {
+    Hooks.callAll(`${MODULE_ID}.analyticsUpdated`, user.getFlag(MODULE_ID, "personalMatchAnalytics") ?? [], user.id);
+  }
+
+  if (user.id !== game.user.id || authorUserId === game.user.id) return;
 
   if (flags.has("cardCollection")) {
     Hooks.callAll(`${MODULE_ID}.collectionUpdated`, user.getFlag(MODULE_ID, "cardCollection") ?? {}, user.id);
@@ -156,6 +163,9 @@ Hooks.on("updateUser", (user, changes, _options, authorUserId) => {
   if (flags.has("soloMatchHistory")) {
     Hooks.callAll(`${MODULE_ID}.soloStatsUpdated`, user.getFlag(MODULE_ID, "soloMatchHistory") ?? [], user.id);
   }
+  if (flags.has("personalMatchAnalytics")) {
+    Hooks.callAll(`${MODULE_ID}.analyticsUpdated`, user.getFlag(MODULE_ID, "personalMatchAnalytics") ?? [], user.id);
+  }
   if (flags.has("playerTradeLedger")) {
     Hooks.callAll(`${MODULE_ID}.tradesUpdated`, user.getFlag(MODULE_ID, "playerTradeLedger") ?? {}, user.id);
   }
@@ -165,7 +175,7 @@ Hooks.on("updateUser", (user, changes, _options, authorUserId) => {
 
   const resetFlags = [
     "cardCollection", "customDecks", "boosterCredits", "specialBoosterCredits",
-    "eventBoosterCredits", "boosterHistory", "crowns", "shopBoosterInventory", "shopHistory", "soloMatchHistory"
+    "eventBoosterCredits", "boosterHistory", "crowns", "shopBoosterInventory", "shopHistory", "soloMatchHistory", "personalMatchAnalytics"
   ];
   if (resetFlags.every((flag) => flags.has(flag))) {
     ui.notifications.warn("Votre profil du Jeu des Six Couronnes a été réinitialisé par le MJ.");
@@ -212,6 +222,21 @@ Hooks.once("ready", async () => {
     }
   }
 
-  globalThis.setTimeout(() => void resumePvpSession(), 350);
-  console.log(`${MODULE_TITLE} | Prêt. Ouvrez la macro « Jouer au Jeu des Six Couronnes » pour accéder au hub.`);
+  startTradeRecoveryLoop();
+  globalThis.setTimeout(() => {
+    void (async () => {
+      const resumedPvp = await resumePvpSession();
+      if (resumedPvp?.resumed) return;
+
+      const storedSolo = game.user?.getFlag?.(MODULE_ID, "activeMatchState") ?? null;
+      const activeSoloPhases = new Set(["coin-toss", "mulligan", "playing", "round-over"]);
+      try {
+        if (storedSolo && activeSoloPhases.has(storedSolo.phase)) await openBoard();
+        else await openHome();
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Navigation de démarrage impossible`, error);
+      }
+    })();
+  }, 350);
+  console.log(`${MODULE_TITLE} | Prêt. L’accueil ou la partie active est restauré automatiquement.`);
 });

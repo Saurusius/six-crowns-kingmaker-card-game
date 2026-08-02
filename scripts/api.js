@@ -127,7 +127,7 @@ export async function openAnalyticsDashboard() {
 export async function openBoard() {
   const { SixCrownsBoard } = await import("./applications/game-board.js");
 
-  board ??= new SixCrownsBoard();
+  if (!board || !board.rendered) board = new SixCrownsBoard();
   await board.render({ force: true });
   return board;
 }
