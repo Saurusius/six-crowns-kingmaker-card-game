@@ -1,0 +1,87 @@
+<section class="scg-profile-shell">
+  <header class="scg-profile-header">
+    <div class="scg-profile-identity">
+      <img src="{{avatar}}" alt="Portrait de {{userName}}">
+      <div><small>Profil du joueur · v{{version}}</small><h1>{{userName}}</h1><p>Votre progression complète dans le Jeu des Six Couronnes.</p></div>
+    </div>
+    <div class="scg-profile-actions">
+      <button type="button" data-action="open-ladder"><i class="fa-solid fa-ranking-star"></i> Ladder</button>
+      <button type="button" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
+    </div>
+  </header>
+
+  <section class="scg-profile-overview">
+    <article><i class="fa-solid fa-crown"></i><span><strong>{{crowns}}</strong><small>Couronnes</small></span></article>
+    <article><i class="fa-solid fa-table-cells-large"></i><span><strong>{{collectionPercent}} %</strong><small>Collection découverte</small></span></article>
+    <article><i class="fa-solid fa-layer-group"></i><span><strong>{{decks}}</strong><small>Decks enregistrés</small></span></article>
+    <article><i class="fa-solid fa-khanda"></i><span><strong>{{total.played}}</strong><small>Parties jouées</small></span></article>
+    <article><i class="fa-solid fa-trophy"></i><span><strong>{{total.winRate}} %</strong><small>Taux de victoire</small></span></article>
+  </section>
+
+  <div class="scg-profile-grid">
+    <main>
+      <section class="scg-profile-panel">
+        <header><div><small>Progression</small><h2>État de la collection</h2></div><button type="button" data-action="open-collection"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir</button></header>
+        <div class="scg-profile-collection-summary">
+          <span><strong>{{discovered}} / {{totalCards}}</strong><small>cartes découvertes</small></span>
+          <span><strong>{{copies}}</strong><small>exemplaires possédés</small></span>
+          <span><strong>{{missing}}</strong><small>cartes à découvrir</small></span>
+        </div>
+        <div class="scg-profile-progress-list">
+          {{#each factionRows}}
+            <article><span class="scg-profile-progress-label">{{#if symbol}}<b>{{symbol}}</b>{{/if}}<strong>{{label}}</strong><small>{{discovered}} / {{total}}</small></span><div><i style="width: {{percent}}%"></i></div><em>{{percent}} %</em></article>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="scg-profile-panel">
+        <header><div><small>Détail</small><h2>Progression par rareté</h2></div></header>
+        <div class="scg-profile-rarity-grid">
+          {{#each rarityRows}}
+            <article><i class="{{icon}}"></i><span><strong>{{label}}</strong><small>{{discovered}} / {{total}} · {{copies}} exemplaire(s)</small></span><b>{{percent}} %</b></article>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="scg-profile-panel">
+        <header><div><small>Historique</small><h2>Dernières parties</h2></div></header>
+        {{#if hasRecentMatches}}
+          <div class="scg-profile-history">
+            {{#each recentMatches}}
+              <article class="{{resultClass}}"><span class="scg-profile-result">{{result}}{{#if abandoned}} · abandon{{/if}}</span><div><strong>{{mode}} · {{opponent}}</strong><small>{{deck}}</small></div><time>{{dateLabel}}</time></article>
+            {{/each}}
+          </div>
+        {{else}}
+          <div class="scg-profile-empty"><i class="fa-solid fa-scroll"></i><p>Aucune partie terminée pour le moment.</p></div>
+        {{/if}}
+      </section>
+    </main>
+
+    <aside>
+      <section class="scg-profile-panel is-stats">
+        <header><div><small>Toutes parties</small><h2>Statistiques globales</h2></div></header>
+        <div class="scg-profile-stat-grid">
+          <span><strong>{{total.played}}</strong><small>Parties</small></span><span><strong>{{total.wins}}</strong><small>Victoires</small></span><span><strong>{{total.losses}}</strong><small>Défaites</small></span><span><strong>{{total.ties}}</strong><small>Égalités</small></span><span><strong>{{total.abandons}}</strong><small>Abandons</small></span><span><strong>{{total.winRate}} %</strong><small>Victoires</small></span>
+        </div>
+      </section>
+
+      <section class="scg-profile-panel">
+        <header><div><small>Contre l’IA</small><h2>Parties solo</h2></div></header>
+        <div class="scg-profile-stat-grid is-compact"><span><strong>{{solo.played}}</strong><small>Parties</small></span><span><strong>{{solo.wins}}</strong><small>Victoires</small></span><span><strong>{{solo.losses}}</strong><small>Défaites</small></span><span><strong>{{solo.abandons}}</strong><small>Abandons</small></span></div>
+      </section>
+
+      <section class="scg-profile-panel">
+        <header><div><small>Duels classés</small><h2>Parties PvP</h2></div></header>
+        {{#unless pvpAvailable}}<p class="scg-profile-warning"><i class="fa-solid fa-triangle-exclamation"></i> Statistiques PvP temporairement indisponibles.</p>{{/unless}}
+        <div class="scg-profile-stat-grid is-compact"><span><strong>{{pvp.played}}</strong><small>Duels</small></span><span><strong>{{pvp.wins}}</strong><small>Victoires</small></span><span><strong>{{pvp.losses}}</strong><small>Défaites</small></span><span><strong>{{pvp.abandons}}</strong><small>Abandons</small></span></div>
+      </section>
+
+      <section class="scg-profile-panel">
+        <header><div><small>Réserves</small><h2>Boosters et tickets</h2></div></header>
+        <div class="scg-profile-reserves"><span><i class="fa-solid fa-ticket"></i><strong>{{classicTickets}}</strong><small>classiques</small></span><span><i class="fa-solid fa-gem"></i><strong>{{specialTickets}}</strong><small>spéciaux</small></span><span><i class="fa-solid fa-star"></i><strong>{{eventTickets}}</strong><small>événementiels</small></span><span><i class="fa-solid fa-box-open"></i><strong>{{storedBoosters}}</strong><small>en réserve</small></span></div>
+      </section>
+
+      <button type="button" class="scg-profile-decks-button" data-action="open-decks"><i class="fa-solid fa-hammer"></i><span><strong>Gérer mes decks</strong><small>{{decks}} deck(s) personnalisé(s)</small></span><i class="fa-solid fa-chevron-right"></i></button>
+    </aside>
+  </div>
+</section>

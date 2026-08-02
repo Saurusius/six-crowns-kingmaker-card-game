@@ -2435,3 +2435,29 @@ body.scg-booster-open {
   }
 }
 
+
+/* v0.14.6 — la découverte de cartes couvre réellement tout le viewport Foundry */
+html > .scg-booster-opening,
+body > .scg-booster-opening {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  isolation: isolate;
+}
+html > .scg-booster-opening::before,
+html > .scg-booster-opening::after,
+body > .scg-booster-opening::before,
+body > .scg-booster-opening::after { inset: -60vmax; }

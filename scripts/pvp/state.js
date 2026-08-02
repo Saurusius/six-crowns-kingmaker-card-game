@@ -255,26 +255,6 @@ export function surrenderPvpMatch(match, side) {
   return match;
 }
 
-export function forcePvpTurn(match) {
-  const state = match.state;
-  if (state.phase !== PHASES.PLAYING) throw new Error("Aucun tour actif à débloquer.");
-  const next = state.currentTurn === "player" ? "opponent" : "player";
-  if (state[next].passed) throw new Error("Le camp opposé a déjà passé.");
-  state.currentTurn = next;
-  appendPvpLog(state, "gm", `Le MJ donne la main à ${state[next].name}.`, { next });
-  return match;
-}
-
-export function declarePvpWinner(match, winner) {
-  if (!["player", "opponent", "tie"].includes(winner)) throw new Error("Vainqueur invalide.");
-  match.state.phase = PHASES.GAME_OVER;
-  match.state.currentTurn = null;
-  match.state.gameWinner = winner;
-  const message = winner === "tie" ? "Le MJ déclare le duel nul." : `Le MJ déclare ${match.state[winner].name} vainqueur.`;
-  appendPvpLog(match.state, "gm", message, { winner });
-  return match;
-}
-
 function swapSide(side) {
   return side === "player" ? "opponent" : side === "opponent" ? "player" : side;
 }
@@ -307,27 +287,18 @@ export function buildPvpSnapshot(match, userId) {
     : match.participants.opponent.userId === userId
       ? "opponent"
       : null;
-  const spectator = !originalSide;
-  const viewerSide = originalSide ?? "player";
-  let state = viewerSide === "opponent" ? swapPerspective(match.state) : clone(match.state);
+  if (!originalSide) throw new Error("Vous ne participez pas à ce duel.");
 
-  const ownOriginalSide = viewerSide;
-  const ownSelection = match.mulligan?.selections?.[ownOriginalSide] ?? [];
-  state.mulliganSelection = spectator ? [] : [...ownSelection];
+  let state = originalSide === "opponent" ? swapPerspective(match.state) : clone(match.state);
+  const ownSelection = match.mulligan?.selections?.[originalSide] ?? [];
+  state.mulliganSelection = [...ownSelection];
 
   const playerDeckCount = state.player?.deck?.length ?? 0;
   const opponentDeckCount = state.opponent?.deck?.length ?? 0;
-  const playerDiscardCount = state.player?.discard?.length ?? 0;
   const opponentDiscardCount = state.opponent?.discard?.length ?? 0;
   const opponentHandCount = state.opponent?.hand?.length ?? 0;
 
-  if (state.player) {
-    state.player.deck = hiddenArray(playerDeckCount);
-    if (spectator) {
-      state.player.hand = [];
-      state.player.discard = hiddenArray(playerDiscardCount);
-    }
-  }
+  if (state.player) state.player.deck = hiddenArray(playerDeckCount);
   if (state.opponent) {
     state.opponent.deck = hiddenArray(opponentDeckCount);
     state.opponent.hand = hiddenArray(opponentHandCount);
@@ -335,16 +306,9 @@ export function buildPvpSnapshot(match, userId) {
   }
 
   // Chaque participant voit son propre sortilège, mais jamais le choix adverse
-  // tant que celui-ci n’a pas été activé. Le statut canonique `revealed` ne doit
-  // donc jamais servir à révéler un choix à l’autre client.
-  if (!spectator && state.spells?.player?.id) state.spells.player.revealed = true;
+  // tant que celui-ci n’a pas été activé.
+  if (state.spells?.player?.id) state.spells.player.revealed = true;
   if (state.spells?.opponent?.id && !state.spells.opponent.used) {
-    state.spells.opponent = { id: null, used: false, revealed: false, secret: true, equipped: true };
-  }
-  if (spectator && state.spells?.player?.id && !state.spells.player.used) {
-    state.spells.player = { id: null, used: false, revealed: false, secret: true, equipped: true };
-  }
-  if (spectator && state.spells?.opponent?.id && !state.spells.opponent.used) {
     state.spells.opponent = { id: null, used: false, revealed: false, secret: true, equipped: true };
   }
 
@@ -353,7 +317,7 @@ export function buildPvpSnapshot(match, userId) {
     name: participant.name,
     avatar: participant.avatar ?? null
   });
-  const localizedParticipants = viewerSide === "opponent"
+  const localizedParticipants = originalSide === "opponent"
     ? { player: safeParticipant(match.participants.opponent), opponent: safeParticipant(match.participants.player) }
     : { player: safeParticipant(match.participants.player), opponent: safeParticipant(match.participants.opponent) };
 
@@ -368,12 +332,11 @@ export function buildPvpSnapshot(match, userId) {
   return {
     matchId: match.id,
     status: match.status,
-    role: spectator ? "spectator" : "participant",
-    viewerSide: spectator ? null : "player",
+    role: "participant",
+    viewerSide: "player",
     originalSide,
-    canAct: !spectator && match.status === "active",
-    canRematch: !spectator && match.status === "completed",
-    allowSpectators: Boolean(match.allowSpectators),
+    canAct: match.status === "active",
+    canRematch: match.status === "completed",
     participants: localizedParticipants,
     state,
     pendingChoice: pending,

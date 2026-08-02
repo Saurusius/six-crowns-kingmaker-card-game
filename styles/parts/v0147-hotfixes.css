@@ -1,0 +1,33 @@
+/*
+ * v0.14.7 — correctifs chargés en dernier dans la cascade.
+ * La face finale du toss est désormais rendue directement depuis l'état de jeu.
+ */
+.scg-coin.has-final-face .scg-coin-final {
+  display: grid;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+
+.scg-coin.has-final-face.is-resolved,
+.scg-coin.has-final-face.is-resolved.is-shield,
+.scg-coin.has-final-face.is-resolved.is-sword {
+  transform: translate3d(0, 0, 0) rotateX(360deg) rotateY(2160deg) !important;
+  animation: scg-coin-final-face-reveal .58s cubic-bezier(.2, .82, .28, 1) both !important;
+}
+
+@keyframes scg-coin-final-face-reveal {
+  0% {
+    transform: translate3d(0, -38px, 0) rotateX(340deg) rotateY(1800deg) scale(1.12);
+    filter: brightness(1.8) drop-shadow(0 0 30px #e9bd45);
+  }
+  72% {
+    transform: translate3d(0, 7px, 0) rotateX(360deg) rotateY(2160deg) scale(.96);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(360deg) rotateY(2160deg) scale(1);
+    filter: brightness(1) drop-shadow(0 16px 12px rgba(0, 0, 0, .5));
+  }
+}

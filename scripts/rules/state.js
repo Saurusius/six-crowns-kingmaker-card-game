@@ -151,6 +151,8 @@ export function createPrototypeState() {
     log: [],
     playedCards: [],
     analyticsRecorded: false,
+    localStatsRecorded: false,
+    surrenderedBy: null,
     player: null,
     opponent: null
   };
@@ -361,6 +363,8 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   state.log = [];
   state.playedCards = [];
   state.analyticsRecorded = false;
+  state.localStatsRecorded = false;
+  state.surrenderedBy = null;
   state.coin = { flipping: false, resolved: false, choice: null, face: null, winner: null };
   state.message = "Les decks et les sortilèges sont verrouillés. Lancez la pièce pour désigner le premier joueur.";
   recordLog(state, "match-start", `${state.player.name} affronte ${state.opponent.name}.`);
@@ -596,6 +600,56 @@ function simulateOpponentMove(state, card, row) {
   return evaluateScores(scores);
 }
 
+function cloneRows(rows) {
+  return Object.fromEntries(ROWS.map((row) => [row, [...(rows?.[row] ?? [])]]));
+}
+
+function applySimulatedOpponentCard(state, rows, card, row) {
+  const nextRows = cloneRows(rows);
+  nextRows[row].push(card);
+  if (hasAbility(card, "rally")) {
+    nextRows[row].push(...state.opponent.deck.filter((candidate) => candidate.key === card.key));
+  }
+  return nextRows;
+}
+
+/**
+ * Cherche la séquence la plus courte permettant à l'IA de reprendre la manche
+ * après que le joueur a passé. La profondeur est volontairement limitée : au-delà,
+ * gagner la manche coûterait trop de cartes et il vaut généralement mieux concéder.
+ */
+function findOpponentWinningSequence(state, maxDepth = 2) {
+  const playerScores = calculateSideScores(state.player.rows);
+  const cards = [...state.opponent.hand];
+  let best = null;
+
+  const visit = (rows, remainingCards, sequence, targetDepth) => {
+    const evaluation = evaluateScores({ player: playerScores, opponent: calculateSideScores(rows) });
+    if (evaluation.winner === "opponent") {
+      const cost = sequence.reduce((sum, move) => sum + Number(move.card.strength ?? 0), 0);
+      if (!best || sequence.length < best.sequence.length || (sequence.length === best.sequence.length && cost < best.cost)) {
+        best = { sequence: [...sequence], cost };
+      }
+      return;
+    }
+    if (sequence.length >= targetDepth || best?.sequence?.length <= sequence.length) return;
+
+    // Les cartes les moins coûteuses sont explorées d'abord afin de préserver la main.
+    const ordered = [...remainingCards].sort((a, b) => Number(a.strength ?? 0) - Number(b.strength ?? 0));
+    for (const card of ordered) {
+      for (const row of card.rows ?? []) {
+        const nextRows = applySimulatedOpponentCard(state, rows, card, row);
+        visit(nextRows, remainingCards.filter((entry) => entry.id !== card.id), [...sequence, { card, row }], targetDepth);
+      }
+    }
+  };
+
+  for (let depth = 1; depth <= maxDepth && !best; depth += 1) {
+    visit(state.opponent.rows, cards, [], depth);
+  }
+  return best?.sequence ?? null;
+}
+
 function chooseOpponentMove(state) {
   if (state.opponent.hand.length === 0) return null;
   const current = evaluateBoard(state);
@@ -616,11 +670,27 @@ function chooseOpponentMove(state) {
   }
 
   if (state.player.passed) {
-    const winningMoves = candidates
-      .filter((candidate) => candidate.evaluation.winner === "opponent")
-      .sort((a, b) => Number(a.card.strength ?? 0) - Number(b.card.strength ?? 0)
-        || a.totalGain - b.totalGain);
-    if (winningMoves.length > 0) return winningMoves[0];
+    const threatenedWithDefeat = Number(state.opponent.lives ?? 0) <= 1;
+    const canEndMatch = Number(state.player.lives ?? 0) <= 1;
+    const maxDepth = threatenedWithDefeat || canEndMatch ? 3 : 2;
+    const sequence = findOpponentWinningSequence(state, maxDepth);
+
+    if (sequence?.length) {
+      const cardsAfter = state.opponent.hand.length - sequence.length;
+      const playerCards = state.player.hand.length;
+      const expensiveRoundOneRecovery = state.round === 1
+        && !threatenedWithDefeat
+        && !canEndMatch
+        && (sequence.length >= 3 || (sequence.length >= 2 && cardsAfter < playerCards - 1));
+      if (!expensiveRoundOneRecovery) {
+        const [move] = sequence;
+        return candidates.find((candidate) => candidate.card.id === move.card.id && candidate.row === move.row) ?? move;
+      }
+    }
+
+    // Sans victoire raisonnable à courte portée, l'IA accepte de perdre la manche
+    // plutôt que de vider sa main. Elle ne lutte jusqu'au bout qu'à sa dernière gemme.
+    if (!threatenedWithDefeat) return null;
   }
 
   return candidates.sort((a, b) =>
@@ -677,6 +747,12 @@ export function startNextRound(state) {
   moveRowsToDiscardWithResilience(state.opponent);
 
   state.round += 1;
+  const playerHandBefore = state.player.hand.length;
+  const opponentHandBefore = state.opponent.hand.length;
+  drawCards(state.player, 1);
+  drawCards(state.opponent, 1);
+  const playerDrawn = state.player.hand.length - playerHandBefore;
+  const opponentDrawn = state.opponent.hand.length - opponentHandBefore;
   state.player.passed = state.player.hand.length === 0;
   state.opponent.passed = state.opponent.hand.length === 0;
   state.phase = PHASES.PLAYING;
@@ -691,8 +767,11 @@ export function startNextRound(state) {
   state.roundStarter = starter;
   state.currentTurn = starter;
   state.roundResult = null;
-  state.message = `${state[starter].name} commence la manche ${state.round}. Aucune carte supplémentaire n’est piochée.`;
-  recordLog(state, "round-start", state.message, { starter });
+  const drawMessage = playerDrawn || opponentDrawn
+    ? `Chaque camp pioche une carte${playerDrawn && opponentDrawn ? "" : " lorsque sa pioche le permet"}.`
+    : "Les deux pioches sont vides.";
+  state.message = `${state[starter].name} commence la manche ${state.round}. ${drawMessage}`;
+  recordLog(state, "round-start", state.message, { starter, playerDrawn, opponentDrawn });
 
   markEmptyHandsAsPassed(state);
   if (state.player.passed && state.opponent.passed) return finishRound(state);
@@ -705,8 +784,24 @@ export function createRematchState(state, random = Math.random) {
   next.selectedPlayerDeck = state.selectedPlayerDeck;
   next.selectedOpponentDeck = state.selectedOpponentDeck;
   next.spells.player.id = state.spells?.player?.id ?? null;
-  next.message = "Confirmez les decks de la revanche, puis choisissez votre sortilège avant le lancer de pièce.";
-  return next;
+  prepareEventSpellSelection(next);
+  selectEventSpell(next, next.spells.player.id);
+  return startMatch(next, {
+    playerDeckId: next.selectedPlayerDeck,
+    opponentDeckId: next.selectedOpponentDeck,
+    random
+  });
+}
+
+export function abandonMatch(state) {
+  if (![PHASES.COIN_TOSS, PHASES.MULLIGAN, PHASES.PLAYING, PHASES.ROUND_OVER].includes(state.phase)) return state;
+  state.phase = PHASES.GAME_OVER;
+  state.currentTurn = null;
+  state.gameWinner = "opponent";
+  state.surrenderedBy = "player";
+  state.message = "Vous avez abandonné la partie. La défaite est comptabilisée.";
+  recordLog(state, "surrender", state.message, { side: "player", winner: "opponent" });
+  return state;
 }
 
 export function buildMatchAnalyticsRecord(state, { userId = "unknown", userName = "Joueur" } = {}) {
@@ -723,6 +818,9 @@ export function buildMatchAnalyticsRecord(state, { userId = "unknown", userName 
     opponentSpellId: state.spells?.opponent?.id ?? null,
     opponentSpellUsed: Boolean(state.spells?.opponent?.used),
     winner: state.gameWinner ?? "tie",
+    mode: "solo",
+    abandoned: state.surrenderedBy === "player",
+    surrenderedBy: state.surrenderedBy ?? null,
     rounds: state.round,
     playedCards: (state.playedCards ?? []).filter((entry) => entry.side === "player").map((entry) => ({ id: entry.id, name: entry.name })),
     completedAt: new Date().toISOString()

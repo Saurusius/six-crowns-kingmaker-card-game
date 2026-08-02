@@ -1837,3 +1837,26 @@
 .scg-collection-shell.is-options-compact > .scg-gm-tools {
   display: none !important;
 }
+
+/* v0.14.6 — sélection des sortilèges utilisable sans redimensionner la fenêtre */
+.six-crowns-board .scg-spell-selection-panel,
+.six-crowns-pvp-board .scg-spell-selection-panel {
+  min-height: 0;
+  max-height: calc(100vh - 150px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c5a34e rgba(0, 0, 0, .32);
+}
+.six-crowns-board .scg-spell-selection-panel::-webkit-scrollbar,
+.six-crowns-pvp-board .scg-spell-selection-panel::-webkit-scrollbar { width: 10px; }
+.six-crowns-board .scg-spell-selection-panel::-webkit-scrollbar-track,
+.six-crowns-pvp-board .scg-spell-selection-panel::-webkit-scrollbar-track { background: rgba(0, 0, 0, .32); }
+.six-crowns-board .scg-spell-selection-panel::-webkit-scrollbar-thumb,
+.six-crowns-pvp-board .scg-spell-selection-panel::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(0, 0, 0, .32);
+  border-radius: 999px;
+  background: #c5a34e;
+}
+.scg-end-actions { position: relative; z-index: 5; pointer-events: auto; }

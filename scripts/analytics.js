@@ -102,6 +102,9 @@ export function sanitizeMatchRecord(record = {}) {
     opponentDeckId: String(record.opponentDeckId ?? "unknown"),
     opponentDeckName: String(record.opponentDeckName ?? "Deck inconnu"),
     winner: ["player", "opponent", "tie"].includes(record.winner) ? record.winner : "tie",
+    mode: record.mode === "pvp" ? "pvp" : "solo",
+    abandoned: Boolean(record.abandoned || record.surrenderedBy === "player"),
+    surrenderedBy: record.surrenderedBy === "player" ? "player" : null,
     rounds: Math.max(1, Number.parseInt(record.rounds ?? 1, 10) || 1),
     playedCards,
     completedAt: String(record.completedAt ?? new Date().toISOString())

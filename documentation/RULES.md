@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du module **0.14.5**.
+Cette page décrit les règles du module **0.14.8**.
 
 ## But de la partie
 
@@ -134,10 +134,10 @@ Le mode PvP applique les mêmes règles de cartes, de lignes, de score et de vic
 5. Un joueur peut abandonner ; l’adversaire est alors déclaré vainqueur.
 6. Une revanche ne commence que lorsque les deux participants la demandent.
 
-Les spectateurs sont désactivés par défaut. Lorsqu’ils sont autorisés, ils voient le plateau et les scores, mais pas les mains ni les sortilèges qui n’ont pas été activés. Aucun chronomètre, aucune mise et aucune perte de carte ne sont appliqués.
+Le mode spectateur a été retiré afin d’alléger la synchronisation : seuls les deux participants reçoivent les données du duel. Aucun chronomètre, aucune mise et aucune perte de carte ne sont appliqués.
 
-Un MJ connecté sert d’arbitre technique : il conserve l’état de la partie, valide les actions et peut resynchroniser ou débloquer exceptionnellement un duel.
+Aucun MJ n’a besoin d’être connecté. Un profil joueur actif est élu automatiquement comme coordinateur technique et relaie les actions signées entre les deux participants.
 
 ## Sauvegarde et profils
 
-Les collections, decks personnels et tickets sont enregistrés sur le profil Foundry connecté. Chaque joueur possède donc ses propres données. Les duels PvP sont sauvegardés au niveau du monde par le MJ hôte afin de permettre la synchronisation et la reconnexion des deux participants.
+Les collections, decks personnels, tickets et registres d’échanges sont enregistrés sur le profil Foundry connecté. Chaque joueur possède donc ses propres données. Le coordinateur PvP conserve l’état canonique des duels sur son profil pendant la session afin de synchroniser les deux participants.

@@ -71,7 +71,7 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const discovered = catalog.filter((card) => Number(collection?.[card.id]?.count ?? 0) > 0).length;
     const copies = catalog.reduce((total, card) => total + Math.max(0, Number(collection?.[card.id]?.count ?? 0)), 0);
-    const version = game.modules.get(MODULE_ID)?.version ?? "0.14.5";
+    const version = game.modules.get(MODULE_ID)?.version ?? "0.14.8";
 
     return {
       userName: game.user?.name ?? "Joueur",
@@ -120,6 +120,22 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
         if (typeof api?.openPvp !== "function") throw new Error("L’arène PvP n’est pas disponible.");
         await api.openPvp();
       }, "Impossible d’ouvrir l’arène PvP.");
+    });
+
+    this.element.querySelector("[data-action='player-profile']")?.addEventListener("click", () => {
+      void run(async () => {
+        const api = moduleApi();
+        if (typeof api?.openPlayerProfile !== "function") throw new Error("Le profil du joueur n’est pas disponible.");
+        await api.openPlayerProfile();
+      }, "Impossible d’ouvrir le profil du joueur.");
+    });
+
+    this.element.querySelector("[data-action='ladder']")?.addEventListener("click", () => {
+      void run(async () => {
+        const api = moduleApi();
+        if (typeof api?.openLadder !== "function") throw new Error("Le Ladder n’est pas disponible.");
+        await api.openLadder();
+      }, "Impossible d’ouvrir le Ladder.");
     });
 
     this.element.querySelector("[data-action='collection']")?.addEventListener("click", () => {

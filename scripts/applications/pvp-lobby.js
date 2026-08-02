@@ -54,7 +54,7 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
       try {
         this.dashboard = await refreshPvpDashboard();
       } catch (error) {
-        this.dashboard = { current: [], invitations: [], spectatable: [], recent: [], stats: { played: 0, wins: 0, losses: 0, ties: 0 }, adminMatches: [], hostGmId: null, hostGmName: null };
+        this.dashboard = { current: [], invitations: [], recent: [], stats: { played: 0, wins: 0, losses: 0, ties: 0, abandons: 0, winRate: 0 }, ladder: [], hostGmId: null, hostGmName: null, hostUserId: null, hostUserName: null };
       }
     }
 
@@ -76,18 +76,17 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
 
     const deckOptions = this.deckOptions.map((deck) => ({ ...deck, selected: deck.key === this.selectedDeckKey }));
     const spellOptions = this.spellOptions.map((spell) => ({ ...spell, selected: String(spell.id ?? "") === String(this.selectedSpellId ?? "") }));
-    const hasHost = Boolean(this.dashboard.hostGmId);
+    const hasHost = Boolean(this.dashboard.hostUserId ?? this.dashboard.hostGmId);
     const isLobby = currentSummary?.status === "lobby";
     const isActive = currentSummary?.status === "active";
     const isCompleted = currentSummary?.status === "completed";
 
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.14.5",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.14.8",
       userName: game.user.name,
       isGM: game.user.isGM,
-      isHostGm: Boolean(this.dashboard.isHostGm),
       hasHost,
-      hostGmName: this.dashboard.hostGmName,
+      hostGmName: this.dashboard.hostUserName ?? this.dashboard.hostGmName,
       connectedPlayers,
       hasConnectedPlayers: connectedPlayers.length > 0,
       invitations: this.dashboard.invitations ?? [],
@@ -100,13 +99,9 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
       isCompleted,
       deckOptions,
       spellOptions,
-      stats: this.dashboard.stats ?? { played: 0, wins: 0, losses: 0, ties: 0 },
+      stats: this.dashboard.stats ?? { played: 0, wins: 0, losses: 0, ties: 0, abandons: 0, winRate: 0 },
       recent: this.dashboard.recent ?? [],
-      hasRecent: (this.dashboard.recent?.length ?? 0) > 0,
-      spectatable: this.dashboard.spectatable ?? [],
-      hasSpectatable: (this.dashboard.spectatable?.length ?? 0) > 0,
-      adminMatches: this.dashboard.adminMatches ?? [],
-      hasAdminMatches: (this.dashboard.adminMatches?.length ?? 0) > 0
+      hasRecent: (this.dashboard.recent?.length ?? 0) > 0
     };
   }
 
@@ -132,6 +127,10 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
         await api.openHome();
         await this.close();
       })();
+    });
+    this.element.querySelector("[data-action='open-ladder']")?.addEventListener("click", () => {
+      const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
+      void api?.openLadder?.();
     });
     this.element.querySelector("[data-action='open-rulebook']")?.addEventListener("click", () => openRulebook());
     this.element.querySelector("[data-action='open-glossary']")?.addEventListener("click", () => openGlossary());
@@ -175,30 +174,11 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
       void this._run(() => pvpRequest("leave-lobby", { matchId: context.currentSummary.id }), "Impossible de quitter le salon.");
     });
 
-    this.element.querySelector("[data-action='toggle-spectators']")?.addEventListener("change", (event) => {
-      void this._run(() => pvpRequest("toggle-spectators", { matchId: context.currentSummary.id, allowed: event.currentTarget.checked }), "Impossible de modifier les spectateurs.");
-    });
 
     this.element.querySelectorAll("[data-action='open-match']").forEach((button) => button.addEventListener("click", () => {
       void this._run(() => pvpRequest("open-match", { matchId: button.dataset.matchId }), "Impossible de rejoindre le duel.");
     }));
-    this.element.querySelectorAll("[data-action='spectate']").forEach((button) => button.addEventListener("click", () => {
-      void this._run(() => pvpRequest("spectate", { matchId: button.dataset.matchId }), "Impossible de rejoindre comme spectateur.");
-    }));
 
-    this.element.querySelectorAll("[data-action='admin-resync']").forEach((button) => button.addEventListener("click", () => {
-      void this._run(() => pvpRequest("admin-resync", { matchId: button.dataset.matchId }), "Resynchronisation impossible.");
-    }));
-    this.element.querySelectorAll("[data-action='admin-force-turn']").forEach((button) => button.addEventListener("click", () => {
-      void this._run(() => pvpRequest("admin-force-turn", { matchId: button.dataset.matchId }), "Déblocage du tour impossible.");
-    }));
-    this.element.querySelectorAll("[data-action='admin-cancel']").forEach((button) => button.addEventListener("click", () => {
-      void this._run(() => pvpRequest("admin-cancel", { matchId: button.dataset.matchId }), "Annulation MJ impossible.");
-    }));
-    this.element.querySelectorAll("[data-action='admin-winner']").forEach((button) => button.addEventListener("click", () => {
-      const winner = button.dataset.winner;
-      void this._run(() => pvpRequest("admin-winner", { matchId: button.dataset.matchId, winner }), "Déclaration du vainqueur impossible.");
-    }));
   }
 
   async close(options = {}) {

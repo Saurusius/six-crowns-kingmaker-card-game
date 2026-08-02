@@ -105,6 +105,9 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       selected: id === this.factionFilter
     }));
     const validation = validateCustomDeck(this.draft, catalog, collection);
+    // Le bouton doit rester utilisable lorsque la seule erreur est le nom :
+    // la valeur réellement saisie est capturée au clic, sans nécessiter de re-rendu.
+    const structuralErrors = validation.errors.filter((error) => error !== "Donnez un nom au deck.");
 
     return {
       userName: game.user.name,
@@ -124,7 +127,7 @@ export class SixCrownsDeckBuilder extends HandlebarsApplicationMixin(Application
       valid: validation.valid,
       validationErrors: validation.errors,
       hasValidationErrors: validation.errors.length > 0,
-      canSave: validation.valid,
+      canSave: structuralErrors.length === 0,
       canDelete: Boolean(this.draft.id),
       canRename: Boolean(this.draft.id),
       canDuplicate: Boolean(this.draft.id),

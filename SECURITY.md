@@ -1,17 +1,18 @@
 # Sécurité et modèle de confiance
 
-Le Jeu des Six Couronnes est un module Foundry VTT destiné à des tables privées administrées par un MJ.
+Le Jeu des Six Couronnes est un module Foundry VTT destiné à des tables privées. Les interactions entre joueurs ne nécessitent plus la présence d’un MJ.
 
 ## Ce que protège le module
 
-- Les états complets des duels sont stockés dans un journal sans permission joueur.
 - Les instantanés PvP masquent les mains, pioches et sortilèges non révélés.
+- Seuls les deux participants reçoivent les données de leur duel.
 - Les commandes administratives PvP reçues par socket sont refusées.
-- Les requêtes joueurs et les réponses du MJ hôte sont signées en ECDSA P-256 ; toute altération du paquet invalide sa signature.
+- Les requêtes et réponses pair-à-pair sont signées en ECDSA P-256 ; toute altération du paquet invalide sa signature.
 - Les clés publiques sont liées aux profils Foundry, tandis que les clés privées restent dans le stockage local de leur navigateur.
 - Les requêtes sont limitées et dédupliquées.
 - Les opérations économiques utilisent des snapshots, des révisions et des restaurations de secours.
-- Les échanges sont verrouillés avant leur exécution et disposent d’un journal d’audit.
+- Les échanges conservent une copie locale chez chaque participant et utilisent une validation en plusieurs étapes avec possibilité de restauration.
+- Les récompenses PvP sont appliquées sur le profil du gagnant avec un identifiant empêchant les doublons.
 
 ## Limite fondamentale
 

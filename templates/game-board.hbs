@@ -11,7 +11,7 @@
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
       <button type="button" data-action="reset"><i class="fa-solid fa-rotate-left"></i> Nouvelle partie</button>
       {{#if canRematch}}
-        <button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Revanche</button>
+        <button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Rejouer avec les mêmes decks</button>
       {{else}}{{#if canStartNextRound}}
         <button type="button" data-action="next-round"><i class="fa-solid fa-forward"></i> Manche suivante</button>
       {{else}}
@@ -149,9 +149,13 @@
       <div class="scg-coin-stage">
         <span class="scg-coin-orbit" aria-hidden="true"></span>
         <span class="scg-coin-shadow" aria-hidden="true"></span>
-        <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
-          <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
-          <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
+        <div class="scg-coin {{coinClass}} {{#if coin.resolved}}has-final-face{{/if}}" aria-label="Pièce de tirage au sort">
+          {{#if coin.resolved}}
+            <div class="scg-coin-face scg-coin-final"><span class="scg-coin-inner"><i class="{{coinFaceIcon}}"></i></span></div>
+          {{else}}
+            <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
+            <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
+          {{/if}}
         </div>
         {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
       </div>
@@ -276,7 +280,7 @@
         <article><strong>{{gameSummary.opponentCardsPlayed}}</strong><span>cartes adverses jouées</span></article>
       </div>
       <p class="scg-end-message">{{message}}</p>
-      <div class="scg-end-actions"><button type="button" class="scg-primary-button" data-action="rematch"><i class="fa-solid fa-arrows-rotate"></i> Revanche</button><button type="button" data-action="reset"><i class="fa-solid fa-house-flag"></i> Choisir d’autres decks</button></div>
+      <div class="scg-end-actions"><button type="button" class="scg-primary-button" data-action="rematch" title="Relancer immédiatement un duel avec les mêmes decks"><i class="fa-solid fa-arrows-rotate"></i> Rejouer avec les mêmes decks</button><button type="button" data-action="choose-decks"><i class="fa-solid fa-house-flag"></i> Choisir d’autres decks</button></div>
     </section>
   {{/if}}
 

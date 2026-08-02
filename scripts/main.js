@@ -21,6 +21,8 @@ import {
   openBoard,
   openPvp,
   openPvpBoard,
+  openPlayerProfile,
+  openLadder,
   openAnalyticsDashboard,
   openBooster,
   openBoosters,
@@ -38,7 +40,6 @@ import {
 import { handleTradeSocket, recoverStaleTrades, registerTradeSettings } from "./trades.js";
 import { handleAnalyticsSocket, registerAnalyticsSetting } from "./analytics.js";
 import { handlePvpSocket, initializePvpStorage, isPrimaryPvpGm, registerPvpSettings, resumePvpSession } from "./pvp/service.js";
-import { initializeSecureStore } from "./secure-store.js";
 import { initializeSocketIdentity } from "./socket-auth.js";
 import { handleTransactionAuditSocket } from "./transactions.js";
 
@@ -48,6 +49,8 @@ const publicApi = Object.freeze({
   openBoard,
   openPvp,
   openPvpBoard,
+  openPlayerProfile,
+  openLadder,
   openBooster,
   openBoosters,
   openSpecialBooster,
@@ -150,10 +153,19 @@ Hooks.on("updateUser", (user, changes, _options, authorUserId) => {
   if (flags.has("shopBoosterInventory")) {
     Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, user.getFlag(MODULE_ID, "shopBoosterInventory") ?? {}, user.id);
   }
+  if (flags.has("soloMatchHistory")) {
+    Hooks.callAll(`${MODULE_ID}.soloStatsUpdated`, user.getFlag(MODULE_ID, "soloMatchHistory") ?? [], user.id);
+  }
+  if (flags.has("playerTradeLedger")) {
+    Hooks.callAll(`${MODULE_ID}.tradesUpdated`, user.getFlag(MODULE_ID, "playerTradeLedger") ?? {}, user.id);
+  }
+  if (flags.has("pvpPersonalHistory")) {
+    Hooks.callAll(`${MODULE_ID}.pvpHistoryUpdated`, user.getFlag(MODULE_ID, "pvpPersonalHistory") ?? [], user.id);
+  }
 
   const resetFlags = [
     "cardCollection", "customDecks", "boosterCredits", "specialBoosterCredits",
-    "eventBoosterCredits", "boosterHistory", "crowns", "shopBoosterInventory", "shopHistory"
+    "eventBoosterCredits", "boosterHistory", "crowns", "shopBoosterInventory", "shopHistory", "soloMatchHistory"
   ];
   if (resetFlags.every((flag) => flags.has(flag))) {
     ui.notifications.warn("Votre profil du Jeu des Six Couronnes a été réinitialisé par le MJ.");
@@ -172,11 +184,10 @@ Hooks.once("ready", async () => {
 
   if (isPrimaryPvpGm()) {
     try {
-      await initializeSecureStore();
       await initializePvpStorage();
     } catch (error) {
-      console.error(`${MODULE_TITLE} | Stockage MJ indisponible`, error);
-      ui.notifications.error("Le stockage réservé au MJ du Jeu des Six Couronnes n’a pas pu être initialisé.");
+      console.error(`${MODULE_TITLE} | Stockage PvP pair-à-pair indisponible`, error);
+      ui.notifications.error("La synchronisation PvP pair-à-pair n’a pas pu être initialisée.");
     }
   }
 
@@ -188,7 +199,7 @@ Hooks.once("ready", async () => {
   });
 
   const startupTasks = [
-    ...(game.user.isGM ? [["récupération des échanges interrompus", () => recoverStaleTrades()]] : []),
+    ["synchronisation des échanges pair-à-pair", () => recoverStaleTrades()],
     ["synchronisation des decks", () => syncCustomDeckRegistry()],
     ["réparation de la macro de booster", () => createBoosterMacro()],
     ["réparation des macros du module", () => createProfileMacros()]

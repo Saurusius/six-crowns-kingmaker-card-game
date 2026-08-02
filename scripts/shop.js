@@ -73,7 +73,8 @@ export async function awardCrowns({ amount = 0, label = "Gain de Couronnes", use
   const delta = Math.max(0, Number.parseInt(amount ?? 0, 10) || 0);
   const normalizedRewardId = rewardId ? String(rewardId) : null;
   const isLocalBotReward = source === "bot-victory" && delta === 5 && target.id === game.user.id && normalizedRewardId;
-  if (!game.user.isGM && !isLocalBotReward) throw new Error("Récompense de Couronnes non autorisée.");
+  const isLocalPvpReward = source === "pvp-victory" && delta === 10 && target.id === game.user.id && normalizedRewardId;
+  if (!game.user.isGM && !isLocalBotReward && !isLocalPvpReward) throw new Error("Récompense de Couronnes non autorisée.");
   if (!delta) return { user: target, amount: 0, crowns: await getCrowns({ user: target }), duplicate: false };
   let crowns;
   let history;

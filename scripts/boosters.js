@@ -93,9 +93,14 @@ async function loadJson(path) {
   return response.json();
 }
 
-function resolveUser({ user = null, userId = null } = {}) {
+function resolveReadableUser({ user = null, userId = null } = {}) {
   const targetUser = user ?? (userId ? game.users.get(userId) : game.user);
   if (!targetUser) throw new Error("Profil Foundry introuvable.");
+  return targetUser;
+}
+
+function resolveUser({ user = null, userId = null } = {}) {
+  const targetUser = resolveReadableUser({ user, userId });
   if (targetUser.id !== game.user.id && !game.user.isGM) {
     throw new Error("Seul un MJ peut modifier la collection d’un autre joueur.");
   }
@@ -107,7 +112,7 @@ function normalizeBoosterCredits(value) {
 }
 
 async function getTicketCredits(flag, options = {}) {
-  const targetUser = resolveUser(options);
+  const targetUser = resolveReadableUser(options);
   return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, flag));
 }
 
@@ -224,7 +229,7 @@ function shuffle(items, random = secureRandom) {
 }
 
 export async function getBoosterHistory(options = {}) {
-  const targetUser = resolveUser(options);
+  const targetUser = resolveReadableUser(options);
   const history = foundry.utils.deepClone(targetUser.getFlag(MODULE_ID, BOOSTER_HISTORY_FLAG) ?? []);
   return Array.isArray(history) ? history : [];
 }
@@ -269,7 +274,7 @@ function addCardsToCollectionData(collectionValue, cards) {
 }
 
 export async function getBoosterCredits(options = {}) {
-  const targetUser = resolveUser(options);
+  const targetUser = resolveReadableUser(options);
   return normalizeBoosterCredits(targetUser.getFlag(MODULE_ID, BOOSTER_CREDITS_FLAG));
 }
 
@@ -293,7 +298,7 @@ export async function grantBoostersToUser({ userId, count = 1 } = {}) {
 }
 
 export async function getCollection(options = {}) {
-  const targetUser = resolveUser(options);
+  const targetUser = resolveReadableUser(options);
   const collection = foundry.utils.deepClone(targetUser.getFlag(MODULE_ID, COLLECTION_FLAG) ?? {});
   const catalog = await loadCardCatalog();
   const cardsById = new Map(catalog.map((card) => [card.id, card]));
@@ -666,7 +671,7 @@ export function showSpecialBoosterSelector() {
       ui.notifications.error(error.message);
     }
   }));
-  document.body.appendChild(overlay);
+  (document.documentElement ?? document.body).appendChild(overlay);
   document.addEventListener("keydown", onKeyDown);
   overlay.querySelector("[data-faction]")?.focus({ preventScroll: true });
 }
@@ -725,7 +730,7 @@ export async function recycleCardsForBooster(cardIds = []) {
 
 
 export async function executeTrade({ fromUserId, toUserId, offered = {}, requested = {}, offeredCredits = 0, requestedCredits = 0, tradeId = null } = {}) {
-  if (!game.user.isGM) throw new Error("Un MJ actif doit valider l’échange.");
+  if (!game.user.isGM) throw new Error("Utilisez le centre d’échanges pair-à-pair pour finaliser cette opération.");
   const fromUser = game.users.get(fromUserId);
   const toUser = game.users.get(toUserId);
   if (!fromUser || !toUser || fromUser.id === toUser.id) throw new Error("Joueurs invalides.");

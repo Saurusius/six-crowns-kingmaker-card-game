@@ -1,21 +1,22 @@
 <section class="scg-pvp-shell">
   <header class="scg-pvp-header">
     <div>
-      <small>Multijoueur en ligne · bêta</small>
+      <small>Multijoueur pair-à-pair · bêta</small>
       <h1><i class="fa-solid fa-khanda"></i> Arène des Six Couronnes</h1>
       <p>Invitez un joueur connecté, verrouillez votre deck et votre sortilège, puis laissez parler les cartes.</p>
     </div>
     <div class="scg-pvp-header-actions">
       <span class="scg-pvp-version">v{{version}}</span>
+      <button type="button" data-action="open-ladder"><i class="fa-solid fa-ranking-star"></i> Ladder</button>
       <button type="button" data-action="refresh"><i class="fa-solid fa-rotate"></i> Actualiser</button>
       <button type="button" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button>
     </div>
   </header>
 
   {{#unless hasHost}}
-    <div class="scg-pvp-alert is-danger"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>Aucun MJ hôte connecté</strong><p>Un MJ doit rester connecté pour arbitrer, sauvegarder et resynchroniser les duels.</p></div></div>
+    <div class="scg-pvp-alert is-danger"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>Synchronisation PvP indisponible</strong><p>Aucun profil connecté ne peut coordonner la partie pour le moment.</p></div></div>
   {{else}}
-    <div class="scg-pvp-alert"><i class="fa-solid fa-server"></i><div><strong>Serveur PvP prêt</strong><p>{{hostGmName}} assure l’arbitrage technique des parties.</p></div></div>
+    <div class="scg-pvp-alert"><i class="fa-solid fa-link"></i><div><strong>Synchronisation pair-à-pair prête</strong><p>Les joueurs peuvent s’affronter directement. Aucun MJ n’a besoin d’être connecté.</p></div></div>
   {{/unless}}
 
   <div class="scg-pvp-grid">
@@ -79,7 +80,6 @@
           </div>
 
           <div class="scg-pvp-lobby-footer">
-            <label class="scg-pvp-toggle"><input type="checkbox" data-action="toggle-spectators" {{#if currentLobby.allowSpectators}}checked{{/if}}><span>Autoriser les spectateurs</span></label>
             <div class="scg-pvp-inline-actions">
               <button type="button" class="scg-danger-button" data-action="leave-lobby"><i class="fa-solid fa-door-open"></i> Quitter le salon</button>
               <button type="button" data-action="save-loadout"><i class="fa-solid fa-floppy-disk"></i> Valider mon équipement</button>
@@ -92,7 +92,7 @@
           <header><div><small>Duel {{#if isCompleted}}terminé{{else}}en cours{{/if}}</small><h2>{{currentSummary.player.name}} contre {{currentSummary.opponentSeat.name}}</h2></div><span class="scg-pvp-status-chip {{#if isCompleted}}is-complete{{/if}}">{{#if isCompleted}}Résultat disponible{{else}}Manche {{currentSummary.round}}{{/if}}</span></header>
           <div class="scg-pvp-resume-card">
             <div class="scg-pvp-versus-large"><img src="{{currentSummary.player.avatar}}" alt=""><span>VS</span><img src="{{currentSummary.opponentSeat.avatar}}" alt=""></div>
-            <div><strong>{{#if isCompleted}}{{#if currentSummary.isTie}}Égalité finale{{else}}{{currentSummary.winnerName}} remporte le duel{{/if}}{{else}}Votre partie vous attend{{/if}}</strong><p>La partie est sauvegardée par le MJ et peut être reprise après une reconnexion.</p></div>
+            <div><strong>{{#if isCompleted}}{{#if currentSummary.isTie}}Égalité finale{{else}}{{currentSummary.winnerName}} remporte le duel{{/if}}{{else}}Votre partie vous attend{{/if}}</strong><p>La partie est sauvegardée automatiquement et peut être reprise après une reconnexion.</p></div>
             <button type="button" class="scg-primary-button" data-action="open-match" data-match-id="{{currentSummary.id}}"><i class="fa-solid fa-door-open"></i> {{#if isCompleted}}Voir le résultat{{else}}Reprendre le duel{{/if}}</button>
           </div>
         </section>
@@ -102,7 +102,7 @@
           {{#if hasConnectedPlayers}}
             <div class="scg-pvp-player-list">
               {{#each connectedPlayers}}
-                <article><img src="{{avatar}}" alt="Portrait de {{name}}"><div><strong>{{name}}</strong><small>{{#if isGM}}Maître du jeu{{else}}Joueur connecté{{/if}}</small></div><button type="button" data-action="invite" data-user-id="{{id}}" {{#unless @root.hasHost}}disabled{{/unless}}><i class="fa-solid fa-khanda"></i> Défier</button></article>
+                <article><img src="{{avatar}}" alt="Portrait de {{name}}"><div><strong>{{name}}</strong><small>Joueur connecté</small></div><button type="button" data-action="invite" data-user-id="{{id}}"><i class="fa-solid fa-khanda"></i> Défier</button></article>
               {{/each}}
             </div>
           {{else}}
@@ -111,14 +111,6 @@
         </section>
       {{/if}}{{/if}}
 
-      {{#if hasSpectatable}}
-        <section class="scg-pvp-panel">
-          <header><div><small>Tribunes ouvertes</small><h2>Duels à observer</h2></div><i class="fa-solid fa-eye"></i></header>
-          <div class="scg-pvp-spectate-list">
-            {{#each spectatable}}<article><span><strong>{{player.name}} contre {{opponentSeat.name}}</strong><small>Manche {{round}}</small></span><button type="button" data-action="spectate" data-match-id="{{id}}"><i class="fa-solid fa-eye"></i> Observer</button></article>{{/each}}
-          </div>
-        </section>
-      {{/if}}
     </main>
 
     <aside class="scg-pvp-sidebar">
@@ -140,24 +132,4 @@
     </aside>
   </div>
 
-  {{#if isHostGm}}
-    <section class="scg-pvp-panel scg-pvp-admin">
-      <header><div><small>Arbitrage technique</small><h2>Console MJ</h2></div><i class="fa-solid fa-gavel"></i></header>
-      {{#if hasAdminMatches}}
-        <div class="scg-pvp-admin-list">
-          {{#each adminMatches}}
-            <article>
-              <div><strong>{{player.name}} contre {{opponentSeat.name}}</strong><small>{{statusLabel}}{{#if round}} · manche {{round}}{{/if}}</small></div>
-              <div class="scg-pvp-inline-actions">
-                <button type="button" data-action="admin-resync" data-match-id="{{id}}" title="Renvoyer l’état"><i class="fa-solid fa-arrows-rotate"></i></button>
-                {{#if canAdminForceTurn}}<button type="button" data-action="admin-force-turn" data-match-id="{{id}}" title="Forcer le changement de tour"><i class="fa-solid fa-forward-step"></i></button>{{/if}}
-                {{#if canAdminDeclareWinner}}<button type="button" data-action="admin-winner" data-match-id="{{id}}" data-winner="player" title="Déclarer le premier joueur vainqueur"><i class="fa-solid fa-trophy"></i> J1</button><button type="button" data-action="admin-winner" data-match-id="{{id}}" data-winner="opponent" title="Déclarer le second joueur vainqueur"><i class="fa-solid fa-trophy"></i> J2</button>{{/if}}
-                {{#if canAdminCancel}}<button type="button" data-action="admin-cancel" data-match-id="{{id}}" title="Annuler le duel"><i class="fa-solid fa-trash"></i></button>{{/if}}
-              </div>
-            </article>
-          {{/each}}
-        </div>
-      {{else}}<div class="scg-pvp-empty is-small"><p>Aucun duel à administrer.</p></div>{{/if}}
-    </section>
-  {{/if}}
 </section>

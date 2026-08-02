@@ -42,7 +42,6 @@ function matchFixture() {
     mulligan: { selections: { player: [state.player.hand[0].id], opponent: [] } },
     pendingChoice: null,
     rematchVotes: [],
-    allowSpectators: true,
     updatedAt: new Date().toISOString()
   };
 }
@@ -60,14 +59,7 @@ test("un participant ne reçoit ni la main ni le sortilège secret adverses", ()
   assert.deepEqual(snapshot.state.mulliganSelection, [match.state.player.hand[0].id]);
 });
 
-test("un spectateur ne reçoit aucune main ni aucun sortilège non révélé", () => {
+test("un profil extérieur au duel ne reçoit aucun instantané", () => {
   const match = matchFixture();
-  const snapshot = buildPvpSnapshot(match, "spectator-1");
-
-  assert.equal(snapshot.role, "spectator");
-  assert.deepEqual(snapshot.state.player.hand, []);
-  assert.ok(snapshot.state.opponent.hand.every((entry) => String(entry.id).startsWith("hidden-")));
-  assert.equal(snapshot.state.spells.player.id, null);
-  assert.equal(snapshot.state.spells.opponent.id, null);
-  assert.deepEqual(snapshot.state.mulliganSelection, []);
+  assert.throws(() => buildPvpSnapshot(match, "spectator-1"), /ne participez pas/i);
 });

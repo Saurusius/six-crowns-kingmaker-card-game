@@ -347,8 +347,15 @@ export function chooseOpponentEventSpellPayload(state, random = Math.random) {
     return { cardIds: [...options.targets].sort((a, b) => b.strength - a.strength).slice(0, 3).map((target) => target.id) };
   }
   if (spell.effectId === "bag-rescue") {
+    // Ne pas gaspiller Sauvetage de sac au tout début du duel : le mulligan peut
+    // avoir placé une petite carte dans la défausse, mais la main est encore pleine.
+    const handSize = state.opponent?.hand?.length ?? 0;
+    const playerHandSize = state.player?.hand?.length ?? 0;
+    if (state.round === 1 && handSize >= 7) return null;
+    if (handSize > playerHandSize + 1) return null;
     const target = [...options.targets].sort((a, b) => b.strength - a.strength)[0];
-    return target ? { cardId: target.id } : null;
+    if (!target || (Number(target.strength ?? 0) <= 2 && handSize > 4)) return null;
+    return { cardId: target.id };
   }
   if (spell.effectId === "titanium-chancla") {
     const target = [...options.targets].sort((a, b) => b.strength - a.strength)[0];

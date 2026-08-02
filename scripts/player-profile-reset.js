@@ -7,6 +7,7 @@ import {
   SPECIAL_BOOSTER_CREDITS_FLAG
 } from "./boosters.js";
 import { CUSTOM_DECKS_FLAG } from "./profile.js";
+import { SOLO_MATCH_HISTORY_FLAG } from "./player-stats.js";
 import {
   CROWNS_FLAG,
   DEFAULT_CROWNS,
@@ -16,6 +17,10 @@ import {
 import { transactUserFlags } from "./transactions.js";
 
 export const ACTIVE_MATCH_STATE_FLAG = "activeMatchState";
+export const PLAYER_TRADE_LEDGER_FLAG = "playerTradeLedger";
+export const PREPARED_TRADE_TRANSACTIONS_FLAG = "preparedTradeTransactions";
+export const PVP_PERSONAL_HISTORY_FLAG = "pvpPersonalHistory";
+export const PVP_PEER_REPOSITORY_FLAG = "pvpPeerRepository";
 
 export const PLAYER_PROFILE_FLAGS = Object.freeze([
   COLLECTION_FLAG,
@@ -27,7 +32,12 @@ export const PLAYER_PROFILE_FLAGS = Object.freeze([
   CROWNS_FLAG,
   SHOP_INVENTORY_FLAG,
   SHOP_HISTORY_FLAG,
-  ACTIVE_MATCH_STATE_FLAG
+  SOLO_MATCH_HISTORY_FLAG,
+  ACTIVE_MATCH_STATE_FLAG,
+  PLAYER_TRADE_LEDGER_FLAG,
+  PREPARED_TRADE_TRANSACTIONS_FLAG,
+  PVP_PERSONAL_HISTORY_FLAG,
+  PVP_PEER_REPOSITORY_FLAG
 ]);
 
 function clone(value) {
@@ -56,7 +66,12 @@ export function buildFreshPlayerProfile() {
     [CROWNS_FLAG]: DEFAULT_CROWNS,
     [SHOP_INVENTORY_FLAG]: {},
     [SHOP_HISTORY_FLAG]: [],
-    [ACTIVE_MATCH_STATE_FLAG]: null
+    [SOLO_MATCH_HISTORY_FLAG]: [],
+    [ACTIVE_MATCH_STATE_FLAG]: null,
+    [PLAYER_TRADE_LEDGER_FLAG]: { offers: [], history: [], revision: 0 },
+    [PREPARED_TRADE_TRANSACTIONS_FLAG]: {},
+    [PVP_PERSONAL_HISTORY_FLAG]: [],
+    [PVP_PEER_REPOSITORY_FLAG]: { matches: [], history: [], revision: 0, updatedAt: null }
   };
 }
 
@@ -67,6 +82,12 @@ export function summarizePlayerProfile(snapshot = {}) {
   const decks = Array.isArray(snapshot[CUSTOM_DECKS_FLAG]) ? snapshot[CUSTOM_DECKS_FLAG] : [];
   const boosterHistory = Array.isArray(snapshot[BOOSTER_HISTORY_FLAG]) ? snapshot[BOOSTER_HISTORY_FLAG] : [];
   const shopHistory = Array.isArray(snapshot[SHOP_HISTORY_FLAG]) ? snapshot[SHOP_HISTORY_FLAG] : [];
+  const soloHistory = Array.isArray(snapshot[SOLO_MATCH_HISTORY_FLAG]) ? snapshot[SOLO_MATCH_HISTORY_FLAG] : [];
+  const pvpHistory = Array.isArray(snapshot[PVP_PERSONAL_HISTORY_FLAG]) ? snapshot[PVP_PERSONAL_HISTORY_FLAG] : [];
+  const tradeLedger = snapshot[PLAYER_TRADE_LEDGER_FLAG] && typeof snapshot[PLAYER_TRADE_LEDGER_FLAG] === "object"
+    ? snapshot[PLAYER_TRADE_LEDGER_FLAG]
+    : {};
+  const tradeHistory = Array.isArray(tradeLedger.history) ? tradeLedger.history : [];
   const inventory = snapshot[SHOP_INVENTORY_FLAG] && typeof snapshot[SHOP_INVENTORY_FLAG] === "object"
     ? snapshot[SHOP_INVENTORY_FLAG]
     : {};
@@ -86,7 +107,7 @@ export function summarizePlayerProfile(snapshot = {}) {
       (total, count) => total + positiveInteger(count),
       0
     ),
-    removedHistoryEntries: boosterHistory.length + shopHistory.length,
+    removedHistoryEntries: boosterHistory.length + shopHistory.length + soloHistory.length + pvpHistory.length + tradeHistory.length,
     previousCrowns: snapshot[CROWNS_FLAG] === undefined || snapshot[CROWNS_FLAG] === null
       ? DEFAULT_CROWNS
       : positiveInteger(snapshot[CROWNS_FLAG]),
@@ -121,6 +142,7 @@ export async function resetPlayerProfileForUser({ userId } = {}) {
   Hooks.callAll(`${MODULE_ID}.boosterHistoryUpdated`, [], targetUser.id);
   Hooks.callAll(`${MODULE_ID}.crownsUpdated`, DEFAULT_CROWNS, targetUser.id);
   Hooks.callAll(`${MODULE_ID}.shopInventoryUpdated`, {}, targetUser.id);
+  Hooks.callAll(`${MODULE_ID}.soloStatsUpdated`, [], targetUser.id);
   Hooks.callAll(`${MODULE_ID}.profileReset`, targetUser.id, summary);
 
   return { user: targetUser, crowns: DEFAULT_CROWNS, ...summary };

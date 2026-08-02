@@ -15,8 +15,6 @@ import {
   confirmPvpMulligan,
   continuePvpCoinToss,
   createPvpDuelState,
-  declarePvpWinner,
-  forcePvpTurn,
   getPvpSpellOptions,
   passPvpSide,
   playPvpCard,
@@ -27,6 +25,7 @@ import {
 
 export const PVP_MATCHES_SETTING = "pvpMatches";
 export const PVP_HISTORY_SETTING = "pvpHistory";
+export const PVP_PERSONAL_HISTORY_FLAG = "pvpPersonalHistory";
 export const PVP_STATUS = Object.freeze({
   INVITED: "invited",
   LOBBY: "lobby",
@@ -78,15 +77,21 @@ function usersArray() {
   return Array.from(game.users?.contents ?? game.users ?? []);
 }
 
-export function primaryActivePvpGm() {
-  return usersArray()
-    .filter((user) => user.isGM && user.active)
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0] ?? null;
+export function primaryActivePvpHost() {
+  const active = usersArray().filter((user) => user.active);
+  // Un joueur est préféré comme coordinateur afin que le PvP reste disponible
+  // même lorsqu’aucun MJ n’est connecté. Un MJ actif sert uniquement de repli.
+  return active
+    .sort((a, b) => Number(a.isGM) - Number(b.isGM) || String(a.id).localeCompare(String(b.id)))[0] ?? null;
 }
 
-export function isPrimaryPvpGm() {
-  return Boolean(game.user?.isGM && primaryActivePvpGm()?.id === game.user.id);
+export function isPrimaryPvpHost() {
+  return Boolean(primaryActivePvpHost()?.id === game.user?.id);
 }
+
+// Alias conservés pour les extensions qui utilisaient l’API précédente.
+export const primaryActivePvpGm = primaryActivePvpHost;
+export const isPrimaryPvpGm = isPrimaryPvpHost;
 
 function emit(message) {
   const packet = {
@@ -135,6 +140,39 @@ export function getPvpHistory() {
   return readPvpHistory();
 }
 
+function getDistributedPvpHistory() {
+  const byId = new Map();
+  for (const entry of readPvpHistory()) {
+    if (entry?.id) byId.set(entry.id, clone(entry));
+  }
+  for (const user of usersArray()) {
+    const entries = user.getFlag?.(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG);
+    if (!Array.isArray(entries)) continue;
+    for (const entry of entries) {
+      if (entry?.id && !byId.has(entry.id)) byId.set(entry.id, clone(entry));
+    }
+  }
+  return [...byId.values()].sort((a, b) => Date.parse(a.completedAt ?? 0) - Date.parse(b.completedAt ?? 0));
+}
+
+async function persistPersonalPvpHistory(record) {
+  if (!record?.id) return false;
+  const current = game.user.getFlag(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG);
+  const history = Array.isArray(current) ? clone(current) : [];
+  if (history.some((entry) => entry.id === record.id)) return false;
+  history.push(clone(record));
+  await game.user.setFlag(MODULE_ID, PVP_PERSONAL_HISTORY_FLAG, history.slice(-250));
+  Hooks.callAll(`${MODULE_ID}.pvpHistoryUpdated`, getDistributedPvpHistory());
+  return true;
+}
+
+function distributeHistoryRecord(record, participantIds = []) {
+  for (const userId of [...new Set(participantIds.filter(Boolean))]) {
+    if (userId === game.user.id) void persistPersonalPvpHistory(record);
+    else emit({ type: "pvp-history-entry", targetUserId: userId, record });
+  }
+}
+
 async function saveMatches(matches) {
   const timestamp = Date.now();
   const terminalStatuses = new Set([PVP_STATUS.COMPLETED, PVP_STATUS.CANCELLED, PVP_STATUS.REJECTED]);
@@ -152,6 +190,7 @@ async function saveMatches(matches) {
 
 async function saveHistory(history) {
   await persistPvpHistory(history.slice(-250));
+  Hooks.callAll(`${MODULE_ID}.pvpHistoryUpdated`, clone(history));
 }
 
 function participantView(participant, { revealSpell = false } = {}) {
@@ -176,7 +215,7 @@ function sideForUser(match, userId) {
 }
 
 function userInMatch(match, userId) {
-  return Boolean(sideForUser(match, userId) || match.spectators?.includes(userId));
+  return Boolean(sideForUser(match, userId));
 }
 
 function publicMatchSummary(match, viewerId) {
@@ -191,17 +230,11 @@ function publicMatchSummary(match, viewerId) {
     id: match.id,
     status: match.status,
     statusLabel: PVP_STATUS_LABELS[match.status] ?? match.status,
-    canAdminForceTurn: match.status === PVP_STATUS.ACTIVE,
-    canAdminDeclareWinner: match.status === PVP_STATUS.ACTIVE,
-    canAdminCancel: [PVP_STATUS.INVITED, PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE].includes(match.status),
     createdAt: match.createdAt,
     updatedAt: match.updatedAt,
-    allowSpectators: Boolean(match.allowSpectators),
     isParticipant,
-    isSpectator: match.spectators?.includes(viewerId) ?? false,
     isIncoming: match.status === PVP_STATUS.INVITED && match.participants.opponent.userId === viewerId,
     isOutgoing: match.status === PVP_STATUS.INVITED && match.participants.player.userId === viewerId,
-    canSpectate: Boolean(game.users.get(viewerId)?.isGM || match.allowSpectators),
     own: own ? participantView(own, { revealSpell: true }) : null,
     opponent: opponent ? participantView(opponent, { revealSpell: spellIsPublic(opponentSide) }) : null,
     player: participantView(match.participants.player, { revealSpell: viewerOwnsSeat("player") || spellIsPublic("player") }),
@@ -218,20 +251,64 @@ function computeHistoryStats(history, userId) {
   let wins = 0;
   let losses = 0;
   let ties = 0;
+  let abandons = 0;
   for (const entry of entries) {
     if (entry.winnerUserId === null) ties += 1;
     else if (entry.winnerUserId === userId) wins += 1;
     else losses += 1;
+    if (entry.surrenderedByUserId === userId) abandons += 1;
   }
-  return { played: entries.length, wins, losses, ties };
+  return {
+    played: entries.length,
+    wins,
+    losses,
+    ties,
+    abandons,
+    winRate: entries.length ? Math.round((wins / entries.length) * 100) : 0
+  };
+}
+
+export function buildPvpLadder(history = [], viewerId = null) {
+  const rows = new Map();
+  const ensure = (userId, name) => {
+    if (!userId) return null;
+    if (!rows.has(userId)) rows.set(userId, { userId, name: name || "Joueur", played: 0, wins: 0, losses: 0, ties: 0, abandons: 0 });
+    return rows.get(userId);
+  };
+
+  for (const entry of history ?? []) {
+    const player = ensure(entry.playerUserId, entry.playerName);
+    const opponent = ensure(entry.opponentUserId, entry.opponentName);
+    for (const row of [player, opponent].filter(Boolean)) row.played += 1;
+    if (entry.winnerUserId === null) {
+      if (player) player.ties += 1;
+      if (opponent) opponent.ties += 1;
+    } else {
+      const winner = rows.get(entry.winnerUserId);
+      const loser = entry.winnerUserId === entry.playerUserId ? opponent : player;
+      if (winner) winner.wins += 1;
+      if (loser) loser.losses += 1;
+    }
+    const quitter = rows.get(entry.surrenderedByUserId);
+    if (quitter) quitter.abandons += 1;
+  }
+
+  return [...rows.values()]
+    .map((row) => ({
+      ...row,
+      points: row.wins * 3 + row.ties,
+      winRate: row.played ? Math.round((row.wins / row.played) * 100) : 0,
+      isCurrent: row.userId === viewerId
+    }))
+    .sort((a, b) => b.points - a.points || b.wins - a.wins || b.winRate - a.winRate || a.losses - b.losses || a.name.localeCompare(b.name, "fr"))
+    .map((row, index) => ({ ...row, rank: index + 1, isFirst: index === 0 }));
 }
 
 function dashboardForUser(userId) {
   const matches = getPvpMatches();
-  const history = getPvpHistory();
+  const history = getDistributedPvpHistory();
   const current = matches.filter((match) => userInMatch(match, userId) && ![PVP_STATUS.CANCELLED, PVP_STATUS.REJECTED].includes(match.status));
   const invitations = matches.filter((match) => match.status === PVP_STATUS.INVITED && [match.participants.player.userId, match.participants.opponent.userId].includes(userId));
-  const spectatable = matches.filter((match) => match.status === PVP_STATUS.ACTIVE && !userInMatch(match, userId) && (match.allowSpectators || game.users.get(userId)?.isGM));
   const recent = history
     .filter((entry) => entry.playerUserId === userId || entry.opponentUserId === userId)
     .slice(-12)
@@ -241,21 +318,17 @@ function dashboardForUser(userId) {
       resultLabel: entry.winnerUserId === null ? "Égalité" : entry.winnerUserId === userId ? "Victoire" : "Défaite",
       dateLabel: formatDateTime(entry.completedAt)
     }));
-  const hostGm = primaryActivePvpGm();
-  const isHostGm = Boolean(game.users.get(userId)?.isGM && hostGm?.id === userId);
-  const adminMatches = isHostGm
-    ? matches.filter((match) => [PVP_STATUS.INVITED, PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(match.status)).map((match) => publicMatchSummary(match, userId))
-    : [];
+  const host = primaryActivePvpHost();
   return {
-    hostGmId: hostGm?.id ?? null,
-    hostGmName: hostGm?.name ?? null,
-    isHostGm,
+    hostGmId: host?.id ?? null,
+    hostGmName: host?.name ?? null,
+    hostUserId: host?.id ?? null,
+    hostUserName: host?.name ?? null,
     current: current.map((match) => publicMatchSummary(match, userId)),
     invitations: invitations.map((match) => publicMatchSummary(match, userId)),
-    spectatable: spectatable.map((match) => publicMatchSummary(match, userId)),
     recent,
     stats: computeHistoryStats(history, userId),
-    adminMatches
+    ladder: buildPvpLadder(history, userId)
   };
 }
 
@@ -276,7 +349,7 @@ function sendMatchSnapshot(match, userId) {
 }
 
 function broadcastMatch(match) {
-  const targets = [match.participants.player.userId, match.participants.opponent.userId, ...(match.spectators ?? [])];
+  const targets = [match.participants.player.userId, match.participants.opponent.userId];
   for (const userId of [...new Set(targets)]) sendMatchSnapshot(match, userId);
 }
 
@@ -377,16 +450,28 @@ async function archiveIfFinished(match) {
   if (winnerSide && winnerSide !== "tie" && !match.crownsRewarded) {
     const winnerUserId = match.participants?.[winnerSide]?.userId;
     if (winnerUserId) {
-      await awardCrowns({ userId: winnerUserId, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory", rewardId: match.id });
+      if (winnerUserId === game.user.id) {
+        await awardCrowns({ user: game.user, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory", rewardId: match.id });
+      } else {
+        emit({
+          type: "pvp-reward",
+          targetUserId: winnerUserId,
+          rewardId: match.id,
+          amount: 10,
+          label: "Victoire en duel contre un joueur"
+        });
+      }
       match.crownsRewarded = true;
       notifyUser(winnerUserId, "info", "Victoire ! Vous gagnez 10 Couronnes.", true);
     }
   }
   const history = getPvpHistory();
+  const record = historyRecord(match);
   if (!history.some((entry) => entry.id === match.id)) {
-    history.push(historyRecord(match));
+    history.push(record);
     await saveHistory(history);
   }
+  distributeHistoryRecord(record, [match.participants.player.userId, match.participants.opponent.userId]);
   return true;
 }
 
@@ -406,12 +491,10 @@ async function processInvite(matches, userId, payload) {
     status: PVP_STATUS.INVITED,
     createdAt: now(),
     updatedAt: now(),
-    allowSpectators: false,
     participants: {
       player: sanitizeUser(challenger),
       opponent: sanitizeUser(opponent)
     },
-    spectators: [],
     state: null,
     mulligan: null,
     pendingChoice: null,
@@ -466,7 +549,6 @@ function lobbySnapshot(match, userId) {
     matchId: match.id,
     status: match.status,
     side,
-    allowSpectators: Boolean(match.allowSpectators),
     own: side ? participantView(match.participants[side], { revealSpell: true }) : null,
     opponent: side ? participantView(match.participants[side === "player" ? "opponent" : "player"]) : null,
     player: participantView(match.participants.player),
@@ -558,45 +640,6 @@ async function processReady(matches, userId, payload) {
   return { matchId: match.id, started };
 }
 
-async function processSpectator(matches, userId, payload) {
-  const match = getMatchOrThrow(matches, payload.matchId);
-  if (![PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(match.status)) throw new Error("Ce duel ne peut pas être observé.");
-  if (!match.allowSpectators && !game.users.get(userId)?.isGM) throw new Error("Les spectateurs ne sont pas autorisés.");
-  match.spectators ??= [];
-  if (!match.spectators.includes(userId)) match.spectators.push(userId);
-  match.updatedAt = now();
-  await saveMatches(matches);
-  sendMatchSnapshot(match, userId);
-  sendDashboard(userId);
-  return { matchId: match.id };
-}
-
-async function processToggleSpectators(matches, userId, payload) {
-  const match = getMatchOrThrow(matches, payload.matchId);
-  ensureActor(match, userId);
-  match.allowSpectators = Boolean(payload.allowed);
-  const removedSpectators = [];
-  if (!match.allowSpectators) {
-    match.spectators = (match.spectators ?? []).filter((id) => {
-      const keep = Boolean(game.users.get(id)?.isGM);
-      if (!keep) removedSpectators.push(id);
-      return keep;
-    });
-  }
-  match.updatedAt = now();
-  await saveMatches(matches);
-  for (const spectatorId of removedSpectators) {
-    emit({
-      type: "pvp-access-revoked",
-      targetUserId: spectatorId,
-      matchId: match.id,
-      message: "Les tribunes de ce duel viennent d’être fermées."
-    });
-  }
-  if (match.state) broadcastMatch(match); else broadcastMatchLobby(match);
-  sendDashboards();
-  return {};
-}
 
 function resolveHydraPending(match, side, payload, options) {
   const ownTarget = options.targets?.find((target) => target.id === payload.cardId) ?? options.targets?.[0];
@@ -667,42 +710,12 @@ async function processGameAction(matches, userId, action, payload) {
   await saveMatches(matches);
   if (match.status === PVP_STATUS.LOBBY) broadcastMatchLobby(match);
   else broadcastMatch(match);
-  sendDashboards([match.participants.player.userId, match.participants.opponent.userId, ...(match.spectators ?? [])]);
+  sendDashboards([match.participants.player.userId, match.participants.opponent.userId]);
   return { matchId: match.id, result };
 }
 
-async function processAdmin(matches, userId, action, payload, { local = false } = {}) {
-  if (!local || !isPrimaryPvpGm() || userId !== game.user.id) throw new Error("Les commandes MJ doivent être exécutées depuis la session du MJ hôte.");
-  const match = getMatchOrThrow(matches, payload.matchId);
-  if (action === "admin-cancel") {
-    ensureMatchAction(match, [PVP_STATUS.INVITED, PVP_STATUS.LOBBY, PVP_STATUS.ACTIVE]);
-    if (match.state) {
-      match.state.phase = PHASES.GAME_OVER;
-      match.state.currentTurn = null;
-      match.state.gameWinner = "tie";
-      match.state.cancelledByGm = true;
-      appendPvpLog(match.state, "gm", "Le duel est annulé par le MJ.");
-    }
-    match.status = PVP_STATUS.CANCELLED;
-    match.updatedAt = now();
-  } else if (action === "admin-force-turn") {
-    ensureMatchAction(match, [PVP_STATUS.ACTIVE]);
-    forcePvpTurn(match);
-  } else if (action === "admin-winner") {
-    ensureMatchAction(match, [PVP_STATUS.ACTIVE]);
-    declarePvpWinner(match, String(payload.winner ?? "tie"));
-    await archiveIfFinished(match);
-  } else if (action === "admin-resync") {
-    // Aucun changement : le nouvel instantané est simplement renvoyé.
-  } else throw new Error("Action MJ inconnue.");
-  match.updatedAt = now();
-  await saveMatches(matches);
-  if (match.state) broadcastMatch(match); else broadcastMatchLobby(match);
-  sendDashboards();
-  return {};
-}
 
-async function processRequest(data, { local = false } = {}) {
+async function processRequest(data) {
   const userId = String(data.userId ?? "");
   const action = String(data.action ?? "");
   const payload = data.payload ?? {};
@@ -714,12 +727,9 @@ async function processRequest(data, { local = false } = {}) {
   if (action === "loadout") return processLoadout(matches, userId, payload);
   if (action === "leave-lobby") return processLeaveLobby(matches, userId, payload);
   if (action === "ready") return processReady(matches, userId, payload);
-  if (action === "spectate") return processSpectator(matches, userId, payload);
-  if (action === "toggle-spectators") return processToggleSpectators(matches, userId, payload);
   if (["continue-coin", "toggle-mulligan", "confirm-mulligan", "play-card", "pass", "next-round", "spell-options", "activate-spell", "resolve-pending", "surrender", "rematch-vote"].includes(action)) {
     return processGameAction(matches, userId, action, payload);
   }
-  if (action.startsWith("admin-")) return processAdmin(matches, userId, action, payload, { local });
   if (action === "open-match") {
     const match = getMatchOrThrow(matches, payload.matchId);
     if (!userInMatch(match, userId)) throw new Error("Vous n’avez pas accès à ce duel.");
@@ -732,8 +742,8 @@ async function processRequest(data, { local = false } = {}) {
 
 function queueHostRequest(data, options = {}) {
   const task = hostRequestQueue.then(async () => {
-    // Plusieurs MJ peuvent être connectés. Le MJ hôte relit le dépôt avant
-    // chaque commande afin de reprendre un duel sans cache périmé après un basculement.
+    // Le coordinateur actif relit son dépôt avant chaque commande afin de
+    // reprendre un duel sans cache périmé après un basculement de session.
     await refreshPvpRepository();
     return processRequest(data, options);
   });
@@ -742,20 +752,20 @@ function queueHostRequest(data, options = {}) {
 }
 
 export async function pvpRequest(action, payload = {}, { timeout = 12_000 } = {}) {
-  const gm = primaryActivePvpGm();
-  if (!gm) return Promise.reject(new Error("Un MJ doit être connecté pour héberger les duels PvP."));
+  const host = primaryActivePvpHost();
+  if (!host) return Promise.reject(new Error("Aucun joueur n’est disponible pour coordonner le duel PvP."));
   const requestId = makeId();
   const unsignedRequest = { type: "pvp-request", requestId, userId: game.user.id, action, payload };
 
   // Un MJ peut aussi être joueur. Dans ce cas, traiter la requête localement évite
   // de dépendre du fait que le transport Socket.IO renvoie ou non l’événement à son émetteur.
-  if (isPrimaryPvpGm()) return queueHostRequest(unsignedRequest, { local: true });
+  if (isPrimaryPvpHost()) return queueHostRequest(unsignedRequest, { local: true });
 
   const request = await signSocketEnvelope(unsignedRequest);
   return new Promise((resolve, reject) => {
     const timer = globalThis.setTimeout(() => {
       pendingRequests.delete(requestId);
-      reject(new Error("Le serveur PvP ne répond pas. Vérifiez que le MJ est toujours connecté."));
+      reject(new Error("Le coordinateur PvP ne répond pas. Actualisez l’arène puis réessayez."));
     }, timeout);
     pendingRequests.set(requestId, { resolve, reject, timer });
     emit(request);
@@ -797,7 +807,7 @@ export async function resumePvpSession() {
 async function handlePvpClientMessage(data, { trustedLocal = false } = {}) {
   if (data.targetUserId && data.targetUserId !== game.user.id) return true;
   if (!trustedLocal) {
-    const host = primaryActivePvpGm();
+    const host = primaryActivePvpHost();
     if (!data.serverUserId || data.serverUserId !== host?.id) throw new Error("Réponse PvP émise par un hôte non autorisé.");
     await verifySocketEnvelope(data, data.serverUserId);
   }
@@ -834,6 +844,15 @@ async function handlePvpClientMessage(data, { trustedLocal = false } = {}) {
   if (data.type === "pvp-match-sync") {
     clientCache.matches.set(data.snapshot.matchId, clone(data.snapshot));
     Hooks.callAll(`${MODULE_ID}.pvpMatchUpdated`, clone(data.snapshot));
+    if (data.snapshot.status === PVP_STATUS.COMPLETED && data.snapshot.state?.gameWinner === "player") {
+      await awardCrowns({
+        user: game.user,
+        amount: 10,
+        label: "Victoire en duel contre un joueur",
+        source: "pvp-victory",
+        rewardId: data.snapshot.matchId
+      });
+    }
     if ([PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(data.snapshot.status)) {
       const api = game.modules.get(MODULE_ID)?.api ?? globalThis.SixCrownsCardGame;
       if (typeof api?.openPvpBoard === "function") void api.openPvpBoard(data.snapshot.matchId);
@@ -845,6 +864,29 @@ async function handlePvpClientMessage(data, { trustedLocal = false } = {}) {
     clientCache.matches.delete(data.matchId);
     Hooks.callAll(`${MODULE_ID}.pvpAccessRevoked`, data.matchId);
     ui.notifications?.warn?.(data.message || "Votre accès à ce duel a été retiré.");
+    return true;
+  }
+
+  if (data.type === "pvp-history-entry") {
+    const record = data.record;
+    if (!record || typeof record !== "object" || typeof record.id !== "string") {
+      throw new Error("Entrée d’historique PvP invalide.");
+    }
+    if (![record.playerUserId, record.opponentUserId].includes(game.user.id)) {
+      throw new Error("Cette entrée d’historique ne concerne pas ce profil.");
+    }
+    await persistPersonalPvpHistory(record);
+    return true;
+  }
+
+  if (data.type === "pvp-reward") {
+    await awardCrowns({
+      user: game.user,
+      amount: Number.parseInt(data.amount ?? 10, 10) || 10,
+      label: String(data.label ?? "Victoire en duel contre un joueur"),
+      source: "pvp-victory",
+      rewardId: String(data.rewardId ?? "")
+    });
     return true;
   }
 
@@ -895,7 +937,7 @@ export async function handlePvpSocket(data) {
   if (data.localDeliveredTo === game.user?.id && data.targetUserId === game.user?.id) return true;
 
   if (data.type === "pvp-request") {
-    if (!isPrimaryPvpGm()) return true;
+    if (!isPrimaryPvpHost()) return true;
     try {
       await verifySocketEnvelope(data, data.userId);
       validateRequestEnvelope(data);

@@ -36,6 +36,8 @@ let analyticsDashboard;
 let shop;
 let gmHub;
 let pvpLobby;
+let playerProfile;
+let ladder;
 const pvpBoards = new Map();
 
 
@@ -73,6 +75,23 @@ export async function openPvp() {
   if (!pvpLobby || !pvpLobby.rendered) pvpLobby = new SixCrownsPvpLobby();
   await pvpLobby.render({ force: true });
   return pvpLobby;
+}
+
+
+/** Ouvre le profil détaillé du joueur connecté. */
+export async function openPlayerProfile() {
+  const { SixCrownsPlayerProfile } = await import("./applications/player-profile.js");
+  if (!playerProfile || !playerProfile.rendered) playerProfile = new SixCrownsPlayerProfile();
+  await playerProfile.render({ force: true });
+  return playerProfile;
+}
+
+/** Ouvre le classement PvP global. */
+export async function openLadder() {
+  const { SixCrownsLadder } = await import("./applications/ladder.js");
+  if (!ladder || !ladder.rendered) ladder = new SixCrownsLadder();
+  await ladder.render({ force: true });
+  return ladder;
 }
 
 /** Ouvre ou restaure le plateau d’un duel PvP précis. */

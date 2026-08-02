@@ -9,7 +9,7 @@
       <button type="button" data-action="open-home"><i class="fa-solid fa-khanda"></i> Arène PvP</button>
       <button type="button" data-action="open-rulebook"><i class="fa-solid fa-scroll"></i> Règlement</button>
       <button type="button" data-action="open-glossary"><i class="fa-solid fa-book-open"></i> Glossaire</button>
-      {{#if canAct}}<button type="button" class="scg-danger-button" data-action="surrender"><i class="fa-solid fa-flag-white"></i> Abandonner</button>{{else}}{{#if isSpectator}}<span class="scg-pvp-spectator-chip"><i class="fa-solid fa-eye"></i> Spectateur</span>{{/if}}{{/if}}
+      {{#if canAct}}<button type="button" class="scg-danger-button" data-action="surrender"><i class="fa-solid fa-flag-white"></i> Abandonner</button>{{/if}}
       {{#if canRematch}}
         <button type="button" class="scg-primary-button" data-action="rematch" {{#if rematchRequested}}disabled{{else}}{{#unless canRequestRematch}}disabled{{/unless}}{{/if}}><i class="fa-solid fa-arrows-rotate"></i> {{#if rematchRequested}}Revanche demandée{{else}}Demander une revanche{{/if}}</button>
       {{else}}{{#if canStartNextRound}}
@@ -160,9 +160,13 @@
       <div class="scg-coin-stage">
         <span class="scg-coin-orbit" aria-hidden="true"></span>
         <span class="scg-coin-shadow" aria-hidden="true"></span>
-        <div class="scg-coin {{coinClass}}" aria-label="Pièce de tirage au sort">
-          <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
-          <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
+        <div class="scg-coin {{coinClass}} {{#if coin.resolved}}has-final-face{{/if}}" aria-label="Pièce de tirage au sort">
+          {{#if coin.resolved}}
+            <div class="scg-coin-face scg-coin-final"><span class="scg-coin-inner"><i class="{{coinFaceIcon}}"></i></span></div>
+          {{else}}
+            <div class="scg-coin-face scg-coin-front"><span class="scg-coin-inner"><i class="fa-solid fa-shield-halved"></i></span></div>
+            <div class="scg-coin-face scg-coin-back"><span class="scg-coin-inner"><i class="fa-solid fa-sword"></i></span></div>
+          {{/if}}
         </div>
         {{#if coin.resolved}}<strong class="scg-coin-result"><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong>{{/if}}
       </div>

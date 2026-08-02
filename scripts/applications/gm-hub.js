@@ -15,7 +15,6 @@ import {
 } from "../shop.js";
 import { downloadTextFile } from "../analytics.js";
 import { readSecureData } from "../secure-store.js";
-import { recoverStaleTrades } from "../trades.js";
 import { resetPlayerProfileForUser } from "../player-profile-reset.js";
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -125,10 +124,6 @@ export class SixCrownsGmHub extends HandlebarsApplicationMixin(ApplicationV2) {
       (result) => result
         ? `Collection réparée : ${result.normalizedEntries} entrée(s) normalisée(s), ${result.removedEntries} supprimée(s).`
         : null
-    ));
-    query('[data-action="recover-trades"]')?.addEventListener("click", () => run(
-      () => recoverStaleTrades({ maxAgeMs: 0 }),
-      (result) => `${result?.recovered ?? 0} échange(s) interrompu(s) libéré(s).`
     ));
     query('[data-action="export-audit"]')?.addEventListener("click", async () => {
       try {

@@ -7,6 +7,7 @@ import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../prof
 import { openGlossary, openRulebook } from "../glossary.js";
 import { requestAnalyticsRecord } from "../analytics.js";
 import { awardCrowns } from "../shop.js";
+import { recordSoloMatch } from "../player-stats.js";
 import { EVENT_BOOSTER_ID, getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
 import {
   PHASES,
@@ -15,6 +16,7 @@ import {
   continueAfterCoinToss,
   buildMatchAnalyticsRecord,
   activateEventSpell,
+  abandonMatch,
   createBoardViewModel,
   createPrototypeState,
   createRematchState,
@@ -34,7 +36,7 @@ import {
   toggleMulliganCard
 } from "../rules/state.js";
 
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
 function normalizeName(value = "") {
   return String(value)
@@ -190,6 +192,15 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     if ([PHASES.SPELL_SELECTION, PHASES.DECK_SELECTION].includes(this.matchState.phase)) {
       await game.user.unsetFlag(MODULE_ID, "activeMatchState");
       return;
+    }
+    if (this.matchState.phase === PHASES.GAME_OVER && !this.matchState.localStatsRecorded) {
+      this.matchState.localStatsRecorded = true;
+      try {
+        await recordSoloMatch(buildMatchAnalyticsRecord(this.matchState, { userId: game.user.id, userName: game.user.name }));
+      } catch (error) {
+        this.matchState.localStatsRecorded = false;
+        console.error(`${MODULE_TITLE} | Statistiques locales impossibles`, error);
+      }
     }
     if (this.matchState.phase === PHASES.GAME_OVER && !this.matchState.analyticsRecorded) {
       this.matchState.analyticsRecorded = true;
@@ -659,17 +670,39 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
 
-    this.element.querySelector("[data-action='rematch']")?.addEventListener("click", async () => {
+    this.element.querySelectorAll("[data-action='rematch']").forEach((button) => button.addEventListener("click", async () => {
+      if (button.disabled) return;
       this._clearTimers();
       this.matchState = createRematchState(this.matchState);
       await this._renderState();
-    });
+    }));
 
-    this.element.querySelector("[data-action='reset']")?.addEventListener("click", async () => {
+    this.element.querySelectorAll("[data-action='choose-decks']").forEach((button) => button.addEventListener("click", async () => {
+      if (button.disabled) return;
       this._clearTimers();
       this.matchState = createPrototypeState();
       await this._renderState();
-    });
+    }));
+
+    this.element.querySelectorAll("[data-action='reset']").forEach((button) => button.addEventListener("click", async () => {
+      if (button.disabled) return;
+      const activeMatch = [PHASES.COIN_TOSS, PHASES.MULLIGAN, PHASES.PLAYING, PHASES.ROUND_OVER].includes(this.matchState.phase);
+      if (activeMatch) {
+        const confirmed = await DialogV2.confirm({
+          window: { title: "Abandonner la partie en cours ?" },
+          content: `<section class="scg-abandon-confirmation"><p>Cette partie est encore en cours.</p><p><strong>Une défaite sera comptabilisée et la partie sera enregistrée comme un abandon.</strong></p></section>`,
+          modal: true,
+          rejectClose: false
+        });
+        if (!confirmed) return;
+        this._clearTimers();
+        abandonMatch(this.matchState);
+        await this._persistMatchState();
+      }
+      this._clearTimers();
+      this.matchState = createPrototypeState();
+      await this._renderState();
+    }));
 
     this._scheduleOpponentTurn();
   }

@@ -1,0 +1,29 @@
+<section class="scg-ladder-shell">
+  <header class="scg-ladder-header">
+    <div><small>Classement PvP · v{{version}}</small><h1><i class="fa-solid fa-ranking-star"></i> Ladder des Six Couronnes</h1><p>Trois points par victoire, un point par égalité. Les ex æquo sont départagés par les victoires puis le taux de victoire.</p></div>
+    <div><button type="button" data-action="refresh"><i class="fa-solid fa-rotate"></i> Actualiser</button><button type="button" data-action="open-pvp"><i class="fa-solid fa-khanda"></i> Arène PvP</button><button type="button" data-action="open-home"><i class="fa-solid fa-house"></i> Accueil</button></div>
+  </header>
+
+  {{#if unavailable}}
+    <div class="scg-ladder-alert"><i class="fa-solid fa-triangle-exclamation"></i><span><strong>Classement temporairement indisponible</strong><small>Le service de synchronisation PvP ne répond pas.</small></span></div>
+  {{/if}}
+
+  {{#if ownRow}}
+    <section class="scg-ladder-own"><span><small>Votre position</small><strong>#{{ownRow.rank}}</strong></span><span><small>Points</small><strong>{{ownRow.points}}</strong></span><span><small>Victoires</small><strong>{{ownRow.wins}}</strong></span><span><small>Taux</small><strong>{{ownRow.winRate}} %</strong></span></section>
+  {{/if}}
+
+  {{#if hasEntries}}
+    <div class="scg-ladder-table" role="table" aria-label="Classement des joueurs">
+      <header role="row"><span>Rang</span><span>Joueur</span><span>Points</span><span>J</span><span>V</span><span>D</span><span>É</span><span>Ab.</span><span>Ratio</span></header>
+      {{#each ladder}}
+        <article role="row" class="{{#if isCurrent}}is-current{{/if}} {{#if isFirst}}is-first{{/if}}">
+          <span class="scg-ladder-rank">{{#if isFirst}}<i class="fa-solid fa-crown"></i>{{else}}#{{rank}}{{/if}}</span>
+          <strong>{{name}}{{#if isCurrent}} <em>vous</em>{{/if}}</strong>
+          <b>{{points}}</b><span>{{played}}</span><span>{{wins}}</span><span>{{losses}}</span><span>{{ties}}</span><span>{{abandons}}</span><span>{{winRate}} %</span>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="scg-ladder-empty"><i class="fa-solid fa-trophy"></i><h2>Le trône attend son premier prétendant</h2><p>Le classement apparaîtra après le premier duel PvP terminé.</p></div>
+  {{/if}}
+</section>

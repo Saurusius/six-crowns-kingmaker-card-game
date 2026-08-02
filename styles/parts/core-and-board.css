@@ -3480,3 +3480,19 @@ body > .scg-global-modal.scg-mulligan-preview-backdrop {
 }
 
 
+
+/* v0.14.6 — résultat visuel du toss strictement synchronisé */
+.scg-coin-face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.scg-coin.is-resolved {
+  animation: none;
+  transition: transform .48s cubic-bezier(.22,.75,.28,1);
+}
+.scg-coin.is-resolved.is-shield { transform: rotateY(0deg); }
+.scg-coin.is-resolved.is-sword { transform: rotateY(180deg); }
+.scg-coin.is-resolved.is-shield .scg-coin-front,
+.scg-coin.is-resolved.is-sword .scg-coin-back { opacity: 1; visibility: visible; }
+.scg-coin.is-resolved.is-shield .scg-coin-back,
+.scg-coin.is-resolved.is-sword .scg-coin-front { opacity: 0; visibility: hidden; }

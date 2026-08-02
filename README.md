@@ -2,7 +2,7 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.14.5-c9a44d)
+![Version](https://img.shields.io/badge/version-0.14.8-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
@@ -66,17 +66,16 @@ Des boutons **Accueil** sont également disponibles dans le plateau, la collecti
 
 - duels synchronisés en **1 contre 1** entre profils Foundry connectés ;
 - invitation, acceptation, salon privé et verrouillage indépendant des équipements ;
-- validation côté MJ des decks personnalisés et des cartes réellement possédées ;
+- validation automatique des decks personnalisés et des cartes réellement possédées ;
 - sortilèges emblématiques gardés secrets jusqu’à leur activation ;
-- mains adverses expurgées des instantanés envoyés aux autres joueurs et aux spectateurs ;
+- mains adverses expurgées des instantanés envoyés aux autres joueurs ;
 - remplacement initial de deux cartes maximum, tours, passages, manches et revanche synchronisés ;
-- sauvegarde par le MJ hôte et reprise automatique après fermeture ou reconnexion ;
-- abandon, historique compact des actions et statistiques personnelles ;
-- spectateurs désactivés par défaut et activables depuis le salon ;
-- console MJ pour resynchroniser, débloquer un tour, annuler une partie ou déclarer un résultat ;
+- coordination automatique par un profil joueur actif, sans connexion MJ requise ;
+- abandon, historique compact des actions, Ladder et statistiques personnelles ;
+- mode spectateur et arbitrage manuel supprimés ;
 - aucun chronomètre, aucune mise et aucune perte de carte.
 
-Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvegarde. Les limites et le protocole de test de cette bêta sont détaillés dans [`documentation/PVP-BETA.md`](documentation/PVP-BETA.md).
+Les limites et le protocole de test de cette bêta pair-à-pair sont détaillés dans [`documentation/PVP-BETA.md`](documentation/PVP-BETA.md).
 
 ### Cartes et collection
 
@@ -121,11 +120,12 @@ Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvega
 
 ### Échanges entre joueurs
 
-- offres persistantes envoyées depuis les cartes de la collection ;
+- offres envoyées directement entre profils connectés, sans MJ ;
 - échange de cartes ou de tickets ;
+- registre local et historique conservés sur chaque profil concerné ;
 - réservation des ressources engagées tant que l’offre est en attente ;
-- acceptation, refus, annulation et historique ;
-- synchronisation et notifications entre les profils concernés.
+- validation en plusieurs étapes avec restauration de secours en cas d’échec ;
+- acceptation, refus, annulation et notifications pair-à-pair.
 
 ### Outils MJ
 
@@ -134,7 +134,7 @@ Un **MJ actif** doit rester connecté pour héberger l’arbitrage et la sauvega
 - réinitialisation complète d’un profil joueur ;
 - tableau d’équilibrage avec taux d’utilisation, résultats par deck et cartes jamais jouées ;
 - export des données en JSON et CSV ;
-- réparation des collections, libération des échanges interrompus et export du journal d’audit transactionnel.
+- réparation des collections et export du journal d’audit transactionnel.
 
 ## Règles essentielles
 
@@ -144,22 +144,21 @@ Une manche est gagnée d’abord au nombre de lignes contrôlées, puis à la Pu
 
 Les règles détaillées sont disponibles dans le module et dans [`documentation/RULES.md`](documentation/RULES.md).
 
-## Version 0.14.5
+## Version 0.14.8
 
-Cette version consolide le module avant l’élargissement du PvP :
+Cette version retire la dernière dépendance à une session MJ pour les interactions entre joueurs :
 
-- l’état complet des duels est migré vers un journal Foundry sans permission joueur, réservé au MJ hôte ;
-- les anciens réglages monde contenant les mains et les decks sont vidés après migration ;
-- les commandes administratives PvP ne peuvent plus être envoyées à distance et doivent être exécutées depuis la session du MJ hôte ;
-- les requêtes PvP, d’échange et d’analytics sont signées par profil, limitées, dédupliquées et protégées contre les doubles traitements ;
-- les offres passent par un état **Validation** avant tout déplacement de ressources ;
-- achats, récompenses, boosters, recyclages, decks et échanges utilisent désormais des snapshots, révisions et restaurations de secours ;
-- le booster classique équilibre d’abord les quatre factions à rareté identique et préfère une carte Unique non possédée lorsque possible ;
-- l’API globale n’expose plus les fonctions de mutation réservées au MJ ;
-- les styles sont répartis en cinq feuilles fonctionnelles, les visuels de boosters sont convertis en WebP et la map d’illustrations redondante est supprimée ;
-- une suite Node vérifie les cartes, les illustrations, les versions, les imports, la syntaxe, les transactions, les signatures et les probabilités avant chaque release.
+- les offres d’échange sont stockées sur les profils des deux participants plutôt que dans un réglage monde ;
+- l’envoi, l’acceptation, le refus et l’annulation passent directement par des messages signés entre joueurs ;
+- la finalisation d’un échange utilise plusieurs étapes et conserve un snapshot local permettant une restauration en cas d’échec ;
+- seuls les profils actuellement connectés sont proposés comme destinataires d’une offre ;
+- le bouton MJ de récupération des échanges bloqués est supprimé ;
+- le PvP élit automatiquement un profil joueur actif comme coordinateur technique ;
+- les decks, actions, résultats et récompenses PvP fonctionnent même lorsqu’aucun MJ n’est connecté ;
+- l’arène indique clairement que la synchronisation est pair-à-pair ;
+- 32 tests automatiques couvrent désormais le module, dont trois régressions dédiées aux interactions sans MJ.
 
-Le PvP reste conçu pour une table Foundry administrée par un MJ. Les signatures empêchent l’usurpation triviale d’un autre profil et détectent l’altération des paquets, mais elles ne peuvent pas empêcher un joueur de modifier son propre client, son interface ou les données locales auxquelles Foundry lui donne accès. Un anti-triche compétitif complet exigerait toujours un arbitre serveur externe.
+La version conserve également le correctif 0.14.7 du lancer de pièce ainsi que toutes les améliorations de la 0.14.6 : IA, pioche entre les manches, écran de victoire, Ladder, profil joueur et abandon comptabilisé.
 
 ## Compatibilité
 
@@ -181,7 +180,7 @@ La commande contrôle notamment les 165 cartes, les 495 illustrations, la syntax
 Préparer l’archive courante :
 
 ```bash
-npm run prepare-release -- 0.14.5
+npm run prepare-release -- 0.14.8
 ```
 
 Le ZIP est produit dans `dist/`. Les workflows GitHub vérifient chaque push et publient automatiquement l’archive lors d’un tag `vX.Y.Z`.

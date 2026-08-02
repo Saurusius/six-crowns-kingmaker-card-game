@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.14.8
+
+- Supprime la nécessité de garder un MJ connecté pour les échanges entre joueurs.
+- Remplace le registre mondial des échanges par un registre local conservé sur chacun des deux profils concernés.
+- Envoie, accepte, refuse et annule les offres par messages pair-à-pair signés entre profils connectés.
+- Ajoute une finalisation en plusieurs étapes avec snapshot local et restauration de secours si l’un des deux côtés ne peut pas appliquer l’échange.
+- Limite la liste des destinataires d’échange aux profils actuellement connectés.
+- Supprime l’ancien bouton MJ destiné à libérer les échanges bloqués.
+- Permet au PvP de fonctionner sans MJ grâce à l’élection automatique d’un profil joueur actif comme coordinateur technique.
+- Déplace le dépôt PvP actif sur le profil du coordinateur et attribue les récompenses directement sur le profil du gagnant.
+- Met à jour l’arène, les règles et la documentation pour présenter clairement le fonctionnement pair-à-pair.
+- Ajoute trois tests de régression dédiés aux échanges et aux duels sans MJ, pour un total de 32 tests réussis.
+
+## 0.14.7
+
+- Corrige définitivement la face Épée du lancer de pièce en rendant la face finale directement depuis le résultat du jeu, au lieu de dépendre du verso 3D et de la cascade CSS.
+- Applique le même correctif déterministe aux duels solo et PvP.
+- Charge une feuille de correctifs en dernier afin d’éviter qu’une règle historique ne réécrase l’affichage final.
+- Ajoute un test de régression vérifiant le rendu direct de l’icône Épée ou Bouclier.
+
+## 0.14.6
+
+- Répare les deux actions de l’écran de victoire : « Rejouer avec les mêmes decks » relance une partie complète avec un nouveau lancer de pièce, tandis que « Choisir d’autres decks » revient à la préparation.
+- Corrige la face finale de la pièce afin que l’illustration Épée ou Bouclier corresponde toujours au résultat du toss.
+- Corrige l’enregistrement des decks lorsque le nom vient d’être saisi et n’avait pas encore été détecté par l’interface.
+- Ajoute une pioche pour chaque camp au début des manches 2 et 3 afin de préserver les possibilités de retour.
+- Améliore la gestion des ressources de l’IA : elle peut concéder une manche trop coûteuse, recherche des séquences raisonnables et évite de vider sa main pour une victoire marginale.
+- Empêche l’IA de gaspiller « Sauvetage de sac » en début de partie ou sur une récupération sans intérêt.
+- Étend l’animation de découverte des cartes à l’ensemble de l’écran et ajoute un défilement vertical au choix des sortilèges.
+- Retire le mode spectateur et l’interface d’arbitrage manuel du MJ des duels PvP ; seuls les deux participants reçoivent désormais les instantanés de la partie.
+- Ajoute un Ladder PvP avec classement, points, victoires, défaites, égalités, abandons et taux de victoire.
+- Ajoute depuis l’accueil un profil joueur complet regroupant progression de collection, réserves, decks et statistiques solo/PvP.
+- Demande confirmation avant de lancer une nouvelle partie pendant un duel actif et enregistre alors la partie comme une défaite par abandon.
+- Ajoute des tests de régression couvrant la revanche, la pioche entre les manches, le comportement de l’IA, l’abandon, le Ladder, le profil et la suppression des fonctions spectateur/MJ.
+
 ## 0.14.5
 
 - Corrige le bouton de réinitialisation de l’espace MJ, qui échouait car `DialogV2` n’était pas chargé dans l’application.

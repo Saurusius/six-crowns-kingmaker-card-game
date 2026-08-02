@@ -72,27 +72,20 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       image: snapshot.participants.opponent.avatar ?? "icons/svg/mystery-man.svg"
     };
     view.canAct = canAct;
-    view.isSpectator = snapshot.role === "spectator";
     view.canContinueCoin = canAct && snapshot.state.phase === PHASES.COIN_TOSS;
     view.canConfirmMulligan = canAct && snapshot.state.phase === PHASES.MULLIGAN && !snapshot.state.player?.mulliganUsed;
     view.firstPlayerName = snapshot.state[snapshot.state.coin?.winner]?.name ?? "Le destin";
     view.pvpMatchId = snapshot.matchId;
     view.pendingChoice = snapshot.pendingChoice;
     view.rematchRequested = snapshot.rematchVotes?.includes(game.user.id) ?? false;
-    view.playerCampLabel = view.isSpectator ? "Joueur 1" : "Votre camp";
-    view.opponentCampLabel = view.isSpectator ? "Joueur 2" : "Adversaire";
-    if (view.isSpectator) view.turnLabel = snapshot.state.currentTurn ? snapshot.state[snapshot.state.currentTurn]?.name ?? "—" : "—";
+    view.playerCampLabel = "Votre camp";
+    view.opponentCampLabel = "Adversaire";
     if (snapshot.status === "cancelled" && view.gameSummary) {
       view.gameSummary.winnerLabel = "Duel annulé";
       view.gameSummary.eyebrow = "Intervention du maître du jeu";
       view.gameSummary.subtitle = "La confrontation a été interrompue sans résultat enregistré.";
       view.gameSummary.icon = "fa-solid fa-ban";
       view.gameSummary.screenClass = "is-draw";
-    } else if (view.isSpectator && view.gameSummary) {
-      const winner = snapshot.state.gameWinner;
-      view.gameSummary.winnerLabel = winner === "tie" ? "Égalité" : `${snapshot.state[winner]?.name ?? "Un joueur"} l’emporte`;
-      view.gameSummary.eyebrow = "Le duel touche à sa fin";
-      view.gameSummary.subtitle = winner === "tie" ? "Les deux couronnes restent debout." : "La tribune acclame le vainqueur.";
     }
     return view;
   }

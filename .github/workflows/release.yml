@@ -1,53 +1,21 @@
 name: Publication Foundry
-
-run-name: Publication ${{ github.ref_name }}
-
 on:
   push:
-    tags:
-      - "v*.*.*"
-
-permissions:
-  contents: write
-
+    tags: ["v*.*.*"]
 jobs:
   release:
-    name: Vérifier, construire et publier
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Récupérer le dépôt
-        uses: actions/checkout@v4
-
-      - name: Installer Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
-      - name: Installer les dépendances
-        run: npm ci
-
-      - name: Vérifier le module
-        run: npm run check
-
-      - name: Préparer le ZIP et les notes
-        shell: bash
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-
-          npm run prepare-release -- "$VERSION"
-
-          node scripts/dev/extract-release-notes.mjs \
-            "$VERSION" \
-            release-notes.md
-
-      - name: Publier la release
-        uses: softprops/action-gh-release@v3
+      - run: npm ci
+      - run: npm run check
+      - run: npm run prepare-release -- ${GITHUB_REF_NAME#v}
+      - uses: softprops/action-gh-release@v2
         with:
-          name: Le Jeu des Six Couronnes — ${{ github.ref_name }}
-          body_path: release-notes.md
           files: dist/*.zip
-          fail_on_unmatched_files: true
-          overwrite_files: true
-          make_latest: true

@@ -1,11 +1,24 @@
 import { MODULE_ID } from "./constants.js";
-import { executeTrade, getBoosterCredits, getCollection, loadCardCatalog } from "./boosters.js";
+import {
+  BOOSTER_CREDITS_FLAG,
+  COLLECTION_FLAG,
+  getBoosterCredits,
+  getCollection,
+  loadCardCatalog
+} from "./boosters.js";
 import { formatDateTime } from "./i18n.js";
 import { signSocketEnvelope, verifySocketEnvelope } from "./socket-auth.js";
+import { transactUserFlags } from "./transactions.js";
 
+// Les anciens réglages monde restent enregistrés pour que Foundry puisse charger
+// sans erreur les mondes provenant des versions précédentes. Depuis la 0.14.8,
+// chaque joueur conserve sa propre copie du registre d'échanges dans ses flags.
 export const TRADE_OFFERS_SETTING = "tradeOffers";
 export const TRADE_HISTORY_SETTING = "tradeHistory";
 export const TRADE_LEDGER_SETTING = "tradeLedger";
+export const TRADE_LEDGER_FLAG = "playerTradeLedger";
+export const TRADE_PREPARED_FLAG = "preparedTradeTransactions";
+
 export const TRADE_STATUS = Object.freeze({
   PENDING: "pending",
   PROCESSING: "processing",
@@ -17,11 +30,11 @@ export const TRADE_STATUS = Object.freeze({
 
 const processedRequests = new Map();
 const requestWindows = new Map();
-const MAX_PROCESSED_REQUESTS = 300;
-const MAX_REQUESTS_PER_WINDOW = 40;
+const MAX_PROCESSED_REQUESTS = 400;
+const MAX_REQUESTS_PER_WINDOW = 60;
 const REQUEST_WINDOW_MS = 10_000;
-let outboundServerQueue = Promise.resolve();
-let hostTradeQueue = Promise.resolve();
+let localQueue = Promise.resolve();
+let outboundQueue = Promise.resolve();
 
 function clone(value) {
   return globalThis.foundry?.utils?.deepClone ? foundry.utils.deepClone(value ?? {}) : structuredClone(value ?? {});
@@ -35,10 +48,23 @@ function positiveInteger(value, maximum = 999) {
   return Math.max(0, Math.min(maximum, Number.parseInt(value ?? 0, 10) || 0));
 }
 
+function usersArray() {
+  return Array.from(game.users?.contents ?? game.users ?? []);
+}
+
+function notify(level, message) {
+  const fn = ui?.notifications?.[level] ?? ui?.notifications?.info;
+  fn?.call(ui.notifications, message);
+}
+
 export function normalizeTradeItems(items = {}) {
   return Object.fromEntries(Object.entries(items ?? {})
     .map(([id, count]) => [String(id), positiveInteger(count)])
     .filter(([id, count]) => id && count > 0));
+}
+
+function canonicalItems(items = {}) {
+  return JSON.stringify(Object.fromEntries(Object.entries(normalizeTradeItems(items)).sort(([a], [b]) => a.localeCompare(b))));
 }
 
 export function buildTradeReservations(offers = [], userId = null) {
@@ -66,16 +92,16 @@ export function registerTradeSettings() {
   });
 }
 
+function normalizeLedger(value = {}) {
+  return {
+    offers: Array.isArray(value?.offers) ? clone(value.offers) : [],
+    history: Array.isArray(value?.history) ? clone(value.history) : [],
+    revision: Math.max(0, Number.parseInt(value?.revision ?? 0, 10) || 0)
+  };
+}
+
 function getTradeLedger() {
-  const ledger = clone(game.settings.get(MODULE_ID, TRADE_LEDGER_SETTING) ?? {});
-  const revision = Math.max(0, Number.parseInt(ledger.revision ?? 0, 10) || 0);
-  const legacyOffers = clone(game.settings.get(MODULE_ID, TRADE_OFFERS_SETTING) ?? []);
-  const legacyHistory = clone(game.settings.get(MODULE_ID, TRADE_HISTORY_SETTING) ?? []);
-  const ledgerOffers = Array.isArray(ledger.offers) ? ledger.offers : [];
-  const ledgerHistory = Array.isArray(ledger.history) ? ledger.history : [];
-  const offers = revision === 0 && ledgerOffers.length === 0 && Array.isArray(legacyOffers) && legacyOffers.length > 0 ? legacyOffers : ledgerOffers;
-  const history = revision === 0 && ledgerHistory.length === 0 && Array.isArray(legacyHistory) && legacyHistory.length > 0 ? legacyHistory : ledgerHistory;
-  return { offers, history, revision };
+  return normalizeLedger(game.user?.getFlag?.(MODULE_ID, TRADE_LEDGER_FLAG) ?? {});
 }
 
 export function getTradeOffers() {
@@ -86,147 +112,100 @@ export function getTradeHistory() {
   return getTradeLedger().history;
 }
 
-async function saveLedger({ offers, history, revision = null }) {
-  const current = getTradeLedger();
-  const next = {
-    offers: clone(offers ?? current.offers),
-    history: clone(history ?? current.history).slice(-100),
-    revision: revision ?? current.revision + 1
-  };
-  await game.settings.set(MODULE_ID, TRADE_LEDGER_SETTING, next);
-  return next;
-}
-
-function primaryActiveGm() {
-  return Array.from(game.users?.contents ?? game.users ?? [])
-    .filter((user) => user.isGM && user.active)
-    .sort((a, b) => String(a.id).localeCompare(String(b.id)))[0] ?? null;
-}
-
-export function isPrimaryTradeGm() {
-  return game.user.isGM && primaryActiveGm()?.id === game.user.id;
-}
-
-function emit(message) {
-  game.socket.emit(`module.${MODULE_ID}`, message);
-}
-
-function emitServer(message) {
-  const packet = { ...message, serverUserId: game.user?.id ?? null };
-  const task = outboundServerQueue.then(async () => {
-    const signedPacket = await signSocketEnvelope(packet);
-    await handleTradeClientMessage(signedPacket, { trustedLocal: true });
-    emit(signedPacket);
-  });
-  outboundServerQueue = task.catch((error) => console.error("Six Crowns | Envoi d’échange signé impossible", error));
-}
-
-async function handleTradeClientMessage(data, { trustedLocal = false } = {}) {
-  const concernsCurrentUser = data.type === "trade-error"
-    ? data.userId === game.user.id
-    : Array.isArray(data.users) && data.users.includes(game.user.id);
-  if (!concernsCurrentUser) return true;
-  if (!trustedLocal) {
-    const host = primaryActiveGm();
-    if (!data.serverUserId || data.serverUserId !== host?.id) throw new Error("Message d’échange émis par un hôte non autorisé.");
-    await verifySocketEnvelope(data, data.serverUserId);
-  }
-  if (data.type === "trade-error") {
-    ui.notifications.error(data.message);
-    return true;
-  }
-  const pendingLabel = data.toUserId === game.user.id
-    ? "Nouvelle offre d’échange reçue."
-    : "Offre d’échange envoyée.";
-  const labels = {
-    pending: pendingLabel,
-    processing: "Échange en cours de validation.",
-    completed: "Échange terminé.",
-    rejected: "Offre refusée.",
-    cancelled: "Offre annulée.",
-    failed: `Échange impossible${data.note ? ` : ${data.note}` : "."}`
-  };
-  const notification = data.status === "failed" ? ui.notifications.error : ui.notifications.info;
-  notification.call(ui.notifications, labels[data.status] ?? "Le centre d’échanges a été mis à jour.");
-  Hooks.callAll(`${MODULE_ID}.tradesUpdated`, data);
-  return true;
-}
-
-async function recoverStaleTradesInternal({ maxAgeMs = 5 * 60 * 1000 } = {}) {
-  if (!game.user.isGM || !isPrimaryTradeGm()) return { recovered: 0 };
-  const ledger = getTradeLedger();
-  const timestamp = Date.now();
-  const stale = ledger.offers.filter((offer) =>
-    offer.status === TRADE_STATUS.PROCESSING
-    && timestamp - Date.parse(offer.updatedAt ?? offer.createdAt ?? 0) >= maxAgeMs
-  );
-  if (stale.length === 0) return { recovered: 0 };
-  const staleIds = new Set(stale.map((offer) => offer.id));
-  const offers = ledger.offers.filter((offer) => !staleIds.has(offer.id));
-  const history = [...ledger.history, ...stale.map((offer) => ({
-    ...offer,
-    status: TRADE_STATUS.FAILED,
-    note: "Transaction interrompue puis libérée automatiquement par le MJ.",
-    updatedAt: new Date().toISOString()
-  }))];
-  await saveLedger({ offers, history });
-  for (const offer of stale) {
-    emitServer({
-      type: "trade-sync",
-      users: [offer.fromUserId, offer.toUserId],
-      fromUserId: offer.fromUserId,
-      toUserId: offer.toUserId,
-      offerId: offer.id,
-      status: TRADE_STATUS.FAILED,
-      note: "Transaction interrompue puis libérée automatiquement par le MJ."
+async function mutateLedger(mutator) {
+  let nextLedger;
+  const task = localQueue.then(async () => {
+    await transactUserFlags({
+      user: game.user,
+      type: "trade-ledger",
+      flags: [TRADE_LEDGER_FLAG],
+      metadata: { peerToPeer: true },
+      mutate: (snapshot) => {
+        const ledger = normalizeLedger(snapshot[TRADE_LEDGER_FLAG]);
+        const result = mutator(ledger) ?? ledger;
+        nextLedger = normalizeLedger({ ...result, revision: ledger.revision + 1 });
+        nextLedger.history = nextLedger.history.slice(-100);
+        return { [TRADE_LEDGER_FLAG]: nextLedger };
+      }
     });
-  }
-  return { recovered: stale.length };
-}
-
-export async function recoverStaleTrades(options = {}) {
-  const task = hostTradeQueue.then(() => recoverStaleTradesInternal(options));
-  hostTradeQueue = task.catch(() => undefined);
+    Hooks.callAll(`${MODULE_ID}.tradesUpdated`, clone(nextLedger));
+    return nextLedger;
+  });
+  localQueue = task.catch(() => undefined);
   return task;
 }
 
-export async function requestTradeCreate(payload) {
-  if (!primaryActiveGm()) {
-    ui.notifications.warn("Un MJ doit être connecté pour enregistrer une offre d’échange.");
-    return false;
-  }
-  try {
-    const unsigned = { type: "trade-create", requestId: makeId(), actorUserId: game.user.id, payload: { ...payload } };
-    if (isPrimaryTradeGm()) await handleTradeSocket(unsigned, { local: true });
-    else emit(await signSocketEnvelope(unsigned));
-    return true;
-  } catch (error) {
-    ui.notifications.error(error.message);
-    return false;
-  }
+async function upsertLocalOffer(offer) {
+  return mutateLedger((ledger) => {
+    const index = ledger.offers.findIndex((entry) => entry.id === offer.id);
+    if (index >= 0) ledger.offers[index] = { ...ledger.offers[index], ...clone(offer) };
+    else ledger.offers.push(clone(offer));
+    return ledger;
+  });
 }
 
-export async function requestTradeAction(action, offerId, extra = {}) {
-  if (!primaryActiveGm()) {
-    ui.notifications.warn("Un MJ doit être connecté pour traiter cette offre d’échange.");
-    return false;
-  }
-  try {
-    const unsigned = { type: "trade-action", requestId: makeId(), action, offerId, actorUserId: game.user.id, ...extra };
-    if (isPrimaryTradeGm()) await handleTradeSocket(unsigned, { local: true });
-    else emit(await signSocketEnvelope(unsigned));
-    return true;
-  } catch (error) {
-    ui.notifications.error(error.message);
-    return false;
-  }
+async function updateLocalOffer(offerId, changes = {}) {
+  let updated = null;
+  await mutateLedger((ledger) => {
+    const index = ledger.offers.findIndex((entry) => entry.id === offerId);
+    if (index < 0) return ledger;
+    updated = { ...ledger.offers[index], ...clone(changes), updatedAt: new Date().toISOString() };
+    ledger.offers[index] = updated;
+    return ledger;
+  });
+  return updated;
 }
 
+async function archiveLocalOffer(offerId, status, note = "", fallbackOffer = null) {
+  let archived = null;
+  await mutateLedger((ledger) => {
+    const offer = ledger.offers.find((entry) => entry.id === offerId) ?? fallbackOffer;
+    ledger.offers = ledger.offers.filter((entry) => entry.id !== offerId);
+    if (!offer) return ledger;
+    archived = { ...clone(offer), status, note, updatedAt: new Date().toISOString() };
+    const existing = ledger.history.findIndex((entry) => entry.id === offerId);
+    if (existing >= 0) ledger.history[existing] = archived;
+    else ledger.history.push(archived);
+    return ledger;
+  });
+  return archived;
+}
 
-async function validateOfferPayload(payload, offers, actorUserId) {
-  const fromUser = game.users.get(actorUserId);
+async function sendPeer(message) {
+  const packet = {
+    ...message,
+    actorUserId: message.actorUserId ?? game.user.id,
+    requestId: message.requestId ?? makeId()
+  };
+  const task = outboundQueue.then(async () => {
+    const signed = await signSocketEnvelope(packet);
+    game.socket.emit(`module.${MODULE_ID}`, signed);
+    return signed;
+  });
+  outboundQueue = task.catch((error) => console.error("Six Crowns | Envoi d’échange pair-à-pair impossible", error));
+  return task;
+}
+
+function statusLabel(status, offer) {
+  const pendingLabel = offer?.toUserId === game.user.id
+    ? "Nouvelle offre d’échange reçue."
+    : "Offre d’échange envoyée.";
+  return {
+    pending: pendingLabel,
+    processing: "Échange en cours de validation entre les deux joueurs.",
+    completed: "Échange terminé.",
+    rejected: "Offre refusée.",
+    cancelled: "Offre annulée.",
+    failed: `Échange impossible${offer?.note ? ` : ${offer.note}` : "."}`
+  }[status] ?? "Le centre d’échanges a été mis à jour.";
+}
+
+async function validateOfferPayload(payload, offers) {
+  const fromUser = game.user;
   const toUser = game.users.get(payload.toUserId);
   if (!fromUser || !toUser || fromUser.id === toUser.id) throw new Error("Joueurs invalides.");
+  if (!toUser.active) throw new Error("Le destinataire doit être connecté pour recevoir l’offre.");
+
   const offered = normalizeTradeItems(payload.offered);
   if (Object.keys(offered).length === 0 && positiveInteger(payload.offeredCredits) === 0) {
     throw new Error("L’offre doit contenir au moins une carte ou un ticket.");
@@ -236,10 +215,10 @@ async function validateOfferPayload(payload, offers, actorUserId) {
   const requestedRarity = requestedMode === "rarity" ? String(payload.requestedRarity ?? "") : null;
   const requestedCredits = requestedMode === "credits" ? positiveInteger(payload.requestedCredits, 100) : 0;
   if (requestedMode === "card" && Object.keys(requested).length === 0) throw new Error("Choisissez une carte demandée.");
-  if (requestedMode === "rarity" && !["commun", "peuCommune", "rare", "unique"].includes(requestedRarity)) throw new Error("Rareté demandée invalide.");
+  if (requestedMode === "rarity" && !["commun", "peuCommune", "rare", "unique", "doree"].includes(requestedRarity)) throw new Error("Rareté demandée invalide.");
   if (requestedMode === "credits" && requestedCredits <= 0) throw new Error("Indiquez un nombre de tickets demandé.");
 
-  const fromCollection = await getCollection({ user: fromUser });
+  const fromCollection = await getCollection();
   const reservations = buildTradeReservations(offers, fromUser.id);
   for (const [cardId, count] of Object.entries(offered)) {
     const available = (fromCollection[cardId]?.count ?? 0) - (reservations.reservedCards[cardId] ?? 0);
@@ -247,7 +226,7 @@ async function validateOfferPayload(payload, offers, actorUserId) {
   }
   const offeredCredits = positiveInteger(payload.offeredCredits, 100);
   if (offeredCredits > 0) {
-    const credits = await getBoosterCredits({ user: fromUser });
+    const credits = await getBoosterCredits();
     if (credits - reservations.reservedCredits < offeredCredits) throw new Error("Pas assez de tickets disponibles.");
   }
 
@@ -278,112 +257,392 @@ async function resolveRequestedItems(offer, selectedCardId = null) {
   return { [card.id]: 1 };
 }
 
-async function archiveOffer(offers, offer, status, note = "") {
-  const nextOffers = offers.filter((entry) => entry.id !== offer.id);
-  const history = getTradeHistory();
-  history.push({ ...offer, status, note, updatedAt: new Date().toISOString() });
-  await saveLedger({ offers: nextOffers, history });
-  emitServer({ type: "trade-sync", users: [offer.fromUserId, offer.toUserId], fromUserId: offer.fromUserId, toUserId: offer.toUserId, offerId: offer.id, status, note });
+async function validateLocalAssets(items, credits = 0) {
+  const [collection, wallet] = await Promise.all([getCollection(), getBoosterCredits()]);
+  for (const [id, count] of Object.entries(normalizeTradeItems(items))) {
+    if ((collection[id]?.count ?? 0) < count) throw new Error(`Vous ne possédez plus assez de ${collection[id]?.name ?? id}.`);
+  }
+  if (wallet < positiveInteger(credits, 100)) throw new Error("Vous ne possédez plus assez de tickets.");
+  return true;
 }
 
-async function markOfferProcessing(offers, offer) {
-  const processing = { ...offer, status: TRADE_STATUS.PROCESSING, updatedAt: new Date().toISOString() };
-  const nextOffers = offers.map((entry) => entry.id === offer.id ? processing : entry);
-  await saveLedger({ offers: nextOffers, history: getTradeHistory() });
-  emitServer({ type: "trade-sync", users: [offer.fromUserId, offer.toUserId], fromUserId: offer.fromUserId, toUserId: offer.toUserId, offerId: offer.id, status: TRADE_STATUS.PROCESSING });
-  return { processing, nextOffers };
+async function applyLocalTradeSide({ offerId, give = {}, receive = {}, giveCredits = 0, receiveCredits = 0, prepareRollback = false } = {}) {
+  const catalog = await loadCardCatalog();
+  const cards = new Map(catalog.map((card) => [card.id, card]));
+  let nextCollection;
+  let nextCredits;
+
+  await transactUserFlags({
+    user: game.user,
+    type: "peer-trade-side",
+    flags: [COLLECTION_FLAG, BOOSTER_CREDITS_FLAG, TRADE_PREPARED_FLAG],
+    metadata: { offerId, peerToPeer: true, give: normalizeTradeItems(give), receive: normalizeTradeItems(receive) },
+    mutate: (snapshot) => {
+      const beforeCollection = snapshot[COLLECTION_FLAG] && typeof snapshot[COLLECTION_FLAG] === "object"
+        ? clone(snapshot[COLLECTION_FLAG])
+        : {};
+      const beforeCredits = positiveInteger(snapshot[BOOSTER_CREDITS_FLAG], 100_000);
+      nextCollection = clone(beforeCollection);
+      const normalizedGive = normalizeTradeItems(give);
+      const normalizedReceive = normalizeTradeItems(receive);
+      const debit = positiveInteger(giveCredits, 100);
+      const credit = positiveInteger(receiveCredits, 100);
+
+      for (const [id, count] of Object.entries(normalizedGive)) {
+        if ((nextCollection[id]?.count ?? 0) < count) throw new Error(`Vous ne possédez plus assez de ${nextCollection[id]?.name ?? id}.`);
+      }
+      if (beforeCredits < debit) throw new Error("Vous ne possédez plus assez de tickets.");
+
+      for (const [id, count] of Object.entries(normalizedGive)) {
+        nextCollection[id].count -= count;
+        if (nextCollection[id].count <= 0) delete nextCollection[id];
+      }
+      for (const [id, count] of Object.entries(normalizedReceive)) {
+        const card = cards.get(id);
+        if (!card) throw new Error(`Carte d’échange inconnue : ${id}.`);
+        const current = nextCollection[id] ?? { id: card.id, name: card.name, faction: card.faction, rarity: card.rarity, count: 0 };
+        nextCollection[id] = { ...current, id: card.id, name: card.name, faction: card.faction, rarity: card.rarity, count: positiveInteger(current.count, 9999) + count };
+      }
+      nextCredits = beforeCredits - debit + credit;
+      const prepared = snapshot[TRADE_PREPARED_FLAG] && typeof snapshot[TRADE_PREPARED_FLAG] === "object"
+        ? clone(snapshot[TRADE_PREPARED_FLAG])
+        : {};
+      if (prepareRollback) {
+        prepared[offerId] = {
+          collection: beforeCollection,
+          credits: beforeCredits,
+          createdAt: new Date().toISOString()
+        };
+      }
+      return {
+        [COLLECTION_FLAG]: nextCollection,
+        [BOOSTER_CREDITS_FLAG]: nextCredits,
+        [TRADE_PREPARED_FLAG]: prepared
+      };
+    }
+  });
+
+  Hooks.callAll(`${MODULE_ID}.collectionUpdated`, nextCollection, game.user.id);
+  Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, nextCredits, game.user.id);
+  return true;
 }
 
-function validateRequest(data) {
+async function clearPreparedTrade(offerId) {
+  await transactUserFlags({
+    user: game.user,
+    type: "peer-trade-finalize",
+    flags: [TRADE_PREPARED_FLAG],
+    metadata: { offerId },
+    mutate: (snapshot) => {
+      const prepared = snapshot[TRADE_PREPARED_FLAG] && typeof snapshot[TRADE_PREPARED_FLAG] === "object"
+        ? clone(snapshot[TRADE_PREPARED_FLAG])
+        : {};
+      delete prepared[offerId];
+      return { [TRADE_PREPARED_FLAG]: prepared };
+    }
+  });
+}
+
+async function rollbackPreparedTrade(offerId) {
+  let collection;
+  let credits;
+  let restored = false;
+  await transactUserFlags({
+    user: game.user,
+    type: "peer-trade-rollback",
+    flags: [COLLECTION_FLAG, BOOSTER_CREDITS_FLAG, TRADE_PREPARED_FLAG],
+    metadata: { offerId },
+    mutate: (snapshot) => {
+      const prepared = snapshot[TRADE_PREPARED_FLAG] && typeof snapshot[TRADE_PREPARED_FLAG] === "object"
+        ? clone(snapshot[TRADE_PREPARED_FLAG])
+        : {};
+      const rollback = prepared[offerId];
+      if (!rollback) {
+        return { [TRADE_PREPARED_FLAG]: prepared };
+      }
+      collection = clone(rollback.collection ?? {});
+      credits = positiveInteger(rollback.credits, 100_000);
+      delete prepared[offerId];
+      restored = true;
+      return {
+        [COLLECTION_FLAG]: collection,
+        [BOOSTER_CREDITS_FLAG]: credits,
+        [TRADE_PREPARED_FLAG]: prepared
+      };
+    }
+  });
+  if (restored) {
+    Hooks.callAll(`${MODULE_ID}.collectionUpdated`, collection, game.user.id);
+    Hooks.callAll(`${MODULE_ID}.boosterCreditsUpdated`, credits, game.user.id);
+  }
+  return restored;
+}
+
+export async function requestTradeCreate(payload) {
+  try {
+    const offer = await validateOfferPayload(payload, getTradeOffers());
+    await upsertLocalOffer(offer);
+    await sendPeer({ type: "trade-offer-deliver", targetUserId: offer.toUserId, offer });
+    notify("info", "Offre d’échange envoyée directement au joueur.");
+    return true;
+  } catch (error) {
+    notify("error", error.message);
+    return false;
+  }
+}
+
+export async function requestTradeAction(action, offerId, extra = {}) {
+  try {
+    const offer = getTradeOffers().find((entry) => entry.id === offerId);
+    if (!offer) throw new Error("Cette offre n’est plus disponible.");
+    if (action === "cancel") {
+      if (offer.fromUserId !== game.user.id) throw new Error("Seul l’expéditeur peut annuler cette offre.");
+      await archiveLocalOffer(offer.id, TRADE_STATUS.CANCELLED);
+      await sendPeer({ type: "trade-peer-status", targetUserId: offer.toUserId, offerId: offer.id, status: TRADE_STATUS.CANCELLED });
+      notify("info", "Offre annulée.");
+      return true;
+    }
+    if (action === "reject") {
+      if (offer.toUserId !== game.user.id) throw new Error("Seul le destinataire peut refuser cette offre.");
+      await archiveLocalOffer(offer.id, TRADE_STATUS.REJECTED);
+      await sendPeer({ type: "trade-peer-status", targetUserId: offer.fromUserId, offerId: offer.id, status: TRADE_STATUS.REJECTED });
+      notify("info", "Offre refusée.");
+      return true;
+    }
+    if (action !== "accept") throw new Error("Action d’échange inconnue.");
+    if (offer.toUserId !== game.user.id) throw new Error("Seul le destinataire peut accepter cette offre.");
+    const sender = game.users.get(offer.fromUserId);
+    if (!sender?.active) throw new Error("L’expéditeur doit être connecté pour finaliser l’échange.");
+    const requested = await resolveRequestedItems(offer, extra.selectedCardId);
+    await validateLocalAssets(requested, offer.requestedCredits);
+    await updateLocalOffer(offer.id, { status: TRADE_STATUS.PROCESSING, requested });
+    await sendPeer({
+      type: "trade-accept-request",
+      targetUserId: offer.fromUserId,
+      offerId: offer.id,
+      requested
+    });
+    notify("info", "Validation envoyée à l’autre joueur.");
+    return true;
+  } catch (error) {
+    notify("error", error.message);
+    return false;
+  }
+}
+
+function validateRequestEnvelope(data) {
   if (!data.requestId || typeof data.requestId !== "string" || data.requestId.length > 128) throw new Error("Identifiant de requête d’échange invalide.");
   if (!data.actorUserId || !game.users.get(data.actorUserId)) throw new Error("Utilisateur d’échange inconnu.");
-  if (JSON.stringify(data.payload ?? data).length > 50_000) throw new Error("La requête d’échange est trop volumineuse.");
+  if (data.targetUserId !== game.user.id) throw new Error("Destinataire d’échange invalide.");
+  if (JSON.stringify(data).length > 75_000) throw new Error("La requête d’échange est trop volumineuse.");
   const timestamp = Date.now();
   const window = requestWindows.get(data.actorUserId) ?? { startedAt: timestamp, count: 0 };
   if (timestamp - window.startedAt >= REQUEST_WINDOW_MS) { window.startedAt = timestamp; window.count = 0; }
   window.count += 1;
   requestWindows.set(data.actorUserId, window);
   if (window.count > MAX_REQUESTS_PER_WINDOW) throw new Error("Trop de requêtes d’échange ont été envoyées.");
-}
-
-function rememberRequest(requestId, result) {
-  processedRequests.set(requestId, result);
+  const replayKey = `${data.actorUserId}:${data.requestId}`;
+  if (processedRequests.has(replayKey)) return false;
+  processedRequests.set(replayKey, true);
   while (processedRequests.size > MAX_PROCESSED_REQUESTS) processedRequests.delete(processedRequests.keys().next().value);
+  return true;
 }
 
-async function processTradeRequest(data, { local = false } = {}) {
-  try {
-    if (!local) await verifySocketEnvelope(data, data.actorUserId);
-    validateRequest(data);
-    if (processedRequests.has(data.requestId)) return true;
-    if (data.type === "trade-create") {
-      const offers = getTradeOffers();
-      const offer = await validateOfferPayload(data.payload ?? {}, offers, data.actorUserId);
-      offers.push(offer);
-      await saveLedger({ offers, history: getTradeHistory() });
-      rememberRequest(data.requestId, { status: offer.status, offerId: offer.id });
-      emitServer({ type: "trade-sync", users: [offer.fromUserId, offer.toUserId], fromUserId: offer.fromUserId, toUserId: offer.toUserId, offerId: offer.id, status: offer.status });
-      return true;
-    }
+async function handleOfferDelivery(data) {
+  const offer = clone(data.offer ?? {});
+  if (offer.fromUserId !== data.actorUserId || offer.toUserId !== game.user.id || !offer.id) throw new Error("Offre reçue invalide.");
+  const existing = getTradeOffers().find((entry) => entry.id === offer.id);
+  const historical = getTradeHistory().find((entry) => entry.id === offer.id);
+  if (historical) return true;
+  if (!existing || existing.status !== TRADE_STATUS.PROCESSING) await upsertLocalOffer({ ...offer, status: existing?.status ?? TRADE_STATUS.PENDING });
+  if (!existing) notify("info", "Nouvelle offre d’échange reçue.");
+  return true;
+}
 
-    let offers = getTradeOffers();
-    const offer = offers.find((entry) => entry.id === data.offerId);
-    if (!offer || offer.status !== TRADE_STATUS.PENDING) {
-      rememberRequest(data.requestId, { status: "ignored" });
-      return true;
-    }
-    if (data.action === "cancel") {
-      if (data.actorUserId !== offer.fromUserId) throw new Error("Seul l’expéditeur peut annuler cette offre.");
-      await archiveOffer(offers, offer, TRADE_STATUS.CANCELLED);
-    } else if (data.action === "reject") {
-      if (data.actorUserId !== offer.toUserId) throw new Error("Seul le destinataire peut refuser cette offre.");
-      await archiveOffer(offers, offer, TRADE_STATUS.REJECTED);
-    } else if (data.action === "accept") {
-      if (data.actorUserId !== offer.toUserId) throw new Error("Seul le destinataire peut accepter cette offre.");
-      const requested = await resolveRequestedItems(offer, data.selectedCardId);
-      const marked = await markOfferProcessing(offers, offer);
-      offers = marked.nextOffers;
-      try {
-        await executeTrade({
-          tradeId: offer.id,
-          fromUserId: offer.fromUserId,
-          toUserId: offer.toUserId,
-          offered: offer.offered,
-          requested,
-          offeredCredits: offer.offeredCredits,
-          requestedCredits: offer.requestedCredits
-        });
-        await archiveOffer(offers, { ...marked.processing, requested }, TRADE_STATUS.COMPLETED);
-      } catch (error) {
-        await archiveOffer(offers, marked.processing, TRADE_STATUS.FAILED, error.message);
-        throw error;
-      }
-    } else throw new Error("Action d’échange inconnue.");
-    rememberRequest(data.requestId, { status: data.action });
+async function handlePeerStatus(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer) return true;
+  const allowed = data.status === TRADE_STATUS.CANCELLED
+    ? data.actorUserId === offer.fromUserId
+    : data.status === TRADE_STATUS.REJECTED
+      ? data.actorUserId === offer.toUserId
+      : false;
+  if (!allowed) throw new Error("Statut d’échange non autorisé.");
+  await archiveLocalOffer(offer.id, data.status);
+  notify("info", statusLabel(data.status, offer));
+  return true;
+}
+
+async function handleAcceptRequest(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer || offer.fromUserId !== game.user.id || offer.toUserId !== data.actorUserId) throw new Error("Offre d’échange introuvable ou incohérente.");
+  if (![TRADE_STATUS.PENDING, TRADE_STATUS.PROCESSING].includes(offer.status)) throw new Error("Cette offre n’est plus en attente.");
+  const requested = normalizeTradeItems(data.requested);
+  if (offer.requestedMode === "card" && canonicalItems(requested) !== canonicalItems(offer.requested)) throw new Error("La contrepartie ne correspond pas à l’offre.");
+  if (offer.requestedMode === "credits" && Object.keys(requested).length > 0) throw new Error("La contrepartie en cartes est invalide.");
+  if (offer.requestedMode === "rarity") {
+    const entries = Object.entries(requested);
+    const catalog = await loadCardCatalog();
+    const card = catalog.find((entry) => entry.id === entries[0]?.[0]);
+    if (entries.length !== 1 || entries[0][1] !== 1 || card?.rarity !== offer.requestedRarity) throw new Error("La carte choisie ne respecte pas la rareté demandée.");
+  }
+  await validateLocalAssets(offer.offered, offer.offeredCredits);
+  await updateLocalOffer(offer.id, { status: TRADE_STATUS.PROCESSING, requested });
+  await sendPeer({
+    type: "trade-accept-ready",
+    targetUserId: offer.toUserId,
+    offerId: offer.id,
+    offered: offer.offered,
+    requested,
+    offeredCredits: offer.offeredCredits,
+    requestedCredits: offer.requestedCredits
+  });
+  return true;
+}
+
+async function handleAcceptReady(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer || offer.toUserId !== game.user.id || offer.fromUserId !== data.actorUserId) throw new Error("Confirmation d’échange incohérente.");
+  const requested = normalizeTradeItems(data.requested);
+  await applyLocalTradeSide({
+    offerId: offer.id,
+    give: requested,
+    receive: normalizeTradeItems(data.offered),
+    giveCredits: data.requestedCredits,
+    receiveCredits: data.offeredCredits,
+    prepareRollback: true
+  });
+  await sendPeer({
+    type: "trade-recipient-committed",
+    targetUserId: offer.fromUserId,
+    offerId: offer.id,
+    requested
+  });
+  return true;
+}
+
+async function handleRecipientCommitted(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer || offer.fromUserId !== game.user.id || offer.toUserId !== data.actorUserId) throw new Error("Validation finale incohérente.");
+  const requested = normalizeTradeItems(data.requested);
+  try {
+    await applyLocalTradeSide({
+      offerId: offer.id,
+      give: offer.offered,
+      receive: requested,
+      giveCredits: offer.offeredCredits,
+      receiveCredits: offer.requestedCredits,
+      prepareRollback: false
+    });
+    await archiveLocalOffer(offer.id, TRADE_STATUS.COMPLETED, "", { ...offer, requested });
+    await sendPeer({ type: "trade-complete", targetUserId: offer.toUserId, offerId: offer.id, requested });
+    notify("info", "Échange terminé.");
   } catch (error) {
-    rememberRequest(data.requestId, { status: "failed", error: error.message });
-    emitServer({ type: "trade-error", userId: data.actorUserId, message: error.message });
+    await archiveLocalOffer(offer.id, TRADE_STATUS.FAILED, error.message, offer);
+    await sendPeer({ type: "trade-failed", targetUserId: offer.toUserId, offerId: offer.id, note: error.message });
+    throw error;
   }
   return true;
 }
 
-export async function handleTradeSocket(data, { local = false } = {}) {
-  if (!data?.type?.startsWith?.("trade-")) return false;
-  if (["trade-sync", "trade-error"].includes(data.type)) {
-    try {
-      return await handleTradeClientMessage(data, { trustedLocal: local });
-    } catch (error) {
-      console.warn("Six Crowns | Message d’échange refusé", error);
-      return true;
-    }
+async function handleComplete(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer) {
+    await clearPreparedTrade(data.offerId);
+    return true;
   }
-  if (!isPrimaryTradeGm()) return data.type === "trade-create" || data.type === "trade-action";
-  if (!["trade-create", "trade-action"].includes(data.type)) return false;
-  const task = hostTradeQueue.then(() => processTradeRequest(data, { local }));
-  hostTradeQueue = task.catch(() => undefined);
-  return task;
+  if (offer.toUserId !== game.user.id || offer.fromUserId !== data.actorUserId) throw new Error("Finalisation d’échange incohérente.");
+  await clearPreparedTrade(offer.id);
+  await archiveLocalOffer(offer.id, TRADE_STATUS.COMPLETED, "", { ...offer, requested: normalizeTradeItems(data.requested) });
+  notify("info", "Échange terminé.");
+  return true;
 }
 
+async function handleFailed(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (offer && ![offer.fromUserId, offer.toUserId].includes(data.actorUserId)) throw new Error("Échec d’échange non autorisé.");
+  await rollbackPreparedTrade(data.offerId);
+  if (offer) await archiveLocalOffer(offer.id, TRADE_STATUS.FAILED, String(data.note ?? "Échange interrompu."), offer);
+  notify("error", `Échange impossible : ${String(data.note ?? "opération interrompue")}`);
+  return true;
+}
+
+async function handleStatusQuery(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  const history = getTradeHistory().find((entry) => entry.id === data.offerId);
+  const entry = history ?? offer;
+  await sendPeer({
+    type: "trade-status-response",
+    targetUserId: data.actorUserId,
+    offerId: data.offerId,
+    status: entry?.status ?? "unknown",
+    note: entry?.note ?? ""
+  });
+  return true;
+}
+
+async function handleStatusResponse(data) {
+  const offer = getTradeOffers().find((entry) => entry.id === data.offerId);
+  if (!offer) return true;
+  if (data.status === TRADE_STATUS.COMPLETED) {
+    await clearPreparedTrade(offer.id);
+    await archiveLocalOffer(offer.id, TRADE_STATUS.COMPLETED, String(data.note ?? ""), offer);
+  } else if (data.status === TRADE_STATUS.PENDING) {
+    await updateLocalOffer(offer.id, { status: TRADE_STATUS.PENDING });
+  } else if ([TRADE_STATUS.FAILED, TRADE_STATUS.CANCELLED, TRADE_STATUS.REJECTED].includes(data.status)) {
+    await rollbackPreparedTrade(offer.id);
+    await archiveLocalOffer(offer.id, data.status, String(data.note ?? ""), offer);
+  }
+  return true;
+}
+
+export async function syncTradePeers() {
+  for (const offer of getTradeOffers()) {
+    const counterpartId = offer.fromUserId === game.user.id ? offer.toUserId : offer.fromUserId;
+    if (!game.users.get(counterpartId)?.active) continue;
+    if (offer.status === TRADE_STATUS.PENDING && offer.fromUserId === game.user.id) {
+      await sendPeer({ type: "trade-offer-deliver", targetUserId: counterpartId, offer });
+    } else if (offer.status === TRADE_STATUS.PROCESSING) {
+      await sendPeer({ type: "trade-status-query", targetUserId: counterpartId, offerId: offer.id });
+    }
+  }
+  return true;
+}
+
+export async function recoverStaleTrades() {
+  await syncTradePeers();
+  return { recovered: 0 };
+}
+
+export async function handleTradeSocket(data) {
+  if (!data?.type?.startsWith?.("trade-")) return false;
+  if (data.targetUserId !== game.user.id) return true;
+  try {
+    await verifySocketEnvelope(data, data.actorUserId);
+    if (!validateRequestEnvelope(data)) return true;
+    if (data.type === "trade-offer-deliver") return await handleOfferDelivery(data);
+    if (data.type === "trade-peer-status") return await handlePeerStatus(data);
+    if (data.type === "trade-accept-request") return await handleAcceptRequest(data);
+    if (data.type === "trade-accept-ready") return await handleAcceptReady(data);
+    if (data.type === "trade-recipient-committed") return await handleRecipientCommitted(data);
+    if (data.type === "trade-complete") return await handleComplete(data);
+    if (data.type === "trade-failed") return await handleFailed(data);
+    if (data.type === "trade-status-query") return await handleStatusQuery(data);
+    if (data.type === "trade-status-response") return await handleStatusResponse(data);
+    return true;
+  } catch (error) {
+    console.warn("Six Crowns | Message d’échange pair-à-pair refusé", error);
+    notify("error", error.message ?? "Échange impossible.");
+    if (data?.type !== "trade-failed" && data?.offerId && data?.actorUserId && game.users.get(data.actorUserId)?.active) {
+      try {
+        await sendPeer({ type: "trade-failed", targetUserId: data.actorUserId, offerId: data.offerId, note: error.message ?? "Échange interrompu." });
+      } catch (_sendError) {
+        // Le pair peut s’être déconnecté pendant le traitement.
+      }
+    }
+    return true;
+  }
+}
 
 export function decorateTradeOffers(offers, history, catalog, users, currentUserId) {
   const cards = new Map(catalog.map((card) => [card.id, card]));
@@ -394,7 +653,7 @@ export function decorateTradeOffers(offers, history, catalog, users, currentUser
     toName: userMap.get(offer.toUserId)?.name ?? "Joueur inconnu",
     offeredCards: Object.entries(normalizeTradeItems(offer.offered)).map(([id, count]) => ({ id, count, name: cards.get(id)?.name ?? id })),
     requestedCards: Object.entries(normalizeTradeItems(offer.requested)).map(([id, count]) => ({ id, count, name: cards.get(id)?.name ?? id })),
-    requestedRarityLabel: { commun: "Commune", peuCommune: "Peu commune", rare: "Rare", unique: "Unique" }[offer.requestedRarity] ?? offer.requestedRarity,
+    requestedRarityLabel: { commun: "Commune", peuCommune: "Peu commune", rare: "Rare", unique: "Unique", doree: "Dorée" }[offer.requestedRarity] ?? offer.requestedRarity,
     statusLabel: { pending: "En attente", processing: "Validation…", completed: "Terminé", rejected: "Refusé", cancelled: "Annulé", failed: "Échec" }[offer.status] ?? offer.status,
     requestedIsCard: offer.requestedMode === "card",
     requestedIsRarity: offer.requestedMode === "rarity",

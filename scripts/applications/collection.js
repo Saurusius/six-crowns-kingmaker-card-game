@@ -144,7 +144,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
     }
 
     const tradeUsers = users
-      .filter((user) => user.id !== game.user.id)
+      .filter((user) => user.id !== game.user.id && user.active)
       .map((user) => ({ id: user.id, name: user.name }));
     const ownedByRarity = Object.fromEntries(["commun", "peuCommune", "rare", "unique", "doree"].map((rarity) => [rarity,
       catalog
