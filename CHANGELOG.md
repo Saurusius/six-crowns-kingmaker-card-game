@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.15.1
+
+- Corrige la grille de préparation des decks afin que le bandeau des trois étapes ne soit plus comprimé ni partiellement masqué.
+- Augmente la hauteur, l’espacement et le contraste du menu « Decks → Sortilège → Lancer de pièce ».
+- Conserve les galeries de decks comme seule zone flexible afin qu’elles s’adaptent proprement à la hauteur de la fenêtre.
+
+## 0.15.0
+
+- Rend les défausses consultables en solo et en PvP.
+- Permet d’activer **Une bonne bière** après avoir joué la dernière carte de sa main, notamment au terme de la première manche.
+- Renomme `SC-18` en **Arbalétriers de Brumelande**.
+- Ajoute trois niveaux d’IA : Recrue des Couronnes, Stratège des Couronnes et Maître de guerre.
+- Rend le passage d’un joueur plus visible en PvP.
+- Comptabilise correctement les résultats et les récompenses des revanches immédiates.
+- Maintient le résultat du lancer de pièce visible jusqu’à confirmation des deux participants.
+
 ## 0.14.9
 
 - Enregistre désormais les statistiques de partie directement sur le profil du joueur, même lorsqu’aucun MJ n’est connecté, puis les agrège automatiquement dans le tableau d’analyse.

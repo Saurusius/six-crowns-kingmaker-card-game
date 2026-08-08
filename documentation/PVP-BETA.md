@@ -1,6 +1,6 @@
-# Bêta PvP — version 0.14.9
+# Bêta PvP — version 0.15.1
 
-Le mode PvP propose des duels synchronisés entre deux profils Foundry. Aucun MJ n’a besoin d’être connecté : un profil joueur actif est élu automatiquement comme coordinateur technique. Depuis la version 0.14.9, un changement de coordinateur récupère automatiquement la révision de dépôt la plus récente disponible.
+Le mode PvP propose des duels synchronisés entre deux profils Foundry. Aucun MJ n’a besoin d’être connecté : un profil joueur actif est élu automatiquement comme coordinateur technique. Depuis la version 0.15.1, un changement de coordinateur récupère automatiquement la révision de dépôt la plus récente disponible.
 
 ## Prérequis
 
@@ -18,7 +18,8 @@ Les instantanés transmis à chaque client restent adaptés à leur destinataire
 
 - un joueur reçoit sa main complète, mais seulement le nombre de cartes adverses ;
 - les pioches sont anonymisées ;
-- la défausse adverse est masquée ;
+- la défausse adverse est publique et consultable ;
+- la main et la pioche adverses restent masquées ;
 - le sortilège adverse reste caché jusqu’à son activation ;
 - seuls les deux participants reçoivent les instantanés du duel ;
 - le mode spectateur et les commandes d’arbitrage manuel sont supprimés.
@@ -39,7 +40,7 @@ Foundry reste toutefois une application exécutée dans le navigateur. Un joueur
 6. Le tirage au sort désigne le premier joueur.
 7. Chacun remplace éventuellement jusqu’à deux cartes.
 8. La partie suit les règles normales jusqu’à la victoire ou l’abandon.
-9. Les deux joueurs peuvent demander une revanche.
+9. Les deux joueurs peuvent demander une revanche. Chaque revanche constitue un nouveau duel pour l’historique, le Ladder et les récompenses.
 10. Après le résultat, le retour à l’arène libère immédiatement la liste des adversaires pour démarrer un autre duel.
 
 ## Protections techniques

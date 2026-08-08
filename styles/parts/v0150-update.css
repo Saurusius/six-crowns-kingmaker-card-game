@@ -1,0 +1,355 @@
+/* v0.15.0 — défausses consultables, niveaux d’IA et lisibilité PvP. */
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(205, 164, 79, 0.38);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(33, 27, 39, 0.96), rgba(15, 18, 28, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-panel > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-panel h3,
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-panel small {
+  margin: 0;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-panel > header > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(205, 164, 79, 0.48);
+  border-radius: 999px;
+  color: #f1d995;
+  background: rgba(205, 164, 79, 0.09);
+  font-weight: 700;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr 22px;
+  align-items: center;
+  gap: 10px;
+  min-height: 92px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+  color: #efe8da;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.035);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(205, 164, 79, 0.6);
+  background: rgba(205, 164, 79, 0.08);
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card.is-selected {
+  border-color: #d6b35f;
+  background: linear-gradient(145deg, rgba(205, 164, 79, 0.18), rgba(92, 68, 116, 0.13));
+  box-shadow: 0 0 0 1px rgba(214, 179, 95, 0.2), inset 0 0 24px rgba(214, 179, 95, 0.06);
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card > i {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #f0ce78;
+  background: rgba(205, 164, 79, 0.12);
+  font-size: 18px;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card span {
+  display: grid;
+  gap: 3px;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card small {
+  color: #bea86f;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card strong {
+  color: #fff4d0;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card em {
+  color: #b9b2ab;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  font-style: normal;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card > b {
+  color: transparent;
+}
+
+.six-crowns-kingmaker-card-game .scg-ai-difficulty-card.is-selected > b {
+  color: #e0bf68;
+}
+
+.six-crowns-kingmaker-card-game .scg-pass-announcement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 12px;
+  padding: 12px 18px;
+  border: 1px solid rgba(224, 191, 104, 0.55);
+  border-radius: 12px;
+  color: #f8edcf;
+  background: linear-gradient(90deg, rgba(99, 59, 34, 0.92), rgba(47, 31, 40, 0.94));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 0 20px rgba(224, 191, 104, 0.06);
+  animation: scg-pass-pulse 1.8s ease-in-out infinite alternate;
+}
+
+.six-crowns-kingmaker-card-game .scg-pass-announcement.is-opponent-pass {
+  border-color: rgba(118, 188, 151, 0.58);
+  background: linear-gradient(90deg, rgba(27, 75, 61, 0.94), rgba(30, 38, 48, 0.94));
+}
+
+.six-crowns-kingmaker-card-game .scg-pass-announcement > i {
+  font-size: 1.35rem;
+}
+
+.six-crowns-kingmaker-card-game .scg-pass-announcement span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.six-crowns-kingmaker-card-game .scg-pass-announcement strong {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+@keyframes scg-pass-pulse {
+  from { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 0 16px rgba(224, 191, 104, 0.04); }
+  to { box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28), inset 0 0 28px rgba(224, 191, 104, 0.12); }
+}
+
+.six-crowns-kingmaker-card-game button.scg-zone-card-discard {
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.six-crowns-kingmaker-card-game button.scg-zone-card-discard:hover {
+  border-color: rgba(226, 185, 92, 0.7);
+  filter: brightness(1.08);
+}
+
+.six-crowns-kingmaker-card-game .scg-zone-open-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 2px;
+  color: #ddc27c;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.scg-discard-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgba(5, 7, 12, 0.82);
+  backdrop-filter: blur(7px);
+}
+
+.scg-discard-viewer-dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(1080px, 94vw);
+  max-height: min(820px, 90vh);
+  overflow: hidden;
+  border: 1px solid rgba(216, 179, 91, 0.52);
+  border-radius: 18px;
+  color: #eee6d8;
+  background: radial-gradient(circle at top, rgba(87, 59, 40, 0.28), transparent 38%), linear-gradient(155deg, #1d1920, #10151d 70%);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.58);
+}
+
+.scg-discard-viewer-dialog > header,
+.scg-discard-viewer-dialog > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.scg-discard-viewer-dialog > footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 0;
+}
+
+.scg-discard-viewer-dialog h2,
+.scg-discard-viewer-dialog small {
+  margin: 0;
+}
+
+.scg-discard-viewer-dialog h2 {
+  color: #f4df9f;
+}
+
+.scg-discard-viewer-dialog > header button,
+.scg-discard-viewer-dialog > footer button {
+  min-width: 40px;
+  min-height: 36px;
+}
+
+.scg-discard-viewer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  overflow: auto;
+  padding: 18px;
+}
+
+.scg-discard-viewer-card {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  min-height: 138px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.scg-discard-viewer-art {
+  position: relative;
+  overflow: hidden;
+  min-height: 118px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.scg-discard-viewer-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scg-discard-viewer-art > span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.scg-discard-viewer-art > strong {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff4d0;
+  background: rgba(21, 26, 38, 0.9);
+  box-shadow: 0 0 0 2px rgba(218, 180, 91, 0.7);
+}
+
+.scg-discard-viewer-copy {
+  min-width: 0;
+}
+
+.scg-discard-viewer-copy h3 {
+  margin: 3px 0 6px;
+  color: #fff2cf;
+  font-size: 1rem;
+}
+
+.scg-discard-viewer-copy p {
+  margin: 7px 0 0;
+  color: #c9c1b9;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.scg-discard-viewer-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.scg-discard-trait {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: 999px;
+  color: #e5d8b7;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.66rem;
+}
+
+.scg-discard-trait img {
+  width: 14px;
+  height: 14px;
+}
+
+.scg-discard-viewer-empty {
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  min-height: 260px;
+  color: #aaa39d;
+  text-align: center;
+}
+
+.scg-discard-viewer-empty i {
+  color: #d2b363;
+  font-size: 2.4rem;
+}
+
+.six-crowns-pvp-board .scg-coin-panel {
+  min-height: 620px;
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 980px) {
+  .six-crowns-kingmaker-card-game .scg-ai-difficulty-grid { grid-template-columns: 1fr; }
+  .scg-discard-viewer-card { grid-template-columns: 76px 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .six-crowns-kingmaker-card-game .scg-pass-announcement { animation: none; }
+}

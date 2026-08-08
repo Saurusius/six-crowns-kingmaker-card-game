@@ -430,7 +430,7 @@ function historyRecord(match) {
   const winnerSide = match.state.gameWinner;
   const winnerUserId = winnerSide === "tie" || !winnerSide ? null : match.participants[winnerSide].userId;
   return {
-    id: match.id,
+    id: match.state?.matchId ?? match.duelId ?? match.id,
     playerUserId: match.participants.player.userId,
     playerName: match.participants.player.name,
     opponentUserId: match.participants.opponent.userId,
@@ -451,16 +451,17 @@ async function archiveIfFinished(match) {
   match.archived = true;
   match.completedAt = now();
   const winnerSide = match.state?.gameWinner;
+  const rewardId = match.state?.matchId ?? match.duelId ?? match.id;
   if (winnerSide && winnerSide !== "tie" && !match.crownsRewarded) {
     const winnerUserId = match.participants?.[winnerSide]?.userId;
     if (winnerUserId) {
       if (winnerUserId === game.user.id) {
-        await awardCrowns({ user: game.user, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory", rewardId: match.id });
+        await awardCrowns({ user: game.user, amount: 10, label: "Victoire en duel contre un joueur", source: "pvp-victory", rewardId });
       } else {
         emit({
           type: "pvp-reward",
           targetUserId: winnerUserId,
-          rewardId: match.id,
+          rewardId,
           amount: 10,
           label: "Victoire en duel contre un joueur"
         });
@@ -471,7 +472,7 @@ async function archiveIfFinished(match) {
   }
   const history = getPvpHistory();
   const record = historyRecord(match);
-  if (!history.some((entry) => entry.id === match.id)) {
+  if (!history.some((entry) => entry.id === record.id)) {
     history.push(record);
     await saveHistory(history);
   }
@@ -503,6 +504,8 @@ async function processInvite(matches, userId, payload) {
     mulligan: null,
     pendingChoice: null,
     rematchVotes: [],
+    coinAcknowledgements: [],
+    duelId: null,
     archived: false,
     crownsRewarded: false
   };
@@ -603,8 +606,9 @@ async function processLeaveLobby(matches, userId, payload) {
 async function startMatchIfReady(match) {
   if (!match.participants.player.ready || !match.participants.opponent.ready) return false;
   if (!match.participants.player.deck || !match.participants.opponent.deck) throw new Error("Les deux joueurs doivent sélectionner un deck.");
+  match.duelId = makeId();
   match.state = createPvpDuelState({
-    matchId: match.id,
+    matchId: match.duelId,
     participants: match.participants,
     decks: {
       player: match.participants.player.deck,
@@ -621,6 +625,7 @@ async function startMatchIfReady(match) {
   match.mulligan = { selections: { player: [], opponent: [] }, confirmed: { player: false, opponent: false } };
   match.pendingChoice = null;
   match.rematchVotes = [];
+  match.coinAcknowledgements = [];
   match.archived = false;
   match.crownsRewarded = false;
   return true;
@@ -673,7 +678,14 @@ async function processGameAction(matches, userId, action, payload) {
   if (match.pendingChoice && action !== "resolve-pending" && action !== "surrender") throw new Error("Un choix de sortilège doit d’abord être résolu.");
 
   let result = null;
-  if (action === "continue-coin") continuePvpCoinToss(match);
+  if (action === "continue-coin") {
+    match.coinAcknowledgements ??= [];
+    if (!match.coinAcknowledgements.includes(userId)) match.coinAcknowledgements.push(userId);
+    const bothConfirmed = match.coinAcknowledgements.includes(match.participants.player.userId)
+      && match.coinAcknowledgements.includes(match.participants.opponent.userId);
+    if (bothConfirmed) continuePvpCoinToss(match);
+    result = { confirmed: true, waiting: !bothConfirmed };
+  }
   else if (action === "toggle-mulligan") togglePvpMulligan(match, side, String(payload.cardId ?? ""));
   else if (action === "confirm-mulligan") confirmPvpMulligan(match, side);
   else if (action === "play-card") playPvpCard(match, side, String(payload.cardId ?? ""), String(payload.row ?? ""));
@@ -702,6 +714,8 @@ async function processGameAction(matches, userId, action, payload) {
       match.mulligan = null;
       match.pendingChoice = null;
       match.rematchVotes = [];
+      match.coinAcknowledgements = [];
+      match.duelId = null;
       match.archived = false;
       match.crownsRewarded = false;
       match.participants.player.ready = false;
@@ -855,7 +869,7 @@ async function handlePvpClientMessage(data, { trustedLocal = false } = {}) {
         amount: 10,
         label: "Victoire en duel contre un joueur",
         source: "pvp-victory",
-        rewardId: data.snapshot.matchId
+        rewardId: data.snapshot.state?.matchId ?? data.snapshot.matchId
       });
     }
     if ([PVP_STATUS.ACTIVE, PVP_STATUS.COMPLETED].includes(data.snapshot.status)) {

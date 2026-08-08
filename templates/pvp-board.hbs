@@ -22,6 +22,13 @@
 
   <p class="scg-message">{{message}}</p>
 
+  {{#if passAnnouncement}}
+    <aside class="scg-pass-announcement {{passAnnouncement.className}}" role="status">
+      <i class="{{passAnnouncement.icon}}"></i>
+      <span><strong>{{passAnnouncement.title}}</strong>{{passAnnouncement.text}}</span>
+    </aside>
+  {{/if}}
+
   {{#if hasActionLog}}
     <details class="scg-match-log scg-pvp-action-log">
       <summary><i class="fa-solid fa-clock-rotate-left"></i> Historique des actions</summary>
@@ -60,7 +67,7 @@
         <div class="scg-coin-summary {{#if coinPlayerWon}}is-win{{else}}is-loss{{/if}}">
           La pièce montre <strong><i class="{{coinFaceIcon}}"></i> {{coinFaceLabel}}</strong> · <strong>{{firstPlayerName}}</strong> jouera en premier.
         </div>
-        <button class="scg-primary-button" type="button" data-action="continue-after-coin" {{#unless canContinueCoin}}disabled{{/unless}}>Préparer les mains</button>
+        <button class="scg-primary-button" type="button" data-action="continue-after-coin" {{#unless canContinueCoin}}disabled{{/unless}}><i class="fa-solid fa-check"></i> {{coinContinueLabel}}</button>
       {{else}}
         <div class="scg-coin-summary"><i class="fa-solid fa-arrows-rotate fa-spin"></i> Synchronisation du tirage au sort…</div>
       {{/if}}
@@ -353,11 +360,12 @@
             <strong>Deck adverse</strong>
             <small>{{opponent.deck.length}} carte(s)</small>
           </article>
-          <article class="scg-zone-card scg-zone-card-discard">
+          <button type="button" class="scg-zone-card scg-zone-card-discard" data-action="open-discard" data-side="opponent" title="Consulter la défausse adverse">
             <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-skull"></i></span></div>
             <strong>Défausse adverse</strong>
             <small>{{opponent.discard.length}} carte(s)</small>
-          </article>
+            <span class="scg-zone-open-hint"><i class="fa-solid fa-eye"></i> Consulter</span>
+          </button>
         </div>
 
         <div class="scg-zone-stack scg-zone-stack-player">
@@ -376,11 +384,12 @@
             <strong>Votre deck</strong>
             <small>{{player.deck.length}} carte(s)</small>
           </article>
-          <article class="scg-zone-card scg-zone-card-discard">
+          <button type="button" class="scg-zone-card scg-zone-card-discard" data-action="open-discard" data-side="player" title="Consulter votre défausse">
             <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-fire"></i></span></div>
             <strong>Votre défausse</strong>
             <small>{{player.discard.length}} carte(s)</small>
-          </article>
+            <span class="scg-zone-open-hint"><i class="fa-solid fa-eye"></i> Consulter</span>
+          </button>
         </div>
       </aside>
     </section>

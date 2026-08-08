@@ -11,7 +11,7 @@ export const DEMO_ART_BY_NAME = Object.freeze({
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/iron-khans/arbaletrier-lourd/thumb.webp"
   },
-  "Archers de Brumelande": {
+  "Arbalétriers de Brumelande": {
     "full": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/full.webp",
     "medium": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/medium.webp",
     "thumb": "modules/six-crowns-kingmaker-card-game/assets/cards/six-crowns/arbaletriers-de-la-couronne/thumb.webp"

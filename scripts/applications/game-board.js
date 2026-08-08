@@ -1,5 +1,6 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
+import { openDiscardViewer } from "../ui/discard-viewer.js";
 import { getBoosterCredits, getCollection, getEventBoosterCredits, openBooster, openEventBooster } from "../boosters.js";
 import { normalizeCardArt } from "../art.js";
 import { getDeckDefinition } from "../rules/decks.js";
@@ -28,6 +29,7 @@ import {
   passSide,
   playCard,
   resolveCoinToss,
+  selectAiDifficulty,
   selectDeck,
   selectEventSpell,
   startMatch,
@@ -480,6 +482,17 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       });
     });
 
+    this.element.querySelectorAll("[data-action='select-ai-difficulty']").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          selectAiDifficulty(this.matchState, button.dataset.difficultyId);
+          await this._renderState();
+        } catch (error) {
+          ui.notifications.warn(error.message);
+        }
+      });
+    });
+
     this.element.querySelector("[data-action='start-game']")?.addEventListener("click", async () => {
       try {
         const playerDeckId = this.element.querySelector("[name='player-deck']")?.value;
@@ -645,6 +658,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       } catch (error) {
         ui.notifications.warn(error.message);
       }
+    });
+
+    this.element.querySelectorAll("[data-action='open-discard']").forEach((button) => {
+      button.addEventListener("click", () => {
+        const side = button.dataset.side === "opponent" ? "opponent" : "player";
+        const cards = context?.[side]?.discard ?? [];
+        openDiscardViewer({
+          cards,
+          title: side === "player" ? "Votre défausse" : `Défausse de ${context?.opponent?.name ?? "l’adversaire"}`,
+          subtitle: side === "player" ? "Vos cartes jouées lors des manches précédentes" : "Cartes adverses jouées lors des manches précédentes",
+          ownerId: `${this.id}-${side}`
+        });
+      });
     });
 
     this.element.querySelectorAll("[data-action='play-card']").forEach((button) => {

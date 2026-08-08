@@ -16,6 +16,32 @@ import {
 
 const RANDOM_DECK_ID = "random";
 
+export const AI_DIFFICULTIES = Object.freeze({
+  easy: Object.freeze({
+    id: "easy",
+    name: "Recrue des Couronnes",
+    levelLabel: "Facile",
+    description: "Joue de manière directe, commet parfois des erreurs et utilise moins bien son sortilège.",
+    icon: "fa-solid fa-shield"
+  }),
+  intermediate: Object.freeze({
+    id: "intermediate",
+    name: "Stratège des Couronnes",
+    levelLabel: "Intermédiaire",
+    description: "Évalue le contrôle des lignes et préserve raisonnablement ses cartes.",
+    icon: "fa-solid fa-chess-knight"
+  }),
+  hard: Object.freeze({
+    id: "hard",
+    name: "Maître de guerre",
+    levelLabel: "Difficile",
+    description: "Anticipe plusieurs coups, exploite les fins de manche et cherche les meilleures lignes de jeu.",
+    icon: "fa-solid fa-crown"
+  })
+});
+
+const DEFAULT_AI_DIFFICULTY = "intermediate";
+
 export const SIDES = Object.freeze(["player", "opponent"]);
 export const PHASES = Object.freeze({
   SPELL_SELECTION: "spell-selection",
@@ -129,6 +155,7 @@ export function createPrototypeState() {
     phase: PHASES.DECK_SELECTION,
     selectedPlayerDeck: "six-crowns",
     selectedOpponentDeck: "aldori",
+    aiDifficulty: DEFAULT_AI_DIFFICULTY,
     spells: {
       player: { id: null, used: false, revealed: true },
       opponent: { id: null, used: false, revealed: false }
@@ -156,6 +183,16 @@ export function createPrototypeState() {
     player: null,
     opponent: null
   };
+}
+
+function normalizeAiDifficulty(value) {
+  return AI_DIFFICULTIES[value]?.id ?? DEFAULT_AI_DIFFICULTY;
+}
+
+export function selectAiDifficulty(state, difficultyId) {
+  if (state.phase !== PHASES.DECK_SELECTION) throw new Error("Le niveau de l’adversaire ne peut plus être modifié.");
+  state.aiDifficulty = normalizeAiDifficulty(difficultyId);
+  return state;
 }
 
 function otherSide(side) {
@@ -312,6 +349,7 @@ export function activateEventSpell(state, side = "player", payload = {}) {
 export function maybeUseOpponentEventSpell(state, random = Math.random) {
   ensureSpellState(state);
   if (state.phase !== PHASES.PLAYING || state.currentTurn !== "opponent") return null;
+  if (normalizeAiDifficulty(state.aiDifficulty) === "easy" && random() > 0.4) return null;
   const payload = chooseOpponentEventSpellPayload(state, random);
   if (!payload) return null;
   return activateEventSpell(state, "opponent", payload);
@@ -355,6 +393,7 @@ export function startMatch(state, { playerDeckId, opponentDeckId, random = Math.
   }
 
   state.matchId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  state.aiDifficulty = normalizeAiDifficulty(state.aiDifficulty);
   state.selectedPlayerDeck = playerId;
   state.selectedOpponentDeck = opponentId;
   state.player = createSide(playerId, random);
@@ -534,8 +573,15 @@ function finishRound(state) {
 }
 
 function markEmptyHandsAsPassed(state) {
-  if (state.player.hand.length === 0) state.player.passed = true;
-  if (state.opponent.hand.length === 0) state.opponent.passed = true;
+  const canStillUseGoodBeer = (side) => {
+    const slot = state.spells?.[side];
+    const spell = getEventSpellDefinition(slot?.id);
+    if (spell?.effectId !== "good-beer" || slot?.used || state[side]?.passed) return false;
+    return ROWS.some((row) => (state[side]?.rows?.[row] ?? []).some((card) => !card.spellExcluded));
+  };
+
+  if (state.player.hand.length === 0 && !canStillUseGoodBeer("player")) state.player.passed = true;
+  if (state.opponent.hand.length === 0 && !canStillUseGoodBeer("opponent")) state.opponent.passed = true;
 }
 
 function advanceAfterAction(state, actingSide) {
@@ -676,10 +722,11 @@ function findOpponentWinningSequence(state, maxDepth = 2) {
   return best?.sequence ?? null;
 }
 
-function chooseOpponentMove(state) {
+function chooseOpponentMove(state, random = Math.random) {
   if (state.opponent.hand.length === 0) return null;
   const current = evaluateBoard(state);
   if (state.player.passed && current.winner === "opponent") return null;
+  const difficulty = normalizeAiDifficulty(state.aiDifficulty);
 
   const candidates = [];
   for (const card of state.opponent.hand) {
@@ -695,16 +742,21 @@ function chooseOpponentMove(state) {
     }
   }
 
+  if (difficulty === "easy") {
+    if (state.player.passed && current.winner !== "opponent" && Number(state.opponent.lives ?? 0) > 1 && random() < 0.35) return null;
+    return candidates[Math.floor(random() * candidates.length)] ?? null;
+  }
+
   if (state.player.passed) {
     const threatenedWithDefeat = Number(state.opponent.lives ?? 0) <= 1;
     const canEndMatch = Number(state.player.lives ?? 0) <= 1;
-    const maxDepth = threatenedWithDefeat || canEndMatch ? 3 : 2;
+    const maxDepth = difficulty === "hard" ? 4 : (threatenedWithDefeat || canEndMatch ? 3 : 2);
     const sequence = findOpponentWinningSequence(state, maxDepth);
 
     if (sequence?.length) {
       const cardsAfter = state.opponent.hand.length - sequence.length;
       const playerCards = state.player.hand.length;
-      const expensiveRoundOneRecovery = state.round === 1
+      const expensiveRoundOneRecovery = difficulty !== "hard" && state.round === 1
         && !threatenedWithDefeat
         && !canEndMatch
         && (sequence.length >= 3 || (sequence.length >= 2 && cardsAfter < playerCards - 1));
@@ -716,7 +768,20 @@ function chooseOpponentMove(state) {
 
     // Sans victoire raisonnable à courte portée, l'IA accepte de perdre la manche
     // plutôt que de vider sa main. Elle ne lutte jusqu'au bout qu'à sa dernière gemme.
-    if (!threatenedWithDefeat) return null;
+    if (!threatenedWithDefeat && difficulty !== "hard") return null;
+  }
+
+  if (difficulty === "hard") {
+    return candidates.sort((a, b) => {
+      const winnerValue = (entry) => entry.evaluation.winner === "opponent" ? 3 : entry.evaluation.winner === "tie" ? 1 : 0;
+      const lineMargin = (entry) => entry.evaluation.controlledLines.opponent - entry.evaluation.controlledLines.player;
+      const scoreMargin = (entry) => entry.evaluation.scores.opponent.total - entry.evaluation.scores.player.total;
+      return winnerValue(b) - winnerValue(a)
+        || lineMargin(b) - lineMargin(a)
+        || scoreMargin(b) - scoreMargin(a)
+        || b.controlledGain - a.controlledGain
+        || Number(a.card.strength ?? 0) - Number(b.card.strength ?? 0);
+    })[0] ?? null;
   }
 
   return candidates.sort((a, b) =>
@@ -728,9 +793,9 @@ function chooseOpponentMove(state) {
   )[0] ?? null;
 }
 
-export function takeOpponentTurn(state) {
+export function takeOpponentTurn(state, random = Math.random) {
   assertCanAct(state, "opponent");
-  const move = chooseOpponentMove(state);
+  const move = chooseOpponentMove(state, random);
   if (!move) return passSide(state, "opponent");
   return playCard(state, "opponent", move.card.id, move.row);
 }
@@ -787,8 +852,8 @@ export function startNextRound(state) {
   drawCards(state.opponent, 1);
   const playerDrawn = state.player.hand.length - playerHandBefore;
   const opponentDrawn = state.opponent.hand.length - opponentHandBefore;
-  state.player.passed = state.player.hand.length === 0;
-  state.opponent.passed = state.opponent.hand.length === 0;
+  state.player.passed = false;
+  state.opponent.passed = false;
   state.phase = PHASES.PLAYING;
 
   const previousWinner = state.roundResult?.winner;
@@ -817,6 +882,7 @@ export function createRematchState(state, random = Math.random) {
   const next = createPrototypeState();
   next.selectedPlayerDeck = state.selectedPlayerDeck;
   next.selectedOpponentDeck = state.selectedOpponentDeck;
+  next.aiDifficulty = normalizeAiDifficulty(state.aiDifficulty);
   next.spells.player.id = state.spells?.player?.id ?? null;
   prepareEventSpellSelection(next);
   selectEventSpell(next, next.spells.player.id);
@@ -851,6 +917,7 @@ export function buildMatchAnalyticsRecord(state, { userId = "unknown", userName 
     playerSpellUsed: Boolean(state.spells?.player?.used),
     opponentSpellId: state.spells?.opponent?.id ?? null,
     opponentSpellUsed: Boolean(state.spells?.opponent?.used),
+    aiDifficulty: normalizeAiDifficulty(state.aiDifficulty),
     winner: state.gameWinner ?? "tie",
     mode: "solo",
     abandoned: state.surrenderedBy === "player",
@@ -956,6 +1023,7 @@ function prepareSpellView(state, side) {
 
 export function createBoardViewModel(state) {
   ensureSpellState(state);
+  state.aiDifficulty = normalizeAiDifficulty(state.aiDifficulty);
   const evaluation = evaluateBoard(state);
   const canPlayerAct = state.phase === PHASES.PLAYING
     && state.currentTurn === "player"
@@ -993,6 +1061,7 @@ export function createBoardViewModel(state) {
       rows: preparedPlayerRows,
       rowList: makeRowList(preparedPlayerRows, playerStatuses, evaluation.scores.player, ["avant-garde", "escarmouche", "domaine"]),
       hand: state.player.hand.map((card) => prepareCardView(card, null, state.mulliganSelection)),
+      discard: state.player.discard.map((card) => prepareCardView(card)),
       gems: gemMarkers(state.player.lives),
       controlledLines: evaluation.controlledLines.player,
       rowStatuses: playerStatuses
@@ -1002,6 +1071,7 @@ export function createBoardViewModel(state) {
       rows: preparedOpponentRows,
       rowList: makeRowList(preparedOpponentRows, opponentStatuses, evaluation.scores.opponent, ["domaine", "escarmouche", "avant-garde"]),
       handCount: state.opponent.hand.length,
+      discard: state.opponent.discard.map((card) => prepareCardView(card)),
       gems: gemMarkers(state.opponent.lives),
       controlledLines: evaluation.controlledLines.opponent,
       rowStatuses: opponentStatuses
@@ -1010,6 +1080,11 @@ export function createBoardViewModel(state) {
     playerScore: evaluation.scores.player,
     opponentScore: evaluation.scores.opponent,
     canPlayerAct,
+    aiDifficultyChoices: Object.values(AI_DIFFICULTIES).map((difficulty) => ({
+      ...difficulty,
+      selected: difficulty.id === state.aiDifficulty
+    })),
+    aiDifficultyLabel: AI_DIFFICULTIES[state.aiDifficulty]?.name ?? AI_DIFFICULTIES[DEFAULT_AI_DIFFICULTY].name,
     canStartNextRound: state.phase === PHASES.ROUND_OVER,
     canRematch: state.phase === PHASES.GAME_OVER,
     actionLog: [...(state.log ?? [])].reverse().slice(0, 30),
@@ -1027,6 +1102,21 @@ export function createBoardViewModel(state) {
       opponentCardsPlayed: (state.playedCards ?? []).filter((entry) => entry.side === "opponent").length
     } : null,
     isOpponentTurn: state.phase === PHASES.PLAYING && state.currentTurn === "opponent",
+    passAnnouncement: state.phase === PHASES.PLAYING && state.player?.passed !== state.opponent?.passed
+      ? state.player?.passed
+        ? {
+            icon: "fa-solid fa-flag-checkered",
+            title: "Vous avez passé",
+            text: `${state.opponent?.name ?? "L’adversaire"} peut encore jouer avant de passer.`,
+            className: "is-player-pass"
+          }
+        : {
+            icon: "fa-solid fa-flag",
+            title: `${state.opponent?.name ?? "L’adversaire"} a passé`,
+            text: "Vous pouvez continuer à jouer ou passer à votre tour.",
+            className: "is-opponent-pass"
+          }
+      : null,
     isSpellSelection: state.phase === PHASES.SPELL_SELECTION,
     isDeckSelection: state.phase === PHASES.DECK_SELECTION,
     isCoinToss: state.phase === PHASES.COIN_TOSS,

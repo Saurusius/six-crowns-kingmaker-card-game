@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du module **0.14.9**.
+Cette page décrit les règles du module **0.15.1**.
 
 ## But de la partie
 
@@ -26,6 +26,8 @@ Aucune carte supplémentaire n’est piochée entre les manches. La main de dép
 - passer définitivement pour la manche.
 
 Lorsqu’un joueur a passé, il ne joue plus jusqu’à la manche suivante.
+
+Les défausses des deux camps sont publiques et peuvent être consultées pendant la partie. Les mains et les pioches restent secrètes en PvP.
 
 ## Les trois lignes
 
@@ -133,6 +135,17 @@ Le mode PvP applique les mêmes règles de cartes, de lignes, de score et de vic
 4. Chaque joueur effectue son propre remplacement initial, puis joue uniquement pendant son tour.
 5. Un joueur peut abandonner ; l’adversaire est alors déclaré vainqueur.
 6. Une revanche ne commence que lorsque les deux participants la demandent.
+7. Une revanche est enregistrée comme un duel distinct et peut donc modifier le Ladder et attribuer des Couronnes.
+
+### Particularité d’Une bonne bière
+
+Un camp qui vient de jouer la dernière carte de sa main ne passe pas automatiquement si **Une bonne bière** est encore disponible et qu’au moins une carte alliée valide se trouve en jeu. Il peut attendre son prochain tour, activer le sortilège, puis passer manuellement.
+
+## Niveaux de l’adversaire automatisé
+
+- **Recrue des Couronnes — Facile** : décisions plus directes et utilisation moins régulière du sortilège.
+- **Stratège des Couronnes — Intermédiaire** : comportement équilibré et gestion raisonnable de la main.
+- **Maître de guerre — Difficile** : anticipation plus profonde et meilleure exploitation des fins de manche.
 
 Le mode spectateur a été retiré afin d’alléger la synchronisation : seuls les deux participants reçoivent les données du duel. Aucun chronomètre, aucune mise et aucune perte de carte ne sont appliqués.
 

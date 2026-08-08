@@ -1,5 +1,6 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
+import { openDiscardViewer } from "../ui/discard-viewer.js";
 import { openGlossary, openRulebook } from "../glossary.js";
 import { getEventSpellDefinition } from "../event-spells.js";
 import { createBoardViewModel, PHASES } from "../rules/state.js";
@@ -73,6 +74,9 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
     };
     view.canAct = canAct;
     view.canContinueCoin = canAct && snapshot.state.phase === PHASES.COIN_TOSS;
+    view.coinAcknowledged = snapshot.coinAcknowledgements?.includes(game.user.id) ?? false;
+    view.canContinueCoin = Boolean(view.canContinueCoin && !view.coinAcknowledged);
+    view.coinContinueLabel = view.coinAcknowledged ? "Résultat confirmé · attente de l’adversaire" : "Confirmer le tirage";
     view.canConfirmMulligan = canAct && snapshot.state.phase === PHASES.MULLIGAN && !snapshot.state.player?.mulliganUsed;
     view.firstPlayerName = snapshot.state[snapshot.state.coin?.winner]?.name ?? "Le destin";
     view.pvpMatchId = snapshot.matchId;
@@ -285,6 +289,18 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       if (!payload) return;
       const activation = await send("activate-spell", { payload });
       if (activation?.result?.spell) await this._showSpellReveal(activation.result, "player");
+    });
+    this.element.querySelectorAll("[data-action='open-discard']").forEach((button) => {
+      button.addEventListener("click", () => {
+        const side = button.dataset.side === "opponent" ? "opponent" : "player";
+        const cards = context?.[side]?.discard ?? [];
+        openDiscardViewer({
+          cards,
+          title: side === "player" ? "Votre défausse" : `Défausse de ${context?.opponent?.name ?? "l’adversaire"}`,
+          subtitle: side === "player" ? "Vos cartes jouées lors des manches précédentes" : "Défausse publique du duel PvP",
+          ownerId: `${this.id}-${side}`
+        });
+      });
     });
     this.element.querySelector("[data-action='surrender']")?.addEventListener("click", () => {
       if (!globalThis.confirm("Abandonner ce duel ? Votre adversaire sera déclaré vainqueur.")) return;

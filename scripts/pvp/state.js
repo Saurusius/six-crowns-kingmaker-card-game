@@ -281,14 +281,12 @@ export function buildPvpSnapshot(match, userId) {
 
   const playerDeckCount = state.player?.deck?.length ?? 0;
   const opponentDeckCount = state.opponent?.deck?.length ?? 0;
-  const opponentDiscardCount = state.opponent?.discard?.length ?? 0;
   const opponentHandCount = state.opponent?.hand?.length ?? 0;
 
   if (state.player) state.player.deck = hiddenArray(playerDeckCount);
   if (state.opponent) {
     state.opponent.deck = hiddenArray(opponentDeckCount);
     state.opponent.hand = hiddenArray(opponentHandCount);
-    state.opponent.discard = hiddenArray(opponentDiscardCount);
   }
 
   // Chaque participant voit son propre sortilège, mais jamais le choix adverse
@@ -327,6 +325,7 @@ export function buildPvpSnapshot(match, userId) {
     state,
     pendingChoice: pending,
     rematchVotes: [...(match.rematchVotes ?? [])],
+    coinAcknowledgements: [...(match.coinAcknowledgements ?? [])],
     updatedAt: match.updatedAt
   };
 }

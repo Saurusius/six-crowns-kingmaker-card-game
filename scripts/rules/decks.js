@@ -63,7 +63,7 @@ const DECK_DEFINITIONS = {
       ...makeDemoCopies("DEMO-SC-C-01", "garde-demo", "Garde du palais", 5, ["avant-garde"], 3),
       ...makeDemoCopies("DEMO-SC-C-02", "milice-demo", "Milice du Moulin", 3, ["avant-garde"], 3, ["bond"]),
       ...makeDemoCopies("DEMO-SC-C-03", "eclaireurs-demo", "Éclaireurs de la Sellen", 3, ["escarmouche"], 3, ["rally"]),
-      ...makeDemoCopies("DEMO-SC-C-04", "archers-demo", "Archers de Brumelande", 4, ["escarmouche"], 2),
+      ...makeDemoCopies("DEMO-SC-C-04", "archers-demo", "Arbalétriers de Brumelande", 4, ["escarmouche"], 2),
       ...makeDemoCopies("DEMO-SC-C-05", "routes-demo", "Patrouille des routes royales", 4, ["escarmouche", "domaine"], 2),
       ...makeDemoCopies("DEMO-SC-C-06", "pionniers-demo", "Pionniers du royaume", 3, ["domaine"], 2)
     ]

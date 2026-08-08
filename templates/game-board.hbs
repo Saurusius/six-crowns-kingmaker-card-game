@@ -22,6 +22,13 @@
 
   <p class="scg-message">{{message}}</p>
 
+  {{#if passAnnouncement}}
+    <aside class="scg-pass-announcement {{passAnnouncement.className}}" role="status">
+      <i class="{{passAnnouncement.icon}}"></i>
+      <span><strong>{{passAnnouncement.title}}</strong>{{passAnnouncement.text}}</span>
+    </aside>
+  {{/if}}
+
   {{#if isSpellSelection}}
     <section class="scg-setup-panel scg-spell-selection-panel">
       <div class="scg-setup-heading scg-spell-selection-heading">
@@ -127,6 +134,22 @@
           </div>
         </section>
       </div>
+
+      <section class="scg-ai-difficulty-panel">
+        <header>
+          <div><small>Adversaire automatisé</small><h3>Niveau de stratégie</h3></div>
+          <span><i class="fa-solid fa-brain"></i> {{aiDifficultyLabel}}</span>
+        </header>
+        <div class="scg-ai-difficulty-grid">
+          {{#each aiDifficultyChoices}}
+            <button type="button" class="scg-ai-difficulty-card {{#if selected}}is-selected{{/if}}" data-action="select-ai-difficulty" data-difficulty-id="{{id}}">
+              <i class="{{icon}}"></i>
+              <span><small>{{levelLabel}}</small><strong>{{name}}</strong><em>{{description}}</em></span>
+              <b><i class="fa-solid fa-circle-check"></i></b>
+            </button>
+          {{/each}}
+        </div>
+      </section>
 
       <div class="scg-setup-actions">
         <button class="scg-secondary-button" type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
@@ -469,11 +492,12 @@
             <strong>Deck adverse</strong>
             <small>{{opponent.deck.length}} carte(s)</small>
           </article>
-          <article class="scg-zone-card scg-zone-card-discard">
+          <button type="button" class="scg-zone-card scg-zone-card-discard" data-action="open-discard" data-side="opponent" title="Consulter la défausse adverse">
             <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-skull"></i></span></div>
             <strong>Défausse adverse</strong>
             <small>{{opponent.discard.length}} carte(s)</small>
-          </article>
+            <span class="scg-zone-open-hint"><i class="fa-solid fa-eye"></i> Consulter</span>
+          </button>
         </div>
 
         <div class="scg-zone-stack scg-zone-stack-player">
@@ -492,11 +516,12 @@
             <strong>Votre deck</strong>
             <small>{{player.deck.length}} carte(s)</small>
           </article>
-          <article class="scg-zone-card scg-zone-card-discard">
+          <button type="button" class="scg-zone-card scg-zone-card-discard" data-action="open-discard" data-side="player" title="Consulter votre défausse">
             <div class="scg-zone-visual is-discard"><span><i class="fa-solid fa-fire"></i></span></div>
             <strong>Votre défausse</strong>
             <small>{{player.discard.length}} carte(s)</small>
-          </article>
+            <span class="scg-zone-open-hint"><i class="fa-solid fa-eye"></i> Consulter</span>
+          </button>
         </div>
       </aside>
     </section>
