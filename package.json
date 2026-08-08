@@ -1,15 +1,15 @@
 {
-  "name": "six-crowns-kingmaker-card-game",
-  "version": "0.14.9",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=20"
-  },
-  "scripts": {
-    "validate": "node scripts/dev/validate-module.mjs",
-    "test": "node --test",
-    "check": "npm run validate && npm test",
-    "prepare-release": "node scripts/dev/prepare-release.mjs"
-  }
+    "name":  "six-crowns-kingmaker-card-game",
+    "version":  "0.15.1",
+    "private":  true,
+    "type":  "module",
+    "engines":  {
+                    "node":  "\u003e=20"
+                },
+    "scripts":  {
+                    "validate":  "node scripts/dev/validate-module.mjs",
+                    "test":  "node --test",
+                    "check":  "npm run validate \u0026\u0026 npm test",
+                    "prepare-release":  "node scripts/dev/prepare-release.mjs"
+                }
 }
