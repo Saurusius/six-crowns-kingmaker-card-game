@@ -1,4 +1,4 @@
-# Le Jeu des Six Couronnes
+# 🃏 Le Jeu des Six Couronnes
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
