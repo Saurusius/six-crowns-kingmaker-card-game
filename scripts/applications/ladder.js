@@ -35,7 +35,7 @@ export class SixCrownsLadder extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     const ladder = this.dashboard?.ladder ?? [];
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.15.1",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.15.2",
       ladder,
       hasEntries: ladder.length > 0,
       unavailable,

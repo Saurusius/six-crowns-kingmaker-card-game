@@ -39,9 +39,10 @@ import {
 } from "./api.js";
 import { handleTradeSocket, recoverStaleTrades, registerTradeSettings, startTradeRecoveryLoop } from "./trades.js";
 import { handleAnalyticsSocket, registerAnalyticsSetting } from "./analytics.js";
-import { handlePvpSocket, initializePvpStorage, isPrimaryPvpGm, registerPvpSettings, resumePvpSession } from "./pvp/service.js";
+import { handlePvpSocket, initializePvpStorage, isPrimaryPvpGm, registerPvpSettings } from "./pvp/service.js";
 import { initializeSocketIdentity } from "./socket-auth.js";
 import { handleTransactionAuditSocket } from "./transactions.js";
+import { ensureLauncher, registerLauncherSettings } from "./ui/launcher.js";
 
 const publicApi = Object.freeze({
   openHome,
@@ -101,6 +102,7 @@ Hooks.once("init", () => {
   registerTradeSettings();
   registerAnalyticsSetting();
   registerPvpSettings();
+  registerLauncherSettings();
   exposeApi();
 });
 
@@ -223,20 +225,6 @@ Hooks.once("ready", async () => {
   }
 
   startTradeRecoveryLoop();
-  globalThis.setTimeout(() => {
-    void (async () => {
-      const resumedPvp = await resumePvpSession();
-      if (resumedPvp?.resumed) return;
-
-      const storedSolo = game.user?.getFlag?.(MODULE_ID, "activeMatchState") ?? null;
-      const activeSoloPhases = new Set(["coin-toss", "mulligan", "playing", "round-over"]);
-      try {
-        if (storedSolo && activeSoloPhases.has(storedSolo.phase)) await openBoard();
-        else await openHome();
-      } catch (error) {
-        console.error(`${MODULE_TITLE} | Navigation de démarrage impossible`, error);
-      }
-    })();
-  }, 350);
-  console.log(`${MODULE_TITLE} | Prêt. L’accueil ou la partie active est restauré automatiquement.`);
+  ensureLauncher();
+  console.log(`${MODULE_TITLE} | Prêt. Le module reste fermé à la connexion et s’ouvre depuis le bouton d’accès rapide.`);
 });

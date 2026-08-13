@@ -1,0 +1,80 @@
+/* v0.15.2 — accès rapide au module sans ouverture automatique à la connexion. */
+
+#six-crowns-kingmaker-card-game-launcher.scg-launcher {
+  position: fixed;
+  left: 78px;
+  bottom: 18px;
+  width: 48px;
+  height: 48px;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(226, 187, 86, 0.82);
+  border-radius: 50%;
+  color: #ffe49a;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(109, 118, 154, 0.98), rgba(38, 43, 66, 0.98) 57%, rgba(12, 14, 23, 0.99));
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.48),
+    0 0 0 2px rgba(12, 14, 23, 0.5),
+    inset 0 0 13px rgba(226, 187, 86, 0.18);
+  cursor: grab;
+  touch-action: none;
+  transition: transform 150ms ease, filter 150ms ease, box-shadow 150ms ease;
+}
+
+#six-crowns-kingmaker-card-game-launcher.scg-launcher:hover,
+#six-crowns-kingmaker-card-game-launcher.scg-launcher:focus-visible {
+  transform: translateY(-3px) scale(1.06);
+  filter: brightness(1.16);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.52),
+    0 0 0 2px rgba(12, 14, 23, 0.55),
+    0 0 18px rgba(226, 187, 86, 0.2),
+    inset 0 0 15px rgba(255, 228, 154, 0.2);
+}
+
+#six-crowns-kingmaker-card-game-launcher.scg-launcher.is-dragging {
+  cursor: grabbing;
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+#six-crowns-kingmaker-card-game-launcher .fa-crown {
+  position: relative;
+  z-index: 2;
+  font-size: 21px;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.65), 0 0 10px rgba(255, 228, 154, 0.25);
+  animation: scg-launcher-crown 2.8s ease-in-out infinite;
+}
+
+.scg-launcher-shine {
+  position: absolute;
+  z-index: 1;
+  inset: -42% 54% -42% -20%;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 239, 185, 0.22), transparent);
+  transform: rotate(12deg);
+  animation: scg-launcher-shine 3.8s ease-in-out infinite;
+}
+
+@keyframes scg-launcher-crown {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-2px) rotate(2deg); }
+}
+
+@keyframes scg-launcher-shine {
+  0%, 55% { transform: translateX(-150%) rotate(12deg); opacity: 0; }
+  64% { opacity: 1; }
+  82%, 100% { transform: translateX(330%) rotate(12deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #six-crowns-kingmaker-card-game-launcher .fa-crown,
+  .scg-launcher-shine {
+    animation: none;
+  }
+}

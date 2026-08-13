@@ -84,7 +84,7 @@ export class SixCrownsPvpLobby extends HandlebarsApplicationMixin(ApplicationV2)
     const isActive = currentSummary?.status === "active";
 
     return {
-      version: game.modules.get(MODULE_ID)?.version ?? "0.15.1",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.15.2",
       userName: game.user.name,
       isGM: game.user.isGM,
       hasHost,

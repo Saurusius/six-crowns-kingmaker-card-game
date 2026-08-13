@@ -1,4 +1,4 @@
-# Bêta PvP — version 0.15.1
+# Bêta PvP — version 0.15.2
 
 Le mode PvP propose des duels synchronisés entre deux profils Foundry. Aucun MJ n’a besoin d’être connecté : un profil joueur actif est élu automatiquement comme coordinateur technique. Depuis la version 0.15.1, un changement de coordinateur récupère automatiquement la révision de dépôt la plus récente disponible.
 

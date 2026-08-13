@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.15.2
+
+- Supprime l’ouverture automatique de l’accueil du module lors de la connexion à un monde Foundry.
+- Supprime également la reprise automatique d’une fenêtre de partie solo ou PvP à la connexion : le joueur garde désormais la main sur l’ouverture de l’interface.
+- Ajoute un bouton flottant d’accès rapide, inspiré de Hameçons & Couronnes, permettant d’ouvrir l’accueil du Jeu des Six Couronnes à tout moment.
+- Rend ce bouton déplaçable et mémorise sa position localement pour chaque navigateur.
+
 ## 0.15.1
 
 - Corrige la grille de préparation des decks afin que le bandeau des trois étapes ne soit plus comprimé ni partiellement masqué.
