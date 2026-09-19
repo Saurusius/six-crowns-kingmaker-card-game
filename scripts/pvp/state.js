@@ -232,7 +232,7 @@ export function activatePvpSpell(match, side, payload) {
   // le résultat détaillé, mais le journal partagé ne doit jamais révéler le nom
   // de la carte ajoutée à sa main.
   const publicMessage = result.spell.effectId === "big-catch"
-    ? `${result.spell.name} : une carte rejoint la main${(result.affectedIds?.length ?? 0) ? " et les autres prises passent sous la pioche." : "."}`
+    ? `${result.spell.name} : son effet est résolu sans révéler le contenu de la pioche ni de la main.`
     : result.message;
 
   appendPvpLog(match.state, "event-spell", `${match.state[side].name} révèle ${result.spell.name}. ${publicMessage}`, { side, spellId: result.spell.id, affectedIds: result.affectedIds ?? [] });
