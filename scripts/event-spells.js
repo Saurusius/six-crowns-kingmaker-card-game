@@ -285,6 +285,14 @@ function selectAiHydraVictim(candidates) {
   })[0] ?? null;
 }
 
+function hasOpponentPlayedCardThisRound(state, side) {
+  const enemySide = otherSide(side);
+  return (state?.playedCards ?? []).some((entry) =>
+    entry?.side === enemySide
+    && Number(entry?.round) === Number(state?.round)
+  );
+}
+
 function commonActivationCheck(state, side) {
   const slot = state?.spells?.[side];
   const spell = getEventSpellDefinition(slot?.id);
@@ -329,6 +337,15 @@ export function buildEventSpellActivationOptions(state, side = "player") {
   }
 
   if (spell.effectId === "titanium-chancla") {
+    if (!hasOpponentPlayedCardThisRound(state, side)) {
+      return {
+        ...base,
+        canActivate: false,
+        reason: "L’adversaire doit avoir joué au moins une carte pendant cette manche.",
+        mode: spell.targetMode,
+        targets: []
+      };
+    }
     const targets = scoredCards(enemy)
       .map(({ card, row, effectiveStrength }) => targetView(card, row, null, effectiveStrength));
     if (targets.length === 0) return { ...base, canActivate: false, reason: "Aucune carte adverse ne peut recevoir la chancla.", mode: spell.targetMode, targets };
@@ -395,6 +412,15 @@ export function buildEventSpellActivationOptions(state, side = "player") {
   }
 
   if (spell.effectId === "betrayal") {
+    if (!hasOpponentPlayedCardThisRound(state, side)) {
+      return {
+        ...base,
+        canActivate: false,
+        reason: "L’adversaire doit avoir joué au moins une carte pendant cette manche.",
+        mode: spell.targetMode,
+        targets: []
+      };
+    }
     const targets = scoredCards(enemy)
       .filter(({ card, effectiveStrength }) => !card.summoned && effectiveStrength <= 5)
       .map(({ card, row, effectiveStrength }) => targetView(card, row, null, effectiveStrength));
@@ -426,6 +452,7 @@ function clearRoundOnlyFlags(card) {
   delete cleaned.spellBetrayalOwnerSide;
   delete cleaned.spellBetrayalOriginalRow;
   delete cleaned.spellBetrayalBy;
+  delete cleaned.resilientConsumed;
   return cleaned;
 }
 
