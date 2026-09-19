@@ -5,8 +5,7 @@ on:
     branches:
       - master
     paths:
-      - module.json
-      - ".github/workflows/publish-release.yml"
+      - "module.json"
   workflow_dispatch:
 
 permissions:
