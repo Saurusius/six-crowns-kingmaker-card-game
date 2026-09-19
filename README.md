@@ -2,33 +2,41 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.15.4-c9a44d)
+![Version](https://img.shields.io/badge/version-0.15.5-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
 Le module propose une expérience complète dans Foundry VTT : un hub central illustré, des parties solo contre un adversaire automatisé, une arène PvP synchronisée, une collection personnelle, des boosters, un constructeur de deck, des échanges entre joueurs et des outils d’équilibrage pour le MJ.
 
-## Installation
+## 📦 Installation
 
-### Depuis Foundry VTT
+### Méthode recommandée — depuis Foundry VTT
 
 Dans **Modules complémentaires**, choisissez **Installer un module**, puis collez cette adresse dans le champ **URL du manifeste** :
 
 ```text
-https://raw.githubusercontent.com/Saurusius/six-crowns-kingmaker-card-game/main/module.json
+https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/latest/download/module.json
 ```
 
-Activez ensuite **Le Jeu des Six Couronnes** dans votre monde.
+Foundry téléchargera automatiquement le ZIP correspondant à la dernière version stable publiée. Activez ensuite **Le Jeu des Six Couronnes** dans votre monde.
+
+Une installation effectuée avec ce manifeste permet également à Foundry de **détecter les futures mises à jour du module**.
 
 ### Installation manuelle
 
-Téléchargez l’archive de la dernière release GitHub, puis extrayez-la dans :
+La dernière release est toujours disponible ici :
 
 ```text
-FoundryVTT/Data/modules/six-crowns-kingmaker-card-game
+https://github.com/Saurusius/six-crowns-kingmaker-card-game/releases/latest
 ```
 
-Relancez Foundry après l’installation.
+Téléchargez le fichier `six-crowns-kingmaker-card-game-vX.Y.Z.zip`, puis extrayez son contenu dans :
+
+```text
+FoundryVTT/Data/modules/six-crowns-kingmaker-card-game/
+```
+
+Le fichier `module.json` doit se trouver directement dans ce dossier. Relancez ensuite Foundry VTT et activez le module.
 
 ## Démarrage rapide
 
