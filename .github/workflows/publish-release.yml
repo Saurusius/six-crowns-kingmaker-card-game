@@ -1,0 +1,128 @@
+name: Publish Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish Foundry release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Read module metadata
+        id: module
+        shell: bash
+        run: |
+          VERSION=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).version")
+          ID=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).id")
+          test -n "$VERSION" && test -n "$ID" || exit 1
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "id=$ID" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "zip=six-crowns-kingmaker-card-game-v$VERSION.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release metadata
+        shell: bash
+        run: |
+          EXPECTED="https://github.com/${{ github.repository }}/releases/download/v${{ steps.module.outputs.version }}/${{ steps.module.outputs.zip }}"
+          ACTUAL=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
+          test "$ACTUAL" = "$EXPECTED" || {
+            echo "::error::URL download incorrect";
+            echo "Attendu: $EXPECTED";
+            echo "Actuel: $ACTUAL";
+            exit 1;
+          }
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find scripts -type f -name '*.js' -print0)
+
+      - name: Validate JSON data
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+          const path = require("path");
+
+          function walk(dir) {
+            return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) return walk(full);
+              return entry.isFile() && entry.name.endsWith(".json") ? [full] : [];
+            });
+          }
+
+          const files = ["module.json", ...["data", "lang", "assets"]
+            .filter((dir) => fs.existsSync(dir))
+            .flatMap(walk)];
+
+          for (const file of files) JSON.parse(fs.readFileSync(file, "utf8"));
+          console.log(files.length + " fichiers JSON validés.");
+          NODE
+
+      - name: Ensure tag does not already exist
+        shell: bash
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/${{ steps.module.outputs.tag }}" >/dev/null 2>&1; then
+            echo "::error::Le tag ${{ steps.module.outputs.tag }} existe déjà."
+            exit 1
+          fi
+
+      - name: Build Foundry ZIP
+        shell: bash
+        run: |
+          rm -rf dist
+          mkdir -p dist/package
+          rsync -a ./ dist/package/ \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='dist'
+          cd dist/package
+          zip -r -9 "../${{ steps.module.outputs.zip }}" .
+          cd ../..
+          test -f "dist/${{ steps.module.outputs.zip }}"
+          unzip -l "dist/${{ steps.module.outputs.zip }}" | grep -q "module.json"
+
+      - name: Upload ZIP as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.module.outputs.zip }}
+          path: dist/${{ steps.module.outputs.zip }}
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release create "${{ steps.module.outputs.tag }}" "dist/${{ steps.module.outputs.zip }}" \
+            --target master \
+            --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" \
+            --generate-notes
+
+      - name: Fast-forward main to released master
+        shell: bash
+        run: |
+          git fetch origin main master
+          git merge-base --is-ancestor origin/main origin/master || {
+            echo "::error::main a divergé de master. Synchronisation automatique refusée.";
+            exit 1;
+          }
+          git push origin origin/master:refs/heads/main
