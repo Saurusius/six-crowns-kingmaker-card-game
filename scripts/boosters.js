@@ -5,7 +5,6 @@ import {
   EVENT_BOOSTER_IMAGE,
   EVENT_CARD_BACK,
   EVENT_SET_LABEL,
-  EVENT_SPELL_IDS,
   STOLEN_LANDS_SPELL_IDS,
   RIVERS_RUN_RED_BOOSTER_ID,
   RIVERS_RUN_RED_BOOSTER_IMAGE,
@@ -758,10 +757,6 @@ export async function recycleCardsForBooster(cardIds = []) {
   if (ids.length !== 10) throw new Error("Sélectionnez exactement 10 exemplaires à recycler.");
   const requested = {};
   for (const id of ids) requested[id] = (requested[id] ?? 0) + 1;
-  const eventSpellIds = new Set(EVENT_SPELL_IDS);
-  if (Object.keys(requested).some((id) => eventSpellIds.has(id))) {
-    throw new Error("Les cartes événementielles dorées ne peuvent pas être recyclées.");
-  }
   let collection;
   let credits;
   await transactUserFlags({

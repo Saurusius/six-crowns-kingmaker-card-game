@@ -169,7 +169,7 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       newCount: entry.cards.filter((card) => card.isNew).length
     }));
     const recyclableCards = collectionCards
-      .filter((card) => card.deckEligible !== false && card.kind !== "event-spell")
+      .filter((card) => card.deckEligible !== false || card.kind === "event-spell")
       .map((card) => ({
         ...card,
         count: card.ownedCount,
@@ -220,7 +220,6 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       hasRecyclableCards: recyclableCopies > 0,
       recycleFactionOptions: Object.entries(FACTION_DETAILS).map(([id, details]) => ({ id, label: details.label })),
       recycleRarityOptions: Object.entries(RARITY_DETAILS)
-        .filter(([id]) => id !== "doree")
         .map(([id, details]) => ({ id, label: details.label })),
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
