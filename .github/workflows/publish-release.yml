@@ -1,6 +1,11 @@
 name: Publish Release
 
 on:
+  push:
+    branches:
+      - master
+    paths:
+      - module.json
   workflow_dispatch:
 
 permissions:
