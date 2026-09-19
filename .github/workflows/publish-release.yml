@@ -42,9 +42,24 @@ jobs:
       - name: Validate release metadata
         shell: bash
         run: |
-          EXPECTED="https://github.com/${{ github.repository }}/releases/download/v${{ steps.module.outputs.version }}/${{ steps.module.outputs.zip }}"
-          ACTUAL=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
-          test "$ACTUAL" = "$EXPECTED" || { echo "::error::URL download incorrect"; echo "Attendu: $EXPECTED"; echo "Actuel: $ACTUAL"; exit 1; }
+          EXPECTED_DOWNLOAD="https://github.com/${{ github.repository }}/releases/download/v${{ steps.module.outputs.version }}/${{ steps.module.outputs.zip }}"
+          EXPECTED_MANIFEST="https://github.com/${{ github.repository }}/releases/latest/download/module.json"
+          ACTUAL_DOWNLOAD=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
+          ACTUAL_MANIFEST=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).manifest || ''")
+
+          test "$ACTUAL_DOWNLOAD" = "$EXPECTED_DOWNLOAD" || {
+            echo "::error::URL download incorrect"
+            echo "Attendu: $EXPECTED_DOWNLOAD"
+            echo "Actuel: $ACTUAL_DOWNLOAD"
+            exit 1
+          }
+
+          test "$ACTUAL_MANIFEST" = "$EXPECTED_MANIFEST" || {
+            echo "::error::URL manifest incorrect"
+            echo "Attendu: $EXPECTED_MANIFEST"
+            echo "Actuel: $ACTUAL_MANIFEST"
+            exit 1
+          }
 
       - name: Check JavaScript syntax
         shell: bash
@@ -89,7 +104,6 @@ jobs:
           fi
 
       - name: Build Foundry ZIP
-        if: steps.release.outputs.exists != 'true'
         shell: bash
         run: |
           rm -rf dist
@@ -101,12 +115,13 @@ jobs:
           test -f "dist/${{ steps.module.outputs.zip }}"
           unzip -l "dist/${{ steps.module.outputs.zip }}" | grep -q "module.json"
 
-      - name: Upload ZIP as workflow artifact
-        if: steps.release.outputs.exists != 'true'
+      - name: Upload release files as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.module.outputs.zip }}
-          path: dist/${{ steps.module.outputs.zip }}
+          path: |
+            dist/${{ steps.module.outputs.zip }}
+            module.json
           if-no-files-found: error
           retention-days: 30
           compression-level: 0
@@ -124,10 +139,22 @@ jobs:
             --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" \
             --generate-notes
 
-      - name: Repair existing release manifest
+      - name: Repair existing release assets
         if: steps.release.outputs.exists == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release upload "${{ steps.module.outputs.tag }}" "module.json" --clobber
+          gh release upload "${{ steps.module.outputs.tag }}" \
+            "dist/${{ steps.module.outputs.zip }}" \
+            "module.json" \
+            --clobber
+
+      - name: Verify release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          ASSETS=$(gh release view "${{ steps.module.outputs.tag }}" --repo "${{ github.repository }}" --json assets --jq '.assets[].name')
+          grep -Fxq "${{ steps.module.outputs.zip }}" <<< "$ASSETS" || { echo "::error::ZIP absent de la release"; exit 1; }
+          grep -Fxq "module.json" <<< "$ASSETS" || { echo "::error::module.json absent de la release"; exit 1; }
