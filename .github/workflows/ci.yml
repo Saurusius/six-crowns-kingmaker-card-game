@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find scripts -type f -name '*.js' -print0)
+
+      - name: Validate JSON data
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+          const path = require("path");
+
+          function walk(dir) {
+            return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) return walk(full);
+              return entry.isFile() && entry.name.endsWith(".json") ? [full] : [];
+            });
+          }
+
+          const files = ["module.json", ...["data", "lang", "assets"]
+            .filter((dir) => fs.existsSync(dir))
+            .flatMap(walk)];
+
+          for (const file of files) JSON.parse(fs.readFileSync(file, "utf8"));
+          console.log(files.length + " fichiers JSON validés.");
+          NODE
+
+      - name: Run card and spell regression tests
+        shell: bash
+        run: node --experimental-default-type=module --test tests/*.test.mjs
