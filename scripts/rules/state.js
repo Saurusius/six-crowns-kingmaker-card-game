@@ -809,12 +809,13 @@ function cleanTemporarySpellState(card) {
   delete cleaned.temporaryPower;
   delete cleaned.spellExcluded;
   delete cleaned.spellExcludedBy;
+  delete cleaned.resilientConsumed;
   return cleaned;
 }
 
 function moveRowsToDiscardWithResilience(side) {
   const resilientCards = ROWS.flatMap((row) => side.rows[row]
-    .filter((card) => !card.summoned && hasAbility(card, "resilient"))
+    .filter((card) => !card.summoned && hasAbility(card, "resilient") && !card.resilientConsumed)
     .map((card) => ({
       card,
       row,
@@ -832,10 +833,16 @@ function moveRowsToDiscardWithResilience(side) {
       if (rawCard.summoned) continue;
       const card = cleanTemporarySpellState(rawCard);
       if (survivor?.card.id === rawCard.id) {
+        const printedStrength = Math.max(0, Number(card.strength ?? 0));
+        const reducedStrength = Math.ceil(printedStrength / 2);
         nextRows[row].push({
           ...card,
-          strength: Math.ceil(Number(card.strength ?? 0) / 2),
-          abilities: (card.abilities ?? []).filter((ability) => ability !== "resilient")
+          // On conserve la Puissance imprimée et le trait Bastion. La réduction
+          // ne vaut que pour la manche suivante et disparaît dès que la carte
+          // rejoint la défausse, ce qui permet aux effets de récupération de
+          // restaurer correctement la carte originale.
+          temporaryPower: reducedStrength - printedStrength,
+          resilientConsumed: true
         });
       } else side.discard.push(card);
     }
