@@ -38,12 +38,7 @@ jobs:
         run: |
           EXPECTED="https://github.com/${{ github.repository }}/releases/download/v${{ steps.module.outputs.version }}/${{ steps.module.outputs.zip }}"
           ACTUAL=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
-          test "$ACTUAL" = "$EXPECTED" || {
-            echo "::error::URL download incorrect";
-            echo "Attendu: $EXPECTED";
-            echo "Actuel: $ACTUAL";
-            exit 1;
-          }
+          test "$ACTUAL" = "$EXPECTED" || { echo "::error::URL download incorrect"; echo "Attendu: $EXPECTED"; echo "Actuel: $ACTUAL"; exit 1; }
 
       - name: Check JavaScript syntax
         shell: bash
@@ -88,10 +83,7 @@ jobs:
         run: |
           rm -rf dist
           mkdir -p dist/package
-          rsync -a ./ dist/package/ \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='dist'
+          rsync -a ./ dist/package/ --exclude='.git' --exclude='.github' --exclude='dist' --exclude='install-local.ps1' --exclude='DEV_NOTES_*' --exclude='RELEASE_NOTES_*'
           cd dist/package
           zip -r -9 "../${{ steps.module.outputs.zip }}" .
           cd ../..
@@ -112,17 +104,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "${{ steps.module.outputs.tag }}" "dist/${{ steps.module.outputs.zip }}" \
-            --target master \
-            --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" \
-            --generate-notes
-
-      - name: Fast-forward main to released master
-        shell: bash
-        run: |
-          git fetch origin main master
-          git merge-base --is-ancestor origin/main origin/master || {
-            echo "::error::main a divergé de master. Synchronisation automatique refusée.";
-            exit 1;
-          }
-          git push origin origin/master:refs/heads/main
+          gh release create "${{ steps.module.outputs.tag }}" "dist/${{ steps.module.outputs.zip }}" --target master --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" --generate-notes
