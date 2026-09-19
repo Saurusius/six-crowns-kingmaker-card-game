@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - module.json
+      - ".github/workflows/publish-release.yml"
   workflow_dispatch:
 
 permissions:
@@ -75,15 +76,20 @@ jobs:
           console.log(files.length + " fichiers JSON validés.");
           NODE
 
-      - name: Ensure tag does not already exist
+      - name: Detect existing release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/${{ steps.module.outputs.tag }}" >/dev/null 2>&1; then
-            echo "::error::Le tag ${{ steps.module.outputs.tag }} existe déjà."
-            exit 1
+          if gh release view "${{ steps.module.outputs.tag }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build Foundry ZIP
+        if: steps.release.outputs.exists != 'true'
         shell: bash
         run: |
           rm -rf dist
@@ -96,6 +102,7 @@ jobs:
           unzip -l "dist/${{ steps.module.outputs.zip }}" | grep -q "module.json"
 
       - name: Upload ZIP as workflow artifact
+        if: steps.release.outputs.exists != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.module.outputs.zip }}
@@ -105,8 +112,22 @@ jobs:
           compression-level: 0
 
       - name: Create GitHub Release
+        if: steps.release.outputs.exists != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          gh release create "${{ steps.module.outputs.tag }}" "dist/${{ steps.module.outputs.zip }}" --target master --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" --generate-notes
+          gh release create "${{ steps.module.outputs.tag }}" \
+            "dist/${{ steps.module.outputs.zip }}" \
+            "module.json" \
+            --target master \
+            --title "Le Jeu des Six Couronnes v${{ steps.module.outputs.version }}" \
+            --generate-notes
+
+      - name: Repair existing release manifest
+        if: steps.release.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh release upload "${{ steps.module.outputs.tag }}" "module.json" --clobber
