@@ -2,6 +2,16 @@ name: Promote dev to master
 
 on:
   workflow_dispatch:
+    inputs:
+      bump:
+        description: "Type de version à publier"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
@@ -11,9 +21,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  validate:
-    name: Validate module
+  promote:
+    name: Validate, bump and promote dev to master
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout dev
         uses: actions/checkout@v4
@@ -21,15 +32,20 @@ jobs:
           ref: dev
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+
       - name: Validate module.json
         shell: bash
         run: |
           node <<'NODE'
           const fs = require("fs");
           const m = JSON.parse(fs.readFileSync("module.json", "utf8"));
-          if (!m.id || !m.version) throw new Error("module.json invalide");
           if (m.id !== "six-crowns-kingmaker-card-game") throw new Error("ID module inattendu");
-          console.log(m.id + " v" + m.version);
+          if (!/^\d+\.\d+\.\d+$/.test(m.version ?? "")) throw new Error("Version invalide");
           NODE
 
       - name: Check JavaScript syntax
@@ -45,7 +61,6 @@ jobs:
           node <<'NODE'
           const fs = require("fs");
           const path = require("path");
-
           function walk(dir) {
             return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
               const full = path.join(dir, entry.name);
@@ -53,45 +68,96 @@ jobs:
               return entry.isFile() && entry.name.endsWith(".json") ? [full] : [];
             });
           }
-
-          const files = ["module.json", ...["data", "lang", "assets"]
-            .filter((dir) => fs.existsSync(dir))
-            .flatMap(walk)];
-
+          const files = ["module.json", ...["data", "lang", "assets"].filter(fs.existsSync).flatMap(walk)];
           for (const file of files) JSON.parse(fs.readFileSync(file, "utf8"));
-          console.log(files.length + " fichiers JSON validés.");
           NODE
 
-      - name: Validate release URL
+      - name: Run card and spell regression tests
+        shell: bash
+        run: node --experimental-default-type=module --test tests/*.test.mjs
+
+      - name: Require fast-forward promotion
         shell: bash
         run: |
-          VERSION=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).version")
-          EXPECTED="https://github.com/${{ github.repository }}/releases/download/v${VERSION}/six-crowns-kingmaker-card-game-v${VERSION}.zip"
-          ACTUAL=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
-          test "$ACTUAL" = "$EXPECTED" || {
-            echo "::error::URL download incorrect";
-            echo "Attendu: $EXPECTED";
-            echo "Actuel: $ACTUAL";
-            exit 1;
+          set -euo pipefail
+          git fetch origin master dev
+          if ! git merge-base --is-ancestor origin/master HEAD; then
+            echo "::error::master a divergé de dev. Promotion refusée pour éviter d'écraser des commits."
+            exit 1
+          fi
+
+      - name: Bump Foundry module version
+        id: version
+        shell: bash
+        env:
+          BUMP: \${{ inputs.bump }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require("fs");
+
+          const file = "module.json";
+          const m = JSON.parse(fs.readFileSync(file, "utf8"));
+          const oldVersion = m.version;
+          if (!/^\d+\.\d+\.\d+$/.test(oldVersion ?? "")) {
+            throw new Error("Version SemVer invalide: " + oldVersion);
           }
 
-  promote:
-    name: Fast-forward dev to master
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: master
-          fetch-depth: 0
+          let [major, minor, patch] = oldVersion.split(".").map(Number);
+          switch (process.env.BUMP) {
+            case "patch": patch += 1; break;
+            case "minor": minor += 1; patch = 0; break;
+            case "major": major += 1; minor = 0; patch = 0; break;
+            default: throw new Error("Type de bump invalide: " + process.env.BUMP);
+          }
 
-      - name: Promote only if master is an ancestor of dev
+          const nextVersion = [major, minor, patch].join(".");
+          const repo = process.env.GITHUB_REPOSITORY;
+          const repoName = repo.split("/")[1];
+
+          m.version = nextVersion;
+          m.download = \`https://github.com/\${repo}/releases/download/v\${nextVersion}/\${repoName}-v\${nextVersion}.zip\`;
+
+          if (typeof m.changelog === "string" && m.changelog.includes("/releases/tag/")) {
+            m.changelog = \`https://github.com/\${repo}/releases/tag/v\${nextVersion}\`;
+          }
+
+          if (typeof m.description === "string" && m.description.includes(\`v\${oldVersion}\`)) {
+            m.description = m.description.replace(\`v\${oldVersion}\`, \`v\${nextVersion}\`);
+          }
+
+          fs.writeFileSync(file, JSON.stringify(m, null, 2) + "\n");
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, \`old=\${oldVersion}\nversion=\${nextVersion}\n\`);
+          console.log(\`Version: v\${oldVersion} -> v\${nextVersion}\`);
+          NODE
+
+      - name: Validate generated release metadata
         shell: bash
         run: |
-          git fetch origin dev master
-          git merge-base --is-ancestor origin/master origin/dev || {
-            echo "::error::master a divergé de dev. Fusion automatique refusée.";
-            exit 1;
-          }
-          git push origin origin/dev:refs/heads/master
+          set -euo pipefail
+          VERSION="\${{ steps.version.outputs.version }}"
+          REPO_NAME="\${GITHUB_REPOSITORY#*/}"
+          EXPECTED_DOWNLOAD="https://github.com/\${GITHUB_REPOSITORY}/releases/download/v\${VERSION}/\${REPO_NAME}-v\${VERSION}.zip"
+          EXPECTED_MANIFEST="https://github.com/\${GITHUB_REPOSITORY}/releases/latest/download/module.json"
+          ACTUAL_DOWNLOAD=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).download || ''")
+          ACTUAL_MANIFEST=$(node -p "JSON.parse(require('fs').readFileSync('module.json','utf8')).manifest || ''")
+
+          test "$ACTUAL_DOWNLOAD" = "$EXPECTED_DOWNLOAD" || { echo "::error::URL download incorrect"; exit 1; }
+          test "$ACTUAL_MANIFEST" = "$EXPECTED_MANIFEST" || { echo "::error::URL manifest incorrect"; exit 1; }
+
+      - name: Commit version bump on dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="\${{ steps.version.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add module.json
+          git commit -m "chore(release): bump version to v\${VERSION}"
+          git push origin HEAD:dev
+
+      - name: Promote dev to master
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin HEAD:master
