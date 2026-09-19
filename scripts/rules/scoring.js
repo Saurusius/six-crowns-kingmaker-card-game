@@ -16,7 +16,7 @@ function cardKey(card) {
 export function calculateCardStrength(card, rowCards = []) {
   if (card?.spellExcluded) return 0;
   const activeCards = rowCards.filter((other) => !other?.spellExcluded);
-  const baseStrength = Math.max(0, Number(card?.strength ?? 0) + Number(card?.temporaryPower ?? 0));
+  const modifiedBaseStrength = Number(card?.strength ?? 0) + Number(card?.temporaryPower ?? 0);
   const supportBonus = activeCards.filter(
     (other) => other?.id !== card?.id && hasAbility(other, "support")
   ).length;
@@ -28,7 +28,10 @@ export function calculateCardStrength(card, rowCards = []) {
     ? Math.max(0, identicalCopies - 1) * 2
     : 0;
 
-  return baseStrength + supportBonus + bondBonus;
+  // Les modificateurs temporaires de sortilège s'appliquent à la Puissance
+  // effective finale. Le plancher à 0 intervient donc après Soutien/Formation :
+  // une Chancla à -4 retire réellement 4 Puissance, bonus compris.
+  return Math.max(0, modifiedBaseStrength + supportBonus + bondBonus);
 }
 
 export function calculateRowDetails(cards = []) {
