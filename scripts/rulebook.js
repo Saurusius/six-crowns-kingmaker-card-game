@@ -64,7 +64,7 @@ export const RULEBOOK = Object.freeze([
     items: [
       { title: "Booster classique", icon: "fa-solid fa-box-open", text: "Contient 5 cartes : 4 tirages normaux et 1 carte Rare ou Unique garantie." },
       { title: "Booster spécial", icon: "fa-solid fa-wand-sparkles", text: "Contient 3 cartes issues de la sélection thématique choisie." },
-      { title: "Booster événementiel", icon: "fa-solid fa-star", text: "Contient exactement 1 carte dorée de la suite événementielle concernée." },
+      { title: "Booster de sortilèges", icon: "fa-solid fa-star", text: "Contient exactement 1 carte dorée de la mini-collection de chapitre choisie." },
       { title: "Doublons et sauvegarde", icon: "fa-solid fa-box-archive", text: "Les doublons sont autorisés et chaque carte ouverte est sauvegardée dans la collection du profil Foundry." },
       { title: "Tickets", icon: "fa-solid fa-ticket", text: "Un joueur non MJ doit posséder le ticket correspondant ; chaque ouverture consomme 1 ticket." },
       { title: "Gagner des Couronnes", icon: "fa-solid fa-coins", text: "Une victoire en duel contre un autre joueur rapporte 10 Couronnes. Une victoire contre l’adversaire automatisé rapporte 5 Couronnes. Le MJ peut aussi distribuer des Couronnes comme récompense de quête, d’événement ou de campagne." },

@@ -13,12 +13,12 @@
   <nav class="scg-collection-command-bar" aria-label="Actions de la collection">
     <section class="scg-collection-command-group is-boosters" aria-label="Boosters">
       <header><i class="fa-solid fa-box-open"></i><span>Boosters</span></header>
-      <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Événementiels illimités{{else}}{{eventBoosterCredits}} événementiel(s){{/if}}</span></div>
+      <div class="scg-ticket-wallet"><span class="scg-booster-credit-badge"><i class="fa-solid fa-ticket"></i> {{#if isGM}}Classiques illimités{{else}}{{boosterCredits}} classique(s){{/if}}</span><span class="scg-booster-credit-badge is-special"><i class="fa-solid fa-wand-sparkles"></i> {{#if isGM}}Spéciaux illimités{{else}}{{specialBoosterCredits}} spécial(aux){{/if}}</span><span class="scg-booster-credit-badge is-event"><i class="fa-solid fa-star"></i> {{#if isGM}}Sortilèges illimités{{else}}{{eventBoosterCredits}} sortilège(s){{/if}}</span></div>
       <div class="scg-collection-command-buttons">
         <button type="button" data-action="open-booster" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-box-open"></i> {{boosterButtonLabel}}</button>
         <button type="button" data-action="open-three-boosters" {{#unless canOpenBooster}}disabled{{/unless}}><i class="fa-solid fa-boxes-stacked"></i> Ouvrir jusqu’à 3</button>
         <button type="button" data-action="open-special-booster" {{#unless canOpenSpecialBooster}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> Booster spécial</button>
-        <button type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster événementiel configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster événementiel</button>
+        <button type="button" data-action="open-event-booster" {{#unless canOpenEventBooster}}disabled{{/unless}} title="{{#unless hasConfiguredEventBoosters}}Aucun booster de sortilèges configuré{{/unless}}"><i class="fa-solid fa-star"></i> Booster de sortilèges</button>
       </div>
     </section>
 
@@ -140,7 +140,7 @@
           <div>
             {{#if groupIcon}}<img class="scg-collection-group-icon" src="{{groupIcon}}" alt="">{{else}}<span class="scg-collection-symbol">{{symbol}}</span>{{/if}}
             <h2>{{label}}</h2>
-            {{#if isEventGroup}}<span class="scg-event-set-chip"><i class="fa-solid fa-wand-sparkles"></i> Suite événementielle</span>{{/if}}
+            {{#if isEventGroup}}<span class="scg-event-set-chip"><i class="fa-solid fa-wand-sparkles"></i> Mini-collection de sortilèges</span>{{/if}}
           </div>
           <div class="scg-collection-progress">
             <strong>{{discovered}} / {{total}}</strong>
@@ -194,7 +194,7 @@
                 </div>
               {{else}}
                 <div class="scg-hidden-card-back {{#if isEventSpell}}is-event-card-back{{/if}}">
-                  {{#if eventCardBack}}<img src="{{eventCardBack}}" alt="Dos de carte événementielle">{{else}}<span class="scg-hidden-question">?</span>{{/if}}
+                  {{#if eventCardBack}}<img src="{{eventCardBack}}" alt="Dos de carte de sortilège">{{else}}<span class="scg-hidden-question">?</span>{{/if}}
                   <strong>Carte inconnue</strong>
                   <small>{{id}}</small>
                 </div>

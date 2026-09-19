@@ -1,6 +1,6 @@
 # Règles du Jeu des Six Couronnes
 
-Cette page décrit les règles du module **0.15.2**.
+Cette page décrit les règles du module **0.15.4**.
 
 ## But de la partie
 
@@ -84,13 +84,13 @@ Les sortilèges événementiels ne comptent pas dans les 20 cartes du deck. Ils 
 
 ## Raretés et collection
 
-Le catalogue contient 165 cartes collectionnables :
+Le catalogue contient 170 cartes collectionnables :
 
 - 104 Communes ;
 - 28 Peu communes ;
 - 21 Rares ;
 - 7 Uniques ;
-- 5 cartes dorées de la suite événementielle **Terres Dérobées**.
+- 10 cartes dorées réparties entre les mini-collections de sortilèges **Terres Dérobées** et **Rivers Run Red**.
 
 Les cartes non obtenues restent masquées dans la collection afin de limiter les révélations, tout en conservant leur emplacement.
 
@@ -111,9 +111,9 @@ Probabilités de la cinquième carte : 99 % Rare et 1 % Unique.
 
 Contient 3 cartes issues de la sélection thématique du booster.
 
-### Booster événementiel
+### Booster de sortilèges
 
-Contient exactement 1 carte dorée de la collection événementielle concernée.
+Contient exactement 1 carte dorée parmi les 5 cartes de la mini-collection de chapitre choisie.
 
 Les doublons sont autorisés. Chaque ouverture consomme le ticket correspondant.
 
@@ -124,6 +124,14 @@ Les doublons sont autorisés. Chaque ouverture consomme le ticket correspondant.
 - **Sauvetage de sac** : renvoie en main une carte de la défausse dont la Puissance de base est de 4 ou moins.
 - **Chancla de titane** : retire 4 Puissance à une carte adverse jusqu’à la fin de la manche, sans la faire descendre sous 0.
 - **Hydre vorace** : exclut du score la carte la plus faible de chaque camp pour la manche.
+
+## Sortilèges — Rivers Run Red
+
+- **Belle prise !** : regarde les 3 premières cartes de la pioche, en ajoute une à la main puis place les autres sous la pioche dans l’ordre choisi.
+- **Des plumes partout !** : toutes les cartes d’une ligne adverse choisie perdent 1 Puissance jusqu’à la fin de la manche.
+- **Le Chantier royal** : remet directement en jeu, sur une ligne choisie, une carte alliée de la défausse dont la Puissance de base est de 4 ou moins.
+- **Hargrulka, Roi des Trolls** : donne +4 Puissance à une carte alliée jusqu’à la fin de la manche ; si elle est alors la plus puissante de sa ligne au moment du choix, la carte adverse la plus puissante perd 2 Puissance.
+- **Trahison** : une carte adverse de 5 Puissance ou moins change temporairement de camp sur la ligne correspondante, puis rejoint la défausse de son propriétaire à la fin de la manche.
 
 ## Duels PvP
 

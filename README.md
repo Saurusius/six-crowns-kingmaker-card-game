@@ -2,7 +2,7 @@
 
 > Un jeu de cartes tactique en trois lignes pour Foundry Virtual Tabletop, inspiré des Terres Dérobées.
 
-![Version](https://img.shields.io/badge/version-0.15.2-c9a44d)
+![Version](https://img.shields.io/badge/version-0.15.4-c9a44d)
 ![Foundry VTT](https://img.shields.io/badge/Foundry%20VTT-v14-6b4a8a)
 ![Licence](https://img.shields.io/badge/licence-MIT-2f855a)
 
@@ -79,7 +79,7 @@ Les limites et le protocole de test de cette bêta pair-à-pair sont détaillés
 
 ### Cartes et collection
 
-- **165 cartes collectionnables** : 160 cartes classiques et 5 cartes dorées événementielles ;
+- **170 cartes collectionnables** : 160 cartes classiques et 10 cartes dorées de sortilèges ;
 - quatre collections principales : Royaume des Six Couronnes, Maison Aldori, Khans de Fer et Arcanes des Terres Dérobées ;
 - cartes non découvertes masquées pour éviter les révélations ;
 - filtres par collection, rareté, ligne et possession ;
@@ -91,7 +91,7 @@ Les limites et le protocole de test de cette bêta pair-à-pair sont détaillés
 
 - booster classique de **5 cartes** avec une Rare ou Unique garantie ;
 - boosters spéciaux thématiques de **3 cartes** ;
-- booster événementiel **Terres Dérobées** contenant exactement **1 carte dorée** ;
+- boosters de sortilèges par chapitre, contenant chacun exactement **1 carte dorée** parmi une mini-collection de **5 cartes** ;
 - tickets classiques, spéciaux et événementiels ;
 - ouverture animée, révélation progressive et effet particulier pour les cartes Uniques ;
 - historique personnel des ouvertures ;
@@ -116,7 +116,8 @@ Les limites et le protocole de test de cette bêta pair-à-pair sont détaillés
 - sélection présentée automatiquement dans un carrousel horizontal avec barre de défilement lorsqu’il existe plusieurs choix ;
 - un seul sortilège équipé et une seule activation par partie ;
 - ciblage interactif et révélation animée ;
-- première suite : **Et là, un ours !**, **Une bonne bière**, **Sauvetage de sac**, **Chancla de titane** et **Hydre vorace**.
+- **Terres Dérobées** : **Et là, un ours !**, **Une bonne bière**, **Sauvetage de sac**, **Chancla de titane** et **Hydre vorace** ;
+- **Rivers Run Red** : **Belle prise !**, **Des plumes partout !**, **Le Chantier royal**, **Hargrulka, Roi des Trolls** et **Trahison**.
 
 ### Échanges entre joueurs
 
@@ -175,7 +176,7 @@ npm ci
 npm run check
 ```
 
-La commande contrôle notamment les 165 cartes, les 495 illustrations, la syntaxe JavaScript, la cohérence des versions, les probabilités des boosters et l’intégrité des signatures socket.
+La commande contrôle notamment les 170 cartes, les 510 illustrations, la syntaxe JavaScript, la cohérence des versions, les probabilités des boosters et l’intégrité des signatures socket.
 
 Préparer l’archive courante :
 

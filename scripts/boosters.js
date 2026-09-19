@@ -1,6 +1,17 @@
 import { MODULE_ID, MODULE_TITLE } from "./constants.js";
 import { withNormalizedCardArt } from "./art.js";
-import { EVENT_BOOSTER_ID, EVENT_BOOSTER_IMAGE, EVENT_CARD_BACK, EVENT_SET_LABEL, EVENT_SPELL_IDS } from "./event-spells.js";
+import {
+  EVENT_BOOSTER_ID,
+  EVENT_BOOSTER_IMAGE,
+  EVENT_CARD_BACK,
+  EVENT_SET_LABEL,
+  EVENT_SPELL_IDS,
+  STOLEN_LANDS_SPELL_IDS,
+  RIVERS_RUN_RED_BOOSTER_ID,
+  RIVERS_RUN_RED_BOOSTER_IMAGE,
+  RIVERS_RUN_RED_SET_LABEL,
+  RIVERS_RUN_RED_SPELL_IDS
+} from "./event-spells.js";
 import { buildModuleMacroCommand, upsertModuleMacro } from "./macros.js";
 import { transactMultipleUsers, transactUserFlags } from "./transactions.js";
 
@@ -17,23 +28,36 @@ export const SPECIAL_BOOSTERS = Object.freeze({
   "stolen-lands-arcana": { id: "stolen-lands-arcana", label: "Arcanes des Terres Dérobées", image: `modules/${MODULE_ID}/assets/boosters/arcanes-terres-derobees.webp`, accent: "arcana" }
 });
 
-const EVENT_BOOSTERS = new Map([[EVENT_BOOSTER_ID, {
-  id: EVENT_BOOSTER_ID,
-  label: EVENT_SET_LABEL,
-  description: "Booster événementiel mono-carte de la suite Terres Dérobées.",
-  image: EVENT_BOOSTER_IMAGE,
-  cardBack: EVENT_CARD_BACK,
-  accent: "event-gold",
-  cardIds: [...EVENT_SPELL_IDS],
-  drawCount: 1
-}]]);
+const EVENT_BOOSTERS = new Map([
+  [EVENT_BOOSTER_ID, {
+    id: EVENT_BOOSTER_ID,
+    label: EVENT_SET_LABEL,
+    description: "Booster de sortilèges mono-carte de la suite Terres Dérobées.",
+    image: EVENT_BOOSTER_IMAGE,
+    cardBack: EVENT_CARD_BACK,
+    accent: "event-gold",
+    cardIds: [...STOLEN_LANDS_SPELL_IDS],
+    drawCount: 1
+  }],
+  [RIVERS_RUN_RED_BOOSTER_ID, {
+    id: RIVERS_RUN_RED_BOOSTER_ID,
+    label: RIVERS_RUN_RED_SET_LABEL,
+    description: "Booster de sortilèges mono-carte du chapitre Rivers Run Red.",
+    image: RIVERS_RUN_RED_BOOSTER_IMAGE,
+    cardBack: EVENT_CARD_BACK,
+    accent: "event-red",
+    cardIds: [...RIVERS_RUN_RED_SPELL_IDS],
+    drawCount: 1
+  }]
+]);
 
 const CARD_FILES = Object.freeze([
   "six-crowns.json",
   "aldori.json",
   "iron-khans.json",
   "stolen-lands-arcana.json",
-  "event-stolen-lands.json"
+  "event-stolen-lands.json",
+  "event-rivers-run-red.json"
 ]);
 
 const RARITY_LABELS = Object.freeze({
@@ -146,9 +170,9 @@ export async function grantTicketCreditsToUser({ userId, count = 1, type = "spec
 
 export function registerEventBooster(definition = {}) {
   const id = String(definition.id ?? "").trim();
-  if (!id) throw new Error("Un booster événementiel doit posséder un identifiant.");
+  if (!id) throw new Error("Un booster de sortilèges doit posséder un identifiant.");
   const cardIds = Array.isArray(definition.cardIds) ? [...new Set(definition.cardIds.filter(Boolean))] : [];
-  if (cardIds.length < 1) throw new Error("Un booster événementiel doit référencer au moins une carte.");
+  if (cardIds.length < 1) throw new Error("Un booster de sortilèges doit référencer au moins une carte.");
   EVENT_BOOSTERS.set(id, { ...definition, id, cardIds, drawCount: 1, label: definition.label ?? id });
   return EVENT_BOOSTERS.get(id);
 }
@@ -201,7 +225,7 @@ function pickCard(cards, rarity, random = secureRandom) {
 }
 
 export function pickBalancedCard(cards, rarity, random = secureRandom, { collection = {}, preferUnowned = false } = {}) {
-  let pool = cards.filter((card) => card.rarity === rarity && card.faction !== "event-stolen-lands");
+  let pool = cards.filter((card) => card.rarity === rarity && card.kind !== "event-spell");
   if (preferUnowned) {
     const unowned = pool.filter((card) => Number(collection?.[card.id]?.count ?? 0) <= 0);
     if (unowned.length > 0) pool = unowned;
@@ -580,13 +604,13 @@ export async function openSpecialBooster({ faction, random = secureRandom, user 
 
 export async function openEventBooster({ boosterId, random = secureRandom, user = null, userId = null, animate = true, consumeCredit = true } = {}) {
   const definition = EVENT_BOOSTERS.get(boosterId);
-  if (!definition) throw new Error("Ce booster événementiel n’est pas configuré.");
+  if (!definition) throw new Error("Ce booster de sortilèges n’est pas configuré.");
   const targetUser = resolveUser({ user, userId });
   const requiresCredit = !game.user.isGM && consumeCredit;
   const randomSource = resolveRandom(random);
   const catalog = await loadCardCatalog();
   const pool = catalog.filter((card) => definition.cardIds.includes(card.id));
-  if (pool.length < 1) throw new Error("La réserve de ce booster événementiel est incomplète.");
+  if (pool.length < 1) throw new Error("La réserve de ce booster de sortilèges est incomplète.");
   let annotated = [];
   let remainingCredits = null;
   let collection = null;
@@ -625,14 +649,14 @@ export async function openEventBooster({ boosterId, random = secureRandom, user 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ alias: game.user.name }),
       content: boosterChatContent(annotated, targetUser, remainingCredits)
-        .replace("Booster des Six Couronnes", `Booster événementiel — ${definition.label}`)
+        .replace("Booster des Six Couronnes", `Booster de sortilèges — ${definition.label}`)
         .replace("Les cartes ont été ajoutées", "La carte dorée a été ajoutée")
     });
   } catch (error) {
-    console.error(`${MODULE_TITLE} | Publication du booster événementiel impossible`, error);
+    console.error(`${MODULE_TITLE} | Publication du booster de sortilèges impossible`, error);
   }
   if (animate && targetUser.id === game.user.id) animateBooster(annotated, {
-    boosterLabel: `Événement — ${definition.label}`,
+    boosterLabel: `Sortilèges — ${definition.label}`,
     getRemainingCredits: getEventBoosterCredits,
     reopen: () => openEventBooster({ boosterId }),
     packImage: definition.image,
@@ -674,6 +698,45 @@ export function showSpecialBoosterSelector() {
   (document.documentElement ?? document.body).appendChild(overlay);
   document.addEventListener("keydown", onKeyDown);
   overlay.querySelector("[data-faction]")?.focus({ preventScroll: true });
+}
+
+export function showEventBoosterSelector() {
+  if (typeof document === "undefined") return;
+  const boosters = getEventBoosters();
+  if (boosters.length === 0) throw new Error("Aucun booster de sortilèges n’est configuré.");
+  if (boosters.length === 1) {
+    void openEventBooster({ boosterId: boosters[0].id }).catch((error) => ui.notifications.error(error.message));
+    return;
+  }
+
+  document.querySelector(".scg-event-booster-picker")?.remove();
+  const previousFocus = document.activeElement;
+  const overlay = document.createElement("div");
+  overlay.className = "scg-special-booster-picker scg-event-booster-picker";
+  overlay.innerHTML = `<section role="dialog" aria-modal="true" aria-labelledby="scg-event-picker-title" tabindex="-1"><header><div><small>Ticket de sortilèges</small><h2 id="scg-event-picker-title">Choisissez votre chapitre</h2><p>Chaque paquet révèle 1 carte dorée parmi les 5 sortilèges de la mini-collection choisie.</p></div><button type="button" data-action="close-event-picker" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button></header><div class="scg-special-booster-grid">${boosters.map((entry) => `<button type="button" class="scg-special-booster-option is-${escapeHtml(entry.accent ?? "event-gold")}" data-event-booster="${escapeHtml(entry.id)}"><span class="scg-special-booster-art" aria-hidden="true"><img src="${escapeHtml(entry.image ?? "")}" alt="Booster ${escapeHtml(entry.label)}"></span><span class="scg-special-booster-meta"><strong>${escapeHtml(entry.label)}</strong><small>1 sortilège doré · mini-collection de ${entry.cardIds.length} cartes</small></span></button>`).join("")}</div></section>`;
+  const onKeyDown = (event) => {
+    if (event.key === "Escape") close();
+  };
+  const close = () => {
+    document.removeEventListener("keydown", onKeyDown);
+    overlay.remove();
+    previousFocus?.focus?.({ preventScroll: true });
+  };
+  overlay.addEventListener("click", (event) => { if (event.target === overlay) close(); });
+  overlay.querySelector("[data-action='close-event-picker']")?.addEventListener("click", close);
+  overlay.querySelectorAll("[data-event-booster]").forEach((button) => button.addEventListener("click", async () => {
+    const boosterId = button.dataset.eventBooster;
+    button.disabled = true;
+    try {
+      close();
+      await openEventBooster({ boosterId });
+    } catch (error) {
+      ui.notifications.error(error.message);
+    }
+  }));
+  (document.documentElement ?? document.body).appendChild(overlay);
+  document.addEventListener("keydown", onKeyDown);
+  overlay.querySelector("[data-event-booster]")?.focus({ preventScroll: true });
 }
 
 export async function openBoosters({ count = 1, random = secureRandom } = {}) {
@@ -831,7 +894,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
   overlay.dataset.highestRarity = highestRarity;
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", hasGolden ? "Ouverture d’un booster événementiel doré" : hasUnique ? "Ouverture d’un booster avec carte Unique" : "Ouverture d’un booster");
+  overlay.setAttribute("aria-label", hasGolden ? "Ouverture d’un booster de sortilèges doré" : hasUnique ? "Ouverture d’un booster avec carte Unique" : "Ouverture d’un booster");
 
   overlay.innerHTML = `
     <div class="scg-booster-energy" aria-hidden="true">
@@ -851,7 +914,7 @@ function animateBooster(cards, { onClose = null, packIndex = 1, totalPacks = 1, 
         <div>
           <small>${escapeHtml(boosterLabel)} · ${packIndex} / ${totalPacks}</small>
           <h2>${eventMode ? "Révélation événementielle" : "Révélation des cartes"}</h2>
-          <p class="scg-booster-progress" data-reveal-status>${eventMode ? "Une carte dorée émerge des Terres Dérobées…" : "La magie se rassemble…"}</p>
+          <p class="scg-booster-progress" data-reveal-status>${eventMode ? "Une carte dorée se révèle…" : "La magie se rassemble…"}</p>
         </div>
       </header>
       <div class="scg-booster-reveal scg-booster-reveal--count-${orderedCards.length}">

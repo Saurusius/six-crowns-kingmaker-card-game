@@ -1,6 +1,6 @@
 {
-  "version": "0.15.2",
-  "integratedCardArtCount": 165,
+  "version": "0.15.4",
+  "integratedCardArtCount": 170,
   "integratedCardArt": [
     {
       "id": "AL-01",
@@ -4951,6 +4951,156 @@
           "sha256": "5c685fbb302c71727510484dc7bf5963f509d60eab1f13c25898ebbfb9614baf"
         }
       }
+    },
+    {
+      "id": "EV-RRR-01",
+      "name": "Belle prise !",
+      "faction": "event-rivers-run-red",
+      "source": "belleprise.png",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/event-rivers-run-red/belle-prise",
+      "variants": {
+        "full.webp": {
+          "path": "assets/cards/event-rivers-run-red/belle-prise/full.webp",
+          "width": 900,
+          "height": 1260,
+          "bytes": 340428,
+          "sha256": "75172b0c96935f95de32fa6532bd6bfa77624c44f1cf15333a598ae8a77609fa"
+        },
+        "medium.webp": {
+          "path": "assets/cards/event-rivers-run-red/belle-prise/medium.webp",
+          "width": 450,
+          "height": 630,
+          "bytes": 115008,
+          "sha256": "350dc66a03d17858fd29b97e6ef46c8fb91cd38ee2a614faf2b7cac5afa49d44"
+        },
+        "thumb.webp": {
+          "path": "assets/cards/event-rivers-run-red/belle-prise/thumb.webp",
+          "width": 225,
+          "height": 315,
+          "bytes": 30428,
+          "sha256": "7df16f0d67acab0aa7d0cee2da528bdd63d89222e5d9ab2b043c1d75109bc673"
+        }
+      }
+    },
+    {
+      "id": "EV-RRR-02",
+      "name": "Des plumes partout !",
+      "faction": "event-rivers-run-red",
+      "source": "tempetedeplumes.png",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/event-rivers-run-red/des-plumes-partout",
+      "variants": {
+        "full.webp": {
+          "path": "assets/cards/event-rivers-run-red/des-plumes-partout/full.webp",
+          "width": 900,
+          "height": 1260,
+          "bytes": 226586,
+          "sha256": "a153c8e13eaef5ab2bc2829e97934d55bf31dbb2e82f2e537bc5c99fd8ec31ef"
+        },
+        "medium.webp": {
+          "path": "assets/cards/event-rivers-run-red/des-plumes-partout/medium.webp",
+          "width": 450,
+          "height": 630,
+          "bytes": 75396,
+          "sha256": "bb9aa2b986d5a82282479b99eab46aeb7972b89503a5ff7fc13ef04f851a2d79"
+        },
+        "thumb.webp": {
+          "path": "assets/cards/event-rivers-run-red/des-plumes-partout/thumb.webp",
+          "width": 225,
+          "height": 315,
+          "bytes": 21266,
+          "sha256": "f470347faafb3249e131453f7369f13b10481a4ac655a62783f7b719dcb288d5"
+        }
+      }
+    },
+    {
+      "id": "EV-RRR-03",
+      "name": "Le Chantier royal",
+      "faction": "event-rivers-run-red",
+      "source": "chantierroyal.png",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/event-rivers-run-red/chantier-royal",
+      "variants": {
+        "full.webp": {
+          "path": "assets/cards/event-rivers-run-red/chantier-royal/full.webp",
+          "width": 900,
+          "height": 1260,
+          "bytes": 339082,
+          "sha256": "3cd655c20069dac70749eec1f4dc85f3d55ae82ed747d14cc3a247f961dee1ab"
+        },
+        "medium.webp": {
+          "path": "assets/cards/event-rivers-run-red/chantier-royal/medium.webp",
+          "width": 450,
+          "height": 630,
+          "bytes": 105300,
+          "sha256": "a73572d228851ad0c190534afe47fe76a4e93faad091bdca491288fdaafacf61"
+        },
+        "thumb.webp": {
+          "path": "assets/cards/event-rivers-run-red/chantier-royal/thumb.webp",
+          "width": 225,
+          "height": 315,
+          "bytes": 27320,
+          "sha256": "660174e1ea369e4aabf56da046514f434c07d87d9825a03b4902fa787dbcf6db"
+        }
+      }
+    },
+    {
+      "id": "EV-RRR-04",
+      "name": "Hargrulka, Roi des Trolls",
+      "faction": "event-rivers-run-red",
+      "source": "hargrulka.png",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/event-rivers-run-red/hargrulka-roi-troll",
+      "variants": {
+        "full.webp": {
+          "path": "assets/cards/event-rivers-run-red/hargrulka-roi-troll/full.webp",
+          "width": 900,
+          "height": 1260,
+          "bytes": 205326,
+          "sha256": "b5236fa9a3e28e29e158b7e553854d65ec027a840d29b1d90ef47af9d94ddcc6"
+        },
+        "medium.webp": {
+          "path": "assets/cards/event-rivers-run-red/hargrulka-roi-troll/medium.webp",
+          "width": 450,
+          "height": 630,
+          "bytes": 67960,
+          "sha256": "026473416c31b6577bc2106d53968ca55a0b7fd5e66a7d69621565214253221a"
+        },
+        "thumb.webp": {
+          "path": "assets/cards/event-rivers-run-red/hargrulka-roi-troll/thumb.webp",
+          "width": 225,
+          "height": 315,
+          "bytes": 18462,
+          "sha256": "4aba74bb2d3690b40383bbd8e79c39a195d03913bf1b791336284a9f078cb919"
+        }
+      }
+    },
+    {
+      "id": "EV-RRR-05",
+      "name": "Trahison",
+      "faction": "event-rivers-run-red",
+      "source": "trahison.png",
+      "base": "modules/six-crowns-kingmaker-card-game/assets/cards/event-rivers-run-red/trahison",
+      "variants": {
+        "full.webp": {
+          "path": "assets/cards/event-rivers-run-red/trahison/full.webp",
+          "width": 900,
+          "height": 1260,
+          "bytes": 151288,
+          "sha256": "eaf6671efe94ebc0cde773840e6b88fd387b90f2602f290571dbbb355836991c"
+        },
+        "medium.webp": {
+          "path": "assets/cards/event-rivers-run-red/trahison/medium.webp",
+          "width": 450,
+          "height": 630,
+          "bytes": 49776,
+          "sha256": "13bb69b6ce964b9637d86927be9b4028cbaf1827102232e56f4c5925fe865794"
+        },
+        "thumb.webp": {
+          "path": "assets/cards/event-rivers-run-red/trahison/thumb.webp",
+          "width": 225,
+          "height": 315,
+          "bytes": 14218,
+          "sha256": "b7aca767676c1f6d3bf1d84422a5d84a039a263dafcd4610df45d3486177e7d9"
+        }
+      }
     }
   ],
   "interfaceAssets": [
@@ -5109,6 +5259,19 @@
           "bytes": 11430,
           "sha256": "176e93cf3c4f2426f7a16345b3793d27e6d8978ce0751eb7e124db2900990dfb"
         }
+      }
+    },
+    "riversRunRed": {
+      "setId": "rivers-run-red",
+      "setLabel": "Rivers Run Red",
+      "booster": {
+        "path": "assets/boosters/rivers-run-red-evenementiel.webp",
+        "size": [
+          800,
+          1200
+        ],
+        "bytes": 324404,
+        "sha256": "b3040135cb96c52157c002b91337e9b5424a90e208dbda6c18897491dbbaa004"
       }
     }
   }

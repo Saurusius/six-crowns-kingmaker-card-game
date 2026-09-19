@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { EVENT_BOOSTER_ID } from "./event-spells.js";
+import { EVENT_BOOSTER_ID, RIVERS_RUN_RED_BOOSTER_ID, RIVERS_RUN_RED_BOOSTER_IMAGE } from "./event-spells.js";
 import { SPECIAL_BOOSTERS, openBooster, openSpecialBooster, openEventBooster } from "./boosters.js";
 import { transactUserFlags } from "./transactions.js";
 
@@ -14,7 +14,8 @@ export const SHOP_PRODUCTS = Object.freeze([
   { id: "theme-aldori", label: "Booster Maison Aldori", description: "3 cartes issues de la Maison Aldori.", price: 175, image: SPECIAL_BOOSTERS.aldori.image, kind: "special", faction: "aldori", quantity: 1 },
   { id: "theme-khans", label: "Booster Khans de Fer", description: "3 cartes issues des Khans de Fer.", price: 175, image: SPECIAL_BOOSTERS["iron-khans"].image, kind: "special", faction: "iron-khans", quantity: 1 },
   { id: "theme-arcana", label: "Booster Arcanes des Terres Dérobées", description: "3 cartes issues des Arcanes des Terres Dérobées.", price: 175, image: SPECIAL_BOOSTERS["stolen-lands-arcana"].image, kind: "special", faction: "stolen-lands-arcana", quantity: 1 },
-  { id: "event-stolen-lands", label: "Booster événementiel — Terres Dérobées", description: "1 carte dorée exclusive de la suite événementielle.", price: 400, image: `modules/${MODULE_ID}/assets/boosters/terres-derobees-evenementiel.webp`, kind: "event", boosterId: EVENT_BOOSTER_ID, quantity: 1 },
+  { id: "event-stolen-lands", label: "Booster de sortilèges — Terres Dérobées", description: "1 carte dorée exclusive parmi les 5 sortilèges de la mini-collection.", price: 400, image: `modules/${MODULE_ID}/assets/boosters/terres-derobees-evenementiel.webp`, kind: "event", boosterId: EVENT_BOOSTER_ID, quantity: 1 },
+  { id: "event-rivers-run-red", label: "Booster de sortilèges — Rivers Run Red", description: "1 carte dorée exclusive parmi les 5 sortilèges du chapitre Rivers Run Red.", price: 400, image: RIVERS_RUN_RED_BOOSTER_IMAGE, kind: "event", boosterId: RIVERS_RUN_RED_BOOSTER_ID, quantity: 1 },
   { id: "classic-bundle", label: "Lot de 5 boosters classiques", description: "Cinq boosters classiques à prix réduit.", price: 450, image: `modules/${MODULE_ID}/assets/boosters/booster-classique.webp`, kind: "classic", quantity: 5 }
 ]);
 

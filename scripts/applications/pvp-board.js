@@ -108,14 +108,29 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
         ${target.artThumb ? `<img src="${escape(target.artThumb)}" alt="">` : `<span class="scg-spell-target-icon"><i class="fa-solid fa-chess-pawn"></i></span>`}
         <span><strong>${escape(target.name)}</strong><small>${escape(target.rowLabel ?? "")} · Puissance ${escape(target.strength ?? 0)}</small></span>
       </label>`;
+    const rowMarkup = (targets = [], inputName = "spell-row") => targets.map((target, index) => `
+      <label class="scg-spell-target-row">
+        <input type="radio" name="${inputName}" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}>
+        <span><i class="fa-solid fa-shield-halved"></i><strong>${escape(target.name)}</strong><small>${escape(target.scoreLabel ?? "Score actuel")} : ${escape(target.strength ?? 0)}</small></span>
+      </label>`).join("");
+
     let content = "";
+    let extraControls = "";
     if (options.mode === "row") {
-      content = (options.targets ?? []).map((target, index) => `<label class="scg-spell-target-row"><input type="radio" name="spell-row" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}><span><i class="fa-solid fa-shield-halved"></i><strong>${escape(target.name)}</strong><small>Score actuel : ${escape(target.strength ?? 0)}</small></span></label>`).join("");
+      content = rowMarkup(options.targets ?? []);
     } else if (options.mode === "multi-own-card") {
       content = (options.targets ?? []).map((target) => targetMarkup(target, "checkbox", "spell-card")).join("");
+    } else if (options.mode === "discard-card-row") {
+      content = `
+        <div class="scg-spell-target-subgroup"><h3><i class="fa-solid fa-box-archive"></i> Carte à reconstruire</h3><div class="scg-spell-target-subgrid">${(options.targets ?? []).map((target, index) => targetMarkup(target, "radio", "spell-card", index === 0)).join("")}</div></div>
+        <div class="scg-spell-target-subgroup"><h3><i class="fa-solid fa-table-columns"></i> Ligne de déploiement</h3><div class="scg-spell-target-subgrid is-rows">${rowMarkup(options.rowTargets ?? [], "spell-destination-row")}</div></div>`;
     } else {
       content = (options.targets ?? []).map((target, index) => targetMarkup(target, "radio", "spell-card", index === 0)).join("");
     }
+    if (options.mode === "deck-pick" && (options.targets?.length ?? 0) >= 3) {
+      extraControls = `<div class="scg-spell-order-control"><label><span>Première carte placée sous la pioche</span><select name="spell-bottom-first"></select></label><small>La dernière carte suivra automatiquement. Vous choisissez ainsi l’ordre des deux cartes remises sous la pioche.</small></div>`;
+    }
+
     return new Promise((resolve) => {
       this._removeOverlays();
       const overlay = document.createElement("div");
@@ -124,7 +139,7 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
       overlay.setAttribute("role", "dialog");
       overlay.setAttribute("aria-modal", "true");
       overlay.setAttribute("aria-label", `Ciblage du sortilège ${options.spell.name}`);
-      overlay.innerHTML = `<form class="scg-spell-target-dialog"><header><div><small>Sortilège emblématique</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header><div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""}">${content}</div>${options.mode === "multi-own-card" ? `<p class="scg-spell-target-help">Choisissez entre 1 et ${escape(options.maxTargets ?? 3)} cartes.</p>` : ""}<footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer></form>`;
+      overlay.innerHTML = `<form class="scg-spell-target-dialog"><header><div><small>Sortilège emblématique</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header><div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""} ${options.mode === "discard-card-row" ? "is-composite" : ""}">${content}</div>${options.mode === "multi-own-card" ? `<p class="scg-spell-target-help">Choisissez entre 1 et ${escape(options.maxTargets ?? 3)} cartes.</p>` : ""}${extraControls}<footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer></form>`;
       document.body.append(overlay);
       const previousFocus = document.activeElement;
       const onKeyDown = (event) => { if (event.key === "Escape") finish(null); };
@@ -143,11 +158,47 @@ export class SixCrownsPvpBoard extends HandlebarsApplicationMixin(ApplicationV2)
           if (checked.length > Number(options.maxTargets ?? 3)) input.checked = false;
         }));
       }
+      if (options.mode === "deck-pick") {
+        const orderSelect = overlay.querySelector('[name="spell-bottom-first"]');
+        const syncBottomOrder = () => {
+          if (!orderSelect) return;
+          const chosenId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          const remaining = (options.targets ?? []).filter((target) => target.id !== chosenId);
+          const previous = orderSelect.value;
+          orderSelect.innerHTML = remaining.map((target) => `<option value="${escape(target.id)}">${escape(target.name)}</option>`).join("");
+          if (remaining.some((target) => target.id === previous)) orderSelect.value = previous;
+        };
+        overlay.querySelectorAll('input[name="spell-card"]').forEach((input) => input.addEventListener("change", syncBottomOrder));
+        syncBottomOrder();
+      }
       overlay.querySelector("form").addEventListener("submit", (event) => {
         event.preventDefault();
-        if (options.mode === "row") return finish({ row: overlay.querySelector('input[name="spell-row"]:checked')?.value });
-        if (options.mode === "multi-own-card") return finish({ cardIds: [...overlay.querySelectorAll('input[name="spell-card"]:checked')].map((input) => input.value) });
-        return finish({ cardId: overlay.querySelector('input[name="spell-card"]:checked')?.value });
+        if (options.mode === "row") {
+          const row = overlay.querySelector('input[name="spell-row"]:checked')?.value;
+          return row ? finish({ row }) : ui.notifications.warn("Choisissez une ligne.");
+        }
+        if (options.mode === "multi-own-card") {
+          const cardIds = [...overlay.querySelectorAll('input[name="spell-card"]:checked')].map((input) => input.value);
+          return cardIds.length > 0 ? finish({ cardIds }) : ui.notifications.warn("Choisissez au moins une carte.");
+        }
+        if (options.mode === "discard-card-row") {
+          const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          const row = overlay.querySelector('input[name="spell-destination-row"]:checked')?.value;
+          if (!cardId) return ui.notifications.warn("Choisissez une carte.");
+          return row ? finish({ cardId, row }) : ui.notifications.warn("Choisissez une ligne.");
+        }
+        if (options.mode === "deck-pick") {
+          const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          if (!cardId) return ui.notifications.warn("Choisissez une carte à garder.");
+          const remaining = (options.targets ?? []).filter((target) => target.id !== cardId).map((target) => target.id);
+          const first = overlay.querySelector('[name="spell-bottom-first"]')?.value;
+          const bottomOrder = first && remaining.includes(first)
+            ? [first, ...remaining.filter((id) => id !== first)]
+            : remaining;
+          return finish({ cardId, bottomOrder });
+        }
+        const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+        return cardId ? finish({ cardId }) : ui.notifications.warn("Choisissez une carte.");
       });
       overlay.querySelector("input, button")?.focus({ preventScroll: true });
     });

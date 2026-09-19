@@ -37,7 +37,7 @@
           <h2>Choisissez votre sortilège</h2>
           <p>Les decks sont maintenant sélectionnés. Choisissez secrètement un sortilège de votre collection ; une seule activation sera possible pendant toute la partie.</p>
         </div>
-        <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> Terres Dérobées · 5 cartes dorées</span>
+        <span class="scg-event-set-chip"><i class="fa-solid fa-crown"></i> {{eventSpellCatalogLabel}}</span>
       </div>
 
       <div class="scg-selected-decks-summary">
@@ -60,7 +60,7 @@
           {{#each eventSpellChoices}}
             <button type="button" role="listitem" class="scg-spell-choice-card {{#if selected}}is-selected{{/if}}" data-action="select-event-spell" data-spell-id="{{id}}">
               <span class="scg-spell-choice-art"><img src="{{artMedium}}" alt="Illustration de {{name}}"></span>
-              <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p>{{text}}</p></span>
+              <span class="scg-spell-choice-copy"><small>{{availabilityLabel}}</small><strong>{{name}}</strong><em>{{activation}}</em><p class="scg-spell-choice-description" data-spell-description-scroll><span>{{text}}</span></p></span>
               <i class="fa-solid fa-circle-check scg-spell-selected-mark"></i>
             </button>
           {{/each}}
@@ -68,7 +68,7 @@
       </div>
 
       {{#unless hasOwnedEventSpells}}
-        <div class="scg-spell-empty-state"><i class="fa-solid fa-lock"></i><div><strong>Aucun sortilège possédé</strong><p>Les cartes non obtenues restent entièrement secrètes. Ouvrez un booster événementiel ou consultez votre collection pour en débloquer.</p></div></div>
+        <div class="scg-spell-empty-state"><i class="fa-solid fa-lock"></i><div><strong>Aucun sortilège possédé</strong><p>Les cartes non obtenues restent entièrement secrètes. Ouvrez un booster de sortilèges ou consultez votre collection pour en débloquer.</p></div></div>
       {{/unless}}
 
       <div class="scg-spell-selection-note">

@@ -624,11 +624,45 @@
 
 .scg-spell-choice-art img { width: 100%; height: 100%; object-fit: cover; }
 .scg-spell-choice-art > i { font-size: 2.4rem; }
-.scg-spell-choice-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.scg-spell-choice-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; height: 156px; overflow: hidden; }
 .scg-spell-choice-copy small { color: #d9bd79; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; }
 .scg-spell-choice-copy strong { color: #fff0bf; font-size: 1rem; line-height: 1.1; }
 .scg-spell-choice-copy em { color: #bcae91; font-size: .69rem; line-height: 1.3; }
 .scg-spell-choice-copy p { margin: 2px 0 0; color: #ddd4c0; font-size: .73rem; line-height: 1.35; }
+.scg-spell-choice-description {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 82%, rgba(0,0,0,.3) 96%, transparent 100%);
+}
+.scg-spell-choice-description > span {
+  display: block;
+  transform: translateY(0);
+}
+.scg-spell-choice-description.is-auto-scrolling > span {
+  will-change: transform;
+  animation-name: scg-spell-description-scroll;
+  animation-duration: var(--scg-spell-scroll-duration, 10s);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.scg-spell-choice-description:not(.is-auto-scrolling) {
+  mask-image: none;
+}
+@keyframes scg-spell-description-scroll {
+  0%, 14% { transform: translateY(0); }
+  86%, 100% { transform: translateY(calc(-1 * var(--scg-spell-scroll-distance, 0px))); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scg-spell-choice-description.is-auto-scrolling {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    mask-image: none;
+  }
+  .scg-spell-choice-description.is-auto-scrolling > span { animation: none; }
+}
 .scg-spell-selected-mark { position: absolute; top: 8px; right: 8px; color: #ffe597; opacity: 0; filter: drop-shadow(0 0 5px #8a5d0b); }
 .scg-spell-choice-card.is-selected .scg-spell-selected-mark { opacity: 1; }
 
@@ -1389,6 +1423,7 @@
 .scg-collection-group[data-collection-group="iron-khans"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(227,145,78,.9), rgba(120,69,25,.18) 42%, rgba(255,209,171,.48)); }
 .scg-collection-group[data-collection-group="stolen-lands-arcana"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(111,223,162,.9), rgba(33,96,62,.18) 42%, rgba(201,255,229,.45)); }
 .scg-collection-group[data-collection-group="event-stolen-lands"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(255,232,126,.95), rgba(130,83,29,.18) 42%, rgba(255,242,189,.6)); }
+.scg-collection-group[data-collection-group="event-rivers-run-red"] .scg-collection-card::before { background:linear-gradient(135deg, rgba(226,84,68,.95), rgba(91,21,19,.22) 42%, rgba(255,211,117,.58)); }
 
 .scg-card-preview > div { border-radius:24px; padding:18px; background:linear-gradient(180deg, rgba(26,20,14,.96), rgba(15,11,8,.98)); border:2px solid rgba(255,255,255,.12); box-shadow:0 30px 70px rgba(0,0,0,.45); }
 .scg-card-preview img { border-radius:18px; box-shadow:0 0 0 2px rgba(255,255,255,.08), 0 0 0 6px var(--scg-preview-glow, rgba(255,255,255,.08)); }
@@ -1407,6 +1442,7 @@
 .scg-card-preview.scg-preview-theme-iron-khans > div { border-color: rgba(227,145,78,.55); }
 .scg-card-preview.scg-preview-theme-stolen-lands-arcana > div { border-color: rgba(111,223,162,.55); }
 .scg-card-preview.scg-preview-theme-event-stolen-lands > div { border-color: rgba(255,232,126,.62); }
+.scg-card-preview.scg-preview-theme-event-rivers-run-red > div { border-color: rgba(226,84,68,.68); }
 
 
 /* v0.14.4 — barre d'actions structurée et atelier de recyclage intégré */
@@ -1863,3 +1899,63 @@
   background: #c5a34e;
 }
 .scg-end-actions { position: relative; z-index: 5; pointer-events: auto; }
+
+/* v0.15.3 — ciblages composites des sortilèges Rivers Run Red */
+.scg-spell-target-list.is-composite {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.scg-spell-target-subgroup {
+  display: grid;
+  gap: 10px;
+}
+.scg-spell-target-subgroup h3 {
+  margin: 0;
+  color: #f2d58a;
+  font-size: .82rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.scg-spell-target-subgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.scg-spell-target-subgrid.is-rows {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.scg-spell-order-control {
+  margin: 0 20px 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(242,198,87,.24);
+  border-radius: 9px;
+  background: rgba(23,22,22,.72);
+}
+.scg-spell-order-control label {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(220px, .7fr);
+  align-items: center;
+  gap: 12px;
+  color: #f3dfaf;
+  font-weight: 700;
+}
+.scg-spell-order-control select {
+  width: 100%;
+}
+.scg-spell-order-control small {
+  display: block;
+  margin-top: 6px;
+  color: #ac9f87;
+}
+@media (max-width: 760px) {
+  .scg-spell-target-subgrid.is-rows { grid-template-columns: 1fr; }
+  .scg-spell-order-control label { grid-template-columns: 1fr; }
+}
+
+/* Accents des mini-collections de sortilèges dans le sélecteur de boosters. */
+.scg-special-booster-option.is-event-gold { --picker-accent: #e8c765; }
+.scg-special-booster-option.is-event-red { --picker-accent: #d95f52; }
+
+
+/* v0.15.4 — défilement automatique lent des descriptions trop longues dans la sélection des sortilèges. */

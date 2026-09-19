@@ -1,12 +1,13 @@
 import { buildTraitBadges, describeTraits } from "./traits.js";
 import { normalizeCardArt } from "./art.js";
-import { EVENT_CARD_BACK, EVENT_SET_ICON } from "./event-spells.js";
+import { EVENT_CARD_BACK, EVENT_SET_ICON, RIVERS_RUN_RED_BOOSTER_IMAGE } from "./event-spells.js";
 export const FACTION_DETAILS = Object.freeze({
   "six-crowns": Object.freeze({ label: "Royaume des Six Couronnes", symbol: "♛", order: 1 }),
   aldori: Object.freeze({ label: "Maison Aldori", symbol: "⚔", order: 2 }),
   "iron-khans": Object.freeze({ label: "Khans de Fer", symbol: "♞", order: 3 }),
   "stolen-lands-arcana": Object.freeze({ label: "Arcanes des Terres Dérobées", symbol: "✦", order: 4 }),
-  "event-stolen-lands": Object.freeze({ label: "Sortilèges — Terres Dérobées", symbol: "★", order: 5, event: true, icon: EVENT_SET_ICON })
+  "event-stolen-lands": Object.freeze({ label: "Sortilèges — Terres Dérobées", symbol: "★", order: 5, event: true, icon: EVENT_SET_ICON }),
+  "event-rivers-run-red": Object.freeze({ label: "Sortilèges — Rivers Run Red", symbol: "★", order: 6, event: true, icon: RIVERS_RUN_RED_BOOSTER_IMAGE })
 });
 
 export const RARITY_DETAILS = Object.freeze({

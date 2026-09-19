@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.15.4
+
+- Ajoute un défilement automatique vertical lent aux descriptions de sortilèges trop longues dans l’écran de sélection avant la partie.
+- Le défilement ne s’active que lorsque le texte dépasse réellement la zone disponible ; les descriptions courtes restent parfaitement statiques.
+- Adapte automatiquement la durée du défilement à la quantité de texte masquée et conserve un mode manuel lorsque la réduction des animations est activée dans le système.
+
+## 0.15.3
+
+- Ajoute la mini-collection de sortilèges **Rivers Run Red** : **Belle prise !**, **Des plumes partout !**, **Le Chantier royal**, **Hargrulka, Roi des Trolls** et **Trahison**.
+- Intègre les cinq illustrations de cartes et le booster dédié, avec leurs variantes optimisées pour la collection et le plateau.
+- Ajoute un sélecteur de chapitre lors de l’ouverture d’un booster de sortilèges et conserve la mini-collection **Terres Dérobées** existante.
+- Ajoute le booster **Rivers Run Red** à la boutique et porte le catalogue à **170 cartes collectionnables**.
+- Implémente les cinq nouveaux effets en solo et en PvP, y compris la sélection dans la pioche, l’affaiblissement de ligne, le retour en jeu depuis la défausse et le changement temporaire de camp.
+- Renomme les libellés d’ouverture concernés en « booster de sortilèges » pour mieux refléter le fonctionnement par mini-collection de chapitre.
+
 ## 0.15.2
 
 - Supprime l’ouverture automatique de l’accueil du module lors de la connexion à un monde Foundry.

@@ -12,12 +12,11 @@ import {
   openBooster,
   openBoosters,
   showSpecialBoosterSelector,
-  openEventBooster,
+  showEventBoosterSelector,
   getEventBoosters,
   recycleCardsForBooster,
   resetCollectionForUser
 } from "../boosters.js";
-import { EVENT_BOOSTER_ID } from "../event-spells.js";
 import {
   FACTION_DETAILS,
   RARITY_DETAILS,
@@ -344,14 +343,11 @@ export class SixCrownsCollection extends HandlebarsApplicationMixin(ApplicationV
       catch (error) { ui.notifications.error(error.message); }
     });
     this.element.querySelector("[data-action='open-special-booster']")?.addEventListener("click", () => showSpecialBoosterSelector());
-    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", async () => {
+    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", () => {
       try {
-        const events = getEventBoosters();
-        if (!events.some((entry) => entry.id === EVENT_BOOSTER_ID)) throw new Error("Le booster Terres Dérobées n’est pas configuré.");
-        await openEventBooster({ boosterId: EVENT_BOOSTER_ID });
-        await this.render({ force: true });
+        showEventBoosterSelector();
       } catch (error) {
-        console.error(`${MODULE_TITLE} | Booster événementiel impossible`, error);
+        console.error(`${MODULE_TITLE} | Booster de sortilèges impossible`, error);
         ui.notifications.error(error.message);
       }
     });

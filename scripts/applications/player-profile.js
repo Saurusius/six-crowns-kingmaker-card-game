@@ -154,7 +154,7 @@ export class SixCrownsPlayerProfile extends HandlebarsApplicationMixin(Applicati
     return {
       userName: game.user?.name ?? "Joueur",
       avatar: game.user?.avatar ?? "icons/svg/mystery-man.svg",
-      version: game.modules.get(MODULE_ID)?.version ?? "0.15.2",
+      version: game.modules.get(MODULE_ID)?.version ?? "0.15.4",
       crowns,
       decks: decks.length,
       discovered,

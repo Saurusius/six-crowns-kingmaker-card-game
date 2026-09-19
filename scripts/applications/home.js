@@ -6,10 +6,9 @@ import {
   getSpecialBoosterCredits,
   loadCardCatalog,
   openBooster,
-  openEventBooster,
+  showEventBoosterSelector,
   showSpecialBoosterSelector
 } from "../boosters.js";
-import { EVENT_BOOSTER_ID } from "../event-spells.js";
 import { openGlossary, openRulebook } from "../glossary.js";
 import { getCustomDecks, openCollection, openDeckBuilder } from "../profile.js";
 import { getCrowns } from "../shop.js";
@@ -71,7 +70,7 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
 
     const discovered = catalog.filter((card) => Number(collection?.[card.id]?.count ?? 0) > 0).length;
     const copies = catalog.reduce((total, card) => total + Math.max(0, Number(collection?.[card.id]?.count ?? 0)), 0);
-    const version = game.modules.get(MODULE_ID)?.version ?? "0.15.2";
+    const version = game.modules.get(MODULE_ID)?.version ?? "0.15.4";
 
     return {
       userName: game.user?.name ?? "Joueur",
@@ -160,7 +159,12 @@ export class SixCrownsHome extends HandlebarsApplicationMixin(ApplicationV2) {
     });
 
     this.element.querySelector("[data-action='event-booster']")?.addEventListener("click", () => {
-      void run(() => openEventBooster({ boosterId: EVENT_BOOSTER_ID }), "Impossible d’ouvrir le booster événementiel.");
+      try {
+        showEventBoosterSelector();
+      } catch (error) {
+        console.error(`${MODULE_TITLE} | Sélecteur de booster de sortilèges impossible`, error);
+        ui.notifications.error(error?.message ?? "Impossible d’ouvrir les boosters de sortilèges.");
+      }
     });
 
     this.element.querySelector("[data-action='rulebook']")?.addEventListener("click", () => openRulebook());

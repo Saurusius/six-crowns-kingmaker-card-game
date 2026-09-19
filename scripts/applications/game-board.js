@@ -1,7 +1,7 @@
 import { MODULE_ID, MODULE_TITLE } from "../constants.js";
 import { bindFloatingOverlays, mountGlobalModal } from "../ui/floating-overlays.js";
 import { openDiscardViewer } from "../ui/discard-viewer.js";
-import { getBoosterCredits, getCollection, getEventBoosterCredits, openBooster, openEventBooster } from "../boosters.js";
+import { getBoosterCredits, getCollection, getEventBoosterCredits, openBooster, showEventBoosterSelector } from "../boosters.js";
 import { normalizeCardArt } from "../art.js";
 import { getDeckDefinition } from "../rules/decks.js";
 import { openCollection, openDeckBuilder, syncCustomDeckRegistry } from "../profile.js";
@@ -9,7 +9,7 @@ import { openGlossary, openRulebook } from "../glossary.js";
 import { requestAnalyticsRecord } from "../analytics.js";
 import { awardCrowns } from "../shop.js";
 import { recordSoloMatch } from "../player-stats.js";
-import { EVENT_BOOSTER_ID, getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
+import { getEventSpellDefinition, listEventSpellDefinitions } from "../event-spells.js";
 import {
   PHASES,
   beginCoinToss,
@@ -149,7 +149,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       getEventBoosterCredits(),
       getCollection()
     ]);
-    const eventSpellChoices = listEventSpellDefinitions()
+    const eventSpellDefinitions = listEventSpellDefinitions();
+    const eventSpellChoices = eventSpellDefinitions
       .map((spell) => {
         const ownedCount = Math.max(0, Number(collection?.[spell.id]?.count ?? 0));
         return {
@@ -175,14 +176,15 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       hasOwnedEventSpells: eventSpellChoices.length > 0,
       hasMultipleEventSpells: eventSpellChoices.length > 1,
       eventSpellChoiceCount: eventSpellChoices.length,
+      eventSpellCatalogLabel: `${new Set(eventSpellDefinitions.map((spell) => spell.setId)).size} mini-collections · ${eventSpellDefinitions.length} cartes dorées`,
       selectedPlayerDeckLabel: this.matchState.selectedPlayerDeck === "random" ? "Deck aléatoire" : selectedPlayerDeckDefinition?.name ?? "Deck joueur",
       selectedOpponentDeckLabel: this.matchState.selectedOpponentDeck === "random" ? "Deck aléatoire" : selectedOpponentDeckDefinition?.name ?? "Deck adverse",
       noSpellSelected: !this.matchState.spells?.player?.id,
       selectedSpellLockedLabel: view.playerSpell?.equipped ? view.playerSpell.name : "Sans sortilège",
       canOpenEventBooster: game.user.isGM || eventBoosterCredits > 0,
       eventBoosterButtonLabel: game.user.isGM
-        ? "Ouvrir un booster Terres Dérobées (MJ)"
-        : `Ouvrir un booster Terres Dérobées (${eventBoosterCredits})`,
+        ? "Ouvrir un booster de sortilèges (MJ)"
+        : `Ouvrir un booster de sortilèges (${eventBoosterCredits})`,
       canOpenBooster: game.user.isGM || boosterCredits > 0,
       boosterButtonLabel: game.user.isGM
         ? "Ouvrir un booster (MJ)"
@@ -247,6 +249,46 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     document.querySelectorAll(`[data-scg-spell-overlay-owner="${this.id}"]`).forEach((element) => element.remove());
   }
 
+  _setupSpellDescriptionAutoScroll() {
+    this._spellDescriptionObserver?.disconnect?.();
+    this._spellDescriptionObserver = null;
+
+    const descriptions = [...this.element.querySelectorAll("[data-spell-description-scroll]")];
+    if (descriptions.length === 0) return;
+
+    const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    const measure = (viewport) => {
+      const content = viewport.firstElementChild;
+      if (!content) return;
+
+      viewport.classList.remove("is-auto-scrolling");
+      viewport.style.removeProperty("--scg-spell-scroll-distance");
+      viewport.style.removeProperty("--scg-spell-scroll-duration");
+
+      // Mesure après remise à zéro de l'animation pour éviter que le transform ne fausse la hauteur.
+      const overflow = Math.max(0, Math.ceil(content.scrollHeight - viewport.clientHeight));
+      if (overflow <= 2) return;
+
+      viewport.style.setProperty("--scg-spell-scroll-distance", `${overflow}px`);
+      // Environ 9 px/s, avec un minimum confortable pour les petits dépassements.
+      const duration = Math.min(22, Math.max(9, 5 + (overflow / 9)));
+      viewport.style.setProperty("--scg-spell-scroll-duration", `${duration.toFixed(1)}s`);
+      viewport.classList.add("is-auto-scrolling");
+
+      if (reducedMotion) viewport.scrollTop = 0;
+    };
+
+    const measureAll = () => descriptions.forEach(measure);
+    globalThis.requestAnimationFrame(() => globalThis.requestAnimationFrame(measureAll));
+
+    if (globalThis.ResizeObserver) {
+      this._spellDescriptionObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) measure(entry.target);
+      });
+      descriptions.forEach((viewport) => this._spellDescriptionObserver.observe(viewport));
+    }
+  }
+
   async _requestSpellPayload(options) {
     if (!options?.canActivate) throw new Error(options?.reason || "Ce sortilège ne peut pas être activé.");
     if (options.mode === "hydra-victim" && !options.requiresSelection) {
@@ -261,17 +303,27 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         <span><strong>${escape(target.name)}</strong><small>${escape(target.rowLabel ?? "")} · Puissance ${escape(target.strength ?? 0)}</small></span>
       </label>`;
 
+    const rowMarkup = (targets = [], inputName = "spell-row") => targets.map((target, index) => `
+      <label class="scg-spell-target-row">
+        <input type="radio" name="${inputName}" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}>
+        <span><i class="fa-solid fa-shield-halved"></i><strong>${escape(target.name)}</strong><small>${escape(target.scoreLabel ?? "Score actuel")} : ${escape(target.strength ?? 0)}</small></span>
+      </label>`).join("");
+
     let content = "";
+    let extraControls = "";
     if (options.mode === "row") {
-      content = (options.targets ?? []).map((target, index) => `
-        <label class="scg-spell-target-row">
-          <input type="radio" name="spell-row" value="${escape(target.id)}" ${index === 0 ? "checked" : ""}>
-          <span><i class="fa-solid fa-shield-halved"></i><strong>${escape(target.name)}</strong><small>Score actuel : ${escape(target.strength ?? 0)}</small></span>
-        </label>`).join("");
+      content = rowMarkup(options.targets ?? []);
     } else if (options.mode === "multi-own-card") {
       content = (options.targets ?? []).map((target) => targetMarkup(target, "checkbox", "spell-card")).join("");
+    } else if (options.mode === "discard-card-row") {
+      content = `
+        <div class="scg-spell-target-subgroup"><h3><i class="fa-solid fa-box-archive"></i> Carte à reconstruire</h3><div class="scg-spell-target-subgrid">${(options.targets ?? []).map((target, index) => targetMarkup(target, "radio", "spell-card", index === 0)).join("")}</div></div>
+        <div class="scg-spell-target-subgroup"><h3><i class="fa-solid fa-table-columns"></i> Ligne de déploiement</h3><div class="scg-spell-target-subgrid is-rows">${rowMarkup(options.rowTargets ?? [], "spell-destination-row")}</div></div>`;
     } else {
       content = (options.targets ?? []).map((target, index) => targetMarkup(target, "radio", "spell-card", index === 0)).join("");
+    }
+    if (options.mode === "deck-pick" && (options.targets?.length ?? 0) >= 3) {
+      extraControls = `<div class="scg-spell-order-control"><label><span>Première carte placée sous la pioche</span><select name="spell-bottom-first"></select></label><small>La dernière carte suivra automatiquement. Vous choisissez ainsi l’ordre des deux cartes remises sous la pioche.</small></div>`;
     }
 
     return new Promise((resolve) => {
@@ -286,8 +338,9 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       overlay.innerHTML = `
         <form class="scg-spell-target-dialog">
           <header><div><small>Sortilège événementiel</small><h2>${escape(options.spell.name)}</h2><p>${escape(options.spell.text)}</p></div><button type="button" data-spell-cancel aria-label="Fermer">×</button></header>
-          <div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""}">${content}</div>
+          <div class="scg-spell-target-list ${options.mode === "row" ? "is-rows" : ""} ${options.mode === "discard-card-row" ? "is-composite" : ""}">${content}</div>
           ${options.mode === "multi-own-card" ? `<p class="scg-spell-target-help">Choisissez entre 1 et ${escape(options.maxTargets ?? 3)} cartes.</p>` : ""}
+          ${extraControls}
           <footer><button type="button" data-spell-cancel>Annuler</button><button type="submit" class="scg-primary-button"><i class="fa-solid fa-wand-sparkles"></i> Activer</button></footer>
         </form>`;
       document.body.append(overlay);
@@ -310,6 +363,19 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
           if (checked.length > Number(options.maxTargets ?? 3)) input.checked = false;
         }));
       }
+      if (options.mode === "deck-pick") {
+        const orderSelect = overlay.querySelector('[name="spell-bottom-first"]');
+        const syncBottomOrder = () => {
+          if (!orderSelect) return;
+          const chosenId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          const remaining = (options.targets ?? []).filter((target) => target.id !== chosenId);
+          const previous = orderSelect.value;
+          orderSelect.innerHTML = remaining.map((target) => `<option value="${escape(target.id)}">${escape(target.name)}</option>`).join("");
+          if (remaining.some((target) => target.id === previous)) orderSelect.value = previous;
+        };
+        overlay.querySelectorAll('input[name="spell-card"]').forEach((input) => input.addEventListener("change", syncBottomOrder));
+        syncBottomOrder();
+      }
       overlay.querySelector("form").addEventListener("submit", (event) => {
         event.preventDefault();
         if (options.mode === "row") {
@@ -319,6 +385,22 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
         if (options.mode === "multi-own-card") {
           const cardIds = [...overlay.querySelectorAll('input[name="spell-card"]:checked')].map((input) => input.value);
           return cardIds.length > 0 ? finish({ cardIds }) : ui.notifications.warn("Choisissez au moins une carte.");
+        }
+        if (options.mode === "discard-card-row") {
+          const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          const row = overlay.querySelector('input[name="spell-destination-row"]:checked')?.value;
+          if (!cardId) return ui.notifications.warn("Choisissez une carte.");
+          return row ? finish({ cardId, row }) : ui.notifications.warn("Choisissez une ligne.");
+        }
+        if (options.mode === "deck-pick") {
+          const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
+          if (!cardId) return ui.notifications.warn("Choisissez une carte à garder.");
+          const remaining = (options.targets ?? []).filter((target) => target.id !== cardId).map((target) => target.id);
+          const first = overlay.querySelector('[name="spell-bottom-first"]')?.value;
+          const bottomOrder = first && remaining.includes(first)
+            ? [first, ...remaining.filter((id) => id !== first)]
+            : remaining;
+          return finish({ cardId, bottomOrder });
         }
         const cardId = overlay.querySelector('input[name="spell-card"]:checked')?.value;
         return cardId ? finish({ cardId }) : ui.notifications.warn("Choisissez une carte.");
@@ -411,6 +493,7 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     });
     this._mulliganModalCleanup?.();
     this._mulliganModalCleanup = null;
+    this._setupSpellDescriptionAutoScroll();
 
     this.element.querySelectorAll("[data-action='select-event-spell']").forEach((button) => {
       button.addEventListener("click", async () => {
@@ -459,12 +542,11 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
 
-    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", async () => {
+    this.element.querySelector("[data-action='open-event-booster']")?.addEventListener("click", () => {
       try {
-        await openEventBooster({ boosterId: EVENT_BOOSTER_ID });
-        await this._renderState();
+        showEventBoosterSelector();
       } catch (error) {
-        console.error(`${MODULE_TITLE} | Booster événementiel impossible`, error);
+        console.error(`${MODULE_TITLE} | Booster de sortilèges impossible`, error);
         ui.notifications.error(error.message);
       }
     });
@@ -745,6 +827,8 @@ export class SixCrownsBoard extends HandlebarsApplicationMixin(ApplicationV2) {
     this._floatingCleanup = null;
     this._mulliganModalCleanup?.();
     this._mulliganModalCleanup = null;
+    this._spellDescriptionObserver?.disconnect?.();
+    this._spellDescriptionObserver = null;
     this._removeSpellOverlays();
     if (this._decksHook !== null) Hooks.off(`${MODULE_ID}.decksUpdated`, this._decksHook);
     if (this._boosterHook !== null) Hooks.off(`${MODULE_ID}.boosterCreditsUpdated`, this._boosterHook);

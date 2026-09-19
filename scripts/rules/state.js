@@ -11,7 +11,8 @@ import {
   buildEventSpellActivationOptions,
   chooseOpponentEventSpellPayload,
   getEventSpellDefinition,
-  listEventSpellDefinitions
+  listEventSpellDefinitions,
+  restoreBetrayedCardsAtRoundEnd
 } from "../event-spells.js";
 
 const RANDOM_DECK_ID = "random";
@@ -87,7 +88,8 @@ const FACTION_VISUALS = Object.freeze({
   aldori: { symbol: "⚔", label: "Maison Aldori" },
   "iron-khans": { symbol: "♞", label: "Khans de Fer" },
   arcana: { symbol: "✦", label: "Arcanes" },
-  "event-stolen-lands": { symbol: "✧", label: "Sortilèges — Terres Dérobées" }
+  "event-stolen-lands": { symbol: "✧", label: "Sortilèges — Terres Dérobées" },
+  "event-rivers-run-red": { symbol: "✧", label: "Sortilèges — Rivers Run Red" }
 });
 
 
@@ -542,6 +544,7 @@ function finishRound(state) {
     opponentControlledLines: controlledLines.opponent
   };
   recordLog(state, "round-end", `Manche ${state.round} : ${scores.player.total} à ${scores.opponent.total}, ${controlledLines.player} ligne(s) à ${controlledLines.opponent}.`, state.roundResult);
+  restoreBetrayedCardsAtRoundEnd(state);
   state.currentTurn = null;
 
   const gameWinner = resolveGameWinner(state);
