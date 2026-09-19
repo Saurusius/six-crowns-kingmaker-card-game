@@ -91,6 +91,10 @@ jobs:
           console.log(files.length + " fichiers JSON validés.");
           NODE
 
+      - name: Run card and spell regression tests
+        shell: bash
+        run: node --experimental-default-type=module --test tests/*.test.mjs
+
       - name: Detect existing release
         id: release
         env:
