@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.15.5
+
+- Permet de recycler les doublons de sortilèges événementiels tout en conservant obligatoirement au moins un exemplaire de chaque sortilège.
+- Maintient le recyclage atomique via le système de transactions existant et respecte les exemplaires réservés dans l’interface de sélection.
+- Harmonise la taille visuelle des boosters de sortilèges **Terres Dérobées** et **Rivers Run Red** sans déformation ni rognage.
+- Adapte cette harmonisation aux affichages desktop, tablette et mobile sans affecter les boosters spéciaux classiques.
+
 ## 0.15.4
 
 - Ajoute un défilement automatique vertical lent aux descriptions de sortilèges trop longues dans l’écran de sélection avant la partie.
