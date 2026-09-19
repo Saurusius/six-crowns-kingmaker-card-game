@@ -116,6 +116,26 @@
   line-height: 1.2;
 }
 
+/* Issue #2 — les assets événementiels n'ont pas tous la même taille intrinsèque.
+   On dimensionne leur boîte d'image, pas le visuel lui-même, pour conserver le ratio
+   sans rogner et sans toucher aux boosters spéciaux classiques. */
+.scg-event-booster-picker {
+  --scg-event-booster-art-height: 350px;
+}
+
+.scg-event-booster-picker .scg-special-booster-art {
+  min-height: var(--scg-event-booster-art-height);
+}
+
+.scg-event-booster-picker .scg-special-booster-art img {
+  width: 100%;
+  height: var(--scg-event-booster-art-height);
+  max-width: 100%;
+  max-height: var(--scg-event-booster-art-height);
+  object-fit: contain;
+  object-position: center;
+}
+
 .scg-booster-results {
   justify-items: center;
 }
@@ -136,6 +156,10 @@
 }
 
 @media (max-width: 1100px) {
+  .scg-event-booster-picker {
+    --scg-event-booster-art-height: 310px;
+  }
+
   .scg-special-booster-option {
     min-height: 430px;
   }
@@ -156,6 +180,10 @@
 }
 
 @media (max-width: 900px) {
+  .scg-event-booster-picker {
+    --scg-event-booster-art-height: 275px;
+  }
+
   .scg-special-booster-grid {
     gap: 18px;
   }
@@ -176,6 +204,10 @@
 }
 
 @media (max-width: 640px) {
+  .scg-event-booster-picker {
+    --scg-event-booster-art-height: 245px;
+  }
+
   .scg-special-booster-picker {
     padding: .75rem;
   }
