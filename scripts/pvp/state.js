@@ -227,7 +227,15 @@ export function activatePvpSpell(match, side, payload) {
   const logLength = match.state.log?.length ?? 0;
   const result = activateEventSpell(match.state, side, payload);
   match.state.log = (match.state.log ?? []).slice(0, logLength);
-  appendPvpLog(match.state, "event-spell", `${match.state[side].name} révèle ${result.spell.name}. ${result.message}`, { side, spellId: result.spell.id, affectedIds: result.affectedIds ?? [] });
+
+  // Belle prise ! manipule une zone secrète. Le joueur actif reçoit toujours
+  // le résultat détaillé, mais le journal partagé ne doit jamais révéler le nom
+  // de la carte ajoutée à sa main.
+  const publicMessage = result.spell.effectId === "big-catch"
+    ? `${result.spell.name} : une carte rejoint la main${(result.affectedIds?.length ?? 0) ? " et les autres prises passent sous la pioche." : "."}`
+    : result.message;
+
+  appendPvpLog(match.state, "event-spell", `${match.state[side].name} révèle ${result.spell.name}. ${publicMessage}`, { side, spellId: result.spell.id, affectedIds: result.affectedIds ?? [] });
   return result;
 }
 
